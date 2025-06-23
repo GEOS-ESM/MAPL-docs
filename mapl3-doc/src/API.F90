@@ -1,12 +1,13 @@
-module mapl3g_Field_API
-   use mapl3g_FieldGet, only: MAPL_FieldGet => FieldGet
-   use mapl3g_FieldSet, only: MAPL_FieldSet => FieldSet
-   use mapl3g_FieldCreate
-   use mapl3g_VerticalStaggerLoc
-   ! Internal info should not be exposed to users
-!#   use mapl3g_FieldInfo, only: MAPL_FieldInfoGetPrivate
-!#   use mapl3g_FieldInfo, only: MAPL_FieldInfoSetPrivate
-!#   use mapl3g_FieldInfo, only: MAPL_FieldInfoSetShared
-!#   use mapl3g_FieldInfo, only: MAPL_FieldInfoGetShared
+module mapl3g_State_API
+   use mapl3g_StateGet, only: MAPL_StateGet => StateGet
+   use mapl3g_StateGetPointer, only: MAPL_StateGetPointer => StateGetPointer
+   use MAPL_StateArithmeticParserMod, only: MAPL_ParserVariablesInExpression => parser_variables_in_expression
+   implicit none
+   private
 
-end module mapl3g_Field_API
+   ! Available to users
+   public :: MAPL_StateGet
+   public :: MAPL_StateGetPointer
+   public :: MAPL_ParserVariablesInExpression
+
+end module mapl3g_State_API
