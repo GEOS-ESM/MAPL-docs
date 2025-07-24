@@ -1,37 +1,60 @@
-#include "MAPL_ErrLog.h"
+#include "MAPL.h"
 
-submodule(mapl3g_GriddedComponentDriver) finalize_smod
-
+submodule (mapl3g_OuterMetaComponent) finalize_smod
+   use mapl3g_GriddedComponentDriverMap
+   use mapl3g_GenericPhases
    use mapl_ErrorHandling
-   use mapl3g_OuterMetaComponent
-   use mapl3g_MethodPhasesMapUtils
-   use mapl3g_CouplerPhases, only: GENERIC_COUPLER_INVALIDATE, GENERIC_COUPLER_UPDATE
-
-   implicit none
+   use mapl3g_Generic
+   implicit none (type, external)
 
 contains
 
-   module recursive subroutine finalize(this, unusable, phase_idx, rc)
-      class(GriddedComponentDriver), intent(inout) :: this
+   module recursive subroutine finalize(this, importState, exportState, clock, unusable, rc)
+      class(OuterMetaComponent), intent(inout) :: this
+      type(ESMF_State) :: importState
+      type(ESMF_State) :: exportState
+      type(ESMF_Clock) :: clock
+      ! optional arguments
       class(KE), optional, intent(in) :: unusable
-      integer, optional, intent(in) :: phase_idx
       integer, optional, intent(out) :: rc
 
-      integer :: status, user_status
+      type(GriddedComponentDriver), pointer :: child
+      type(GriddedComponentDriverMapIterator) :: iter
+      integer :: status
+      character(*), parameter :: PHASE_NAME = 'GENERIC::FINALIZE_USER'
+      type(StringVector), pointer :: finalize_phases
+      logical :: found
+      type(ESMF_GridComp) :: gridcomp
+      logical :: skip_final_restart
 
-      associate ( &
-           importState => this%states%importState, &
-           exportState => this%states%exportState)
+      finalize_phases => this%user_phases_map%at(ESMF_METHOD_FINALIZE, _RC)
+      ! User gridcomp may not have any given phase; not an error condition if not found.
+      associate (phase => get_phase_index(finalize_phases, phase_name=phase_name, found=found))
+        _RETURN_UNLESS(found)
 
-        call ESMF_GridCompFinalize(this%gridcomp, &
-             importState=importState, exportState=exportState, clock=this%clock, &
-             phase=phase_idx, _USERRC)
+
+        associate(b => this%children%begin(), e => this%children%end())
+          iter = b
+          do while (iter /= e)
+             child => iter%second()
+             call child%finalize(phase_idx=GENERIC_FINALIZE_USER, _RC)
+             call iter%next()
+          end do
+        end associate
+
+        call this%run_custom(ESMF_METHOD_FINALIZE, PHASE_NAME, _RC)
+
+        gridcomp = this%get_gridcomp()
+        call MAPL_GridcompGetResource(gridcomp, keystring='skip_final_restart', value=skip_final_restart, default=.false., _RC)
+        _RETURN_IF (skip_final_restart)
+        call this%write_restart(importState, exportState, clock, _RC)
+
+        ! TODO - component profile
+        ! TODO - release resources
 
       end associate
 
-      call ESMF_GridCompDestroy(this%gridcomp, _RC)
-
-      _RETURN(_SUCCESS)
+      _RETURN(ESMF_SUCCESS)
       _UNUSED_DUMMY(unusable)
    end subroutine finalize
 
