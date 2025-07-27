@@ -1,49 +1,32 @@
-#include "MAPL.h"
+#include "MAPL_ErrLog.h"
 
-submodule (mapl3g_OuterMetaComponent) write_restart_smod
-   use mapl3g_MultiState
-   use mapl3g_RestartHandler
-   use mapl_ErrorHandling
-   implicit none (type, external)
+submodule(mapl3g_GriddedComponentDriver) write_restart_smod
+   use :: mapl_ErrorHandling
+   use :: mapl3g_OuterMetaComponent
+   use :: mapl3g_MethodPhasesMapUtils
+   implicit none
 
 contains
 
-   module recursive subroutine write_restart(this, importState, exportState, clock, unusable, rc)
-      class(OuterMetaComponent), target, intent(inout) :: this
-      type(ESMF_State) :: importState
-      type(ESMF_State) :: exportState
-      type(ESMF_Clock) :: clock
-      ! optional arguments
+   module recursive subroutine write_restart(this, unusable, phase_idx, rc)
+      class(GriddedComponentDriver), intent(inout) :: this
       class(KE), optional, intent(in) :: unusable
+      integer, optional, intent(in) :: phase_idx
       integer, optional, intent(out) :: rc
 
-      ! Locals
-      type(GriddedComponentDriver), pointer :: driver
-      type(MultiState) :: states
-      type(RestartHandler) :: restart_handler
-      integer :: status
+      integer :: status, user_status
 
-      _RETURN_UNLESS(this%has_geom())
-      
-      driver => this%get_user_gc_driver()
-      states = driver%get_states()
-      restart_handler = RestartHandler(this%get_name(), this%get_geom(), driver%get_clock(), _RC)
-      
-      if (this%component_spec%misc%checkpoint_controls%import) then
-         call restart_handler%write("import", states%importState, _RC)
-      end if
-      
-      if (this%component_spec%misc%checkpoint_controls%internal) then
-         call restart_handler%write("internal", states%internalState, _RC)
-      end if
-      
-      if (this%component_spec%misc%checkpoint_controls%export) then
-         call restart_handler%write("export", states%exportState, _RC)
-      end if
-   
-      call recurse_write_restart_(this, _RC)
+      associate ( &
+           importState => this%states%importState, &
+           exportState => this%states%exportState)
 
-      _RETURN(ESMF_SUCCESS)
+        call ESMF_GridCompWriteRestart(this%gridcomp, &
+             importState=importState, exportState=exportState, clock=this%clock, &
+             phase=phase_idx, _USERRC)
+
+      end associate
+
+      _RETURN(_SUCCESS)
       _UNUSED_DUMMY(unusable)
    end subroutine write_restart
 
