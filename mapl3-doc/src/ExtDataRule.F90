@@ -1,11 +1,11 @@
 #include "MAPL_ErrLog.h"
-module mapl3g_ExtDataRule
+module MAPL_ExtDataRule
    use ESMF
    use MAPL_KeywordEnforcerMod
    use MAPL_ExceptionHandling
    use MAPL_TimeStringConversion
-   use mapl3g_ExtDataSample
-   use mapl3g_ExtDataSampleMap
+   use MAPL_ExtDataTimeSample
+   use MAPL_ExtDataTimeSampleMap
    implicit none
    private
 
@@ -36,7 +36,7 @@ contains
    function new_ExtDataRule(config,sample_map,key,unusable,multi_rule,rc) result(rule)
       type(ESMF_HConfig), intent(in) :: config
       character(len=*), intent(in) :: key
-      type(ExtDataSampleMap) :: sample_map
+      type(ExtDataTimeSampleMap) :: sample_map
       class(KeywordEnforcer), optional, intent(in) :: unusable
       logical, optional, intent(in) :: multi_rule
       integer, optional, intent(out) :: rc
@@ -46,7 +46,7 @@ contains
       integer :: status
       type(ESMF_HConfig) ::config1
       character(len=:), allocatable :: tempc
-      type(ExtDataSample) :: ts
+      type(ExtDataTimeSample) :: ts
       logical :: usable_multi_rule
       _UNUSED_DUMMY(unusable)
 
@@ -77,7 +77,7 @@ contains
 
          config1 = ESMF_HConfigCreateAt(config,keyString="sample",_RC)
          if (ESMF_HConfigIsMap(config1)) then
-            ts = ExtDataSample(config1,_RC)
+            ts = ExtDataTimeSample(config1,_RC)
             call sample_map%insert(trim(key)//"_sample",ts)
             rule%sample_key=trim(key)//"_sample"
          else
@@ -165,10 +165,10 @@ contains
 
    end subroutine split_vector
 
-end module mapl3g_ExtDataRule
+end module MAPL_ExtDataRule
 
-module mapl3g_ExtDataRuleMap
-   use mapl3g_ExtDataRule
+module MAPL_ExtDataRuleMap
+   use MAPL_ExtDataRule
 
 #include "types/key_deferredLengthString.inc"
 #define _value type(ExtDataRule)
@@ -185,4 +185,4 @@ module mapl3g_ExtDataRuleMap
 #undef _alt
 #undef _value
 
-end module mapl3g_ExtDataRuleMap
+end module MAPL_ExtDataRuleMap
