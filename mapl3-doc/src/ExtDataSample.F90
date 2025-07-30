@@ -1,5 +1,5 @@
 #include "MAPL_ErrLog.h"
-module MAPL_ExtDataTimeSample
+module mapl3g_ExtDataSample
    use ESMF
    use MAPL_KeywordEnforcerMod
    use MAPL_ExceptionHandling
@@ -7,7 +7,7 @@ module MAPL_ExtDataTimeSample
    implicit none
    private
 
-   type, public :: ExtDataTimeSample
+   type, public :: ExtDataSample
       logical :: time_interpolation
       logical :: exact
       type(ESMF_Time), allocatable :: source_time(:)
@@ -19,18 +19,18 @@ module MAPL_ExtDataTimeSample
          procedure :: set_defaults
    end type
 
-   interface ExtDataTimeSample
-      module procedure new_ExtDataTimeSample
+   interface ExtDataSample
+      module procedure new_ExtDataSample
    end interface
 
 contains
 
-   function new_ExtDataTimeSample(config,unusable,rc) result(TimeSample)
+   function new_ExtDataSample(config,unusable,rc) result(TimeSample)
       type(ESMF_HConfig), intent(in) :: config
       class(KeywordEnforcer), optional, intent(in) :: unusable
       integer, optional, intent(out) :: rc
 
-      type(ExtDataTimeSample) :: TimeSample
+      type(ExtDataSample) :: TimeSample
       integer :: status
       character(len=:), allocatable :: source_str
       integer :: idx
@@ -80,11 +80,11 @@ contains
 
       _RETURN(_SUCCESS)
 
-   end function new_ExtDataTimeSample
+   end function new_ExtDataSample
 
 
    subroutine set_defaults(this,unusable,rc)
-      class(ExtDataTimeSample), intent(inout), target :: this
+      class(ExtDataSample), intent(inout), target :: this
       class(KeywordEnforcer), optional, intent(in) :: unusable
       integer, optional, intent(out) :: rc
 
@@ -104,17 +104,17 @@ contains
       _RETURN(_SUCCESS)
    end subroutine set_defaults
 
-end module MAPL_ExtDataTimeSample
+end module mapl3g_ExtDataSample
 
-module MAPL_ExtDataTimeSampleMap
-   use MAPL_ExtDataTimeSample
+module mapl3g_ExtDataSampleMap
+   use mapl3g_ExtDataSample
 
 #include "types/key_deferredLengthString.inc"
-#define _value type(ExtDataTimeSample)
+#define _value type(ExtDataSample)
 #define _alt
 
-#define _map ExtDataTimeSampleMap
-#define _iterator ExtDataTimeSampleMapIterator
+#define _map ExtDataSampleMap
+#define _iterator ExtDataSampleMapIterator
 
 #include "templates/map.inc"
 
@@ -124,4 +124,4 @@ module MAPL_ExtDataTimeSampleMap
 #undef _alt
 #undef _value
 
-end module MAPL_ExtDataTimeSampleMap
+end module mapl3g_ExtDataSampleMap

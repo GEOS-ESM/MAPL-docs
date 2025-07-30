@@ -1,6 +1,6 @@
 #include "MAPL_Exceptions.h"
 #include "MAPL_ErrLog.h"
-module MAPL_ExtDataDerived
+module mapl3g_ExtDataDerived
    use ESMF
    use MAPL_KeywordEnforcerMod
    use MAPL_ExceptionHandling
@@ -33,10 +33,7 @@ contains
       logical :: is_present
       integer :: status
       character(len=:), allocatable :: tempc
-      _UNUSED_DUMMY(unusable)
 
-
-      if (allocated(tempc)) deallocate(tempc)
       is_present = ESMF_HConfigIsDefined(config,keyString="function",_RC)
       _ASSERT(is_present,"no expression found in derived entry")
       if (is_present) then
@@ -44,13 +41,13 @@ contains
          rule%expression=tempc
       end if
 
-      if (allocated(tempc)) deallocate(tempc)
       is_present = ESMF_HConfigIsDefined(config,keyString="sample",_RC)
       if (is_present) then
          tempc = ESMF_HConfigAsString(config,keyString="sample",_RC)
          rule%sample_key=tempc
       end if
 
+      _UNUSED_DUMMY(unusable)
       _RETURN(_SUCCESS)
    end function new_ExtDataDerived
 
@@ -89,10 +86,10 @@ contains
       write(*,*)"function: ",trim(this%expression)
    end subroutine display
 
-end module MAPL_ExtDataDerived
+end module mapl3g_ExtDataDerived
 
-module MAPL_ExtDataDerivedMap
-   use MAPL_ExtDataDerived
+module mapl3g_ExtDataDerivedMap
+   use mapl3g_ExtDataDerived
 
 #include "types/key_deferredLengthString.inc"
 #define _value type(ExtDataDerived)
@@ -109,4 +106,4 @@ module MAPL_ExtDataDerivedMap
 #undef _alt
 #undef _value
 
-end module MAPL_ExtDataDerivedMap
+end module mapl3g_ExtDataDerivedMap
