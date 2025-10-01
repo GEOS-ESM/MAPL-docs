@@ -1,128 +1,90 @@
 #include "MAPL.h"
-
 module mapl3g_VerticalGrid
+   use esmf, only: esmf_Field, esmf_Geom, esmf_TypeKind_Flag, ESMF_TYPEKIND_R4
+   use mapl3g_VerticalStaggerLoc, only: VerticalStaggerLoc
+   use gftl2_StringVector, only: StringVector
    use mapl_ErrorHandling
-   implicit none
+   implicit none(type,external)
    private
-
+   
    public :: VerticalGrid
-
+   
    type, abstract :: VerticalGrid
       private
       integer :: id = -1
-      character(:), allocatable :: units
    contains
-      procedure(I_get_num_levels), deferred :: get_num_levels
-      procedure(I_get_coordinate_field), deferred :: get_coordinate_field
-      procedure(I_can_connect_to), deferred :: can_connect_to
-      procedure(I_is_identical_to), deferred :: is_identical_to
-      procedure(I_write_formatted), deferred :: write_formatted
-      generic :: write(formatted) => write_formatted
-
-      procedure :: set_id
       procedure :: get_id
-      procedure :: same_id
-      procedure :: set_units
-      procedure :: get_units
-      procedure :: make_info
+      procedure :: set_id
+      procedure(I_get_coordinate_field), deferred :: get_coordinate_field
+      procedure(I_get_supported_physical_dimensions), deferred :: get_supported_physical_dimensions
+      procedure(I_get_units), deferred :: get_units
+      procedure(I_get_num_levels), deferred :: get_num_levels
+      procedure(I_matches), deferred :: matches
    end type VerticalGrid
-
-   integer :: global_id = 0
-
+   
    abstract interface
+      ! Existing interface
+      function I_get_coordinate_field(this, geom, physical_dimension, units, typekind, coupler, rc) result(field)
+         use mapl3g_ComponentDriver, only: ComponentDriver
+         use esmf, only: esmf_Field, esmf_Geom, esmf_TypeKind_Flag
+         import VerticalGrid
+         implicit none
+         type(esmf_Field) :: field
+         class(VerticalGrid), intent(in) :: this
+         type(esmf_Geom), intent(in) :: geom
+         character(len=*), intent(in) :: physical_dimension
+         character(len=*), intent(in) :: units
+         type(esmf_TypeKind_Flag), intent(in) :: typekind
+         class(ComponentDriver), pointer, intent(out) :: coupler
+         integer, intent(out), optional :: rc
+      end function I_get_coordinate_field
+      
+      ! New interface for supported physical dimensions
+      function I_get_supported_physical_dimensions(this) result(dimensions)
+         use gftl2_StringVector, only: StringVector
+         import VerticalGrid
+         implicit none
+         type(StringVector) :: dimensions
+         class(VerticalGrid), target, intent(in) :: this
+      end function I_get_supported_physical_dimensions
+      
+      ! New interface for getting units by dimension
+      function I_get_units(this, physical_dimension, rc) result(units)
+         import VerticalGrid
+         implicit none
+         character(len=:), allocatable :: units
+         class(VerticalGrid), intent(in) :: this
+         character(len=*), intent(in) :: physical_dimension
+         integer, optional, intent(out) :: rc
+      end function I_get_units
 
       integer function I_get_num_levels(this) result(num_levels)
          import VerticalGrid
+         implicit none
          class(VerticalGrid), intent(in) :: this
       end function I_get_num_levels
 
-      subroutine I_get_coordinate_field(this, field, coupler, standard_name, geom, typekind, units, vertical_stagger, rc)
-         use mapl3g_ComponentDriver
-         use mapl3g_VerticalStaggerLoc
-         use esmf, only: ESMF_Geom, ESMF_TypeKind_Flag, ESMF_Field
+      function I_matches(this, other) result(matches)
          import VerticalGrid
-
+         implicit none
+         logical :: matches
          class(VerticalGrid), intent(in) :: this
-         type(ESMF_Field), intent(out) :: field
-         class(ComponentDriver), pointer, intent(out) :: coupler
-         character(*), intent(in) :: standard_name
-         type(ESMF_Geom), intent(in) :: geom
-         type(ESMF_TypeKind_Flag), intent(in) :: typekind
-         character(*), intent(in) :: units
-         type(VerticalStaggerLoc), intent(in) :: vertical_stagger
-         integer, optional, intent(out) :: rc
-      end subroutine I_get_coordinate_field
-
-      logical function I_can_connect_to(this, dst, rc) result(can_connect_to)
-         import VerticalGrid
-         class(VerticalGrid), intent(in) :: this
-         class(VerticalGrid), intent(in) :: dst
-         integer, optional, intent(out) :: rc
-      end function I_can_connect_to
-
-      logical function I_is_identical_to(this, that, rc) result(is_identical_to)
-         import VerticalGrid
-         class(VerticalGrid), intent(in) :: this
-         class(VerticalGrid), allocatable, intent(in) :: that
-         integer, optional, intent(out) :: rc
-      end function I_is_identical_to
-
-      subroutine I_write_formatted(this, unit, iotype, v_list, iostat, iomsg)
-         import VerticalGrid
-         class(VerticalGrid), intent(in) :: this
-         integer, intent(in) :: unit
-         character(*), intent(in) :: iotype
-         integer, intent(in) :: v_list(:)
-         integer, intent(out) :: iostat
-         character(*), intent(inout) :: iomsg
-      end subroutine I_write_formatted
+         class(VerticalGrid), intent(in) :: other
+      end function I_matches
 
    end interface
 
 contains
-
-   subroutine set_id(this)
-      class(VerticalGrid), intent(inout) :: this
-      global_id = global_id + 1
-      this%id = global_id
-   end subroutine set_id
-
    function get_id(this) result(id)
-      class(VerticalGrid), intent(in) :: this
       integer :: id
+      class(VerticalGrid), intent(in) :: this
       id = this%id
    end function get_id
-
-   logical function same_id(this, other)
-      class(VerticalGrid), intent(in) :: this
-      class(VerticalGrid), intent(in) :: other
-      same_id = (this%id == other%id)
-   end function same_id
-
-   subroutine set_units(this, units)
+   
+   subroutine set_id(this, id)
       class(VerticalGrid), intent(inout) :: this
-      character(*), intent(in) :: units
-      this%units = units
-   end subroutine set_units
-
-   function get_units(this) result(units)
-      character(:), allocatable :: units
-      class(VerticalGrid), intent(in) :: this
-      units = this%units
-   end function get_units
-
-   function make_info(this, rc) result(info)
-      use esmf
-      type(ESMF_Info) :: info
-      class(VerticalGrid), intent(in) :: this
-      integer, optional, intent(out) :: rc
-
-      integer :: status
-
-      info =ESMF_InfoCreate(_RC)
-      call ESMF_InfoSet(info, "num_levels", this%get_num_levels(), _RC)
-
-      _RETURN(_SUCCESS)
-   end function make_info
-
+      integer, intent(in) :: id
+      this%id = id
+   end subroutine set_id
 end module mapl3g_VerticalGrid
+
