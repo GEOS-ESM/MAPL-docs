@@ -1,38 +1,41 @@
-module mapl3g_FieldBundle_API
-
-   use ESMF, only: MAPL_FieldBundleAdd => ESMF_FieldBundleAdd
-   use mapl3g_FieldBundleType_Flag
-   use mapl3g_FieldBundleCreate, only: MAPL_FieldBundleCreate => FieldBundleCreate
-   use mapl3g_FieldBundleCreate, only: MAPL_FieldBundlesAreAliased => FieldBundlesAreAliased
-   use mapl3g_FieldBundleGet, only: MAPL_FieldBundleGet => FieldBundleGet
-   use mapl3g_FieldBundleSet, only: MAPL_FieldBundleSet => FieldBundleSet
-   use mapl3g_FieldBundleInfo, only: MAPL_FieldBundleInfoGetInternal => FieldBundleInfoGetInternal
-   use mapl3g_FieldBundleInfo, only: MAPL_FieldBundleInfoSetInternal => FieldBundleInfoSetInternal
-
-   implicit none
-
+module mapl3g_VerticalGrid_API
+   use mapl3g_VerticalGrid, only: VerticalGrid
+   use mapl3g_VerticalGridSpec, only: VerticalGridSpec
+   use mapl3g_VerticalGridFactory, only: VerticalGridFactory
+   use mapl3g_VerticalGridManager, only: VerticalGridManager
+   use mapl3g_VerticalGridManager, only: get_vertical_grid_manager
+   use mapl3g_IntegerPair, only: IntegerPair
+   use mapl3g_VerticalStaggerLoc
+   use mapl3g_BasicVerticalGrid, only: BasicVerticalGrid
+   use mapl3g_BasicVerticalGrid, only: BasicVerticalGridSpec
+   use mapl3g_BasicVerticalGrid, only: BasicVerticalGridFactory
+   implicit none(type,external)
    private
 
-   ! Available to users
-   public :: MAPL_FieldBundleCreate
-   public :: MAPL_FieldBundlesAreAliased
-   public :: MAPL_FieldBundleGet
-   public :: MAPL_FieldBundleSet
-   public :: MAPL_FieldBundleAdd
-   ! Maybe these should be private?
-   public :: MAPL_FieldBundleInfoGetInternal
-   public :: MAPL_FieldBundleInfoSetInternal
-
-   public :: FieldBundleType_Flag
-   public :: FIELDBUNDLETYPE_INVALID
-   public :: FIELDBUNDLETYPE_BASIC
-   public :: FIELDBUNDLETYPE_VECTOR
-   public :: FIELDBUNDLETYPE_BRACKET
-
-   public :: operator(==)
-   public :: operator(/=)
-
-   ! Used internally by MAPL
-   ! Users shouldn't need these
-
-end module mapl3g_FieldBundle_API
+   ! Abstract base types
+   public :: VerticalGrid
+   public :: VerticalGridSpec
+   public :: VerticalGridFactory
+   
+   ! Manager
+   public :: VerticalGridManager
+   public :: get_vertical_grid_manager
+   
+   ! Utility types
+   public :: IntegerPair
+   
+   ! Vertical stagger locations
+   public :: VerticalStaggerLoc
+   public :: operator(==), operator(/=)
+   public :: VERTICAL_STAGGER_NONE
+   public :: VERTICAL_STAGGER_EDGE
+   public :: VERTICAL_STAGGER_CENTER
+   public :: VERTICAL_STAGGER_MIRROR
+   public :: VERTICAL_STAGGER_INVALID
+   
+   ! Basic grid types
+   public :: BasicVerticalGrid
+   public :: BasicVerticalGridSpec
+   public :: BasicVerticalGridFactory
+   
+end module mapl3g_VerticalGrid_API
