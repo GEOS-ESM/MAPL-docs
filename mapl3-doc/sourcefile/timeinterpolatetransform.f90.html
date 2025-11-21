@@ -1,0 +1,1376 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="MAPL is a foundation layer of the GEOS architecture, whose original purpose is to supplement the Earth System Modeling Framework (ESMF)">
+    <meta name="author" content="The MAPL Developers" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>TimeInterpolateTransform.F90 &ndash; MAPL</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">MAPL </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>TimeInterpolateTransform.F90
+      <small>Source File</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.1% of total for source files.">249 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/TimeInterpolateTransform.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+            <li class="breadcrumb-item active" aria-current="page">TimeInterpolateTransform.F90</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#mods-0"
+         aria-expanded="false" aria-controls="mods-0">
+         <h4 class="card-header bg-primary text-white">Modules</h4>
+      </a>
+      <div id="mods-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/mapl3g_timeinterpolatetransform.html">mapl3g_TimeInterpolateTransform</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/timeinterpolatetransform.f90.html#src">TimeInterpolateTransform.F90</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">This file depends on</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~timeinterpolatetransform.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefiletimeinterpolatetransformf90EfferentGraph" width="641pt" height="820pt"
+ viewBox="0.00 0.00 641.00 819.58" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph" class="graph" transform="scale(0.94 0.94) rotate(0) translate(4 868)">
+<title>sourcefile~~timeinterpolatetransform.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-868 678,-868 678,4 -4,4"/>
+<!-- sourcefile~timeinterpolatetransform.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~timeinterpolatetransform.f90</title>
+<polygon fill="none" stroke="black" points="674,-444 501,-444 501,-420 674,-420 674,-444"/>
+<text text-anchor="middle" x="587.5" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50">TimeInterpolateTransform.F90</text>
+</g>
+<!-- sourcefile~api.f90~3 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~api.f90~3</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node2"><a xlink:href="../sourcefile/api.f90~3.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="422,-759 368,-759 368,-735 422,-735 422,-759"/>
+<text text-anchor="middle" x="395" y="-744.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~api.f90~3 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~api.f90~3</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M579.03,-444.35C550.11,-492.18 445.23,-665.59 408.67,-726.04"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="405.6,-724.37 403.42,-734.74 411.59,-727.99 405.6,-724.37"/>
+</g>
+<!-- sourcefile~constants.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~constants.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node3"><a xlink:href="../sourcefile/constants.f90.html" xlink:title="Constants.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="439,-591 351,-591 351,-567 439,-567 439,-591"/>
+<text text-anchor="middle" x="395" y="-576.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Constants.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~constants.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~constants.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M571.71,-444.17C549.01,-462.78 504.1,-499.25 465,-529 450.84,-539.77 434.76,-551.46 421.69,-560.82"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="419.28,-558.23 413.18,-566.89 423.35,-563.93 419.28,-558.23"/>
+</g>
+<!-- sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~errorhandling.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node4"><a xlink:href="../sourcefile/errorhandling.f90.html" xlink:title="ErrorHandling.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="267,-444 158,-444 158,-420 267,-420 267,-444"/>
+<text text-anchor="middle" x="212.5" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ErrorHandling.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M500.93,-432C432.92,-432 339.28,-432 277.61,-432"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="277.24,-428.5 267.24,-432 277.24,-435.5 277.24,-428.5"/>
+</g>
+<!-- sourcefile~extensiontransform.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~extensiontransform.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node5"><a xlink:href="../sourcefile/extensiontransform.f90.html" xlink:title="ExtensionTransform.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="465,-485 325,-485 325,-461 465,-461 465,-485"/>
+<text text-anchor="middle" x="395" y="-470.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ExtensionTransform.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~extensiontransform.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~extensiontransform.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M530.63,-444.02C509.02,-448.68 484.12,-454.03 461.66,-458.87"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="460.91,-455.45 451.87,-460.98 462.38,-462.29 460.91,-455.45"/>
+</g>
+<!-- sourcefile~fieldutils.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node6" class="node">
+<title>sourcefile~fieldutils.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node6"><a xlink:href="../sourcefile/fieldutils.f90.html" xlink:title="FieldUtils.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="436,-255 354,-255 354,-231 436,-231 436,-255"/>
+<text text-anchor="middle" x="395" y="-240.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldUtils.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~fieldutils.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~fieldutils.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M574.29,-419.89C542.11,-387.96 454.75,-301.28 415.52,-262.37"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="417.92,-259.81 408.35,-255.25 412.99,-264.78 417.92,-259.81"/>
+</g>
+<!-- sourcefile~infoutilities.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node7" class="node">
+<title>sourcefile~infoutilities.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node7"><a xlink:href="../sourcefile/infoutilities.f90.html" xlink:title="InfoUtilities.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="442,-403 348,-403 348,-379 442,-379 442,-403"/>
+<text text-anchor="middle" x="395" y="-388.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">InfoUtilities.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~infoutilities.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~infoutilities.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M530.63,-419.98C505.93,-414.66 476.94,-408.42 452.2,-403.1"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="452.75,-399.63 442.24,-400.95 451.28,-406.48 452.75,-399.63"/>
+</g>
+<!-- sourcefile~regridder_mgr.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node8" class="node">
+<title>sourcefile~regridder_mgr.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node8"><a xlink:href="../sourcefile/regridder_mgr.f90.html" xlink:title="regridder_mgr.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="450,-108 340,-108 340,-84 450,-84 450,-108"/>
+<text text-anchor="middle" x="395" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">regridder_mgr.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~regridder_mgr.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~regridder_mgr.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M579.49,-419.64C551.02,-369.42 443.76,-180.24 407.82,-116.85"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="410.85,-115.09 402.87,-108.11 404.76,-118.54 410.85,-115.09"/>
+</g>
+<!-- sourcefile~stateitem.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node9" class="node">
+<title>sourcefile~stateitem.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node9"><a xlink:href="../sourcefile/stateitem.f90.html" xlink:title="StateItem.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="438.5,-66 351.5,-66 351.5,-42 438.5,-42 438.5,-66"/>
+<text text-anchor="middle" x="395" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StateItem.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~stateitem.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~stateitem.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M586.15,-419.79C584.04,-369.45 569.2,-175.86 465,-75 460.28,-70.43 454.59,-66.85 448.53,-64.05"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="449.38,-60.62 438.79,-60.25 446.84,-67.14 449.38,-60.62"/>
+</g>
+<!-- sourcefile~transformid.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node10" class="node">
+<title>sourcefile~transformid.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node10"><a xlink:href="../sourcefile/transformid.f90.html" xlink:title="TransformId.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="261.5,-528 163.5,-528 163.5,-504 261.5,-504 261.5,-528"/>
+<text text-anchor="middle" x="212.5" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">TransformId.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~transformid.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~transformid.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M568.49,-444.02C545.54,-458.64 504.15,-482.76 465,-494 400.76,-512.44 323.81,-516.72 272.09,-517.16"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="271.76,-513.66 261.77,-517.2 271.78,-520.66 271.76,-513.66"/>
+</g>
+<!-- sourcefile~fieldbundlecreate.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node15" class="node">
+<title>sourcefile~fieldbundlecreate.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node15"><a xlink:href="../sourcefile/fieldbundlecreate.f90.html" xlink:title="FieldBundleCreate.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="279,-822 146,-822 146,-798 279,-798 279,-822"/>
+<text text-anchor="middle" x="212.5" y="-807.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBundleCreate.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~3&#45;&gt;sourcefile~fieldbundlecreate.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge10" class="edge">
+<title>sourcefile~api.f90~3&#45;&gt;sourcefile~fieldbundlecreate.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M367.97,-758.33C346.9,-767.28 316.34,-779.76 289,-789 282.91,-791.06 276.5,-793.07 270.09,-794.99"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="268.68,-791.75 260.06,-797.91 270.64,-798.47 268.68,-791.75"/>
+</g>
+<!-- sourcefile~fieldbundleget.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node16" class="node">
+<title>sourcefile~fieldbundleget.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node16"><a xlink:href="../sourcefile/fieldbundleget.f90.html" xlink:title="FieldBundleGet.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="270.5,-780 154.5,-780 154.5,-756 270.5,-756 270.5,-780"/>
+<text text-anchor="middle" x="212.5" y="-765.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBundleGet.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~3&#45;&gt;sourcefile~fieldbundleget.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge11" class="edge">
+<title>sourcefile~api.f90~3&#45;&gt;sourcefile~fieldbundleget.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M367.75,-750.05C345,-752.7 311.07,-756.65 280.82,-760.17"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="280.25,-756.71 270.72,-761.34 281.06,-763.66 280.25,-756.71"/>
+</g>
+<!-- sourcefile~fieldbundleinfo.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node17" class="node">
+<title>sourcefile~fieldbundleinfo.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node17"><a xlink:href="../sourcefile/fieldbundleinfo.f90.html" xlink:title="FieldBundleInfo.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="271,-738 154,-738 154,-714 271,-714 271,-738"/>
+<text text-anchor="middle" x="212.5" y="-723.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBundleInfo.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~3&#45;&gt;sourcefile~fieldbundleinfo.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge12" class="edge">
+<title>sourcefile~api.f90~3&#45;&gt;sourcefile~fieldbundleinfo.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M367.75,-743.95C345.09,-741.31 311.33,-737.38 281.17,-733.87"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="281.44,-730.38 271.1,-732.7 280.63,-737.33 281.44,-730.38"/>
+</g>
+<!-- sourcefile~fieldbundleset.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node18" class="node">
+<title>sourcefile~fieldbundleset.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node18"><a xlink:href="../sourcefile/fieldbundleset.f90.html" xlink:title="FieldBundleSet.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="270,-696 155,-696 155,-672 270,-672 270,-696"/>
+<text text-anchor="middle" x="212.5" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBundleSet.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~3&#45;&gt;sourcefile~fieldbundleset.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge13" class="edge">
+<title>sourcefile~api.f90~3&#45;&gt;sourcefile~fieldbundleset.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M367.97,-735.67C346.9,-726.72 316.34,-714.24 289,-705 282.91,-702.94 276.5,-700.93 270.09,-699.01"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="270.64,-695.53 260.06,-696.09 268.68,-702.25 270.64,-695.53"/>
+</g>
+<!-- sourcefile~fieldbundletype_flag.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node19" class="node">
+<title>sourcefile~fieldbundletype_flag.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node19"><a xlink:href="../sourcefile/fieldbundletype_flag.f90.html" xlink:title="FieldBundleType_Flag.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="287,-864 138,-864 138,-840 287,-840 287,-864"/>
+<text text-anchor="middle" x="212.5" y="-849.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBundleType_Flag.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~3&#45;&gt;sourcefile~fieldbundletype_flag.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge14" class="edge">
+<title>sourcefile~api.f90~3&#45;&gt;sourcefile~fieldbundletype_flag.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M382.23,-759.15C363.94,-777.35 326.82,-811.64 289,-831 285.18,-832.95 281.17,-834.74 277.05,-836.38"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="275.52,-833.21 267.32,-839.93 277.92,-839.79 275.52,-833.21"/>
+</g>
+<!-- sourcefile~internalconstants.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node23" class="node">
+<title>sourcefile~internalconstants.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node23"><a xlink:href="../sourcefile/internalconstants.f90.html" xlink:title="InternalConstants.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="277,-654 148,-654 148,-630 277,-630 277,-654"/>
+<text text-anchor="middle" x="212.5" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">InternalConstants.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~constants.f90&#45;&gt;sourcefile~internalconstants.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge15" class="edge">
+<title>sourcefile~constants.f90&#45;&gt;sourcefile~internalconstants.f90</title>
+<path fill="none" stroke="#ffaa00" stroke-dasharray="5,2" d="M366.23,-591.07C345.24,-599.96 315.6,-612.01 289,-621 282.91,-623.06 276.5,-625.07 270.09,-626.99"/>
+<polygon fill="#ffaa00" stroke="#ffaa00" points="268.68,-623.75 260.06,-629.91 270.64,-630.47 268.68,-623.75"/>
+</g>
+<!-- sourcefile~mathconstants.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node27" class="node">
+<title>sourcefile~mathconstants.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node27"><a xlink:href="../sourcefile/mathconstants.f90.html" xlink:title="MathConstants.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="269.5,-612 155.5,-612 155.5,-588 269.5,-588 269.5,-612"/>
+<text text-anchor="middle" x="212.5" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MathConstants.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~constants.f90&#45;&gt;sourcefile~mathconstants.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge16" class="edge">
+<title>sourcefile~constants.f90&#45;&gt;sourcefile~mathconstants.f90</title>
+<path fill="none" stroke="#ffaa00" stroke-dasharray="5,2" d="M350.77,-584.03C329.5,-586.5 303.41,-589.54 279.7,-592.3"/>
+<polygon fill="#ffaa00" stroke="#ffaa00" points="279.24,-588.83 269.71,-593.46 280.05,-595.78 279.24,-588.83"/>
+</g>
+<!-- sourcefile~physicalconstants.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node28" class="node">
+<title>sourcefile~physicalconstants.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node28"><a xlink:href="../sourcefile/physicalconstants.f90.html" xlink:title="PhysicalConstants.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="277.5,-570 147.5,-570 147.5,-546 277.5,-546 277.5,-570"/>
+<text text-anchor="middle" x="212.5" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">PhysicalConstants.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~constants.f90&#45;&gt;sourcefile~physicalconstants.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge17" class="edge">
+<title>sourcefile~constants.f90&#45;&gt;sourcefile~physicalconstants.f90</title>
+<path fill="none" stroke="#ffaa00" stroke-dasharray="5,2" d="M350.77,-573.97C331.86,-571.77 309.13,-569.13 287.66,-566.63"/>
+<polygon fill="#ffaa00" stroke="#ffaa00" points="287.91,-563.13 277.57,-565.45 287.1,-570.09 287.91,-563.13"/>
+</g>
+<!-- sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node26" class="node">
+<title>sourcefile~mapl_throw.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node26"><a xlink:href="../sourcefile/mapl_throw.f90.html" xlink:title="MAPL_Throw.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="100,-444 0,-444 0,-420 100,-420 100,-444"/>
+<text text-anchor="middle" x="50" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Throw.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge18" class="edge">
+<title>sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90</title>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M157.61,-432C142.37,-432 125.7,-432 110.17,-432"/>
+<polygon fill="#aaff00" stroke="#aaff00" points="110.15,-428.5 100.15,-432 110.15,-435.5 110.15,-428.5"/>
+</g>
+<!-- sourcefile~extensiontransform.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge20" class="edge">
+<title>sourcefile~extensiontransform.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M340.82,-460.92C320.62,-456.33 297.42,-451.06 276.41,-446.29"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="277.14,-442.87 266.61,-444.06 275.59,-449.69 277.14,-442.87"/>
+</g>
+<!-- sourcefile~extensiontransform.f90&#45;&gt;sourcefile~transformid.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge21" class="edge">
+<title>sourcefile~extensiontransform.f90&#45;&gt;sourcefile~transformid.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M343.24,-485.09C320.99,-490.39 294.74,-496.65 271.7,-502.13"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="270.62,-498.79 261.71,-504.52 272.25,-505.6 270.62,-498.79"/>
+</g>
+<!-- sourcefile~aspectid.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node11" class="node">
+<title>sourcefile~aspectid.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node11"><a xlink:href="../sourcefile/aspectid.f90.html" xlink:title="AspectId.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="253,-486 172,-486 172,-462 253,-462 253,-486"/>
+<text text-anchor="middle" x="212.5" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">AspectId.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extensiontransform.f90&#45;&gt;sourcefile~aspectid.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge19" class="edge">
+<title>sourcefile~extensiontransform.f90&#45;&gt;sourcefile~aspectid.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M324.99,-473.38C304.5,-473.5 282.46,-473.62 263.43,-473.72"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="263.18,-470.22 253.2,-473.78 263.22,-477.22 263.18,-470.22"/>
+</g>
+<!-- sourcefile~fieldbinaryoperations.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node13" class="node">
+<title>sourcefile~fieldbinaryoperations.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node13"><a xlink:href="../sourcefile/fieldbinaryoperations.f90.html" xlink:title="FieldBinaryOperations.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="289,-276 136,-276 136,-252 289,-252 289,-276"/>
+<text text-anchor="middle" x="212.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBinaryOperations.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldbinaryoperations.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge22" class="edge">
+<title>sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldbinaryoperations.f90</title>
+<path fill="none" stroke="#00ffa9" stroke-dasharray="5,2" d="M353.94,-247.66C337.67,-249.55 318.2,-251.82 299.02,-254.05"/>
+<polygon fill="#00ffa9" stroke="#00ffa9" points="298.56,-250.58 289.04,-255.21 299.37,-257.53 298.56,-250.58"/>
+</g>
+<!-- sourcefile~fieldblas.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node14" class="node">
+<title>sourcefile~fieldblas.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node14"><a xlink:href="../sourcefile/fieldblas.f90.html" xlink:title="FieldBLAS.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="256.5,-234 168.5,-234 168.5,-210 256.5,-210 256.5,-234"/>
+<text text-anchor="middle" x="212.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBLAS.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldblas.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge23" class="edge">
+<title>sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldblas.f90</title>
+<path fill="none" stroke="#00ffa9" stroke-dasharray="5,2" d="M353.94,-238.34C328.23,-235.35 294.54,-231.43 266.6,-228.18"/>
+<polygon fill="#00ffa9" stroke="#00ffa9" points="266.94,-224.69 256.6,-227.01 266.13,-231.65 266.94,-224.69"/>
+</g>
+<!-- sourcefile~fieldpointerutilities.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node20" class="node">
+<title>sourcefile~fieldpointerutilities.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node20"><a xlink:href="../sourcefile/fieldpointerutilities.f90.html" xlink:title="FieldPointerUtilities.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="280.5,-192 144.5,-192 144.5,-168 280.5,-168 280.5,-192"/>
+<text text-anchor="middle" x="212.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldPointerUtilities.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldpointerutilities.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge24" class="edge">
+<title>sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldpointerutilities.f90</title>
+<path fill="none" stroke="#00ffa9" stroke-dasharray="5,2" d="M366.23,-230.93C345.24,-222.04 315.6,-209.99 289,-201 282.91,-198.94 276.5,-196.93 270.09,-195.01"/>
+<polygon fill="#00ffa9" stroke="#00ffa9" points="270.64,-191.53 260.06,-192.09 268.68,-198.25 270.64,-191.53"/>
+</g>
+<!-- sourcefile~fieldunaryfunctions.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node21" class="node">
+<title>sourcefile~fieldunaryfunctions.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node21"><a xlink:href="../sourcefile/fieldunaryfunctions.f90.html" xlink:title="FieldUnaryFunctions.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="283.5,-150 141.5,-150 141.5,-126 283.5,-126 283.5,-150"/>
+<text text-anchor="middle" x="212.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldUnaryFunctions.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldunaryfunctions.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge25" class="edge">
+<title>sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldunaryfunctions.f90</title>
+<path fill="none" stroke="#00ffa9" stroke-dasharray="5,2" d="M382.23,-230.85C363.94,-212.65 326.82,-178.36 289,-159 285.18,-157.05 281.17,-155.26 277.05,-153.62"/>
+<polygon fill="#00ffa9" stroke="#00ffa9" points="277.92,-150.21 267.32,-150.07 275.52,-156.79 277.92,-150.21"/>
+</g>
+<!-- sourcefile~fieldutilities.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node22" class="node">
+<title>sourcefile~fieldutilities.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node22"><a xlink:href="../sourcefile/fieldutilities.f90.html" xlink:title="FieldUtilities.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="262,-318 163,-318 163,-294 262,-294 262,-318"/>
+<text text-anchor="middle" x="212.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldUtilities.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldutilities.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge26" class="edge">
+<title>sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldutilities.f90</title>
+<path fill="none" stroke="#00ffa9" stroke-dasharray="5,2" d="M366.23,-255.07C345.24,-263.96 315.6,-276.01 289,-285 282.91,-287.06 276.5,-289.07 270.09,-290.99"/>
+<polygon fill="#00ffa9" stroke="#00ffa9" points="268.68,-287.75 260.06,-293.91 270.64,-294.47 268.68,-287.75"/>
+</g>
+<!-- sourcefile~infoutilities.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge27" class="edge">
+<title>sourcefile~infoutilities.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M347.99,-401.45C326.23,-406.39 299.93,-412.37 276.37,-417.72"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="275.44,-414.34 266.46,-419.97 276.99,-421.17 275.44,-414.34"/>
+</g>
+<!-- sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node24" class="node">
+<title>sourcefile~keywordenforcer.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node24"><a xlink:href="../sourcefile/keywordenforcer.f90.html" xlink:title="KeywordEnforcer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="274.5,-360 150.5,-360 150.5,-336 274.5,-336 274.5,-360"/>
+<text text-anchor="middle" x="212.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">KeywordEnforcer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~infoutilities.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge28" class="edge">
+<title>sourcefile~infoutilities.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M347.99,-380.04C325.4,-374.66 297.91,-368.11 273.68,-362.34"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="274.41,-358.91 263.87,-360 272.79,-365.72 274.41,-358.91"/>
+</g>
+<!-- sourcefile~mapl_esmf_infokeys.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node25" class="node">
+<title>sourcefile~mapl_esmf_infokeys.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node25"><a xlink:href="../sourcefile/mapl_esmf_infokeys.f90.html" xlink:title="MAPL_ESMF_InfoKeys.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="286,-402 139,-402 139,-378 286,-378 286,-402"/>
+<text text-anchor="middle" x="212.5" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_ESMF_InfoKeys.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~infoutilities.f90&#45;&gt;sourcefile~mapl_esmf_infokeys.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge29" class="edge">
+<title>sourcefile~infoutilities.f90&#45;&gt;sourcefile~mapl_esmf_infokeys.f90</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M347.99,-390.75C332.27,-390.66 314.18,-390.56 296.46,-390.46"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="296.11,-386.96 286.09,-390.4 296.07,-393.96 296.11,-386.96"/>
+</g>
+<!-- sourcefile~dynamicmask.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node12" class="node">
+<title>sourcefile~dynamicmask.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node12"><a xlink:href="../sourcefile/dynamicmask.f90.html" xlink:title="DynamicMask.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="267,-108 158,-108 158,-84 267,-84 267,-108"/>
+<text text-anchor="middle" x="212.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">DynamicMask.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regridder_mgr.f90&#45;&gt;sourcefile~dynamicmask.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge30" class="edge">
+<title>sourcefile~regridder_mgr.f90&#45;&gt;sourcefile~dynamicmask.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M339.84,-96C320.21,-96 297.85,-96 277.45,-96"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="277.31,-92.5 267.31,-96 277.31,-99.5 277.31,-92.5"/>
+</g>
+<!-- sourcefile~regriddermanager.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node29" class="node">
+<title>sourcefile~regriddermanager.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node29"><a xlink:href="../sourcefile/regriddermanager.f90.html" xlink:title="RegridderManager.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="279,-66 146,-66 146,-42 279,-42 279,-66"/>
+<text text-anchor="middle" x="212.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RegridderManager.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regridder_mgr.f90&#45;&gt;sourcefile~regriddermanager.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge31" class="edge">
+<title>sourcefile~regridder_mgr.f90&#45;&gt;sourcefile~regriddermanager.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M342.28,-83.96C321.32,-79.09 296.95,-73.42 275.08,-68.33"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="275.76,-64.89 265.23,-66.04 274.18,-71.71 275.76,-64.89"/>
+</g>
+<!-- sourcefile~regridderspec.f90~2 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node30" class="node">
+<title>sourcefile~regridderspec.f90~2</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_node30"><a xlink:href="../sourcefile/regridderspec.f90~2.html" xlink:title="RegridderSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="269.5,-24 155.5,-24 155.5,0 269.5,0 269.5,-24"/>
+<text text-anchor="middle" x="212.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RegridderSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regridder_mgr.f90&#45;&gt;sourcefile~regridderspec.f90~2 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~EfferentGraph_edge32" class="edge">
+<title>sourcefile~regridder_mgr.f90&#45;&gt;sourcefile~regridderspec.f90~2</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M342.41,-83.89C336.3,-81.43 330.35,-78.49 325,-75 304.42,-61.55 309.74,-46.2 289,-33 285.83,-30.98 282.46,-29.16 278.98,-27.5"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="280.12,-24.18 269.55,-23.52 277.4,-30.63 280.12,-24.18"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefiletimeinterpolatetransformf90EfferentGraph = svgPanZoom('#sourcefiletimeinterpolatetransformf90EfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#EfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="EfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Files dependent on this one</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~timeinterpolatetransform.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefiletimeinterpolatetransformf90AfferentGraph" width="641pt" height="444pt"
+ viewBox="0.00 0.00 641.00 443.90" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph" class="graph" transform="scale(0.83 0.83) rotate(0) translate(4 532)">
+<title>sourcefile~~timeinterpolatetransform.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-532 770,-532 770,4 -4,4"/>
+<!-- sourcefile~timeinterpolatetransform.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~timeinterpolatetransform.f90</title>
+<polygon fill="none" stroke="black" points="173,-254 0,-254 0,-230 173,-230 173,-254"/>
+<text text-anchor="middle" x="86.5" y="-239.6" font-family="Helvetica,sans-Serif" font-size="10.50">TimeInterpolateTransform.F90</text>
+</g>
+<!-- sourcefile~bracketclassaspect.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~bracketclassaspect.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node2"><a xlink:href="../sourcefile/bracketclassaspect.f90.html" xlink:title="BracketClassAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="374,-317 234,-317 234,-293 374,-293 374,-317"/>
+<text text-anchor="middle" x="304" y="-302.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">BracketClassAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~bracketclassaspect.f90&#45;&gt;sourcefile~timeinterpolatetransform.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~bracketclassaspect.f90&#45;&gt;sourcefile~timeinterpolatetransform.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M244.33,-292.97C232.57,-290.25 220.34,-287.22 209,-284 181.95,-276.33 152.09,-266.03 128.74,-257.56"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="129.76,-254.2 119.16,-254.05 127.35,-260.77 129.76,-254.2"/>
+</g>
+<!-- sourcefile~test_propagate_time_varying.pf -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~test_propagate_time_varying.pf</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node3"><a xlink:href="../sourcefile/test_propagate_time_varying.pf.html" xlink:title="Test_propagate_time_varying.pf">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="394.5,-233 213.5,-233 213.5,-209 394.5,-209 394.5,-233"/>
+<text text-anchor="middle" x="304" y="-218.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Test_propagate_time_varying.pf</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~test_propagate_time_varying.pf&#45;&gt;sourcefile~timeinterpolatetransform.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~test_propagate_time_varying.pf&#45;&gt;sourcefile~timeinterpolatetransform.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M213.48,-229.72C203.51,-230.7 193.32,-231.69 183.27,-232.67"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="182.9,-229.19 173.28,-233.64 183.57,-236.15 182.9,-229.19"/>
+</g>
+<!-- sourcefile~test_timeinterpolatetransform.pf -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~test_timeinterpolatetransform.pf</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node4"><a xlink:href="../sourcefile/test_timeinterpolatetransform.pf.html" xlink:title="Test_TimeInterpolateTransform.pf">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="399,-191 209,-191 209,-167 399,-167 399,-191"/>
+<text text-anchor="middle" x="304" y="-176.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Test_TimeInterpolateTransform.pf</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~test_timeinterpolatetransform.pf&#45;&gt;sourcefile~timeinterpolatetransform.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~test_timeinterpolatetransform.pf&#45;&gt;sourcefile~timeinterpolatetransform.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M244.33,-191.03C232.57,-193.75 220.34,-196.78 209,-200 181.95,-207.67 152.09,-217.97 128.74,-226.44"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="127.35,-223.23 119.16,-229.95 129.76,-229.8 127.35,-223.23"/>
+</g>
+<!-- sourcefile~vectorbracketclassaspect.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~vectorbracketclassaspect.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node5"><a xlink:href="../sourcefile/vectorbracketclassaspect.f90.html" xlink:title="VectorBracketClassAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="391,-275 217,-275 217,-251 391,-251 391,-275"/>
+<text text-anchor="middle" x="304" y="-260.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VectorBracketClassAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~vectorbracketclassaspect.f90&#45;&gt;sourcefile~timeinterpolatetransform.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~vectorbracketclassaspect.f90&#45;&gt;sourcefile~timeinterpolatetransform.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M216.9,-254.61C205.86,-253.53 194.5,-252.43 183.32,-251.34"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="183.4,-247.83 173.11,-250.34 182.73,-254.8 183.4,-247.83"/>
+</g>
+<!-- sourcefile~test_aspects.pf -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~test_aspects.pf</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node6"><a xlink:href="../sourcefile/test_aspects.pf.html" xlink:title="Test_Aspects.pf">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="534,-357 441,-357 441,-333 534,-333 534,-357"/>
+<text text-anchor="middle" x="487.5" y="-342.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Test_Aspects.pf</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~test_aspects.pf&#45;&gt;sourcefile~bracketclassaspect.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~test_aspects.pf&#45;&gt;sourcefile~bracketclassaspect.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M440.7,-334.91C419.11,-330.15 392.97,-324.39 369.42,-319.2"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="370.03,-315.75 359.51,-317.01 368.52,-322.58 370.03,-315.75"/>
+</g>
+<!-- sourcefile~test_bracketclassaspect.pf -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~test_bracketclassaspect.pf</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node7"><a xlink:href="../sourcefile/test_bracketclassaspect.pf.html" xlink:title="Test_BracketClassAspect.pf">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="749.5,-528 592.5,-528 592.5,-504 749.5,-504 749.5,-528"/>
+<text text-anchor="middle" x="671" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Test_BracketClassAspect.pf</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~test_bracketclassaspect.pf&#45;&gt;sourcefile~bracketclassaspect.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~test_bracketclassaspect.pf&#45;&gt;sourcefile~bracketclassaspect.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M592.21,-506.54C586.23,-503.54 580.7,-499.76 576,-495 521.42,-439.75 598.29,-375.33 540,-324 493.49,-283.04 419.79,-283.89 367.34,-291.41"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="366.49,-288 357.14,-293 367.56,-294.92 366.49,-288"/>
+</g>
+<!-- sourcefile~variablespec.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~variablespec.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node9"><a xlink:href="../sourcefile/variablespec.f90.html" xlink:title="VariableSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="540,-276 435,-276 435,-252 540,-252 540,-276"/>
+<text text-anchor="middle" x="487.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VariableSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~test_bracketclassaspect.pf&#45;&gt;sourcefile~variablespec.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~test_bracketclassaspect.pf&#45;&gt;sourcefile~variablespec.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M592.49,-506.93C586.37,-503.86 580.74,-499.96 576,-495 512.38,-428.45 594.34,-365.32 540,-291 537.45,-287.52 534.32,-284.44 530.87,-281.74"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="532.63,-278.71 522.36,-276.09 528.75,-284.54 532.63,-278.71"/>
+</g>
+<!-- sourcefile~test_vectorbracketclassaspect.pf -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~test_vectorbracketclassaspect.pf</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node8"><a xlink:href="../sourcefile/test_vectorbracketclassaspect.pf.html" xlink:title="Test_VectorBracketClassAspect.pf">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="766,-24 576,-24 576,0 766,0 766,-24"/>
+<text text-anchor="middle" x="671" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Test_VectorBracketClassAspect.pf</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~test_vectorbracketclassaspect.pf&#45;&gt;sourcefile~vectorbracketclassaspect.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~test_vectorbracketclassaspect.pf&#45;&gt;sourcefile~vectorbracketclassaspect.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M594.87,-24.05C588.26,-26.5 581.87,-29.45 576,-33 471.84,-96 503.16,-179 399,-242 395.98,-243.83 392.81,-245.5 389.55,-247.03"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="388.01,-243.87 380.13,-250.95 390.7,-250.33 388.01,-243.87"/>
+</g>
+<!-- sourcefile~test_vectorbracketclassaspect.pf&#45;&gt;sourcefile~variablespec.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge21" class="edge">
+<title>sourcefile~test_vectorbracketclassaspect.pf&#45;&gt;sourcefile~variablespec.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M588.83,-24.22C584.22,-26.68 579.89,-29.58 576,-33 540.83,-63.9 556.51,-88.19 540,-132 525.3,-171.02 507.49,-216.23 497.13,-242.34"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="493.86,-241.08 493.42,-251.66 500.37,-243.66 493.86,-241.08"/>
+</g>
+<!-- sourcefile~variablespec.f90&#45;&gt;sourcefile~bracketclassaspect.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~variablespec.f90&#45;&gt;sourcefile~bracketclassaspect.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M434.69,-275.89C422.96,-278.57 410.55,-281.39 399,-284 389.34,-286.18 379.11,-288.48 369.1,-290.72"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="368.19,-287.34 359.19,-292.94 369.71,-294.17 368.19,-287.34"/>
+</g>
+<!-- sourcefile~variablespec.f90&#45;&gt;sourcefile~vectorbracketclassaspect.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~variablespec.f90&#45;&gt;sourcefile~vectorbracketclassaspect.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M434.97,-263.72C424.44,-263.66 413.03,-263.6 401.49,-263.53"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="401.36,-260.03 391.34,-263.48 401.32,-267.03 401.36,-260.03"/>
+</g>
+<!-- sourcefile~advertise_variable.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~advertise_variable.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node10"><a xlink:href="../sourcefile/advertise_variable.f90.html" xlink:title="advertise_variable.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="737.5,-402 604.5,-402 604.5,-378 737.5,-378 737.5,-402"/>
+<text text-anchor="middle" x="671" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">advertise_variable.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~advertise_variable.f90&#45;&gt;sourcefile~variablespec.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~advertise_variable.f90&#45;&gt;sourcefile~variablespec.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M604.25,-383.47C594.05,-380.25 584.2,-375.62 576,-369 546.29,-345.02 566.31,-318.67 540,-291 536.48,-287.3 532.34,-284.01 527.97,-281.11"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="529.75,-278.09 519.36,-276.01 526.18,-284.12 529.75,-278.09"/>
+</g>
+<!-- sourcefile~componentspec.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~componentspec.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node11"><a xlink:href="../sourcefile/componentspec.f90.html" xlink:title="ComponentSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="733,-360 609,-360 609,-336 733,-336 733,-360"/>
+<text text-anchor="middle" x="671" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ComponentSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~componentspec.f90&#45;&gt;sourcefile~variablespec.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~componentspec.f90&#45;&gt;sourcefile~variablespec.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M608.99,-339.65C597.6,-336.65 586.11,-332.56 576,-327 556.17,-316.1 558.23,-304.41 540,-291 535.15,-287.44 529.78,-284.07 524.37,-281"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="525.81,-277.8 515.35,-276.13 522.49,-283.96 525.81,-277.8"/>
+</g>
+<!-- sourcefile~componentspecparser.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~componentspecparser.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node12"><a xlink:href="../sourcefile/componentspecparser.f90.html" xlink:title="ComponentSpecParser.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="749,-318 593,-318 593,-294 749,-294 749,-318"/>
+<text text-anchor="middle" x="671" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ComponentSpecParser.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~componentspecparser.f90&#45;&gt;sourcefile~variablespec.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~componentspecparser.f90&#45;&gt;sourcefile~variablespec.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M615.29,-293.93C602.4,-291.04 588.71,-287.94 576,-285 566.85,-282.88 557.17,-280.6 547.72,-278.35"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="548.52,-274.94 537.98,-276.02 546.89,-281.75 548.52,-274.94"/>
+</g>
+<!-- sourcefile~generic3g.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~generic3g.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node13"><a xlink:href="../sourcefile/generic3g.f90.html" xlink:title="Generic3g.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="716.5,-276 625.5,-276 625.5,-252 716.5,-252 716.5,-276"/>
+<text text-anchor="middle" x="671" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Generic3g.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~generic3g.f90&#45;&gt;sourcefile~variablespec.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~generic3g.f90&#45;&gt;sourcefile~variablespec.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M625.13,-264C602.63,-264 575.02,-264 550.52,-264"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="550.24,-260.5 540.24,-264 550.24,-267.5 550.24,-260.5"/>
+</g>
+<!-- sourcefile~initialize_advertise.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node14" class="node">
+<title>sourcefile~initialize_advertise.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node14"><a xlink:href="../sourcefile/initialize_advertise.f90.html" xlink:title="initialize_advertise.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="738,-234 604,-234 604,-210 738,-210 738,-234"/>
+<text text-anchor="middle" x="671" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">initialize_advertise.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~initialize_advertise.f90&#45;&gt;sourcefile~variablespec.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~initialize_advertise.f90&#45;&gt;sourcefile~variablespec.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M615.29,-234.07C602.4,-236.96 588.71,-240.06 576,-243 566.85,-245.12 557.17,-247.4 547.72,-249.65"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="546.89,-246.25 537.98,-251.98 548.52,-253.06 546.89,-246.25"/>
+</g>
+<!-- sourcefile~mapl_generic.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node15" class="node">
+<title>sourcefile~mapl_generic.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node15"><a xlink:href="../sourcefile/mapl_generic.f90.html" xlink:title="MAPL_Generic.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="726.5,-192 615.5,-192 615.5,-168 726.5,-168 726.5,-192"/>
+<text text-anchor="middle" x="671" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Generic.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl_generic.f90&#45;&gt;sourcefile~variablespec.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~mapl_generic.f90&#45;&gt;sourcefile~variablespec.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M615.11,-188.36C601.96,-191.42 588.2,-195.52 576,-201 551.05,-212.2 526.08,-231.13 509.24,-245.33"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="506.95,-242.68 501.66,-251.86 511.52,-247.98 506.95,-242.68"/>
+</g>
+<!-- sourcefile~mockaspect.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node16" class="node">
+<title>sourcefile~mockaspect.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node16"><a xlink:href="../sourcefile/mockaspect.f90.html" xlink:title="MockAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="720.5,-150 621.5,-150 621.5,-126 720.5,-126 720.5,-150"/>
+<text text-anchor="middle" x="671" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MockAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mockaspect.f90&#45;&gt;sourcefile~variablespec.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~mockaspect.f90&#45;&gt;sourcefile~variablespec.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M621.32,-142.65C606,-145.7 589.56,-150.72 576,-159 541.85,-179.84 514.72,-218.78 500.19,-242.94"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="497.09,-241.29 495.08,-251.7 503.14,-244.82 497.09,-241.29"/>
+</g>
+<!-- sourcefile~mockitemspec.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node17" class="node">
+<title>sourcefile~mockitemspec.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node17"><a xlink:href="../sourcefile/mockitemspec.f90.html" xlink:title="MockItemSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="727.5,-108 614.5,-108 614.5,-84 727.5,-84 727.5,-108"/>
+<text text-anchor="middle" x="671" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MockItemSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mockitemspec.f90&#45;&gt;sourcefile~variablespec.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~mockitemspec.f90&#45;&gt;sourcefile~variablespec.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M614.15,-100.77C600.74,-103.91 587.1,-108.96 576,-117 532.35,-148.62 506.61,-209.28 495.33,-241.92"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="491.87,-241.24 492.05,-251.83 498.51,-243.44 491.87,-241.24"/>
+</g>
+<!-- sourcefile~outermetacomponent.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node18" class="node">
+<title>sourcefile~outermetacomponent.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node18"><a xlink:href="../sourcefile/outermetacomponent.f90.html" xlink:title="OuterMetaComponent.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="748,-66 594,-66 594,-42 748,-42 748,-66"/>
+<text text-anchor="middle" x="671" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">OuterMetaComponent.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~outermetacomponent.f90&#45;&gt;sourcefile~variablespec.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~outermetacomponent.f90&#45;&gt;sourcefile~variablespec.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M593.76,-64.45C587.38,-67.23 581.34,-70.7 576,-75 561.9,-86.36 516.3,-195.65 497.12,-242.67"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="493.87,-241.37 493.35,-251.95 500.36,-244 493.87,-241.37"/>
+</g>
+<!-- sourcefile~test_modelverticalgrid.pf -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node19" class="node">
+<title>sourcefile~test_modelverticalgrid.pf</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node19"><a xlink:href="../sourcefile/test_modelverticalgrid.pf.html" xlink:title="Test_ModelVerticalGrid.pf">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="744,-486 598,-486 598,-462 744,-462 744,-486"/>
+<text text-anchor="middle" x="671" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Test_ModelVerticalGrid.pf</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~test_modelverticalgrid.pf&#45;&gt;sourcefile~variablespec.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge20" class="edge">
+<title>sourcefile~test_modelverticalgrid.pf&#45;&gt;sourcefile~variablespec.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M597.77,-466.97C589.67,-463.67 582.15,-459.15 576,-453 523.88,-400.82 584.83,-349.57 540,-291 537.34,-287.53 534.11,-284.46 530.57,-281.75"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="532.18,-278.62 521.9,-276.09 528.36,-284.49 532.18,-278.62"/>
+</g>
+<!-- sourcefile~variablespecvector.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node20" class="node">
+<title>sourcefile~variablespecvector.f90</title>
+<g id="a_sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_node20"><a xlink:href="../sourcefile/variablespecvector.f90.html" xlink:title="VariableSpecVector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="739.5,-444 602.5,-444 602.5,-420 739.5,-420 739.5,-444"/>
+<text text-anchor="middle" x="671" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VariableSpecVector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~variablespecvector.f90&#45;&gt;sourcefile~variablespec.f90 -->
+<g id="sourcefile~~timeinterpolatetransform.f90~~AfferentGraph_edge22" class="edge">
+<title>sourcefile~variablespecvector.f90&#45;&gt;sourcefile~variablespec.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M602.46,-426.11C592.71,-422.78 583.47,-417.95 576,-411 535.24,-373.06 575.43,-333.96 540,-291 537.07,-287.44 533.54,-284.3 529.73,-281.53"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="531.36,-278.42 521.04,-276.05 527.63,-284.34 531.36,-278.42"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefiletimeinterpolatetransformf90AfferentGraph = svgPanZoom('#sourcefiletimeinterpolatetransformf90AfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#AfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="AfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+<br>
+      <section>
+        <h2><span class="anchor" id="src"></span>Source Code</h2>
+        <div class="hl codehilite"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="cp">#include &quot;MAPL.h&quot;</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a>
+<a id="ln-3" name="ln-3" href="#ln-3"></a><span class="k">module </span><span class="n">mapl3g_TimeInterpolateTransform</span>
+<a id="ln-4" name="ln-4" href="#ln-4"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_TransformId</span>
+<a id="ln-5" name="ln-5" href="#ln-5"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_ExtensionTransform</span>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_regridder_mgr</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_FieldBundle_API</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_InfoUtilities</span>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_StateItem</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="w">   </span><span class="k">use </span><span class="n">MAPL_FieldUtils</span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a><span class="w">   </span><span class="k">use </span><span class="n">MAPL_Constants</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span><span class="p">,</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL64</span>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_ErrorHandling</span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a><span class="w">   </span><span class="k">use </span><span class="n">esmf</span>
+<a id="ln-14" name="ln-14" href="#ln-14"></a>
+<a id="ln-15" name="ln-15" href="#ln-15"></a><span class="w">   </span><span class="k">implicit none</span><span class="p">(</span><span class="k">type</span><span class="p">,</span><span class="k">external</span><span class="p">)</span>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="w">   </span><span class="k">private</span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a>
+<a id="ln-18" name="ln-18" href="#ln-18"></a><span class="k">   public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">TimeInterpolateTransform</span>
+<a id="ln-19" name="ln-19" href="#ln-19"></a>
+<a id="ln-20" name="ln-20" href="#ln-20"></a><span class="w">   </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">extends</span><span class="p">(</span><span class="n">ExtensionTransform</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">TimeInterpolateTransform</span>
+<a id="ln-21" name="ln-21" href="#ln-21"></a><span class="w">   </span><span class="k">contains</span>
+<a id="ln-22" name="ln-22" href="#ln-22"></a><span class="k">      procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">initialize</span>
+<a id="ln-23" name="ln-23" href="#ln-23"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">update</span>
+<a id="ln-24" name="ln-24" href="#ln-24"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_transformId</span>
+<a id="ln-25" name="ln-25" href="#ln-25"></a><span class="w">   </span><span class="k">end type </span><span class="n">TimeInterpolateTransform</span>
+<a id="ln-26" name="ln-26" href="#ln-26"></a>
+<a id="ln-27" name="ln-27" href="#ln-27"></a><span class="w">   </span><span class="k">interface </span><span class="n">TimeInterpolateTransform</span>
+<a id="ln-28" name="ln-28" href="#ln-28"></a><span class="w">      </span><span class="k">module procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">new_TimeInterpolateTransform</span>
+<a id="ln-29" name="ln-29" href="#ln-29"></a><span class="w">   </span><span class="k">end interface </span><span class="n">TimeInterpolateTransform</span>
+<a id="ln-30" name="ln-30" href="#ln-30"></a>
+<a id="ln-31" name="ln-31" href="#ln-31"></a><span class="k">contains</span>
+<a id="ln-32" name="ln-32" href="#ln-32"></a>
+<a id="ln-33" name="ln-33" href="#ln-33"></a><span class="k">   function </span><span class="n">new_TimeInterpolateTransform</span><span class="p">()</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span>
+<a id="ln-34" name="ln-34" href="#ln-34"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">TimeInterpolateTransform</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">transform</span>
+<a id="ln-35" name="ln-35" href="#ln-35"></a><span class="w">   </span><span class="k">end function </span><span class="n">new_TimeInterpolateTransform</span>
+<a id="ln-36" name="ln-36" href="#ln-36"></a>
+<a id="ln-37" name="ln-37" href="#ln-37"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">initialize</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">importState</span><span class="p">,</span><span class="w"> </span><span class="n">exportState</span><span class="p">,</span><span class="w"> </span><span class="n">clock</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-38" name="ln-38" href="#ln-38"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">TimeInterpolateTransform</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-39" name="ln-39" href="#ln-39"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_State</span><span class="p">)</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">importState</span>
+<a id="ln-40" name="ln-40" href="#ln-40"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_State</span><span class="p">)</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">exportState</span>
+<a id="ln-41" name="ln-41" href="#ln-41"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Clock</span><span class="p">)</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">clock</span><span class="w">      </span>
+<a id="ln-42" name="ln-42" href="#ln-42"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-43" name="ln-43" href="#ln-43"></a>
+<a id="ln-44" name="ln-44" href="#ln-44"></a><span class="w">      </span><span class="c">! noop</span>
+<a id="ln-45" name="ln-45" href="#ln-45"></a>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-47" name="ln-47" href="#ln-47"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">initialize</span>
+<a id="ln-48" name="ln-48" href="#ln-48"></a>
+<a id="ln-49" name="ln-49" href="#ln-49"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">update</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">importState</span><span class="p">,</span><span class="w"> </span><span class="n">exportState</span><span class="p">,</span><span class="w"> </span><span class="n">clock</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-50" name="ln-50" href="#ln-50"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">TimeInterpolateTransform</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-51" name="ln-51" href="#ln-51"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_State</span><span class="p">)</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">importState</span>
+<a id="ln-52" name="ln-52" href="#ln-52"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_State</span><span class="p">)</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">exportState</span>
+<a id="ln-53" name="ln-53" href="#ln-53"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Clock</span><span class="p">)</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">clock</span><span class="w">      </span>
+<a id="ln-54" name="ln-54" href="#ln-54"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-55" name="ln-55" href="#ln-55"></a>
+<a id="ln-56" name="ln-56" href="#ln-56"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-57" name="ln-57" href="#ln-57"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_StateItem_Flag</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">itemType</span>
+<a id="ln-58" name="ln-58" href="#ln-58"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_FieldBundle</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle_in</span>
+<a id="ln-59" name="ln-59" href="#ln-59"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">field_out</span>
+<a id="ln-60" name="ln-60" href="#ln-60"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_FieldBundle</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle_out</span>
+<a id="ln-61" name="ln-61" href="#ln-61"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_TypeKind_Flag</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">typekind</span>
+<a id="ln-62" name="ln-62" href="#ln-62"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">field_list</span><span class="p">(:)</span>
+<a id="ln-63" name="ln-63" href="#ln-63"></a>
+<a id="ln-64" name="ln-64" href="#ln-64"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">importState</span><span class="p">,</span><span class="w"> </span><span class="n">COUPLER_IMPORT_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">itemType</span><span class="o">=</span><span class="n">itemType</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-65" name="ln-65" href="#ln-65"></a><span class="w">      </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="n">itemType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_STATEITEM_FIELDBUNDLE</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Expected FieldBundle in importState.&#39;</span><span class="p">)</span>
+<a id="ln-66" name="ln-66" href="#ln-66"></a>
+<a id="ln-67" name="ln-67" href="#ln-67"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">exportState</span><span class="p">,</span><span class="w"> </span><span class="n">COUPLER_EXPORT_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">itemType</span><span class="o">=</span><span class="n">itemType</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">      </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="n">itemType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_STATEITEM_FIELD</span><span class="w"> </span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="w"> </span><span class="n">itemType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">MAPL_STATEITEM_FIELDBUNDLE</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Expected Field or Vector in exportState.&#39;</span><span class="p">)</span>
+<a id="ln-69" name="ln-69" href="#ln-69"></a>
+<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">importState</span><span class="p">,</span><span class="w"> </span><span class="n">itemName</span><span class="o">=</span><span class="n">COUPLER_IMPORT_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">fieldbundle</span><span class="o">=</span><span class="n">bundle_in</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-71" name="ln-71" href="#ln-71"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">itemType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_STATEITEM_FIELD</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="k">         call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">exportState</span><span class="p">,</span><span class="w"> </span><span class="n">itemName</span><span class="o">=</span><span class="n">COUPLER_EXPORT_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">field</span><span class="o">=</span><span class="n">field_out</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-73" name="ln-73" href="#ln-73"></a><span class="w">         </span><span class="k">call </span><span class="n">ESMF_FieldGet</span><span class="p">(</span><span class="n">field_out</span><span class="p">,</span><span class="w"> </span><span class="n">typekind</span><span class="o">=</span><span class="n">typekind</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="w">      </span><span class="k">else if</span><span class="w"> </span><span class="p">(</span><span class="n">itemType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_STATEITEM_FIELDBUNDLE</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-75" name="ln-75" href="#ln-75"></a><span class="k">         call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">exportState</span><span class="p">,</span><span class="w"> </span><span class="n">itemName</span><span class="o">=</span><span class="n">COUPLER_EXPORT_NAME</span><span class="p">,</span><span class="n">fieldbundle</span><span class="o">=</span><span class="n">bundle_out</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-76" name="ln-76" href="#ln-76"></a><span class="w">         </span><span class="k">call </span><span class="n">MAPL_FieldBundleGet</span><span class="p">(</span><span class="n">bundle_out</span><span class="p">,</span><span class="w"> </span><span class="n">fieldList</span><span class="o">=</span><span class="n">field_list</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-77" name="ln-77" href="#ln-77"></a><span class="w">         </span><span class="k">call </span><span class="n">ESMF_FieldGet</span><span class="p">(</span><span class="n">field_list</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">typekind</span><span class="o">=</span><span class="n">typekind</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-78" name="ln-78" href="#ln-78"></a><span class="w">      </span><span class="k">end if</span>
+<a id="ln-79" name="ln-79" href="#ln-79"></a>
+<a id="ln-80" name="ln-80" href="#ln-80"></a><span class="k">      if</span><span class="w"> </span><span class="p">(</span><span class="n">itemType</span><span class="w"> </span><span class="o">==</span><span class="n">ESMF_STATEITEM_FIELD</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-81" name="ln-81" href="#ln-81"></a><span class="k">         if</span><span class="w"> </span><span class="p">(</span><span class="n">typekind</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_TYPEKIND_R4</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-82" name="ln-82" href="#ln-82"></a><span class="k">            call </span><span class="n">run_r4</span><span class="p">(</span><span class="n">bundle_in</span><span class="p">,</span><span class="w"> </span><span class="n">field_out</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-83" name="ln-83" href="#ln-83"></a><span class="w">            </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">         </span><span class="k">end if</span>
+<a id="ln-85" name="ln-85" href="#ln-85"></a>
+<a id="ln-86" name="ln-86" href="#ln-86"></a><span class="k">         if</span><span class="w"> </span><span class="p">(</span><span class="n">typekind</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_TYPEKIND_R8</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-87" name="ln-87" href="#ln-87"></a><span class="k">            call </span><span class="n">run_r8</span><span class="p">(</span><span class="n">bundle_in</span><span class="p">,</span><span class="w"> </span><span class="n">field_out</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-88" name="ln-88" href="#ln-88"></a><span class="w">            </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-89" name="ln-89" href="#ln-89"></a><span class="w">         </span><span class="k">end if</span>
+<a id="ln-90" name="ln-90" href="#ln-90"></a><span class="k">      else if</span><span class="w"> </span><span class="p">(</span><span class="n">itemType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_STATEITEM_FIELDBUNDLE</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-91" name="ln-91" href="#ln-91"></a><span class="k">         if</span><span class="w"> </span><span class="p">(</span><span class="n">typekind</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_TYPEKIND_R4</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-92" name="ln-92" href="#ln-92"></a><span class="k">            call </span><span class="n">run_r4_vector</span><span class="p">(</span><span class="n">bundle_in</span><span class="p">,</span><span class="w"> </span><span class="n">bundle_out</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-93" name="ln-93" href="#ln-93"></a><span class="w">            </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-94" name="ln-94" href="#ln-94"></a><span class="w">         </span><span class="k">end if</span>
+<a id="ln-95" name="ln-95" href="#ln-95"></a>
+<a id="ln-96" name="ln-96" href="#ln-96"></a><span class="k">         if</span><span class="w"> </span><span class="p">(</span><span class="n">typekind</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_TYPEKIND_R8</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-97" name="ln-97" href="#ln-97"></a><span class="k">            call </span><span class="n">run_r8_vector</span><span class="p">(</span><span class="n">bundle_in</span><span class="p">,</span><span class="w"> </span><span class="n">bundle_out</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-98" name="ln-98" href="#ln-98"></a><span class="w">            </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-99" name="ln-99" href="#ln-99"></a><span class="w">         </span><span class="k">end if</span>
+<a id="ln-100" name="ln-100" href="#ln-100"></a><span class="k">      end if</span>
+<a id="ln-101" name="ln-101" href="#ln-101"></a><span class="k">      </span>
+<a id="ln-102" name="ln-102" href="#ln-102"></a><span class="k">      </span><span class="err">_</span><span class="n">FAIL</span><span class="p">(</span><span class="s1">&#39;unexpected typekind&#39;</span><span class="p">)</span>
+<a id="ln-103" name="ln-103" href="#ln-103"></a>
+<a id="ln-104" name="ln-104" href="#ln-104"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-105" name="ln-105" href="#ln-105"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">clock</span><span class="p">)</span>
+<a id="ln-106" name="ln-106" href="#ln-106"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">update</span>
+<a id="ln-107" name="ln-107" href="#ln-107"></a>
+<a id="ln-108" name="ln-108" href="#ln-108"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">run_r4</span><span class="p">(</span><span class="n">bundle_in</span><span class="p">,</span><span class="w"> </span><span class="n">field_out</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-109" name="ln-109" href="#ln-109"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_FieldBundle</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle_in</span>
+<a id="ln-110" name="ln-110" href="#ln-110"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">field_out</span>
+<a id="ln-111" name="ln-111" href="#ln-111"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-112" name="ln-112" href="#ln-112"></a>
+<a id="ln-113" name="ln-113" href="#ln-113"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-114" name="ln-114" href="#ln-114"></a><span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">ESMF_KIND_R4</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">y</span><span class="p">(:),</span><span class="w"> </span><span class="n">xi</span><span class="p">(:)</span>
+<a id="ln-115" name="ln-115" href="#ln-115"></a><span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">ESMF_KIND_R4</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">weights</span><span class="p">(:)</span>
+<a id="ln-116" name="ln-116" href="#ln-116"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span>
+<a id="ln-117" name="ln-117" href="#ln-117"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fieldList</span><span class="p">(:)</span>
+<a id="ln-118" name="ln-118" href="#ln-118"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Info</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle_info</span>
+<a id="ln-119" name="ln-119" href="#ln-119"></a>
+<a id="ln-120" name="ln-120" href="#ln-120"></a>
+<a id="ln-121" name="ln-121" href="#ln-121"></a><span class="w">      </span><span class="k">call </span><span class="n">MAPL_FieldBundleGet</span><span class="p">(</span><span class="n">bundle_in</span><span class="p">,</span><span class="w"> </span><span class="n">fieldList</span><span class="o">=</span><span class="n">fieldList</span><span class="p">,</span><span class="w"> </span><span class="n">interpolation_weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-122" name="ln-122" href="#ln-122"></a>
+<a id="ln-123" name="ln-123" href="#ln-123"></a><span class="w">      </span><span class="k">call </span><span class="n">assign_fptr</span><span class="p">(</span><span class="n">field_out</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-124" name="ln-124" href="#ln-124"></a><span class="w">      </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weights</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="ln-125" name="ln-125" href="#ln-125"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">fieldList</span><span class="p">)</span>
+<a id="ln-126" name="ln-126" href="#ln-126"></a><span class="w">         </span><span class="k">call </span><span class="n">assign_fptr</span><span class="p">(</span><span class="n">fieldList</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">xi</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-127" name="ln-127" href="#ln-127"></a><span class="w">         </span><span class="k">where</span><span class="w"> </span><span class="p">(</span><span class="n">xi</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span><span class="p">)</span>
+<a id="ln-128" name="ln-128" href="#ln-128"></a><span class="w">            </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">weights</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">xi</span>
+<a id="ln-129" name="ln-129" href="#ln-129"></a><span class="w">         </span><span class="n">elsewhere</span>
+<a id="ln-130" name="ln-130" href="#ln-130"></a><span class="w">            </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span>
+<a id="ln-131" name="ln-131" href="#ln-131"></a><span class="w">         </span><span class="k">end where</span>
+<a id="ln-132" name="ln-132" href="#ln-132"></a><span class="k">      end do</span>
+<a id="ln-133" name="ln-133" href="#ln-133"></a>
+<a id="ln-134" name="ln-134" href="#ln-134"></a><span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-135" name="ln-135" href="#ln-135"></a>
+<a id="ln-136" name="ln-136" href="#ln-136"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">run_r4</span>
+<a id="ln-137" name="ln-137" href="#ln-137"></a>
+<a id="ln-138" name="ln-138" href="#ln-138"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">run_r8</span><span class="p">(</span><span class="n">bundle_in</span><span class="p">,</span><span class="w"> </span><span class="n">field_out</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-139" name="ln-139" href="#ln-139"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_FieldBundle</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle_in</span>
+<a id="ln-140" name="ln-140" href="#ln-140"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">field_out</span>
+<a id="ln-141" name="ln-141" href="#ln-141"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-142" name="ln-142" href="#ln-142"></a>
+<a id="ln-143" name="ln-143" href="#ln-143"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-144" name="ln-144" href="#ln-144"></a><span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">ESMF_KIND_R8</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">y</span><span class="p">(:),</span><span class="w"> </span><span class="n">xi</span><span class="p">(:)</span>
+<a id="ln-145" name="ln-145" href="#ln-145"></a><span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">ESMF_KIND_R4</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">weights</span><span class="p">(:)</span>
+<a id="ln-146" name="ln-146" href="#ln-146"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span>
+<a id="ln-147" name="ln-147" href="#ln-147"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fieldList</span><span class="p">(:)</span>
+<a id="ln-148" name="ln-148" href="#ln-148"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Info</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle_info</span>
+<a id="ln-149" name="ln-149" href="#ln-149"></a>
+<a id="ln-150" name="ln-150" href="#ln-150"></a>
+<a id="ln-151" name="ln-151" href="#ln-151"></a><span class="w">      </span><span class="k">call </span><span class="n">MAPL_FieldBundleGet</span><span class="p">(</span><span class="n">bundle_in</span><span class="p">,</span><span class="w"> </span><span class="n">fieldList</span><span class="o">=</span><span class="n">fieldList</span><span class="p">,</span><span class="w"> </span><span class="n">interpolation_weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-152" name="ln-152" href="#ln-152"></a>
+<a id="ln-153" name="ln-153" href="#ln-153"></a><span class="w">      </span><span class="k">call </span><span class="n">assign_fptr</span><span class="p">(</span><span class="n">field_out</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-154" name="ln-154" href="#ln-154"></a><span class="w">      </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weights</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="ln-155" name="ln-155" href="#ln-155"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">fieldList</span><span class="p">)</span>
+<a id="ln-156" name="ln-156" href="#ln-156"></a><span class="w">         </span><span class="k">call </span><span class="n">assign_fptr</span><span class="p">(</span><span class="n">fieldList</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">xi</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-157" name="ln-157" href="#ln-157"></a><span class="w">         </span><span class="k">where</span><span class="w"> </span><span class="p">(</span><span class="n">xi</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL64</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL64</span><span class="p">)</span>
+<a id="ln-158" name="ln-158" href="#ln-158"></a><span class="w">            </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">weights</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">xi</span>
+<a id="ln-159" name="ln-159" href="#ln-159"></a><span class="w">         </span><span class="n">elsewhere</span>
+<a id="ln-160" name="ln-160" href="#ln-160"></a><span class="w">            </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span>
+<a id="ln-161" name="ln-161" href="#ln-161"></a><span class="w">         </span><span class="k">end where</span>
+<a id="ln-162" name="ln-162" href="#ln-162"></a><span class="k">      end do</span>
+<a id="ln-163" name="ln-163" href="#ln-163"></a>
+<a id="ln-164" name="ln-164" href="#ln-164"></a><span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-165" name="ln-165" href="#ln-165"></a>
+<a id="ln-166" name="ln-166" href="#ln-166"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">run_r8</span>
+<a id="ln-167" name="ln-167" href="#ln-167"></a>
+<a id="ln-168" name="ln-168" href="#ln-168"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">run_r4_vector</span><span class="p">(</span><span class="n">bundle_in</span><span class="p">,</span><span class="w"> </span><span class="n">bundle_out</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-169" name="ln-169" href="#ln-169"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_FieldBundle</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle_in</span>
+<a id="ln-170" name="ln-170" href="#ln-170"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_FieldBundle</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle_out</span>
+<a id="ln-171" name="ln-171" href="#ln-171"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-172" name="ln-172" href="#ln-172"></a>
+<a id="ln-173" name="ln-173" href="#ln-173"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-174" name="ln-174" href="#ln-174"></a><span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">ESMF_KIND_R4</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">y</span><span class="p">(:),</span><span class="w"> </span><span class="n">xi</span><span class="p">(:)</span>
+<a id="ln-175" name="ln-175" href="#ln-175"></a><span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">ESMF_KIND_R4</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">weights</span><span class="p">(:)</span>
+<a id="ln-176" name="ln-176" href="#ln-176"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span>
+<a id="ln-177" name="ln-177" href="#ln-177"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fieldList_in</span><span class="p">(:)</span>
+<a id="ln-178" name="ln-178" href="#ln-178"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fieldList_out</span><span class="p">(:)</span>
+<a id="ln-179" name="ln-179" href="#ln-179"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Info</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle_info</span>
+<a id="ln-180" name="ln-180" href="#ln-180"></a>
+<a id="ln-181" name="ln-181" href="#ln-181"></a>
+<a id="ln-182" name="ln-182" href="#ln-182"></a><span class="w">      </span><span class="k">call </span><span class="n">MAPL_FieldBundleGet</span><span class="p">(</span><span class="n">bundle_in</span><span class="p">,</span><span class="w"> </span><span class="n">fieldList</span><span class="o">=</span><span class="n">fieldList_in</span><span class="p">,</span><span class="w"> </span><span class="n">interpolation_weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-183" name="ln-183" href="#ln-183"></a><span class="w">      </span><span class="k">call </span><span class="n">MAPL_FieldBundleGet</span><span class="p">(</span><span class="n">bundle_out</span><span class="p">,</span><span class="w"> </span><span class="n">fieldList</span><span class="o">=</span><span class="n">fieldList_out</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-184" name="ln-184" href="#ln-184"></a>
+<a id="ln-185" name="ln-185" href="#ln-185"></a><span class="w">      </span><span class="k">call </span><span class="n">assign_fptr</span><span class="p">(</span><span class="n">fieldList_out</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span><span class="w"> </span><span class="c">! u component</span>
+<a id="ln-186" name="ln-186" href="#ln-186"></a><span class="w">      </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weights</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="ln-187" name="ln-187" href="#ln-187"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span>
+<a id="ln-188" name="ln-188" href="#ln-188"></a><span class="w">         </span><span class="k">call </span><span class="n">assign_fptr</span><span class="p">(</span><span class="n">fieldList_in</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">xi</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-189" name="ln-189" href="#ln-189"></a><span class="w">         </span><span class="k">where</span><span class="w"> </span><span class="p">(</span><span class="n">xi</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span><span class="p">)</span>
+<a id="ln-190" name="ln-190" href="#ln-190"></a><span class="w">            </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">weights</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">xi</span>
+<a id="ln-191" name="ln-191" href="#ln-191"></a><span class="w">         </span><span class="n">elsewhere</span>
+<a id="ln-192" name="ln-192" href="#ln-192"></a><span class="w">            </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span>
+<a id="ln-193" name="ln-193" href="#ln-193"></a><span class="w">         </span><span class="k">end where</span>
+<a id="ln-194" name="ln-194" href="#ln-194"></a><span class="k">      end do</span>
+<a id="ln-195" name="ln-195" href="#ln-195"></a>
+<a id="ln-196" name="ln-196" href="#ln-196"></a><span class="k">      call </span><span class="n">assign_fptr</span><span class="p">(</span><span class="n">fieldList_out</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span><span class="w"> </span><span class="c">! v component</span>
+<a id="ln-197" name="ln-197" href="#ln-197"></a><span class="w">      </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weights</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="ln-198" name="ln-198" href="#ln-198"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span>
+<a id="ln-199" name="ln-199" href="#ln-199"></a><span class="w">         </span><span class="k">call </span><span class="n">assign_fptr</span><span class="p">(</span><span class="n">fieldList_in</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">xi</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-200" name="ln-200" href="#ln-200"></a><span class="w">         </span><span class="k">where</span><span class="w"> </span><span class="p">(</span><span class="n">xi</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span><span class="p">)</span>
+<a id="ln-201" name="ln-201" href="#ln-201"></a><span class="w">            </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">weights</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">xi</span>
+<a id="ln-202" name="ln-202" href="#ln-202"></a><span class="w">         </span><span class="n">elsewhere</span>
+<a id="ln-203" name="ln-203" href="#ln-203"></a><span class="w">            </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span>
+<a id="ln-204" name="ln-204" href="#ln-204"></a><span class="w">         </span><span class="k">end where</span>
+<a id="ln-205" name="ln-205" href="#ln-205"></a><span class="k">      end do</span>
+<a id="ln-206" name="ln-206" href="#ln-206"></a>
+<a id="ln-207" name="ln-207" href="#ln-207"></a><span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-208" name="ln-208" href="#ln-208"></a>
+<a id="ln-209" name="ln-209" href="#ln-209"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">run_r4_vector</span>
+<a id="ln-210" name="ln-210" href="#ln-210"></a>
+<a id="ln-211" name="ln-211" href="#ln-211"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">run_r8_vector</span><span class="p">(</span><span class="n">bundle_in</span><span class="p">,</span><span class="w"> </span><span class="n">bundle_out</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-212" name="ln-212" href="#ln-212"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_FieldBundle</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle_in</span>
+<a id="ln-213" name="ln-213" href="#ln-213"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_FieldBundle</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle_out</span>
+<a id="ln-214" name="ln-214" href="#ln-214"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-215" name="ln-215" href="#ln-215"></a>
+<a id="ln-216" name="ln-216" href="#ln-216"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-217" name="ln-217" href="#ln-217"></a><span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">ESMF_KIND_R8</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">y</span><span class="p">(:),</span><span class="w"> </span><span class="n">xi</span><span class="p">(:)</span>
+<a id="ln-218" name="ln-218" href="#ln-218"></a><span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">ESMF_KIND_R4</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">weights</span><span class="p">(:)</span>
+<a id="ln-219" name="ln-219" href="#ln-219"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span>
+<a id="ln-220" name="ln-220" href="#ln-220"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fieldList_in</span><span class="p">(:)</span>
+<a id="ln-221" name="ln-221" href="#ln-221"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fieldList_out</span><span class="p">(:)</span>
+<a id="ln-222" name="ln-222" href="#ln-222"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Info</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle_info</span>
+<a id="ln-223" name="ln-223" href="#ln-223"></a>
+<a id="ln-224" name="ln-224" href="#ln-224"></a><span class="w">      </span><span class="k">call </span><span class="n">MAPL_FieldBundleGet</span><span class="p">(</span><span class="n">bundle_in</span><span class="p">,</span><span class="w"> </span><span class="n">fieldList</span><span class="o">=</span><span class="n">fieldList_in</span><span class="p">,</span><span class="w"> </span><span class="n">interpolation_weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-225" name="ln-225" href="#ln-225"></a><span class="w">      </span><span class="k">call </span><span class="n">MAPL_FieldBundleGet</span><span class="p">(</span><span class="n">bundle_out</span><span class="p">,</span><span class="w"> </span><span class="n">fieldList</span><span class="o">=</span><span class="n">fieldList_out</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-226" name="ln-226" href="#ln-226"></a>
+<a id="ln-227" name="ln-227" href="#ln-227"></a><span class="w">      </span><span class="k">call </span><span class="n">assign_fptr</span><span class="p">(</span><span class="n">fieldList_out</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span><span class="w"> </span><span class="c">! u component</span>
+<a id="ln-228" name="ln-228" href="#ln-228"></a><span class="w">      </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weights</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="ln-229" name="ln-229" href="#ln-229"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span>
+<a id="ln-230" name="ln-230" href="#ln-230"></a><span class="w">         </span><span class="k">call </span><span class="n">assign_fptr</span><span class="p">(</span><span class="n">fieldList_in</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">xi</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-231" name="ln-231" href="#ln-231"></a><span class="w">         </span><span class="k">where</span><span class="w"> </span><span class="p">(</span><span class="n">xi</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span><span class="p">)</span>
+<a id="ln-232" name="ln-232" href="#ln-232"></a><span class="w">            </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">weights</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">xi</span>
+<a id="ln-233" name="ln-233" href="#ln-233"></a><span class="w">         </span><span class="n">elsewhere</span>
+<a id="ln-234" name="ln-234" href="#ln-234"></a><span class="w">            </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span>
+<a id="ln-235" name="ln-235" href="#ln-235"></a><span class="w">         </span><span class="k">end where</span>
+<a id="ln-236" name="ln-236" href="#ln-236"></a><span class="k">      end do</span>
+<a id="ln-237" name="ln-237" href="#ln-237"></a>
+<a id="ln-238" name="ln-238" href="#ln-238"></a><span class="k">      call </span><span class="n">assign_fptr</span><span class="p">(</span><span class="n">fieldList_out</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span><span class="w"> </span><span class="c">! v component</span>
+<a id="ln-239" name="ln-239" href="#ln-239"></a><span class="w">      </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weights</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="ln-240" name="ln-240" href="#ln-240"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span>
+<a id="ln-241" name="ln-241" href="#ln-241"></a><span class="w">         </span><span class="k">call </span><span class="n">assign_fptr</span><span class="p">(</span><span class="n">fieldList_in</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">xi</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-242" name="ln-242" href="#ln-242"></a><span class="w">         </span><span class="k">where</span><span class="w"> </span><span class="p">(</span><span class="n">xi</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span><span class="p">)</span>
+<a id="ln-243" name="ln-243" href="#ln-243"></a><span class="w">            </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">weights</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">xi</span>
+<a id="ln-244" name="ln-244" href="#ln-244"></a><span class="w">         </span><span class="n">elsewhere</span>
+<a id="ln-245" name="ln-245" href="#ln-245"></a><span class="w">            </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MAPL_UNDEFINED_REAL</span>
+<a id="ln-246" name="ln-246" href="#ln-246"></a><span class="w">         </span><span class="k">end where</span>
+<a id="ln-247" name="ln-247" href="#ln-247"></a><span class="k">      end do</span>
+<a id="ln-248" name="ln-248" href="#ln-248"></a>
+<a id="ln-249" name="ln-249" href="#ln-249"></a><span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-250" name="ln-250" href="#ln-250"></a>
+<a id="ln-251" name="ln-251" href="#ln-251"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">run_r8_vector</span>
+<a id="ln-252" name="ln-252" href="#ln-252"></a>
+<a id="ln-253" name="ln-253" href="#ln-253"></a><span class="w">   </span><span class="k">function </span><span class="n">get_transformId</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<a id="ln-254" name="ln-254" href="#ln-254"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">TransformId</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">id</span>
+<a id="ln-255" name="ln-255" href="#ln-255"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">TimeInterpolateTransform</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-256" name="ln-256" href="#ln-256"></a>
+<a id="ln-257" name="ln-257" href="#ln-257"></a><span class="w">      </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TIME_INTERP_TRANSFORM_ID</span>
+<a id="ln-258" name="ln-258" href="#ln-258"></a><span class="w">   </span><span class="k">end function </span><span class="n">get_transformId</span>
+<a id="ln-259" name="ln-259" href="#ln-259"></a>
+<a id="ln-260" name="ln-260" href="#ln-260"></a><span class="k">end module </span><span class="n">mapl3g_TimeInterpolateTransform</span>
+</pre></div>
+
+      </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              MAPL
+ was developed by The MAPL Developers<br>              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2025-11-21T18:33:45.559406+0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
