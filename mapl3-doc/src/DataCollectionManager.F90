@@ -1,23 +1,24 @@
-module mapl3g_DataCollectionManager
-use mapl3g_DataCollectionVector
-use mapl3g_DataCollection
+module MAPL_DataCollectionManagerMod
+use MAPL_CollectionVectorMod
+use MAPL_DataCollectionMod
 implicit none
 private
 
-type(DataCollectionVector), target :: DataCollections
+type(MAPLCollectionVector), target :: DataCollections
 
 public DataCollections
-public mapl3g_AddDataCollection
+public MAPL_DataAddCollection
 
 contains
 
-  function mapl3g_AddDataCollection(template) result(id)
+  function MAPL_DataAddCollection(template,use_file_coords) result(id)
      character(len=*), intent(in) :: template
+     logical, optional, intent(in) :: use_file_coords
       integer :: n
       logical :: found
-      type (DataCollectionVectorIterator) :: iter
-      type (DataCollection), pointer :: collection
-      type (DataCollection) :: c
+      type (MAPLCollectionVectorIterator) :: iter
+      type (MAPLDataCollection), pointer :: collection
+      type (MAPLDataCollection) :: c
       integer :: id
 
       iter = Datacollections%begin()
@@ -36,12 +37,12 @@ contains
       end do
 
       if (.not. found) then
-         c = DataCollection(template)
+         c = MAPLDataCollection(template,use_file_coords=use_file_coords)
          call Datacollections%push_back(c)
       end if
 
       id = n
 
-   end function mapl3g_AddDataCollection
+   end function MAPL_DataAddCollection
 
 end module 
