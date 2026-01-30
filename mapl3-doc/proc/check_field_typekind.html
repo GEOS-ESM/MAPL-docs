@@ -94,7 +94,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title=" 0.1% of total for procedures.">57 statements</a>
+                 title=" 0.1% of total for procedures.">73 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -195,7 +195,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-state~170"></span>
+              <span class="anchor" id="variable-state~191"></span>
               type(<a href='https://mathomp4.github.io/esmf/type/esmf_state.html'>ESMF_State</a>),
             </td>
 <td>intent(inout)</td>
@@ -210,7 +210,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-short_name~60"></span>
+              <span class="anchor" id="variable-short_name~64"></span>
               character(len=*),
             </td>
 <td>intent(in)</td>
@@ -240,7 +240,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-rc~2950"></span>
+              <span class="anchor" id="variable-rc~3704"></span>
               integer,
             </td>
 <td>intent(out)</td>
@@ -551,10 +551,28 @@ large graphs.</div>
 
 <span class="k">      call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">short_name</span><span class="p">,</span><span class="w"> </span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
 <span class="w">      </span><span class="k">call </span><span class="n">ESMF_FieldGet</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="n">typekind</span><span class="o">=</span><span class="n">found_field_typekind</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
-<span class="w">      </span><span class="n">msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">msg</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">short_name</span>
+<span class="w">      </span><span class="n">msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">msg</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="s1">&#39; :: expected=&#39;</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">expected_field_typekind_str</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="s1">&#39;, found=&#39;</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">           </span><span class="n">typekind_to_string</span><span class="p">(</span><span class="n">found_field_typekind</span><span class="p">)</span>
 <span class="w">      </span><span class="err">@</span><span class="n">assert_that</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span><span class="w"> </span><span class="n">expected_field_typekind</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">found_field_typekind</span><span class="p">,</span><span class="w"> </span><span class="k">is</span><span class="p">(</span><span class="n">true</span><span class="p">()))</span>
 
 <span class="w">      </span><span class="n">rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+
+<span class="w">   </span><span class="k">contains</span>
+<span class="k">      function </span><span class="n">typekind_to_string</span><span class="p">(</span><span class="n">tk</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="w">         </span><span class="kt">character</span><span class="p">(:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">s</span>
+<span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_TypeKind_Flag</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">tk</span>
+<span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tk</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_TYPEKIND_R4</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">            </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;R4&#39;</span>
+<span class="w">         </span><span class="k">else if</span><span class="w"> </span><span class="p">(</span><span class="n">tk</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_TYPEKIND_R8</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">            </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;R8&#39;</span>
+<span class="w">         </span><span class="k">else if</span><span class="w"> </span><span class="p">(</span><span class="n">tk</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_TYPEKIND_I4</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">            </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;I4&#39;</span>
+<span class="w">         </span><span class="k">else if</span><span class="w"> </span><span class="p">(</span><span class="n">tk</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_TYPEKIND_I8</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">            </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;I8&#39;</span>
+<span class="w">         </span><span class="k">else</span>
+<span class="k">            </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;unknown&#39;</span>
+<span class="w">         </span><span class="k">end if</span>
+<span class="k">      end function </span><span class="n">typekind_to_string</span>
 <span class="w">   </span><span class="k">end subroutine </span><span class="n">check_field_typekind</span>
 </pre></div>
 
@@ -579,7 +597,7 @@ large graphs.</div>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-01-29T20:15:43.869167+0000             </p>
+ on 2026-01-30T17:49:40.841953+0000             </p>
           </div>
         </div>
         <br>
