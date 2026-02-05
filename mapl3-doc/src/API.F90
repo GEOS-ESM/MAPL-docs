@@ -1,28 +1,46 @@
-module mapl3g_Geom_API
-
-   use mapl_KeywordEnforcer
-   use mapl3g_MaplGeom, only: MaplGeom
-   use mapl3g_GeomSpec, only: GeomSpec
-   use mapl3g_GeomManager, only: GeomManager, geom_manager, get_geom_manager, get_mapl_geom
-   use mapl3g_GeomUtilities, only: mapl_SameGeom, mapl_GeomGetId
-   use mapl3g_GeomGet, only: mapl_GeomGet => GeomGet
-   use mapl3g_GridGet, only: mapl_GridGet => GridGet, mapl_GridGetCoordinates => GridGetCoordinates
-   use esmf, only: ESMF_Grid, ESMF_Geom, ESMF_KIND_R4
-
+module mapl3g_VerticalGrid_API
+   use mapl3g_VerticalGrid, only: VerticalGrid
+   use mapl3g_VerticalGrid, only: VERTICAL_GRID_NOT_FOUND
+   use mapl3g_VerticalGridSpec, only: VerticalGridSpec
+   use mapl3g_VerticalGridFactory, only: VerticalGridFactory
+   use mapl3g_VerticalGridManager, only: VerticalGridManager
+   use mapl3g_VerticalGridManager, only: get_vertical_grid_manager
+   use mapl3g_IntegerPair, only: IntegerPair
+   use mapl3g_VerticalStaggerLoc
+   use mapl3g_BasicVerticalGrid, only: BasicVerticalGrid
+   use mapl3g_BasicVerticalGrid, only: BasicVerticalGridSpec
+   use mapl3g_BasicVerticalGrid, only: BasicVerticalGridFactory
    implicit none(type,external)
-
    private
 
-   ! Available to users
-   public :: mapl_GeomGet
-   public :: mapl_GridGet
-   public :: mapl_GridGetCoordinates
+   ! Abstract base types
+   public :: VerticalGrid
+   public :: VerticalGridSpec
+   public :: VerticalGridFactory
 
-   ! Used internally by MAPL
-   ! Users shouldn't need these
-   public :: MaplGeom
-   public :: mapl_SameGeom, mapl_GeomGetId
-   public :: GeomManager, geom_manager, get_geom_manager, get_mapl_geom
-   public :: GeomSpec
+   ! Manager
+   public :: VerticalGridManager
+   public :: get_vertical_grid_manager
+   
+   ! Utility types
+   public :: IntegerPair
+   
+   ! Vertical stagger locations
+   public :: VerticalStaggerLoc
+   public :: operator(==), operator(/=)
+   public :: VERTICAL_STAGGER_NONE
+   public :: VERTICAL_STAGGER_EDGE
+   public :: VERTICAL_STAGGER_CENTER
+   public :: VERTICAL_STAGGER_MIRROR
+   public :: VERTICAL_STAGGER_INVALID
+   
+   ! Basic grid types
+   public :: BasicVerticalGrid
+   public :: BasicVerticalGridSpec
+   public :: BasicVerticalGridFactory
 
-end module mapl3g_Geom_API
+   ! Parameters
+   public :: VERTICAL_GRID_NOT_FOUND
+  
+   
+end module mapl3g_VerticalGrid_API
