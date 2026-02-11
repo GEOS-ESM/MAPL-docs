@@ -1,41 +1,28 @@
-module mapl3g_FieldBundle_API
+module mapl3g_Geom_API
 
-   use ESMF, only: MAPL_FieldBundleAdd => ESMF_FieldBundleAdd
-   use mapl3g_FieldBundleType_Flag
-   use mapl3g_FieldBundleCreate, only: MAPL_FieldBundleCreate => FieldBundleCreate
-   use mapl3g_FieldBundleCreate, only: MAPL_FieldBundlesAreAliased => FieldBundlesAreAliased
-   use mapl3g_FieldBundleGet, only: MAPL_FieldBundleGet => FieldBundleGet
-   use mapl3g_FieldBundleSet, only: MAPL_FieldBundleSet => FieldBundleSet
-   use mapl3g_FieldBundleInfo, only: MAPL_FieldBundleInfoGetInternal => FieldBundleInfoGetInternal
-   use mapl3g_FieldBundleInfo, only: MAPL_FieldBundleInfoSetInternal => FieldBundleInfoSetInternal
-   use mapl3g_FieldBundleGetPointer, only: MAPL_FieldBundleGetPointer => FieldBundleGetPointerToData
+   use mapl_KeywordEnforcer
+   use mapl3g_MaplGeom, only: MaplGeom
+   use mapl3g_GeomSpec, only: GeomSpec
+   use mapl3g_GeomManager, only: GeomManager, geom_manager, get_geom_manager, get_mapl_geom
+   use mapl3g_GeomUtilities, only: mapl_SameGeom, mapl_GeomGetId
+   use mapl3g_GeomGet, only: mapl_GeomGet => GeomGet
+   use mapl3g_GridGet, only: mapl_GridGet => GridGet, mapl_GridGetCoordinates => GridGetCoordinates
+   use esmf, only: ESMF_Grid, ESMF_Geom, ESMF_KIND_R4
 
-   implicit none
+   implicit none(type,external)
 
    private
 
    ! Available to users
-   public :: MAPL_FieldBundleCreate
-   public :: MAPL_FieldBundlesAreAliased
-   public :: MAPL_FieldBundleGet
-   public :: MAPL_FieldBundleSet
-   public :: MAPL_FieldBundleAdd
-   public :: MAPL_FieldBundleGetPointer
-   ! Maybe these should be private?
-   public :: MAPL_FieldBundleInfoGetInternal
-   public :: MAPL_FieldBundleInfoSetInternal
-
-   public :: FieldBundleType_Flag
-   public :: FIELDBUNDLETYPE_INVALID
-   public :: FIELDBUNDLETYPE_BASIC
-   public :: FIELDBUNDLETYPE_VECTOR
-   public :: FIELDBUNDLETYPE_BRACKET
-   public :: FIELDBUNDLETYPE_VECTOR_BRACKET
-
-   public :: operator(==)
-   public :: operator(/=)
+   public :: mapl_GeomGet
+   public :: mapl_GridGet
+   public :: mapl_GridGetCoordinates
 
    ! Used internally by MAPL
    ! Users shouldn't need these
+   public :: MaplGeom
+   public :: mapl_SameGeom, mapl_GeomGetId
+   public :: GeomManager, geom_manager, get_geom_manager, get_mapl_geom
+   public :: GeomSpec
 
-end module mapl3g_FieldBundle_API
+end module mapl3g_Geom_API
