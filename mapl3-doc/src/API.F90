@@ -1,46 +1,21 @@
-module mapl3g_VerticalGrid_API
-   use mapl3g_VerticalGrid, only: VerticalGrid
-   use mapl3g_VerticalGrid, only: VERTICAL_GRID_NOT_FOUND
-   use mapl3g_VerticalGridSpec, only: VerticalGridSpec
-   use mapl3g_VerticalGridFactory, only: VerticalGridFactory
-   use mapl3g_VerticalGridManager, only: VerticalGridManager
-   use mapl3g_VerticalGridManager, only: get_vertical_grid_manager
-   use mapl3g_IntegerPair, only: IntegerPair
-   use mapl3g_VerticalStaggerLoc
-   use mapl3g_BasicVerticalGrid, only: BasicVerticalGrid
-   use mapl3g_BasicVerticalGrid, only: BasicVerticalGridSpec
-   use mapl3g_BasicVerticalGrid, only: BasicVerticalGridFactory
-   implicit none(type,external)
-   private
+module mapl3g_Utilities_Comms_API
+   use mapl3g_Comms, only: MAPL_Am_I_Root => Am_I_Root
+   use mapl3g_Comms, only: MAPL_NPES => num_pes
 
-   ! Abstract base types
-   public :: VerticalGrid
-   public :: VerticalGridSpec
-   public :: VerticalGridFactory
+   use mapl3g_Comms, only: MAPL_CommsSend => comms_send
+   use mapl3g_Comms, only: MAPL_CommsRecv => comms_recv
+   use mapl3g_Comms, only: MAPL_CommsSendRecv => comms_sendrecv
 
-   ! Manager
-   public :: VerticalGridManager
-   public :: get_vertical_grid_manager
-   
-   ! Utility types
-   public :: IntegerPair
-   
-   ! Vertical stagger locations
-   public :: VerticalStaggerLoc
-   public :: operator(==), operator(/=)
-   public :: VERTICAL_STAGGER_NONE
-   public :: VERTICAL_STAGGER_EDGE
-   public :: VERTICAL_STAGGER_CENTER
-   public :: VERTICAL_STAGGER_MIRROR
-   public :: VERTICAL_STAGGER_INVALID
-   
-   ! Basic grid types
-   public :: BasicVerticalGrid
-   public :: BasicVerticalGridSpec
-   public :: BasicVerticalGridFactory
+   use mapl3g_Comms, only: MAPL_CommsGatherV => comms_gatherv
+   use mapl3g_Comms, only: MAPL_CommsScatterV => comms_scatterv
 
-   ! Parameters
-   public :: VERTICAL_GRID_NOT_FOUND
-  
-   
-end module mapl3g_VerticalGrid_API
+   use mapl3g_Comms, only: MAPL_CommsAllGather => comms_allgather
+   use mapl3g_Comms, only: MAPL_CommsAllGatherV => comms_allgatherv
+
+   use mapl3g_Comms, only: MAPL_ArrayGather => array_gather
+   use mapl3g_Comms, only: MAPL_ArrayScatter => array_scatter
+
+   use mapl3g_Comms, only: MAPL_CommsAllReduceMin => comms_allreduce_min
+   use mapl3g_Comms, only: MAPL_CommsAllReduceMax => comms_allreduce_max
+   use mapl3g_Comms, only: MAPL_CommsAllReduceSum => comms_allreduce_sum
+end module mapl3g_Utilities_Comms_API
