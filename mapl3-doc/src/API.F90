@@ -1,21 +1,30 @@
-module mapl3g_Utilities_Comms_API
-   use mapl3g_Comms, only: MAPL_Am_I_Root => Am_I_Root
-   use mapl3g_Comms, only: MAPL_NPES => num_pes
+module mapl3g_Geom_API
 
-   use mapl3g_Comms, only: MAPL_CommsSend => comms_send
-   use mapl3g_Comms, only: MAPL_CommsRecv => comms_recv
-   use mapl3g_Comms, only: MAPL_CommsSendRecv => comms_sendrecv
+   use mapl_KeywordEnforcer
+   use mapl3g_MaplGeom, only: MaplGeom
+   use mapl3g_GeomSpec, only: GeomSpec
+   use mapl3g_GeomManager, only: GeomManager, geom_manager, get_geom_manager, get_mapl_geom
+   use mapl3g_GeomUtilities, only: mapl_SameGeom, mapl_GeomGetId
+   use mapl3g_GeomGet, only: mapl_GeomGet => GeomGet
+   use mapl3g_GridGet, only: mapl_GridGet => GridGet, mapl_GridGetCoordinates => GridGetCoordinates
+   use mapl3g_VectorBasis, only: mapl_GridGetCorners => GridGetCorners
+   use esmf, only: ESMF_Grid, ESMF_Geom, ESMF_KIND_R4
 
-   use mapl3g_Comms, only: MAPL_CommsGatherV => comms_gatherv
-   use mapl3g_Comms, only: MAPL_CommsScatterV => comms_scatterv
+   implicit none(type,external)
 
-   use mapl3g_Comms, only: MAPL_CommsAllGather => comms_allgather
-   use mapl3g_Comms, only: MAPL_CommsAllGatherV => comms_allgatherv
+   private
 
-   use mapl3g_Comms, only: MAPL_ArrayGather => array_gather
-   use mapl3g_Comms, only: MAPL_ArrayScatter => array_scatter
+   ! Available to users
+   public :: mapl_GeomGet
+   public :: mapl_GridGet
+   public :: mapl_GridGetCoordinates
+   public :: mapl_GridGetCorners
 
-   use mapl3g_Comms, only: MAPL_CommsAllReduceMin => comms_allreduce_min
-   use mapl3g_Comms, only: MAPL_CommsAllReduceMax => comms_allreduce_max
-   use mapl3g_Comms, only: MAPL_CommsAllReduceSum => comms_allreduce_sum
-end module mapl3g_Utilities_Comms_API
+   ! Used internally by MAPL
+   ! Users shouldn't need these
+   public :: MaplGeom
+   public :: mapl_SameGeom, mapl_GeomGetId
+   public :: GeomManager, geom_manager, get_geom_manager, get_mapl_geom
+   public :: GeomSpec
+
+end module mapl3g_Geom_API
