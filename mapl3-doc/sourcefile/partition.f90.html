@@ -1,0 +1,1061 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="MAPL is a foundation layer of the GEOS architecture, whose original purpose is to supplement the Earth System Modeling Framework (ESMF)">
+    <meta name="author" content="The MAPL Developers" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>Partition.F90 &ndash; MAPL</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">MAPL </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>Partition.F90
+      <small>Source File</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.0% of total for source files.">89 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/Partition.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+            <li class="breadcrumb-item active" aria-current="page">Partition.F90</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#mods-0"
+         aria-expanded="false" aria-controls="mods-0">
+         <h4 class="card-header bg-primary text-white">Modules</h4>
+      </a>
+      <div id="mods-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/mapl_partition.html">mapl_Partition</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/partition.f90.html#src">Partition.F90</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">This file depends on</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~partition.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilepartitionf90EfferentGraph" width="383pt" height="74pt"
+ viewBox="0.00 0.00 383.00 74.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~partition.f90~~EfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 70)">
+<title>sourcefile~~partition.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-70 379,-70 379,4 -4,4"/>
+<!-- sourcefile~partition.f90 -->
+<g id="sourcefile~~partition.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~partition.f90</title>
+<polygon fill="none" stroke="black" points="375,-45 296,-45 296,-21 375,-21 375,-45"/>
+<text text-anchor="middle" x="335.5" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50">Partition.F90</text>
+</g>
+<!-- sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~partition.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~errorhandling.f90</title>
+<g id="a_sourcefile~~partition.f90~~EfferentGraph_node2"><a xlink:href="../sourcefile/errorhandling.f90.html" xlink:title="ErrorHandling.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="252.5,-66 143.5,-66 143.5,-42 252.5,-42 252.5,-66"/>
+<text text-anchor="middle" x="198" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ErrorHandling.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~partition.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~partition.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~partition.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M295.67,-39.02C285.43,-40.6 274.11,-42.36 262.93,-44.09"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="262.07,-40.68 252.73,-45.67 263.15,-47.6 262.07,-40.68"/>
+</g>
+<!-- sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~partition.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~keywordenforcer.f90</title>
+<g id="a_sourcefile~~partition.f90~~EfferentGraph_node3"><a xlink:href="../sourcefile/keywordenforcer.f90.html" xlink:title="KeywordEnforcer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="260,-24 136,-24 136,0 260,0 260,-24"/>
+<text text-anchor="middle" x="198" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">KeywordEnforcer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~partition.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~partition.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~partition.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M295.67,-26.98C287.6,-25.73 278.86,-24.38 270.04,-23.01"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="270.51,-19.54 260.09,-21.47 269.44,-26.46 270.51,-19.54"/>
+</g>
+<!-- sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~partition.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~mapl_throw.f90</title>
+<g id="a_sourcefile~~partition.f90~~EfferentGraph_node4"><a xlink:href="../sourcefile/mapl_throw.f90.html" xlink:title="MAPL_Throw.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="100,-66 0,-66 0,-42 100,-42 100,-66"/>
+<text text-anchor="middle" x="50" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Throw.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~partition.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M143.46,-54C132.73,-54 121.4,-54 110.48,-54"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="110.17,-50.5 100.17,-54 110.17,-57.5 110.17,-50.5"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#EfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="EfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Files dependent on this one</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~partition.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilepartitionf90AfferentGraph" width="641pt" height="426pt"
+ viewBox="0.00 0.00 641.00 425.71" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~partition.f90~~AfferentGraph" class="graph" transform="scale(0.56 0.56) rotate(0) translate(4 761.07)">
+<title>sourcefile~~partition.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-761.07 1148,-761.07 1148,4 -4,4"/>
+<!-- sourcefile~partition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~partition.f90</title>
+<polygon fill="none" stroke="black" points="79,-452.26 0,-452.26 0,-428.26 79,-428.26 79,-452.26"/>
+<text text-anchor="middle" x="39.5" y="-437.86" font-family="Helvetica,sans-Serif" font-size="10.50">Partition.F90</text>
+</g>
+<!-- sourcefile~cubedspheredecomposition_smod.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~cubedspheredecomposition_smod.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node2"><a xlink:href="../sourcefile/cubedspheredecomposition_smod.f90.html" xlink:title="CubedSphereDecomposition_smod.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="337,-494.26 115,-494.26 115,-470.26 337,-470.26 337,-494.26"/>
+<text text-anchor="middle" x="226" y="-479.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">CubedSphereDecomposition_smod.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~cubedspheredecomposition_smod.f90&#45;&gt;sourcefile~partition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~cubedspheredecomposition_smod.f90&#45;&gt;sourcefile~partition.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M157.03,-470.23C143.08,-467.5 128.53,-464.45 115,-461.26 106.45,-459.24 97.4,-456.88 88.68,-454.49"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="89.58,-451.11 79,-451.79 87.69,-457.85 89.58,-451.11"/>
+</g>
+<!-- sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~latlondecomposition.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node3"><a xlink:href="../sourcefile/latlondecomposition.f90.html" xlink:title="LatLonDecomposition.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="301.5,-452.26 150.5,-452.26 150.5,-428.26 301.5,-428.26 301.5,-452.26"/>
+<text text-anchor="middle" x="226" y="-437.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">LatLonDecomposition.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~latlondecomposition.f90&#45;&gt;sourcefile~partition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~latlondecomposition.f90&#45;&gt;sourcefile~partition.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M150.49,-440.26C129.81,-440.26 107.91,-440.26 89.13,-440.26"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="89.05,-436.76 79.05,-440.26 89.05,-443.76 89.05,-436.76"/>
+</g>
+<!-- sourcefile~test_partition.pf -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~test_partition.pf</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node4"><a xlink:href="../sourcefile/test_partition.pf.html" xlink:title="Test_Partition.pf">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="274,-410.26 178,-410.26 178,-386.26 274,-386.26 274,-410.26"/>
+<text text-anchor="middle" x="226" y="-395.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Test_Partition.pf</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~test_partition.pf&#45;&gt;sourcefile~partition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~test_partition.pf&#45;&gt;sourcefile~partition.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M177.98,-406.31C158.42,-409.9 135.53,-414.41 115,-419.26 106.45,-421.27 97.4,-423.63 88.68,-426.02"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="87.69,-422.66 79,-428.72 89.58,-429.41 87.69,-422.66"/>
+</g>
+<!-- sourcefile~create_basic_grid.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~create_basic_grid.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node5"><a xlink:href="../sourcefile/create_basic_grid.f90.html" xlink:title="create_basic_grid.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1110.5,-414.26 982.5,-414.26 982.5,-390.26 1110.5,-390.26 1110.5,-414.26"/>
+<text text-anchor="middle" x="1046.5" y="-399.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">create_basic_grid.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~create_basic_grid.f90&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~create_basic_grid.f90&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M1040.26,-414.56C1017.68,-465.44 923.67,-656.18 788,-644.26"/>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M786,-644.26C729.81,-639.32 701.74,-661.27 661,-622.26 607.42,-570.94 681.72,-507.08 625,-459.26 579.39,-420.79 414.52,-425.54 311.84,-432.73"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="311.52,-429.24 301.79,-433.45 312.02,-436.22 311.52,-429.24"/>
+</g>
+<!-- sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~latlongeomspec.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node12"><a xlink:href="../sourcefile/latlongeomspec.f90.html" xlink:title="LatLonGeomSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="564,-412.26 434,-412.26 434,-388.26 564,-388.26 564,-412.26"/>
+<text text-anchor="middle" x="499" y="-397.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">LatLonGeomSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~create_basic_grid.f90&#45;&gt;sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge21" class="edge">
+<title>sourcefile~create_basic_grid.f90&#45;&gt;sourcefile~latlongeomspec.f90</title>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M982.49,-409.06C929.84,-413.02 853.13,-414.75 788,-400.26"/>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M786,-400.26C715.47,-384.56 632.72,-386.71 574.42,-391.49"/>
+<polygon fill="#00ff78" stroke="#00ff78" points="573.86,-388.02 564.2,-392.37 574.46,-395 573.86,-388.02"/>
+</g>
+<!-- sourcefile~latlongeomfactory.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node23" class="node">
+<title>sourcefile~latlongeomfactory.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node23"><a xlink:href="../sourcefile/latlongeomfactory.f90.html" xlink:title="LatLonGeomFactory.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="857.5,-372.26 716.5,-372.26 716.5,-348.26 857.5,-348.26 857.5,-372.26"/>
+<text text-anchor="middle" x="787" y="-357.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">LatLonGeomFactory.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~create_basic_grid.f90&#45;&gt;sourcefile~latlongeomfactory.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge37" class="edge">
+<title>sourcefile~create_basic_grid.f90&#45;&gt;sourcefile~latlongeomfactory.f90</title>
+<path fill="none" stroke="#ffbf00" stroke-dasharray="5,2" d="M982.18,-391.93C947.74,-386.31 904.8,-379.31 868.06,-373.31"/>
+<polygon fill="#ffbf00" stroke="#ffbf00" points="868.31,-369.81 857.87,-371.65 867.18,-376.72 868.31,-369.81"/>
+</g>
+<!-- sourcefile~equal_to.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~equal_to.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node6"><a xlink:href="../sourcefile/equal_to.f90.html" xlink:title="equal_to.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="539,-698.26 459,-698.26 459,-674.26 539,-674.26 539,-698.26"/>
+<text text-anchor="middle" x="499" y="-683.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">equal_to.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~equal_to.f90&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~equal_to.f90&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M458.78,-688.79C431.02,-688.34 394.96,-682.8 373,-660.26 310.28,-595.88 400.25,-525.12 337,-461.26 329.82,-454 320.95,-448.84 311.4,-445.22"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="312.25,-441.82 301.66,-442.09 310.11,-448.48 312.25,-441.82"/>
+</g>
+<!-- sourcefile~fill_coordinates.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~fill_coordinates.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node7"><a xlink:href="../sourcefile/fill_coordinates.f90.html" xlink:title="fill_coordinates.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1104.5,-737.26 988.5,-737.26 988.5,-713.26 1104.5,-713.26 1104.5,-737.26"/>
+<text text-anchor="middle" x="1046.5" y="-722.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fill_coordinates.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fill_coordinates.f90&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~fill_coordinates.f90&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M786,-726.26C608.22,-679.8 509.22,-830.58 373,-707.26 291.08,-633.1 413.42,-541.06 337,-461.26 329.89,-453.83 321.02,-448.58 311.43,-444.92"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="312.23,-441.49 301.64,-441.76 310.08,-448.16 312.23,-441.49"/>
+</g>
+<!-- sourcefile~fill_coordinates.f90&#45;&gt;sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge23" class="edge">
+<title>sourcefile~fill_coordinates.f90&#45;&gt;sourcefile~latlongeomspec.f90</title>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M988.45,-733.75C935.56,-739.7 855.15,-743.8 788,-726.26"/>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M786,-726.26C716.08,-707.99 698.6,-683.98 661,-622.26 622.4,-558.9 671.28,-517.24 625,-459.26 608.49,-438.57 583,-424.75 559.33,-415.73"/>
+<polygon fill="#00ff78" stroke="#00ff78" points="560.28,-412.35 549.69,-412.27 557.92,-418.94 560.28,-412.35"/>
+</g>
+<!-- sourcefile~fill_coordinates.f90&#45;&gt;sourcefile~latlongeomfactory.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge38" class="edge">
+<title>sourcefile~fill_coordinates.f90&#45;&gt;sourcefile~latlongeomfactory.f90</title>
+<path fill="none" stroke="#ffbf00" stroke-dasharray="5,2" d="M988.44,-724.46C973.68,-721.43 959.11,-715.45 949,-704.26 853.66,-598.71 1008.83,-491.37 913,-386.26 901.2,-373.32 884.78,-365.89 867.72,-361.8"/>
+<polygon fill="#ffbf00" stroke="#ffbf00" points="868.12,-358.31 857.63,-359.76 866.74,-365.17 868.12,-358.31"/>
+</g>
+<!-- sourcefile~get_idx_range.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~get_idx_range.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node8"><a xlink:href="../sourcefile/get_idx_range.f90.html" xlink:title="get_idx_range.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="554,-618.26 444,-618.26 444,-594.26 554,-594.26 554,-618.26"/>
+<text text-anchor="middle" x="499" y="-603.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_idx_range.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~get_idx_range.f90&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~get_idx_range.f90&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M443.84,-609.51C419.52,-608.13 392.07,-602.23 373,-585.26 330.14,-547.1 379.44,-499.89 337,-461.26 329.61,-454.53 320.76,-449.66 311.33,-446.17"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="312.33,-442.82 301.74,-443.12 310.21,-449.49 312.33,-442.82"/>
+</g>
+<!-- sourcefile~get_lat_subset.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~get_lat_subset.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node9"><a xlink:href="../sourcefile/get_lat_subset.f90.html" xlink:title="get_lat_subset.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="554.5,-576.26 443.5,-576.26 443.5,-552.26 554.5,-552.26 554.5,-576.26"/>
+<text text-anchor="middle" x="499" y="-561.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_lat_subset.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~get_lat_subset.f90&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~get_lat_subset.f90&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M443.24,-566.25C419.51,-564.47 392.7,-558.6 373,-543.26 341.6,-518.8 368.13,-486.06 337,-461.26 329.44,-455.23 320.67,-450.75 311.44,-447.45"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="312.27,-444.05 301.68,-444.42 310.19,-450.73 312.27,-444.05"/>
+</g>
+<!-- sourcefile~get_lon_subset.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~get_lon_subset.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node10"><a xlink:href="../sourcefile/get_lon_subset.f90.html" xlink:title="get_lon_subset.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="556,-534.26 442,-534.26 442,-510.26 556,-510.26 556,-534.26"/>
+<text text-anchor="middle" x="499" y="-519.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_lon_subset.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~get_lon_subset.f90&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~get_lon_subset.f90&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M441.86,-520.79C419.33,-518.22 393.83,-512.7 373,-501.26 352.04,-489.74 357.84,-473 337,-461.26 329.04,-456.77 320.29,-453.22 311.32,-450.42"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="312.1,-447 301.52,-447.66 310.2,-453.74 312.1,-447"/>
+</g>
+<!-- sourcefile~get_subset.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~get_subset.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node11"><a xlink:href="../sourcefile/get_subset.f90.html" xlink:title="get_subset.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="545,-492.26 453,-492.26 453,-468.26 545,-468.26 545,-492.26"/>
+<text text-anchor="middle" x="499" y="-477.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_subset.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~get_subset.f90&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~get_subset.f90&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M452.95,-473.61C414.6,-467.95 358.46,-459.66 311.73,-452.76"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="312.01,-449.27 301.61,-451.27 310.99,-456.19 312.01,-449.27"/>
+</g>
+<!-- sourcefile~latlongeomspec.f90&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~latlongeomspec.f90&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M433.78,-409.74C397.35,-415.11 351.31,-421.91 311.93,-427.72"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="311.19,-424.29 301.81,-429.22 312.21,-431.22 311.19,-424.29"/>
+</g>
+<!-- sourcefile~make_file_metadata.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~make_file_metadata.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node13"><a xlink:href="../sourcefile/make_file_metadata.f90.html" xlink:title="make_file_metadata.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1118.5,-695.26 974.5,-695.26 974.5,-671.26 1118.5,-671.26 1118.5,-695.26"/>
+<text text-anchor="middle" x="1046.5" y="-680.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">make_file_metadata.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~make_file_metadata.f90&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~make_file_metadata.f90&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M974.43,-679.64C806.03,-670.76 395.14,-647.16 373,-627.26 316.86,-576.79 391.04,-513.97 337,-461.26 329.75,-454.18 320.88,-449.12 311.37,-445.54"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="312.27,-442.15 301.68,-442.43 310.13,-448.81 312.27,-442.15"/>
+</g>
+<!-- sourcefile~make_file_metadata.f90&#45;&gt;sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge26" class="edge">
+<title>sourcefile~make_file_metadata.f90&#45;&gt;sourcefile~latlongeomspec.f90</title>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M974.47,-672.2C965.65,-669.56 956.95,-666.3 949,-662.26 929.92,-652.55 932.3,-639.53 913,-630.26 810.59,-581.06 743.36,-665.52 661,-587.26 607.85,-536.75 677.23,-477.72 625,-426.26 611.41,-412.87 592.84,-405.55 574.17,-401.72"/>
+<polygon fill="#00ff78" stroke="#00ff78" points="574.57,-398.24 564.12,-399.98 573.38,-405.14 574.57,-398.24"/>
+</g>
+<!-- sourcefile~make_file_metadata.f90&#45;&gt;sourcefile~latlongeomfactory.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge39" class="edge">
+<title>sourcefile~make_file_metadata.f90&#45;&gt;sourcefile~latlongeomfactory.f90</title>
+<path fill="none" stroke="#ffbf00" stroke-dasharray="5,2" d="M974.17,-678.32C964.66,-674.84 955.84,-669.71 949,-662.26 865.3,-571.16 997.12,-476.96 913,-386.26 901.16,-373.49 884.81,-366.1 867.83,-362.01"/>
+<polygon fill="#ffbf00" stroke="#ffbf00" points="868.29,-358.53 857.8,-359.96 866.89,-365.39 868.29,-358.53"/>
+</g>
+<!-- sourcefile~make_geom.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node14" class="node">
+<title>sourcefile~make_geom.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node14"><a xlink:href="../sourcefile/make_geom.f90.html" xlink:title="make_geom.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1097,-653.26 996,-653.26 996,-629.26 1097,-629.26 1097,-653.26"/>
+<text text-anchor="middle" x="1046.5" y="-638.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">make_geom.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~make_geom.f90&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~make_geom.f90&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M995.55,-644.66C943.6,-647.54 859.95,-650.32 788,-644.26"/>
+</g>
+<!-- sourcefile~make_geom.f90&#45;&gt;sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge27" class="edge">
+<title>sourcefile~make_geom.f90&#45;&gt;sourcefile~latlongeomspec.f90</title>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M1042.26,-629.08C1031.38,-590.86 992.35,-472.59 913,-419.26 866.36,-387.91 842.85,-412.46 788,-400.26"/>
+</g>
+<!-- sourcefile~make_geom.f90&#45;&gt;sourcefile~latlongeomfactory.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge40" class="edge">
+<title>sourcefile~make_geom.f90&#45;&gt;sourcefile~latlongeomfactory.f90</title>
+<path fill="none" stroke="#ffbf00" stroke-dasharray="5,2" d="M1040.85,-629.2C1022.86,-583.15 956.64,-419.32 913,-386.26 899.9,-376.34 883.91,-369.98 867.8,-365.96"/>
+<polygon fill="#ffbf00" stroke="#ffbf00" points="868.3,-362.48 857.78,-363.74 866.79,-369.32 868.3,-362.48"/>
+</g>
+<!-- sourcefile~make_gridded_dims.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node15" class="node">
+<title>sourcefile~make_gridded_dims.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node15"><a xlink:href="../sourcefile/make_gridded_dims.f90.html" xlink:title="make_gridded_dims.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1117.5,-330.26 975.5,-330.26 975.5,-306.26 1117.5,-306.26 1117.5,-330.26"/>
+<text text-anchor="middle" x="1046.5" y="-315.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">make_gridded_dims.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~make_gridded_dims.f90&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~make_gridded_dims.f90&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M1038.91,-305.94C1022.39,-276.56 975.96,-202.75 913,-175.26 810.36,-130.43 760.68,-124.2 661,-175.26 636.63,-187.74 645.08,-206.64 625,-225.26 528.75,-314.5 473.96,-295.38 373,-379.26 354.6,-394.54 357.84,-407.51 337,-419.26 329.04,-423.74 320.29,-427.29 311.32,-430.09"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="310.2,-426.77 301.52,-432.85 312.1,-433.51 310.2,-426.77"/>
+</g>
+<!-- sourcefile~make_gridded_dims.f90&#45;&gt;sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge28" class="edge">
+<title>sourcefile~make_gridded_dims.f90&#45;&gt;sourcefile~latlongeomspec.f90</title>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M975.2,-315.68C897.45,-314.31 768.92,-316.44 661,-339.26 615.55,-348.87 565.94,-369.29 533.98,-383.86"/>
+<polygon fill="#00ff78" stroke="#00ff78" points="532.26,-380.8 524.65,-388.17 535.2,-387.15 532.26,-380.8"/>
+</g>
+<!-- sourcefile~make_gridded_dims.f90&#45;&gt;sourcefile~latlongeomfactory.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge41" class="edge">
+<title>sourcefile~make_gridded_dims.f90&#45;&gt;sourcefile~latlongeomfactory.f90</title>
+<path fill="none" stroke="#ffbf00" stroke-dasharray="5,2" d="M975.48,-329.68C942.13,-335.12 902.1,-341.65 867.6,-347.27"/>
+<polygon fill="#ffbf00" stroke="#ffbf00" points="866.87,-343.85 857.56,-348.91 868,-350.75 866.87,-343.85"/>
+</g>
+<!-- sourcefile~make_latlondecomposition_current_vm.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node16" class="node">
+<title>sourcefile~make_latlondecomposition_current_vm.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node16"><a xlink:href="../sourcefile/make_latlondecomposition_current_vm.f90.html" xlink:title="make_LatLonDecomposition_current_vm.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="625,-216.26 373,-216.26 373,-192.26 625,-192.26 625,-216.26"/>
+<text text-anchor="middle" x="499" y="-201.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">make_LatLonDecomposition_current_vm.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~make_latlondecomposition_current_vm.f90&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~make_latlondecomposition_current_vm.f90&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M391.82,-216.41C384.91,-220.09 378.52,-224.65 373,-230.26 313.05,-291.23 397.45,-358.78 337,-419.26 329.78,-426.48 320.9,-431.62 311.34,-435.23"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="310.04,-431.97 301.59,-438.35 312.18,-438.64 310.04,-431.97"/>
+</g>
+<!-- sourcefile~make_latlondecomposition_vm.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node17" class="node">
+<title>sourcefile~make_latlondecomposition_vm.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node17"><a xlink:href="../sourcefile/make_latlondecomposition_vm.f90.html" xlink:title="make_LatLonDecomposition_vm.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="603,-174.26 395,-174.26 395,-150.26 603,-150.26 603,-174.26"/>
+<text text-anchor="middle" x="499" y="-159.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">make_LatLonDecomposition_vm.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~make_latlondecomposition_vm.f90&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~make_latlondecomposition_vm.f90&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M394.99,-168.21C386.84,-171.92 379.33,-176.83 373,-183.26 298.54,-258.85 410.61,-342.85 337,-419.26 329.87,-426.66 320.99,-431.9 311.39,-435.56"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="310.04,-432.31 301.59,-438.71 312.18,-438.98 310.04,-432.31"/>
+</g>
+<!-- sourcefile~make_variable_attributes.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node18" class="node">
+<title>sourcefile~make_variable_attributes.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node18"><a xlink:href="../sourcefile/make_variable_attributes.f90.html" xlink:title="make_variable_attributes.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1131.5,-71.26 961.5,-71.26 961.5,-47.26 1131.5,-47.26 1131.5,-71.26"/>
+<text text-anchor="middle" x="1046.5" y="-56.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">make_variable_attributes.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~make_variable_attributes.f90&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~make_variable_attributes.f90&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M961.22,-50.55C910.98,-46.15 845.91,-41.81 788,-42.26"/>
+</g>
+<!-- sourcefile~make_variable_attributes.f90&#45;&gt;sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge31" class="edge">
+<title>sourcefile~make_variable_attributes.f90&#45;&gt;sourcefile~latlongeomspec.f90</title>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M961.29,-67.24C909,-74.86 841.75,-89.67 788,-118.26"/>
+</g>
+<!-- sourcefile~make_variable_attributes.f90&#45;&gt;sourcefile~latlongeomfactory.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge42" class="edge">
+<title>sourcefile~make_variable_attributes.f90&#45;&gt;sourcefile~latlongeomfactory.f90</title>
+<path fill="none" stroke="#ffbf00" stroke-dasharray="5,2" d="M987.57,-71.31C973.07,-76.95 958.86,-85.2 949,-97.26 890.74,-168.55 968.88,-228.09 913,-301.26 897.13,-322.04 872.11,-335.82 848.62,-344.8"/>
+<polygon fill="#ffbf00" stroke="#ffbf00" points="847.25,-341.57 839.02,-348.24 849.62,-348.16 847.25,-341.57"/>
+</g>
+<!-- sourcefile~test_latlondecomposition.pf -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node19" class="node">
+<title>sourcefile~test_latlondecomposition.pf</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node19"><a xlink:href="../sourcefile/test_latlondecomposition.pf.html" xlink:title="Test_LatLonDecomposition.pf">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="583,-94.26 415,-94.26 415,-70.26 583,-70.26 583,-94.26"/>
+<text text-anchor="middle" x="499" y="-79.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Test_LatLonDecomposition.pf</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~test_latlondecomposition.pf&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~test_latlondecomposition.pf&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M414.75,-84.72C398.98,-88.97 383.99,-96.23 373,-108.26 279.13,-210.97 431.71,-317.32 337,-419.26 329.88,-426.92 320.89,-432.29 311.14,-435.99"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="310.05,-432.67 301.59,-439.05 312.18,-439.33 310.05,-432.67"/>
+</g>
+<!-- sourcefile~typesafe_make_file_metadata.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node20" class="node">
+<title>sourcefile~typesafe_make_file_metadata.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node20"><a xlink:href="../sourcefile/typesafe_make_file_metadata.f90.html" xlink:title="typesafe_make_file_metadata.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1144,-29.26 949,-29.26 949,-5.26 1144,-5.26 1144,-29.26"/>
+<text text-anchor="middle" x="1046.5" y="-14.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">typesafe_make_file_metadata.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~typesafe_make_file_metadata.f90&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~typesafe_make_file_metadata.f90&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M961.04,-29.28C910.87,-35.47 845.94,-41.81 788,-42.26"/>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M786,-42.26C602.26,-43.67 506.41,65.1 373,-61.26 314.95,-116.24 390.98,-360.28 337,-419.26 329.94,-426.97 320.98,-432.37 311.25,-436.09"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="310.16,-432.77 301.71,-439.16 312.3,-439.43 310.16,-432.77"/>
+</g>
+<!-- sourcefile~typesafe_make_file_metadata.f90&#45;&gt;sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge35" class="edge">
+<title>sourcefile~typesafe_make_file_metadata.f90&#45;&gt;sourcefile~latlongeomspec.f90</title>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M979.74,-29.26C969.33,-31.82 958.78,-34.81 949,-38.26 932.13,-44.2 929.01,-48.28 913,-56.26 857.49,-83.9 842.75,-89.14 788,-118.26"/>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M786,-118.26C732.09,-146.93 708.14,-136.45 661,-175.26 660.4,-175.75 554.08,-324.55 514.57,-379.86"/>
+<polygon fill="#00ff78" stroke="#00ff78" points="511.58,-378.02 508.62,-388.19 517.28,-382.09 511.58,-378.02"/>
+</g>
+<!-- sourcefile~typesafe_make_file_metadata.f90&#45;&gt;sourcefile~latlongeomfactory.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge44" class="edge">
+<title>sourcefile~typesafe_make_file_metadata.f90&#45;&gt;sourcefile~latlongeomfactory.f90</title>
+<path fill="none" stroke="#ffbf00" stroke-dasharray="5,2" d="M959.54,-29.45C955.7,-31.94 952.14,-34.86 949,-38.26 868.9,-124.88 982.78,-206.13 913,-301.26 897.72,-322.09 873.18,-335.83 849.87,-344.77"/>
+<polygon fill="#ffbf00" stroke="#ffbf00" points="848.57,-341.52 840.34,-348.19 850.93,-348.11 848.57,-341.52"/>
+</g>
+<!-- sourcefile~typesafe_make_geom.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node21" class="node">
+<title>sourcefile~typesafe_make_geom.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node21"><a xlink:href="../sourcefile/typesafe_make_geom.f90.html" xlink:title="typesafe_make_geom.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1122.5,-130.26 970.5,-130.26 970.5,-106.26 1122.5,-106.26 1122.5,-130.26"/>
+<text text-anchor="middle" x="1046.5" y="-115.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">typesafe_make_geom.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~typesafe_make_geom.f90&#45;&gt;sourcefile~latlondecomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge20" class="edge">
+<title>sourcefile~typesafe_make_geom.f90&#45;&gt;sourcefile~latlondecomposition.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M970.28,-108.92C951.6,-106.98 931.6,-105.24 913,-104.26 801.16,-98.36 772.77,-97.11 661,-104.26 596.61,-108.38 418.65,-95.65 373,-141.26 284.86,-229.31 422.42,-328.56 337,-419.26 329.95,-426.74 321.12,-432.03 311.55,-435.71"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="310.2,-432.47 301.76,-438.87 312.36,-439.13 310.2,-432.47"/>
+</g>
+<!-- sourcefile~typesafe_make_geom.f90&#45;&gt;sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge36" class="edge">
+<title>sourcefile~typesafe_make_geom.f90&#45;&gt;sourcefile~latlongeomspec.f90</title>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M1000.56,-106.17C946.63,-94.28 855.1,-82.57 788,-118.26"/>
+</g>
+<!-- sourcefile~typesafe_make_geom.f90&#45;&gt;sourcefile~latlongeomfactory.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge45" class="edge">
+<title>sourcefile~typesafe_make_geom.f90&#45;&gt;sourcefile~latlongeomfactory.f90</title>
+<path fill="none" stroke="#ffbf00" stroke-dasharray="5,2" d="M1039.43,-130.57C1023.09,-162.61 975.19,-249.66 913,-301.26 890.09,-320.26 860.04,-334.7 835.14,-344.54"/>
+<polygon fill="#ffbf00" stroke="#ffbf00" points="833.62,-341.37 825.53,-348.21 836.12,-347.91 833.62,-341.37"/>
+</g>
+<!-- sourcefile~equal_to.f90~3 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node22" class="node">
+<title>sourcefile~equal_to.f90~3</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node22"><a xlink:href="../sourcefile/equal_to.f90~3.html" xlink:title="equal_to.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="827,-250.26 747,-250.26 747,-226.26 827,-226.26 827,-250.26"/>
+<text text-anchor="middle" x="787" y="-235.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">equal_to.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~equal_to.f90~3&#45;&gt;sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge22" class="edge">
+<title>sourcefile~equal_to.f90~3&#45;&gt;sourcefile~latlongeomspec.f90</title>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M746.89,-239.34C721.38,-241.34 687.94,-246.48 661,-259.26 599.32,-288.51 543.25,-348.4 516.5,-379.88"/>
+<polygon fill="#00ff78" stroke="#00ff78" points="513.48,-378.04 509.76,-387.96 518.85,-382.53 513.48,-378.04"/>
+</g>
+<!-- sourcefile~latlongeomfactory.f90&#45;&gt;sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge24" class="edge">
+<title>sourcefile~latlongeomfactory.f90&#45;&gt;sourcefile~latlongeomspec.f90</title>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M716.4,-369.99C673.3,-376.02 617.99,-383.76 574.07,-389.9"/>
+<polygon fill="#00ff78" stroke="#00ff78" points="573.45,-386.45 564.03,-391.3 574.42,-393.38 573.45,-386.45"/>
+</g>
+<!-- sourcefile~make_decomposition.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node24" class="node">
+<title>sourcefile~make_decomposition.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node24"><a xlink:href="../sourcefile/make_decomposition.f90.html" xlink:title="make_decomposition.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="861.5,-208.26 712.5,-208.26 712.5,-184.26 861.5,-184.26 861.5,-208.26"/>
+<text text-anchor="middle" x="787" y="-193.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">make_decomposition.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~make_decomposition.f90&#45;&gt;sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge25" class="edge">
+<title>sourcefile~make_decomposition.f90&#45;&gt;sourcefile~latlongeomspec.f90</title>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M712.45,-200.12C694.8,-203.29 676.57,-208.58 661,-217.26 639.82,-229.06 641.01,-240.04 625,-258.26 586.68,-301.85 541.7,-352.92 517.51,-380.38"/>
+<polygon fill="#00ff78" stroke="#00ff78" points="514.69,-378.29 510.71,-388.1 519.94,-382.91 514.69,-378.29"/>
+</g>
+<!-- sourcefile~make_latlongeomspec_from_hconfig.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node25" class="node">
+<title>sourcefile~make_latlongeomspec_from_hconfig.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node25"><a xlink:href="../sourcefile/make_latlongeomspec_from_hconfig.f90.html" xlink:title="make_LatLonGeomSpec_from_hconfig.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="907,-578.26 667,-578.26 667,-554.26 907,-554.26 907,-578.26"/>
+<text text-anchor="middle" x="787" y="-563.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">make_LatLonGeomSpec_from_hconfig.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~make_latlongeomspec_from_hconfig.f90&#45;&gt;sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge29" class="edge">
+<title>sourcefile~make_latlongeomspec_from_hconfig.f90&#45;&gt;sourcefile~latlongeomspec.f90</title>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M673.57,-554.21C669.1,-551.64 664.88,-548.67 661,-545.26 619.52,-508.75 665.77,-463.56 625,-426.26 611.07,-413.51 592.57,-406.37 574.08,-402.51"/>
+<polygon fill="#00ff78" stroke="#00ff78" points="574.6,-399.05 564.14,-400.74 573.37,-405.94 574.6,-399.05"/>
+</g>
+<!-- sourcefile~make_latlongeomspec_from_metadata.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node26" class="node">
+<title>sourcefile~make_latlongeomspec_from_metadata.f90</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node26"><a xlink:href="../sourcefile/make_latlongeomspec_from_metadata.f90.html" xlink:title="make_LatLonGeomSpec_from_metadata.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="913,-536.26 661,-536.26 661,-512.26 913,-512.26 913,-536.26"/>
+<text text-anchor="middle" x="787" y="-521.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">make_LatLonGeomSpec_from_metadata.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~make_latlongeomspec_from_metadata.f90&#45;&gt;sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge30" class="edge">
+<title>sourcefile~make_latlongeomspec_from_metadata.f90&#45;&gt;sourcefile~latlongeomspec.f90</title>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M675.64,-512.25C670.47,-509.69 665.55,-506.72 661,-503.26 630.92,-480.4 654.63,-449.69 625,-426.26 610.55,-414.83 592.31,-408.08 574.26,-404.18"/>
+<polygon fill="#00ff78" stroke="#00ff78" points="574.76,-400.71 564.28,-402.29 573.46,-407.59 574.76,-400.71"/>
+</g>
+<!-- sourcefile~supports_hconfig.f90~2 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node27" class="node">
+<title>sourcefile~supports_hconfig.f90~2</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node27"><a xlink:href="../sourcefile/supports_hconfig.f90~2.html" xlink:title="supports_hconfig.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="850,-494.26 724,-494.26 724,-470.26 850,-470.26 850,-494.26"/>
+<text text-anchor="middle" x="787" y="-479.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">supports_hconfig.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~supports_hconfig.f90~2&#45;&gt;sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge32" class="edge">
+<title>sourcefile~supports_hconfig.f90~2&#45;&gt;sourcefile~latlongeomspec.f90</title>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M723.91,-479.27C703.07,-476.36 680.24,-471 661,-461.26 641.09,-451.17 644.71,-436.72 625,-426.26 609.45,-418 591.52,-412.36 574.18,-408.52"/>
+<polygon fill="#00ff78" stroke="#00ff78" points="574.56,-405.02 564.07,-406.45 573.17,-411.88 574.56,-405.02"/>
+</g>
+<!-- sourcefile~supports_metadata.f90~2 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node28" class="node">
+<title>sourcefile~supports_metadata.f90~2</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node28"><a xlink:href="../sourcefile/supports_metadata.f90~2.html" xlink:title="supports_metadata.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="856,-452.26 718,-452.26 718,-428.26 856,-428.26 856,-452.26"/>
+<text text-anchor="middle" x="787" y="-437.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">supports_metadata.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~supports_metadata.f90~2&#45;&gt;sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge33" class="edge">
+<title>sourcefile~supports_metadata.f90~2&#45;&gt;sourcefile~latlongeomspec.f90</title>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M717.86,-430.73C674.63,-424.68 618.7,-416.86 574.33,-410.65"/>
+<polygon fill="#00ff78" stroke="#00ff78" points="574.57,-407.15 564.19,-409.23 573.6,-414.09 574.57,-407.15"/>
+</g>
+<!-- sourcefile~test_latlongeomspec.pf -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node29" class="node">
+<title>sourcefile~test_latlongeomspec.pf</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node29"><a xlink:href="../sourcefile/test_latlongeomspec.pf.html" xlink:title="Test_LatLonGeomSpec.pf">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="860,-292.26 714,-292.26 714,-268.26 860,-268.26 860,-292.26"/>
+<text text-anchor="middle" x="787" y="-277.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Test_LatLonGeomSpec.pf</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~test_latlongeomspec.pf&#45;&gt;sourcefile~latlongeomspec.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge34" class="edge">
+<title>sourcefile~test_latlongeomspec.pf&#45;&gt;sourcefile~latlongeomspec.f90</title>
+<path fill="none" stroke="#00ff78" stroke-dasharray="5,2" d="M713.79,-291.14C696.2,-294.91 677.66,-299.86 661,-306.26 609.58,-326.01 555.37,-361.05 524.8,-382.31"/>
+<polygon fill="#00ff78" stroke="#00ff78" points="522.63,-379.56 516.47,-388.18 526.66,-385.29 522.63,-379.56"/>
+</g>
+<!-- sourcefile~test_latlongeomfactory.pf -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_node30" class="node">
+<title>sourcefile~test_latlongeomfactory.pf</title>
+<g id="a_sourcefile~~partition.f90~~AfferentGraph_node30"><a xlink:href="../sourcefile/test_latlongeomfactory.pf.html" xlink:title="Test_LatLonGeomFactory.pf">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1125,-372.26 968,-372.26 968,-348.26 1125,-348.26 1125,-372.26"/>
+<text text-anchor="middle" x="1046.5" y="-357.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Test_LatLonGeomFactory.pf</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~test_latlongeomfactory.pf&#45;&gt;sourcefile~latlongeomfactory.f90 -->
+<g id="sourcefile~~partition.f90~~AfferentGraph_edge43" class="edge">
+<title>sourcefile~test_latlongeomfactory.pf&#45;&gt;sourcefile~latlongeomfactory.f90</title>
+<path fill="none" stroke="#ffbf00" stroke-dasharray="5,2" d="M967.89,-360.26C936.22,-360.26 899.63,-360.26 867.74,-360.26"/>
+<polygon fill="#ffbf00" stroke="#ffbf00" points="867.57,-356.76 857.57,-360.26 867.57,-363.76 867.57,-356.76"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefilepartitionf90AfferentGraph = svgPanZoom('#sourcefilepartitionf90AfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#AfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="AfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+<br>
+      <section>
+        <h2><span class="anchor" id="src"></span>Source Code</h2>
+        <div class="hl codehilite"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="cp">#include &quot;MAPL_Exceptions.h&quot;</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a><span class="cp">#include &quot;MAPL_ErrLog.h&quot;</span>
+<a id="ln-3" name="ln-3" href="#ln-3"></a>
+<a id="ln-4" name="ln-4" href="#ln-4"></a><span class="k">module </span><span class="n">mapl_Partition</span>
+<a id="ln-5" name="ln-5" href="#ln-5"></a>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_KeywordEnforcerMod</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_ErrorHandlingMod</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="w">   </span><span class="k">implicit none</span><span class="p">(</span><span class="k">type</span><span class="p">,</span><span class="k">external</span><span class="p">)</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="w">   </span><span class="k">private</span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="k">   public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mapl_GetPartition</span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a>
+<a id="ln-14" name="ln-14" href="#ln-14"></a><span class="w">   </span><span class="k">interface </span><span class="n">mapl_GetPartition</span>
+<a id="ln-15" name="ln-15" href="#ln-15"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_partition</span>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="w">   </span><span class="k">end interface</span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a>
+<a id="ln-18" name="ln-18" href="#ln-18"></a><span class="k">contains</span>
+<a id="ln-19" name="ln-19" href="#ln-19"></a>
+<a id="ln-20" name="ln-20" href="#ln-20"></a><span class="w">   </span><span class="c">! Return a partition of n items split among k bins. Typically to</span>
+<a id="ln-21" name="ln-21" href="#ln-21"></a><span class="w">   </span><span class="c">! support balannced domain decomposition.</span>
+<a id="ln-22" name="ln-22" href="#ln-22"></a><span class="w">   </span><span class="c">!</span>
+<a id="ln-23" name="ln-23" href="#ln-23"></a><span class="w">   </span><span class="c">! Options:</span>
+<a id="ln-24" name="ln-24" href="#ln-24"></a><span class="w">   </span><span class="c">!</span>
+<a id="ln-25" name="ln-25" href="#ln-25"></a><span class="w">   </span><span class="c">!    symmetric (logical) - attempt to impose mirror symmetry on the</span>
+<a id="ln-26" name="ln-26" href="#ln-26"></a><span class="w">   </span><span class="c">!                          partition (soft constraint).  Will fudge for</span>
+<a id="ln-27" name="ln-27" href="#ln-27"></a><span class="w">   </span><span class="c">!                          even partition of odd number of items.</span>
+<a id="ln-28" name="ln-28" href="#ln-28"></a><span class="w">   </span><span class="c">!</span>
+<a id="ln-29" name="ln-29" href="#ln-29"></a><span class="w">   </span><span class="c">!    min_extent - mininumum # of items to place in any *non-empty*</span>
+<a id="ln-30" name="ln-30" href="#ln-30"></a><span class="w">   </span><span class="c">!                 bin. Supports ESMF use cases where DEs must have</span>
+<a id="ln-31" name="ln-31" href="#ln-31"></a><span class="w">   </span><span class="c">!                 at least an extent of 2.</span>
+<a id="ln-32" name="ln-32" href="#ln-32"></a><span class="w">   </span><span class="c">!</span>
+<a id="ln-33" name="ln-33" href="#ln-33"></a><span class="w">   </span><span class="k">recursive function </span><span class="n">get_partition</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">unusable</span><span class="p">,</span><span class="w"> </span><span class="n">symmetric</span><span class="p">,</span><span class="w"> </span><span class="n">min_extent</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">partition</span><span class="p">)</span>
+<a id="ln-34" name="ln-34" href="#ln-34"></a>
+<a id="ln-35" name="ln-35" href="#ln-35"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-36" name="ln-36" href="#ln-36"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">k</span>
+<a id="ln-37" name="ln-37" href="#ln-37"></a><span class="w">      </span><span class="k">class</span><span class="w"> </span><span class="p">(</span><span class="n">KeywordEnforcer</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">unusable</span>
+<a id="ln-38" name="ln-38" href="#ln-38"></a><span class="w">      </span><span class="kt">logical</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">symmetric</span>
+<a id="ln-39" name="ln-39" href="#ln-39"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">min_extent</span>
+<a id="ln-40" name="ln-40" href="#ln-40"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-41" name="ln-41" href="#ln-41"></a><span class="w">      </span><span class="c">! result</span>
+<a id="ln-42" name="ln-42" href="#ln-42"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">partition</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">k</span><span class="p">)</span>
+<a id="ln-43" name="ln-43" href="#ln-43"></a>
+<a id="ln-44" name="ln-44" href="#ln-44"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">k_used</span>
+<a id="ln-45" name="ln-45" href="#ln-45"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">im</span><span class="p">,</span><span class="w"> </span><span class="n">remainder</span>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i_mid</span>
+<a id="ln-47" name="ln-47" href="#ln-47"></a><span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">symmetric_</span>
+<a id="ln-48" name="ln-48" href="#ln-48"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">min_extent_</span>
+<a id="ln-49" name="ln-49" href="#ln-49"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-50" name="ln-50" href="#ln-50"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">sub_partition_a</span><span class="p">(:),</span><span class="w"> </span><span class="n">sub_partition_b</span><span class="p">(:)</span>
+<a id="ln-51" name="ln-51" href="#ln-51"></a>
+<a id="ln-52" name="ln-52" href="#ln-52"></a><span class="w">      </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;n must be non-negative&#39;</span><span class="p">)</span>
+<a id="ln-53" name="ln-53" href="#ln-53"></a><span class="w">      </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="n">k</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;k must be non-negative&#39;</span><span class="p">)</span>
+<a id="ln-54" name="ln-54" href="#ln-54"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-55" name="ln-55" href="#ln-55"></a><span class="k">         </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="n">k</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;k cannot be 0 unless n is zero&#39;</span><span class="p">)</span>
+<a id="ln-56" name="ln-56" href="#ln-56"></a><span class="w">      </span><span class="k">end if</span>
+<a id="ln-57" name="ln-57" href="#ln-57"></a>
+<a id="ln-58" name="ln-58" href="#ln-58"></a><span class="k">      </span><span class="n">min_extent_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<a id="ln-59" name="ln-59" href="#ln-59"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">min_extent</span><span class="p">))</span><span class="w"> </span><span class="n">min_extent_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">min_extent</span>
+<a id="ln-60" name="ln-60" href="#ln-60"></a><span class="w">      </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="n">min_extent_</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;min_extent cannot be larger than n&#39;</span><span class="p">)</span>
+<a id="ln-61" name="ln-61" href="#ln-61"></a>
+<a id="ln-62" name="ln-62" href="#ln-62"></a><span class="w">      </span><span class="n">k_used</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span>
+<a id="ln-63" name="ln-63" href="#ln-63"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">min_extent_</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">  </span><span class="k">then</span>
+<a id="ln-64" name="ln-64" href="#ln-64"></a><span class="k">         </span><span class="n">k_used</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">min</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">min_extent_</span><span class="p">)</span>
+<a id="ln-65" name="ln-65" href="#ln-65"></a><span class="w">      </span><span class="k">end if</span>
+<a id="ln-66" name="ln-66" href="#ln-66"></a><span class="k">      </span><span class="n">partition</span><span class="p">(</span><span class="n">k_used</span><span class="o">+</span><span class="mi">1</span><span class="p">:)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<a id="ln-67" name="ln-67" href="#ln-67"></a>
+<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">      </span><span class="n">im</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="o">/</span><span class="w"> </span><span class="n">k_used</span><span class="w"> </span><span class="c">! average number of items per bin - rounded down</span>
+<a id="ln-69" name="ln-69" href="#ln-69"></a>
+<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">      </span><span class="n">symmetric_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<a id="ln-71" name="ln-71" href="#ln-71"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">symmetric</span><span class="p">))</span><span class="w"> </span><span class="n">symmetric_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">symmetric</span>
+<a id="ln-72" name="ln-72" href="#ln-72"></a>
+<a id="ln-73" name="ln-73" href="#ln-73"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="n">symmetric_</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="k">         </span><span class="n">partition</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">k_used</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">im</span>
+<a id="ln-75" name="ln-75" href="#ln-75"></a><span class="w">         </span><span class="n">remainder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">k_used</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">im</span>
+<a id="ln-76" name="ln-76" href="#ln-76"></a><span class="w">         </span><span class="n">partition</span><span class="p">(:</span><span class="n">remainder</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">partition</span><span class="p">(:</span><span class="n">remainder</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-77" name="ln-77" href="#ln-77"></a><span class="w">         </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-78" name="ln-78" href="#ln-78"></a><span class="w">      </span><span class="k">end if</span>
+<a id="ln-79" name="ln-79" href="#ln-79"></a>
+<a id="ln-80" name="ln-80" href="#ln-80"></a><span class="w">      </span><span class="c">! Symmetric cases</span>
+<a id="ln-81" name="ln-81" href="#ln-81"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">is_even</span><span class="p">(</span><span class="n">k</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-82" name="ln-82" href="#ln-82"></a><span class="k">         </span><span class="n">sub_partition_a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_partition</span><span class="p">((</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">min_extent</span><span class="o">=</span><span class="n">min_extent</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-83" name="ln-83" href="#ln-83"></a><span class="w">         </span><span class="n">sub_partition_b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_partition</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">min_extent</span><span class="o">=</span><span class="n">min_extent</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">         </span><span class="n">partition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">sub_partition_a</span><span class="p">,</span><span class="w"> </span><span class="n">sub_partition_b</span><span class="p">(</span><span class="n">k</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+<a id="ln-85" name="ln-85" href="#ln-85"></a><span class="w">         </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-86" name="ln-86" href="#ln-86"></a><span class="w">      </span><span class="k">end if</span>
+<a id="ln-87" name="ln-87" href="#ln-87"></a>
+<a id="ln-88" name="ln-88" href="#ln-88"></a><span class="w">      </span><span class="c">! k in odd</span>
+<a id="ln-89" name="ln-89" href="#ln-89"></a><span class="w">      </span><span class="c">! We must ensure that the middle bin count leaves an even number</span>
+<a id="ln-90" name="ln-90" href="#ln-90"></a><span class="w">      </span><span class="c">! to be split across the 2 halves.</span>
+<a id="ln-91" name="ln-91" href="#ln-91"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">is_even</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! i_mid must be even</span>
+<a id="ln-92" name="ln-92" href="#ln-92"></a><span class="w">         </span><span class="n">i_mid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_even</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
+<a id="ln-93" name="ln-93" href="#ln-93"></a><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i_mid</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">min_extent_</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! just set to zero</span>
+<a id="ln-94" name="ln-94" href="#ln-94"></a><span class="w">            </span><span class="n">i_mid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<a id="ln-95" name="ln-95" href="#ln-95"></a><span class="w">         </span><span class="k">end if</span>
+<a id="ln-96" name="ln-96" href="#ln-96"></a><span class="k">      else</span><span class="w"> </span><span class="c">! i_mid must be odd</span>
+<a id="ln-97" name="ln-97" href="#ln-97"></a><span class="w">         </span><span class="n">i_mid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_odd</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
+<a id="ln-98" name="ln-98" href="#ln-98"></a><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i_mid</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">min_extent_</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-99" name="ln-99" href="#ln-99"></a><span class="w">            </span><span class="c">! Cannot set to 0 due to parity constraint, so must be at least min_extent</span>
+<a id="ln-100" name="ln-100" href="#ln-100"></a><span class="w">            </span><span class="n">i_mid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_odd</span><span class="p">(</span><span class="n">min_extent_</span><span class="p">)</span>
+<a id="ln-101" name="ln-101" href="#ln-101"></a><span class="w">         </span><span class="k">end if</span>
+<a id="ln-102" name="ln-102" href="#ln-102"></a><span class="k">      end if</span>
+<a id="ln-103" name="ln-103" href="#ln-103"></a>
+<a id="ln-104" name="ln-104" href="#ln-104"></a><span class="k">      </span><span class="n">sub_partition_a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_partition</span><span class="p">((</span><span class="n">n</span><span class="o">-</span><span class="n">i_mid</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">min_extent</span><span class="o">=</span><span class="n">min_extent_</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span><span class="w"> </span><span class="c">! first half</span>
+<a id="ln-105" name="ln-105" href="#ln-105"></a><span class="w">      </span><span class="n">partition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">sub_partition_a</span><span class="p">,</span><span class="w"> </span><span class="n">i_mid</span><span class="p">,</span><span class="w"> </span><span class="n">sub_partition_a</span><span class="p">((</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">]</span>
+<a id="ln-106" name="ln-106" href="#ln-106"></a>
+<a id="ln-107" name="ln-107" href="#ln-107"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-108" name="ln-108" href="#ln-108"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">unusable</span><span class="p">)</span>
+<a id="ln-109" name="ln-109" href="#ln-109"></a>
+<a id="ln-110" name="ln-110" href="#ln-110"></a><span class="w">   </span><span class="k">contains</span>
+<a id="ln-111" name="ln-111" href="#ln-111"></a>
+<a id="ln-112" name="ln-112" href="#ln-112"></a><span class="k">      pure </span><span class="kt">logical </span><span class="k">function </span><span class="n">is_even</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<a id="ln-113" name="ln-113" href="#ln-113"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-114" name="ln-114" href="#ln-114"></a><span class="w">         </span><span class="n">is_even</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nb">mod</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<a id="ln-115" name="ln-115" href="#ln-115"></a><span class="w">      </span><span class="k">end function </span><span class="n">is_even</span>
+<a id="ln-116" name="ln-116" href="#ln-116"></a>
+<a id="ln-117" name="ln-117" href="#ln-117"></a><span class="w">      </span><span class="k">pure </span><span class="kt">integer </span><span class="k">function </span><span class="n">make_even</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">n_even</span><span class="p">)</span>
+<a id="ln-118" name="ln-118" href="#ln-118"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-119" name="ln-119" href="#ln-119"></a><span class="w">         </span><span class="n">n_even</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">mod</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<a id="ln-120" name="ln-120" href="#ln-120"></a><span class="w">      </span><span class="k">end function </span><span class="n">make_even</span>
+<a id="ln-121" name="ln-121" href="#ln-121"></a>
+<a id="ln-122" name="ln-122" href="#ln-122"></a><span class="w">      </span><span class="k">pure </span><span class="kt">integer </span><span class="k">function </span><span class="n">make_odd</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">n_even</span><span class="p">)</span>
+<a id="ln-123" name="ln-123" href="#ln-123"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-124" name="ln-124" href="#ln-124"></a><span class="w">         </span><span class="n">n_even</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">mod</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<a id="ln-125" name="ln-125" href="#ln-125"></a><span class="w">      </span><span class="k">end function </span><span class="n">make_odd</span>
+<a id="ln-126" name="ln-126" href="#ln-126"></a>
+<a id="ln-127" name="ln-127" href="#ln-127"></a><span class="w">   </span><span class="k">end function </span><span class="n">get_partition</span>
+<a id="ln-128" name="ln-128" href="#ln-128"></a>
+<a id="ln-129" name="ln-129" href="#ln-129"></a><span class="k">end module </span><span class="n">mapl_Partition</span>
+</pre></div>
+
+      </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              MAPL
+ was developed by The MAPL Developers<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-03-12T14:31:57.655033+0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
