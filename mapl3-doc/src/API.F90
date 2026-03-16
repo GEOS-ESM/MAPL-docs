@@ -1,13 +1,17 @@
-module mapl3g_State_API
-   use mapl3g_StateGet, only: MAPL_StateGet => StateGet
-   use mapl3g_StateGetPointer, only: MAPL_StateGetPointer => StateGetPointer
-   use MAPL_StateArithmeticParserMod, only: MAPL_ParserVariablesInExpression => parser_variables_in_expression
-   implicit none
-   private
+module mapl3g_Field_API
+   use mapl3g_FieldGet, only: MAPL_FieldGet => FieldGet
+   use mapl3g_FieldSet, only: MAPL_FieldSet => FieldSet
+   use mapl3g_FieldFill, only: MAPL_FieldFill => FieldFill
+   use mapl3g_FieldCreate
+   use mapl3g_StateItemAllocation
+   use mapl3g_RestartModes
+   use mapl_FieldPointerUtilities, only: MAPL_AssignFptr => assign_fptr
+   use mapl_FieldPointerUtilities, only: MAPL_FieldClone => FieldClone
 
-   ! Available to users
-   public :: MAPL_StateGet
-   public :: MAPL_StateGetPointer
-   public :: MAPL_ParserVariablesInExpression
+   ! Internal info should not be exposed to users
+!#   use mapl3g_FieldInfo, only: MAPL_FieldInfoGetPrivate
+!#   use mapl3g_FieldInfo, only: MAPL_FieldInfoSetPrivate
+!#   use mapl3g_FieldInfo, only: MAPL_FieldInfoSetShared
+!#   use mapl3g_FieldInfo, only: MAPL_FieldInfoGetShared
 
-end module mapl3g_State_API
+end module mapl3g_Field_API
