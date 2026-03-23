@@ -180,7 +180,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-im~103"></span>
+              <span class="anchor" id="variable-im~22"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -195,7 +195,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-jm~87"></span>
+              <span class="anchor" id="variable-jm~18"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -210,7 +210,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-lm~38"></span>
+              <span class="anchor" id="variable-lm~16"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -257,22 +257,27 @@
 <span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">RC</span>
 
 <span class="cp">#ifdef PYTHONBRIDGE_INTEGRATION</span>
-<span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">halting_mode</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">halting_mode_overflow</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">halting_mode_invalid</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">set_halting_allowed</span>
 
 <span class="w">      </span><span class="c">! Spin the interface - we have to deactivate the ieee error</span>
 <span class="w">      </span><span class="c">! to be able to load numpy, scipy and other numpy packages</span>
-<span class="w">      </span><span class="c">! that generate an overflow during init</span>
+<span class="w">      </span><span class="c">! that generate an overflow or invalid operation during init</span>
 
-<span class="w">      </span><span class="n">set_halting_allowed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ieee_support_halting</span><span class="p">(</span><span class="n">ieee_overflow</span><span class="p">)</span>
+<span class="w">      </span><span class="n">set_halting_allowed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ieee_support_halting</span><span class="p">(</span><span class="n">ieee_overflow</span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">         </span><span class="n">ieee_support_halting</span><span class="p">(</span><span class="n">ieee_invalid</span><span class="p">)</span>
 
 <span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">set_halting_allowed</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">         call </span><span class="n">ieee_get_halting_mode</span><span class="p">(</span><span class="n">ieee_overflow</span><span class="p">,</span><span class="w"> </span><span class="n">halting_mode</span><span class="p">)</span>
+<span class="k">         call </span><span class="n">ieee_get_halting_mode</span><span class="p">(</span><span class="n">ieee_overflow</span><span class="p">,</span><span class="w"> </span><span class="n">halting_mode_overflow</span><span class="p">)</span>
 <span class="w">         </span><span class="k">call </span><span class="n">ieee_set_halting_mode</span><span class="p">(</span><span class="n">ieee_overflow</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.)</span>
+<span class="w">         </span><span class="k">call </span><span class="n">ieee_get_halting_mode</span><span class="p">(</span><span class="n">ieee_invalid</span><span class="p">,</span><span class="w"> </span><span class="n">halting_mode_invalid</span><span class="p">)</span>
+<span class="w">         </span><span class="k">call </span><span class="n">ieee_set_halting_mode</span><span class="p">(</span><span class="n">ieee_invalid</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.)</span>
 <span class="w">      </span><span class="k">end if</span>
 <span class="k">      call </span><span class="n">mapl_fortran_python_bridge_global_initialize</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="w"> </span><span class="n">jm</span><span class="p">,</span><span class="w"> </span><span class="n">lm</span><span class="p">)</span>
 <span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">set_halting_allowed</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">         call </span><span class="n">ieee_set_halting_mode</span><span class="p">(</span><span class="n">ieee_overflow</span><span class="p">,</span><span class="w"> </span><span class="n">halting_mode</span><span class="p">)</span>
+<span class="k">         call </span><span class="n">ieee_set_halting_mode</span><span class="p">(</span><span class="n">ieee_overflow</span><span class="p">,</span><span class="w"> </span><span class="n">halting_mode_overflow</span><span class="p">)</span>
+<span class="w">         </span><span class="k">call </span><span class="n">ieee_set_halting_mode</span><span class="p">(</span><span class="n">ieee_invalid</span><span class="p">,</span><span class="w"> </span><span class="n">halting_mode_invalid</span><span class="p">)</span>
 <span class="w">      </span><span class="k">end if</span>
 <span class="cp">#endif</span>
 
@@ -300,7 +305,7 @@
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-03-23T13:26:09.987247+0000             </p>
+ on 2026-03-23T19:35:42.258431+0000             </p>
           </div>
         </div>
         <br>
