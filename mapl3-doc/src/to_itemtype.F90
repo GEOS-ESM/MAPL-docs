@@ -1,4 +1,4 @@
-#include "MAPL_ErrLog.h"
+#include "MAPL.h"
 
 submodule (mapl3g_ComponentSpecParser) to_itemtype_smod
    implicit none(type,external)
@@ -44,8 +44,6 @@ contains
          itemtype = MAPL_STATEITEM_WILDCARD
       case ('bracket')
          itemtype = MAPL_STATEITEM_BRACKET
-      case ('vector_bracket')
-         itemtype = MAPL_STATEITEM_VECTORBRACKET
       case default
          _FAIL('unknown subclass for state item: '//subclass)
       end select
