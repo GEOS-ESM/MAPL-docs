@@ -1,6 +1,6 @@
 #include "MAPL.h"
 
-module MAPL_DataCollectionMod
+module mapl3g_DataCollection
   use pFIO
   use MAPL_FileMetadataUtilsVectorMod
   use MAPL_FileMetadataUtilsMod
@@ -12,48 +12,39 @@ module MAPL_DataCollectionMod
   implicit none
   private
 
-  public :: MAPLDataCollection
-  public :: new_MAPLDataCollection
+  public :: DataCollection
+  public :: new_DataCollection
 
-  type :: MAPLDataCollection
+  type :: DataCollection
     character(len=:), allocatable :: template
-    logical :: use_file_coords
     type (FileMetadataUtilsVector) :: metadatas
     type (StringIntegerMap) :: file_ids
-    type(ESMF_Grid), allocatable :: src_grid
   contains
     procedure :: find => find_
-  end type MAPLDataCollection
+  end type DataCollection
 
-  interface MAPLDataCollection
-    module procedure new_MAPLDataCollection
-  end interface MAPLDataCollection
+  interface DataCollection
+    module procedure new_DataCollection
+  end interface DataCollection
 
 
-  integer, parameter :: MAX_FORMATTERS = 2
+  integer, parameter :: MAX_FORMATTERS = 3
 
 contains
 
 
-  function new_MAPLDataCollection(template,use_file_coords) result(collection)
-    type (MAPLDataCollection) :: collection
+  function new_DataCollection(template) result(collection)
+    type (DataCollection) :: collection
     character(len=*), intent(in) :: template
-    logical, optional, intent(in) :: use_file_coords
 
     collection%template = template 
-    if (present(use_file_coords)) then
-       collection%use_file_coords=use_file_coords
-    else
-       collection%use_file_coords=.false.
-    end if
-
-  end function new_MAPLDataCollection
+  end function new_DataCollection
 
 
 
   function find_(this, file_name, rc) result(metadata)
     type (FileMetadataUtils), pointer :: metadata
-    class (MAPLDataCollection), target, intent(inout) :: this
+    class (DataCollection), target, intent(inout) :: this
     character(len=*), intent(in) :: file_name
     integer, optional, intent(out) :: rc
 
@@ -61,11 +52,7 @@ contains
     type (FileMetadata) :: basic_metadata
     integer, pointer :: file_id
     type (StringIntegerMapIterator) :: iter
-    class (AbstractGridFactory), allocatable :: factory
     integer :: status
-    type(StringIntegerMap), pointer :: dimensions
-    integer, pointer :: tile_size
-    logical :: skip_grid
 
 
     file_id => this%file_ids%at(file_name)
@@ -107,36 +94,12 @@ contains
        call this%metadatas%push_back(metadata)
        deallocate(metadata)
        metadata => this%metadatas%back()
-       dimensions => metadata%get_dimensions()
-       tile_size => dimensions%at("tile_index") 
-       skip_grid = associated(tile_size)   
- 
-       if ( (.not. allocated(this%src_grid)) .and. (.not. skip_grid)) then
-          allocate(factory, source=grid_manager%make_factory(trim(file_name),force_file_coordinates=this%use_file_coords))
-          this%src_grid = grid_manager%make_grid(factory)
-       end if
        ! size() returns 64-bit integer;  cast to 32 bit for this usage.
        call this%file_ids%insert(file_name, int(this%metadatas%size()))
     end if
     _RETURN(_SUCCESS)
   end function find_
 
-end module MAPL_DataCollectionMod
+end module mapl3g_DataCollection
 
-
-module MAPL_CollectionVectorMod
-   use pFIO
-   use MAPL_DataCollectionMod
-   
-   ! Create a map (associative array) between names and pFIO_Attributes.
-   
-#define _type type (MAPLDataCollection)
-#define _vector MAPLCollectionVector
-#define _iterator MAPLCollectionVectorIterator
-
-#define _FTL_THROW pFIO_throw_exception
-
-#include "templates/vector.inc"
-   
-end module MAPL_CollectionVectorMod
 
