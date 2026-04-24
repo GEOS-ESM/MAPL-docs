@@ -1,21 +1,18 @@
-module mapl3g_Utilities_Comms_API
-   use mapl3g_Comms, only: MAPL_Am_I_Root => Am_I_Root
-   use mapl3g_Comms, only: MAPL_NPES => num_pes
+module mapl3g_Field_API
+   use mapl3g_FieldGet, only: MAPL_FieldGet => FieldGet
+   use mapl3g_FieldSet, only: MAPL_FieldSet => FieldSet
+   use mapl3g_FieldFill, only: MAPL_FieldFill => FieldFill
+   use mapl3g_FieldCreate
+   use mapl3g_StateItemAllocation
+   use mapl3g_RestartModes
+   use mapl_FieldPointerUtilities, only: MAPL_AssignFptr => assign_fptr
+   use mapl_FieldPointerUtilities, only: MAPL_FieldClone => FieldClone
 
-   use mapl3g_Comms, only: MAPL_CommsSend => comms_send
-   use mapl3g_Comms, only: MAPL_CommsRecv => comms_recv
-   use mapl3g_Comms, only: MAPL_CommsSendRecv => comms_sendrecv
+   ! Internal info should not be exposed to users
+   use mapl3g_FieldInfo
+!#   use mapl3g_FieldInfo, only: MAPL_FieldInfoGetPrivate
+!#   use mapl3g_FieldInfo, only: MAPL_FieldInfoSetPrivate
+!#   use mapl3g_FieldInfo, only: MAPL_FieldInfoSetShared
+!#   use mapl3g_FieldInfo, only: MAPL_FieldInfoGetShared
 
-   use mapl3g_Comms, only: MAPL_CommsGatherV => comms_gatherv
-   use mapl3g_Comms, only: MAPL_CommsScatterV => comms_scatterv
-
-   use mapl3g_Comms, only: MAPL_CommsAllGather => comms_allgather
-   use mapl3g_Comms, only: MAPL_CommsAllGatherV => comms_allgatherv
-
-   use mapl3g_Comms, only: MAPL_ArrayGather => array_gather
-   use mapl3g_Comms, only: MAPL_ArrayScatter => array_scatter
-
-   use mapl3g_Comms, only: MAPL_CommsAllReduceMin => comms_allreduce_min
-   use mapl3g_Comms, only: MAPL_CommsAllReduceMax => comms_allreduce_max
-   use mapl3g_Comms, only: MAPL_CommsAllReduceSum => comms_allreduce_sum
-end module mapl3g_Utilities_Comms_API
+end module mapl3g_Field_API
