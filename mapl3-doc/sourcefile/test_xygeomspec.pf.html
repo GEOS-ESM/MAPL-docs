@@ -94,7 +94,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title=" 0.0% of total for source files.">146 statements</a>
+                 title=" 0.1% of total for source files.">183 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -536,7 +536,64 @@ large graphs.</div>
 <a id="ln-212" name="ln-212" href="#ln-212"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_HConfigDestroy</span><span class="p">(</span><span class="n">hconfig_b</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
 <a id="ln-213" name="ln-213" href="#ln-213"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">test_equal_to_different_file</span>
 <a id="ln-214" name="ln-214" href="#ln-214"></a>
-<a id="ln-215" name="ln-215" href="#ln-215"></a><span class="k">end module </span><span class="n">Test_XYGeomSpec</span>
+<a id="ln-215" name="ln-215" href="#ln-215"></a><span class="w">   </span><span class="c">! -----------------------------------------------------------------------</span>
+<a id="ln-216" name="ln-216" href="#ln-216"></a><span class="w">   </span><span class="c">! n_peri_dim: hconfig round-trip and equal_to distinguish by n_peri_dim</span>
+<a id="ln-217" name="ln-217" href="#ln-217"></a><span class="w">   </span><span class="c">! -----------------------------------------------------------------------</span>
+<a id="ln-218" name="ln-218" href="#ln-218"></a>
+<a id="ln-219" name="ln-219" href="#ln-219"></a><span class="w">   </span><span class="err">@</span><span class="n">test</span><span class="p">(</span><span class="k">type</span><span class="o">=</span><span class="n">ESMF_TestMethod</span><span class="p">,</span><span class="w"> </span><span class="n">npes</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<a id="ln-220" name="ln-220" href="#ln-220"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">test_n_peri_dim_from_hconfig</span><span class="p">(</span><span class="n">this</span><span class="p">)</span>
+<a id="ln-221" name="ln-221" href="#ln-221"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ESMF_TestMethod</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-222" name="ln-222" href="#ln-222"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">XYGeomSpec</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spec</span>
+<a id="ln-223" name="ln-223" href="#ln-223"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_HConfig</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">hconfig</span>
+<a id="ln-224" name="ln-224" href="#ln-224"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-225" name="ln-225" href="#ln-225"></a>
+<a id="ln-226" name="ln-226" href="#ln-226"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">this</span><span class="p">)</span>
+<a id="ln-227" name="ln-227" href="#ln-227"></a>
+<a id="ln-228" name="ln-228" href="#ln-228"></a><span class="w">      </span><span class="k">call </span><span class="n">create_xy_file</span><span class="p">(</span><span class="s1">&#39;test_xy_peri.nc&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-229" name="ln-229" href="#ln-229"></a><span class="w">      </span><span class="err">@</span><span class="n">assert_that</span><span class="p">(</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="k">is</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<a id="ln-230" name="ln-230" href="#ln-230"></a>
+<a id="ln-231" name="ln-231" href="#ln-231"></a><span class="w">      </span><span class="n">hconfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ESMF_HConfigCreate</span><span class="p">(</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-232" name="ln-232" href="#ln-232"></a><span class="w">           </span><span class="n">content</span><span class="o">=</span><span class="s1">&#39;{class: xy, grid_file_name: test_xy_peri.nc, n_peri_dim: 1}&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-233" name="ln-233" href="#ln-233"></a><span class="w">      </span><span class="err">@</span><span class="n">assert_that</span><span class="p">(</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="k">is</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<a id="ln-234" name="ln-234" href="#ln-234"></a>
+<a id="ln-235" name="ln-235" href="#ln-235"></a><span class="w">      </span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_XYGeomSpec</span><span class="p">(</span><span class="n">hconfig</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-236" name="ln-236" href="#ln-236"></a><span class="w">      </span><span class="err">@</span><span class="n">assert_that</span><span class="p">(</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="k">is</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<a id="ln-237" name="ln-237" href="#ln-237"></a><span class="w">      </span><span class="err">@</span><span class="n">assert_that</span><span class="p">(</span><span class="n">spec</span><span class="p">%</span><span class="n">get_n_peri_dim</span><span class="p">(),</span><span class="w"> </span><span class="k">is</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<a id="ln-238" name="ln-238" href="#ln-238"></a>
+<a id="ln-239" name="ln-239" href="#ln-239"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_HConfigDestroy</span><span class="p">(</span><span class="n">hconfig</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-240" name="ln-240" href="#ln-240"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">test_n_peri_dim_from_hconfig</span>
+<a id="ln-241" name="ln-241" href="#ln-241"></a>
+<a id="ln-242" name="ln-242" href="#ln-242"></a><span class="w">   </span><span class="err">@</span><span class="n">test</span><span class="p">(</span><span class="k">type</span><span class="o">=</span><span class="n">ESMF_TestMethod</span><span class="p">,</span><span class="w"> </span><span class="n">npes</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<a id="ln-243" name="ln-243" href="#ln-243"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">test_equal_to_different_n_peri_dim</span><span class="p">(</span><span class="n">this</span><span class="p">)</span>
+<a id="ln-244" name="ln-244" href="#ln-244"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ESMF_TestMethod</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-245" name="ln-245" href="#ln-245"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">XYGeomSpec</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span>
+<a id="ln-246" name="ln-246" href="#ln-246"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_HConfig</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">hconfig_a</span><span class="p">,</span><span class="w"> </span><span class="n">hconfig_b</span>
+<a id="ln-247" name="ln-247" href="#ln-247"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-248" name="ln-248" href="#ln-248"></a>
+<a id="ln-249" name="ln-249" href="#ln-249"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">this</span><span class="p">)</span>
+<a id="ln-250" name="ln-250" href="#ln-250"></a>
+<a id="ln-251" name="ln-251" href="#ln-251"></a><span class="w">      </span><span class="k">call </span><span class="n">create_xy_file</span><span class="p">(</span><span class="s1">&#39;test_xy_peri2.nc&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-252" name="ln-252" href="#ln-252"></a><span class="w">      </span><span class="err">@</span><span class="n">assert_that</span><span class="p">(</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="k">is</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<a id="ln-253" name="ln-253" href="#ln-253"></a>
+<a id="ln-254" name="ln-254" href="#ln-254"></a><span class="w">      </span><span class="n">hconfig_a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ESMF_HConfigCreate</span><span class="p">(</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-255" name="ln-255" href="#ln-255"></a><span class="w">           </span><span class="n">content</span><span class="o">=</span><span class="s1">&#39;{class: xy, grid_file_name: test_xy_peri2.nc}&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-256" name="ln-256" href="#ln-256"></a><span class="w">      </span><span class="err">@</span><span class="n">assert_that</span><span class="p">(</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="k">is</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<a id="ln-257" name="ln-257" href="#ln-257"></a><span class="w">      </span><span class="n">hconfig_b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ESMF_HConfigCreate</span><span class="p">(</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-258" name="ln-258" href="#ln-258"></a><span class="w">           </span><span class="n">content</span><span class="o">=</span><span class="s1">&#39;{class: xy, grid_file_name: test_xy_peri2.nc, n_peri_dim: 1}&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-259" name="ln-259" href="#ln-259"></a><span class="w">      </span><span class="err">@</span><span class="n">assert_that</span><span class="p">(</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="k">is</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<a id="ln-260" name="ln-260" href="#ln-260"></a>
+<a id="ln-261" name="ln-261" href="#ln-261"></a><span class="w">      </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_XYGeomSpec</span><span class="p">(</span><span class="n">hconfig_a</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-262" name="ln-262" href="#ln-262"></a><span class="w">      </span><span class="err">@</span><span class="n">assert_that</span><span class="p">(</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="k">is</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<a id="ln-263" name="ln-263" href="#ln-263"></a><span class="w">      </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_XYGeomSpec</span><span class="p">(</span><span class="n">hconfig_b</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-264" name="ln-264" href="#ln-264"></a><span class="w">      </span><span class="err">@</span><span class="n">assert_that</span><span class="p">(</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="k">is</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<a id="ln-265" name="ln-265" href="#ln-265"></a>
+<a id="ln-266" name="ln-266" href="#ln-266"></a><span class="w">      </span><span class="err">@</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
+<a id="ln-267" name="ln-267" href="#ln-267"></a>
+<a id="ln-268" name="ln-268" href="#ln-268"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_HConfigDestroy</span><span class="p">(</span><span class="n">hconfig_a</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-269" name="ln-269" href="#ln-269"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_HConfigDestroy</span><span class="p">(</span><span class="n">hconfig_b</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-270" name="ln-270" href="#ln-270"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">test_equal_to_different_n_peri_dim</span>
+<a id="ln-271" name="ln-271" href="#ln-271"></a>
+<a id="ln-272" name="ln-272" href="#ln-272"></a><span class="k">end module </span><span class="n">Test_XYGeomSpec</span>
 </pre></div>
 
       </section>
@@ -558,7 +615,7 @@ large graphs.</div>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-04-24T19:55:51.151598+0000             </p>
+ on 2026-04-25T11:55:18.921252+0000             </p>
           </div>
         </div>
         <br>
