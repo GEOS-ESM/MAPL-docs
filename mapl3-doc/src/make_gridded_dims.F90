@@ -1,42 +1,29 @@
 #include "MAPL.h"
 
-submodule (mapl3g_LatLonGeomFactory) make_gridded_dims_smod
-
-   use mapl3g_GeomSpec
-   use mapl3g_LonAxis
-   use mapl3g_LatAxis
-   use mapl3g_LatLonDecomposition
-   use mapl3g_LatLonGeomSpec
-   use mapl_MinMaxMod
+submodule (mapl3g_XYGeomFactory) make_gridded_dims_smod
    use mapl_ErrorHandlingMod
-   use mapl_Constants
-   use pFIO
-   use gFTL2_StringVector
-   use esmf
-   use mapl_KeywordEnforcer, only: KE => KeywordEnforcer
-
-   implicit none (type, external)
+   use gftl2_StringVector
+   implicit none
 
 contains
 
    module function make_gridded_dims(this, geom_spec, rc) result(gridded_dims)
       type(StringVector) :: gridded_dims
-      class(LatLonGeomFactory), intent(in) :: this
+      class(XYGeomFactory), intent(in) :: this
       class(GeomSpec), intent(in) :: geom_spec
       integer, optional, intent(out) :: rc
 
       gridded_dims = StringVector()
       select type (geom_spec)
-      type is (LatLonGeomSpec)
-         call gridded_dims%push_back('lon')
-         call gridded_dims%push_back('lat')
+      type is (XYGeomSpec)
+         call gridded_dims%push_back('Xdim')
+         call gridded_dims%push_back('Ydim')
       class default
-         _FAIL('geom_spec is not of dynamic type LatLonGeomSpec.')
+         _FAIL('geom_spec is not of dynamic type XYGeomSpec.')
       end select
 
       _RETURN(_SUCCESS)
       _UNUSED_DUMMY(this)
    end function make_gridded_dims
-
 
 end submodule make_gridded_dims_smod
