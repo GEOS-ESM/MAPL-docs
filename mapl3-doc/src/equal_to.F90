@@ -1,28 +1,26 @@
-#include "MAPL.h"
+#include "MAPL_ErrLog.h"
 
-submodule (mapl3g_LatLonDecomposition) equal_to_smod
-   use mapl_ErrorHandlingMod
+submodule (mapl3g_LocStreamDecomposition) equal_to_smod
    implicit none (type, external)
 
 contains
 
-   elemental module function equal_to(decomp1, decomp2)
-      logical :: equal_to
-      type(LatLonDecomposition), intent(in) :: decomp1
-      type(LatLonDecomposition), intent(in) :: decomp2
+   module procedure equal_to
+      
+      ! Both must have allocated distributions
+      if (.not. allocated(decomp1%point_distribution)) then
+         equal_to = .not. allocated(decomp2%point_distribution)
+         return
+      end if
 
-      equal_to = size(decomp1%lon_distribution) == size(decomp2%lon_distribution)
-      if (.not. equal_to) return
+      if (.not. allocated(decomp2%point_distribution)) then
+         equal_to = .false.
+         return
+      end if
 
-      equal_to = size(decomp1%lat_distribution) == size(decomp2%lat_distribution)
-      if (.not. equal_to) return
+      ! Check if distributions are the same
+      equal_to = all(decomp1%point_distribution == decomp2%point_distribution)
 
-      equal_to = all(decomp1%lon_distribution == decomp2%lon_distribution)
-      if (.not. equal_to) return
-
-      equal_to = all(decomp1%lat_distribution == decomp2%lat_distribution)
-
-   end function equal_to
+   end procedure equal_to
 
 end submodule equal_to_smod
-

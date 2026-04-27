@@ -1,37 +1,48 @@
-module mapl3g_Geom_API
+module mapl3g_FieldBundle_API
 
-   use mapl_KeywordEnforcer
-   use mapl3g_MaplGeom, only: MaplGeom
-   use mapl3g_GeomSpec, only: GeomSpec
-   use mapl3g_GeomManager, only: GeomManager, geom_manager, get_geom_manager, get_mapl_geom
-   use mapl3g_GeomUtilities, only: mapl_SameGeom, mapl_GeomGetId
-   use mapl3g_GeomGet, only: mapl_GeomGet => GeomGet
-   use mapl3g_GridGet, only: mapl_GridGet => GridGet, mapl_GridGetCoordinates => GridGetCoordinates
-   use mapl3g_GridGetHorzIJIndex, only: mapl_GridGetHorzIJIndex => GridGetHorzIJIndex
-   use mapl3g_GeomGetHorzIJIndex, only: mapl_GeomGetHorzIJIndex => GeomGetHorzIJIndex
-   use mapl3g_Subgrid, only: mapl_Interval => Interval, mapl_make_subgrids => make_subgrids
-   use mapl3g_XYGeomSpec,    only: XYGeomSpec, make_XYGeomSpec, XY_COORD_STANDARD, XY_COORD_ABI
-   use mapl3g_XYGeomFactory, only: XYGeomFactory
-   use esmf, only: ESMF_Grid, ESMF_Geom, ESMF_KIND_R4
+   use ESMF, only: MAPL_FieldBundleAdd => ESMF_FieldBundleAdd
+   use mapl3g_FieldBundleType_Flag
+   use mapl3g_VectorBasisKind
+   use mapl3g_FieldBundleCreate, only: MAPL_FieldBundleCreate => FieldBundleCreate
+   use mapl3g_FieldBundleCreate, only: MAPL_FieldBundlesAreAliased => FieldBundlesAreAliased
+   use mapl3g_FieldBundleGet, only: MAPL_FieldBundleGet => FieldBundleGet
+   use mapl3g_FieldBundleSet, only: MAPL_FieldBundleSet => FieldBundleSet
+   use mapl3g_FieldBundleInfo, only: MAPL_FieldBundleInfoGetInternal => FieldBundleInfoGetInternal
+   use mapl3g_FieldBundleInfo, only: MAPL_FieldBundleInfoSetInternal => FieldBundleInfoSetInternal
+   use mapl3g_FieldBundleGetPointer, only: MAPL_FieldBundleGetPointer => FieldBundleGetPointerToData
 
-   implicit none(type,external)
+   implicit none
 
    private
 
    ! Available to users
-   public :: mapl_GeomGet
-   public :: mapl_GridGet
-   public :: mapl_GridGetCoordinates
-   public :: mapl_GridGetHorzIJIndex, mapl_GeomGetHorzIJIndex
+   public :: MAPL_FieldBundleCreate
+   public :: MAPL_FieldBundlesAreAliased
+   public :: MAPL_FieldBundleGet
+   public :: MAPL_FieldBundleSet
+   public :: MAPL_FieldBundleAdd
+   public :: MAPL_FieldBundleGetPointer
+   ! Maybe these should be private?
+   public :: MAPL_FieldBundleInfoGetInternal
+   public :: MAPL_FieldBundleInfoSetInternal
+
+   public :: FieldBundleType_Flag
+   public :: FIELDBUNDLETYPE_INVALID
+   public :: FIELDBUNDLETYPE_BASIC
+   public :: FIELDBUNDLETYPE_VECTOR
+   public :: FIELDBUNDLETYPE_BRACKET
+   public :: FIELDBUNDLETYPE_VECTORBRACKET
+
+   public :: operator(==)
+   public :: operator(/=)
+
+   ! VectorBasisKind
+   public :: VectorBasisKind
+   public :: VECTOR_BASIS_KIND_INVALID
+   public :: VECTOR_BASIS_KIND_GRID
+   public :: VECTOR_BASIS_KIND_NS
 
    ! Used internally by MAPL
    ! Users shouldn't need these
-   public :: MaplGeom
-   public :: mapl_SameGeom, mapl_GeomGetId
-   public :: GeomManager, geom_manager, get_geom_manager, get_mapl_geom
-   public :: GeomSpec
-   public :: mapl_Interval, mapl_make_subgrids
-   public :: XYGeomSpec, make_XYGeomSpec, XY_COORD_STANDARD, XY_COORD_ABI
-   public :: XYGeomFactory
 
-end module mapl3g_Geom_API
+end module mapl3g_FieldBundle_API
