@@ -1,28 +1,26 @@
-#include "MAPL.h"
+#include "MAPL_ErrLog.h"
 
-submodule (mapl3g_LatLonGeomSpec) equal_to_smod
-   use mapl3g_CoordinateAxis
-   use mapl3g_GeomSpec
-   use pfio
-   use mapl_ErrorHandling
-   use esmf
+submodule (mapl3g_LocStreamDecomposition) equal_to_smod
    implicit none (type, external)
-   
+
 contains
 
-   pure logical module function equal_to(a, b)
-      class(LatLonGeomSpec), intent(in) :: a
-      class(GeomSpec), intent(in) :: b
+   module procedure equal_to
+      
+      ! Both must have allocated distributions
+      if (.not. allocated(decomp1%point_distribution)) then
+         equal_to = .not. allocated(decomp2%point_distribution)
+         return
+      end if
 
-      select type (b)
-      type is (LatLonGeomSpec)
-         equal_to = (a%lon_axis == b%lon_axis) .and. (a%lat_axis == b%lat_axis)
-         if (.not. equal_to) return
-         equal_to = (a%decomposition == b%decomposition)
-      class default
+      if (.not. allocated(decomp2%point_distribution)) then
          equal_to = .false.
-      end select
+         return
+      end if
 
-   end function equal_to
+      ! Check if distributions are the same
+      equal_to = all(decomp1%point_distribution == decomp2%point_distribution)
+
+   end procedure equal_to
 
 end submodule equal_to_smod
