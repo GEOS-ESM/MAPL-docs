@@ -1,52 +1,25 @@
-module mapl_base3g
-   use mapl_SimulationTime, only: set_reference_clock, fill_time_dict
-   use MAPL_CommsMod, only: mapl_CommsBcast, mapl_CommsScatterV, mapl_CommsGatherV, &
-                            mapl_CommsAllGather, mapl_CommsAllGatherV, &
-                            mapl_CommsAllReduceMin, mapl_CommsAllReduceMax, &
-                            mapl_CommsAllReduceSum, mapl_CommsSend, mapl_CommsRecv, &
-                            mapl_CommsSendRecv, mapl_AM_I_ROOT, mapl_AM_I_RANK, &
-                            mapl_NPES, ArrayGather, ArrayScatter, MAPL_ROOT, &
-                            mapl_CreateRequest, mapl_CommRequest, mapl_ArrayIGather, &
-                            mapl_ArrayIScatter, mapl_CollectiveWait, &
-                            mapl_CollectiveScatter3D, mapl_CollectiveGather3D, &
-                            mapl_RoundRobinPEList, mapl_BcastShared, ArrPtr
-   use MAPL_SatVaporMod, only: MAPL_EQsatSET, MAPL_EQsat
-   use MAPL_StringTemplate, only: fill_grads_template, StrTemplate, fill_grads_template_esmf
-   use mapl_LocalDisplacementEnsemble, only: LocalDisplacementEnsemble
-   use MAPL_MemUtilsMod, only: MAPL_MemUtilsInit, MAPL_MemUtilsDisable, &
-         MAPL_MemUtilsWrite, MAPL_MemUtilsIsDisabled, MAPL_MemUtilsFree, &
-         MAPL_MemCommited, MAPL_MemUsed, MAPL_MemReport
-   use MAPL_SunMod, only: MAPL_SunOrbitCreate, MAPL_SunOrbitCreateFromConfig, &
-         MAPL_SunOrbitCreated, MAPL_SunOrbitDestroy, MAPL_SunOrbitQuery, &
-         MAPL_SunGetInsolation, MAPL_SunGetSolarConstant, &
-          MAPL_SunGetDaylightDuration, MAPL_SunGetDaylightDurationMax, &
-          MAPL_SunGetLocalSolarHourAngle, MAPL_SunOrbit
-   use MAPL_TimeInterpolation, only: MAPL_Interp_Fac, MAPL_ClimInterpFac
-   implicit none(type,external)
+module mapl3g_State_API
+   use mapl3g_StateGet, only: MAPL_StateGet => StateGet
+   use mapl3g_StateGetPointer, only: MAPL_StateGetPointer => StateGetPointer
+   use MAPL_StateArithmeticParserMod, only: MAPL_ParserVariablesInExpression => parser_variables_in_expression
+   use mapl3g_StateAddMethod, only: mapl_StateAddMethod
+   use mapl3g_StateAddMethod, only: CallbackMap
+   use mapl3g_StateAddMethod, only: CallbackMapIterator
+   use mapl3g_StateAddMethod, only: CallbackMethodWrapper
+   use mapl3g_StateAddMethod, only: get_callbacks
+   use mapl3g_StateGetGeom, only: MAPL_StateGetGeom => StateGetGeom
+   implicit none
    private
 
-   public :: set_reference_clock, fill_time_dict
-   public :: mapl_CommsBcast, mapl_CommsScatterV, mapl_CommsGatherV
-   public :: mapl_CommsAllGather, mapl_CommsAllGatherV
-   public :: mapl_CommsAllReduceMin, mapl_CommsAllReduceMax, mapl_CommsAllReduceSum
-   public :: mapl_CommsSend, mapl_CommsRecv, mapl_CommsSendRecv
-   public :: mapl_AM_I_ROOT, mapl_AM_I_RANK, mapl_NPES
-   public :: ArrayGather, ArrayScatter, MAPL_ROOT
-   public :: mapl_CreateRequest, mapl_CommRequest
-   public :: mapl_ArrayIGather, mapl_ArrayIScatter, mapl_CollectiveWait
-   public :: mapl_CollectiveScatter3D, mapl_CollectiveGather3D
-   public :: mapl_RoundRobinPEList, mapl_BcastShared, ArrPtr
-   public :: MAPL_EQsatSET, MAPL_EQsat
-   public :: fill_grads_template, StrTemplate, fill_grads_template_esmf
-   public :: LocalDisplacementEnsemble
-   public :: MAPL_MemUtilsInit, MAPL_MemUtilsDisable
-   public :: MAPL_MemUtilsWrite, MAPL_MemUtilsIsDisabled, MAPL_MemUtilsFree
-   public :: MAPL_MemCommited, MAPL_MemUsed, MAPL_MemReport
-   public :: MAPL_SunOrbitCreate, MAPL_SunOrbitCreateFromConfig
-   public :: MAPL_SunOrbitCreated, MAPL_SunOrbitDestroy, MAPL_SunOrbitQuery
-   public :: MAPL_SunGetInsolation, MAPL_SunGetSolarConstant
-   public :: MAPL_SunGetDaylightDuration, MAPL_SunGetDaylightDurationMax
-   public :: MAPL_SunGetLocalSolarHourAngle, MAPL_SunOrbit
-   public :: MAPL_Interp_Fac, MAPL_ClimInterpFac
+   ! Available to users
+   public :: MAPL_StateGet
+   public :: MAPL_StateGetPointer
+   public :: MAPL_ParserVariablesInExpression
+   public :: mapl_StateAddMethod
+   public :: CallbackMap
+   public :: CallbackMapIterator
+   public :: CallbackMethodWrapper
+   public :: get_callbacks
+   public :: MAPL_StateGetGeom
 
-end module mapl_base3g
+end module mapl3g_State_API
