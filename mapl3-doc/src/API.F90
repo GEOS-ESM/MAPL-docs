@@ -1,25 +1,21 @@
-module mapl3g_State_API
-   use mapl3g_StateGet, only: MAPL_StateGet => StateGet
-   use mapl3g_StateGetPointer, only: MAPL_StateGetPointer => StateGetPointer
-   use MAPL_StateArithmeticParserMod, only: MAPL_ParserVariablesInExpression => parser_variables_in_expression
-   use mapl3g_StateAddMethod, only: mapl_StateAddMethod
-   use mapl3g_StateAddMethod, only: CallbackMap
-   use mapl3g_StateAddMethod, only: CallbackMapIterator
-   use mapl3g_StateAddMethod, only: CallbackMethodWrapper
-   use mapl3g_StateAddMethod, only: get_callbacks
-   use mapl3g_StateGetGeom, only: MAPL_StateGetGeom => StateGetGeom
-   implicit none
-   private
+module mapl3g_Utilities_Comms_API
+   use mapl3g_Comms, only: MAPL_Am_I_Root => Am_I_Root
+   use mapl3g_Comms, only: MAPL_NPES => num_pes
 
-   ! Available to users
-   public :: MAPL_StateGet
-   public :: MAPL_StateGetPointer
-   public :: MAPL_ParserVariablesInExpression
-   public :: mapl_StateAddMethod
-   public :: CallbackMap
-   public :: CallbackMapIterator
-   public :: CallbackMethodWrapper
-   public :: get_callbacks
-   public :: MAPL_StateGetGeom
+   use mapl3g_Comms, only: MAPL_CommsSend => comms_send
+   use mapl3g_Comms, only: MAPL_CommsRecv => comms_recv
+   use mapl3g_Comms, only: MAPL_CommsSendRecv => comms_sendrecv
 
-end module mapl3g_State_API
+   use mapl3g_Comms, only: MAPL_CommsGatherV => comms_gatherv
+   use mapl3g_Comms, only: MAPL_CommsScatterV => comms_scatterv
+
+   use mapl3g_Comms, only: MAPL_CommsAllGather => comms_allgather
+   use mapl3g_Comms, only: MAPL_CommsAllGatherV => comms_allgatherv
+
+   use mapl3g_Comms, only: MAPL_ArrayGather => array_gather
+   use mapl3g_Comms, only: MAPL_ArrayScatter => array_scatter
+
+   use mapl3g_Comms, only: MAPL_CommsAllReduceMin => comms_allreduce_min
+   use mapl3g_Comms, only: MAPL_CommsAllReduceMax => comms_allreduce_max
+   use mapl3g_Comms, only: MAPL_CommsAllReduceSum => comms_allreduce_sum
+end module mapl3g_Utilities_Comms_API
