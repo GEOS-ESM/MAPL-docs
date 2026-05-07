@@ -1,37 +1,25 @@
-module mapl3g_Geom_API
-
-   use mapl_KeywordEnforcer
-   use mapl3g_MaplGeom, only: MaplGeom
-   use mapl3g_GeomSpec, only: GeomSpec
-   use mapl3g_GeomManager, only: GeomManager, geom_manager, get_geom_manager, get_mapl_geom
-   use mapl3g_GeomUtilities, only: mapl_SameGeom, mapl_GeomGetId
-   use mapl3g_GeomGet, only: mapl_GeomGet => GeomGet
-   use mapl3g_GridGet, only: mapl_GridGet => GridGet, mapl_GridGetCoordinates => GridGetCoordinates
-   use mapl3g_GridGetHorzIJIndex, only: mapl_GridGetHorzIJIndex => GridGetHorzIJIndex
-   use mapl3g_GeomGetHorzIJIndex, only: mapl_GeomGetHorzIJIndex => GeomGetHorzIJIndex
-   use mapl3g_Subgrid, only: mapl_Interval => Interval, mapl_make_subgrids => make_subgrids
-   use mapl3g_XYGeomSpec,    only: XYGeomSpec, make_XYGeomSpec, XY_COORD_STANDARD, XY_COORD_ABI
-   use mapl3g_XYGeomFactory, only: XYGeomFactory
-   use esmf, only: ESMF_Grid, ESMF_Geom, ESMF_KIND_R4
-
-   implicit none(type,external)
-
+module mapl3g_State_API
+   use mapl3g_StateGet, only: MAPL_StateGet => StateGet
+   use mapl3g_StateGetPointer, only: MAPL_StateGetPointer => StateGetPointer
+   use MAPL_StateArithmeticParserMod, only: MAPL_ParserVariablesInExpression => parser_variables_in_expression
+   use mapl3g_StateAddMethod, only: mapl_StateAddMethod
+   use mapl3g_StateAddMethod, only: CallbackMap
+   use mapl3g_StateAddMethod, only: CallbackMapIterator
+   use mapl3g_StateAddMethod, only: CallbackMethodWrapper
+   use mapl3g_StateAddMethod, only: get_callbacks
+   use mapl3g_StateGetGeom, only: MAPL_StateGetGeom => StateGetGeom
+   implicit none
    private
 
    ! Available to users
-   public :: mapl_GeomGet
-   public :: mapl_GridGet
-   public :: mapl_GridGetCoordinates
-   public :: mapl_GridGetHorzIJIndex, mapl_GeomGetHorzIJIndex
+   public :: MAPL_StateGet
+   public :: MAPL_StateGetPointer
+   public :: MAPL_ParserVariablesInExpression
+   public :: mapl_StateAddMethod
+   public :: CallbackMap
+   public :: CallbackMapIterator
+   public :: CallbackMethodWrapper
+   public :: get_callbacks
+   public :: MAPL_StateGetGeom
 
-   ! Used internally by MAPL
-   ! Users shouldn't need these
-   public :: MaplGeom
-   public :: mapl_SameGeom, mapl_GeomGetId
-   public :: GeomManager, geom_manager, get_geom_manager, get_mapl_geom
-   public :: GeomSpec
-   public :: mapl_Interval, mapl_make_subgrids
-   public :: XYGeomSpec, make_XYGeomSpec, XY_COORD_STANDARD, XY_COORD_ABI
-   public :: XYGeomFactory
-
-end module mapl3g_Geom_API
+end module mapl3g_State_API
