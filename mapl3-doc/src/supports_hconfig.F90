@@ -1,37 +1,35 @@
 #include "MAPL.h"
 
-submodule (mapl3g_EASEGeomSpec) supports_hconfig_smod
-   use mapl3g_GeomSpec
+submodule (mapl3g_LonAxis) supports_hconfig_smod
+   use mapl_RangeMod
    use mapl_ErrorHandling
    use esmf
    implicit none (type, external)
+   integer, parameter :: R8 = ESMF_KIND_R8
 
 contains
 
-   ! An HConfig block is an EASE geom if it contains:
-   !   class: ease
-   ! and a grid name key:
-   !   grid_name: EASEv2_M09   (or similar)
-   logical module function supports_hconfig_(this, hconfig, rc) result(supports)
-      class(EASEGeomSpec), intent(in) :: this
-      type(ESMF_HConfig),  intent(in) :: hconfig
-      integer, optional,   intent(out) :: rc
+   logical module function supports_hconfig(hconfig, rc) result(supports)
+      type(ESMF_HConfig), intent(in) :: hconfig
+      integer, optional, intent(out) :: rc
 
       integer :: status
-      character(:), allocatable :: geom_class
+      logical :: has_im_world
+      logical :: has_lon_range
+      logical :: has_dateline
 
-      supports = ESMF_HConfigIsDefined(hconfig, keystring='class', _RC)
-      _RETURN_UNLESS(supports)
+      supports = .true.
 
-      geom_class = ESMF_HConfigAsString(hconfig, keyString='class', _RC)
-      supports = (geom_class == 'ease')
-      _RETURN_UNLESS(supports)
+      has_im_world = ESMF_HConfigIsDefined(hconfig, keystring='lon_range', _RC)
+      _RETURN_UNLESS(has_im_world)
 
-      ! Must also have a grid_name key
-      supports = ESMF_HConfigIsDefined(hconfig, keystring='grid_name', _RC)
+      has_lon_range = ESMF_HConfigIsDefined(hconfig, keystring='lon_range', _RC)
+      has_dateline = ESMF_HConfigIsDefined(hconfig, keystring='dateline', _RC)
+      _RETURN_UNLESS(has_lon_range .neqv. has_dateline)
+      supports = .true.
 
       _RETURN(_SUCCESS)
-      _UNUSED_DUMMY(this)
-   end function supports_hconfig_
+   end function supports_hconfig
 
 end submodule supports_hconfig_smod
+
