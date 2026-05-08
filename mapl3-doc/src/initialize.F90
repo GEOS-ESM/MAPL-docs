@@ -1,32 +1,29 @@
 #include "MAPL.h"
 
-submodule(mapl3g_GriddedComponentDriver) initialize_smod
-   use mapl_ErrorHandling
-   implicit none(type,external)
+submodule (mapl3g_GeomManager) initialize_smod
+
+   implicit none
 
 contains
+   
+   module subroutine initialize(this)
+      use mapl3g_LatLonGeomFactory
+      use mapl3g_CubedSphereGeomFactory
+      use mapl3g_XYGeomFactory
+      use mapl3g_EASEGeomFactory
+      class(GeomManager), intent(inout) :: this
 
+      ! Load default factories
+      type(LatLonGeomFactory) :: latlon_factory
+      type(CubedSphereGeomFactory) :: cs_factory
+      type(XYGeomFactory) :: xy_factory
+      type(EASEGeomFactory) :: ease_factory
 
-   recursive module subroutine initialize(this, unusable, phase_idx, rc)
-      class(GriddedComponentDriver), target, intent(inout) :: this
-      class(KE), optional, intent(in) :: unusable
-      integer, optional, intent(in) :: phase_idx
-      integer, optional, intent(out) :: rc
+      call this%add_factory(latlon_factory)
+      call this%add_factory(cs_factory)
+      call this%add_factory(xy_factory)
+      call this%add_factory(ease_factory)
 
-      integer :: status, user_status
-
-      associate ( &
-           importState => this%states%importState, &
-           exportState => this%states%exportState)
-
-        call ESMF_GridCompInitialize(this%gridcomp, &
-             importState=importState, exportState=exportState, clock=this%clock, &
-             phase=phase_idx, _USERRC)
-
-      end associate
-
-      _RETURN(_SUCCESS)
-      _UNUSED_DUMMY(unusable)
    end subroutine initialize
 
 end submodule initialize_smod
