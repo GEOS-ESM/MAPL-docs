@@ -1,54 +1,54 @@
-module mapl_base3g
-   use mapl_SimulationTime, only: set_reference_clock, fill_time_dict
-   use MAPL_CommsMod, only: mapl_CommsBcast, mapl_CommsScatterV, mapl_CommsGatherV, &
-                            mapl_CommsAllGather, mapl_CommsAllGatherV, &
-                            mapl_CommsAllReduceMin, mapl_CommsAllReduceMax, &
-                            mapl_CommsAllReduceSum, mapl_CommsSend, mapl_CommsRecv, &
-                            mapl_CommsSendRecv, mapl_AM_I_ROOT, mapl_AM_I_RANK, &
-                            mapl_NPES, ArrayGather, ArrayScatter, MAPL_ROOT, &
-                            mapl_CreateRequest, mapl_CommRequest, mapl_ArrayIGather, &
-                            mapl_ArrayIScatter, mapl_CollectiveWait, &
-                            mapl_CollectiveScatter3D, mapl_CollectiveGather3D, &
-                            mapl_RoundRobinPEList, mapl_BcastShared, ArrPtr
-   use MAPL_SatVaporMod, only: MAPL_EQsatSET, MAPL_EQsat
-   use MAPL_StringTemplate, only: fill_grads_template, StrTemplate, fill_grads_template_esmf
-   use mapl_LocalDisplacementEnsemble, only: LocalDisplacementEnsemble
-   use MAPL_MemUtilsMod, only: MAPL_MemUtilsInit, MAPL_MemUtilsDisable, &
-         MAPL_MemUtilsWrite, MAPL_MemUtilsIsDisabled, MAPL_MemUtilsFree, &
-         MAPL_MemCommited, MAPL_MemUsed, MAPL_MemReport
-   use MAPL_SunMod, only: MAPL_SunOrbitCreate, MAPL_SunOrbitCreateFromConfig, &
-         MAPL_SunOrbitCreated, MAPL_SunOrbitDestroy, MAPL_SunOrbitQuery, &
-         MAPL_SunGetInsolation, MAPL_SunGetSolarConstant, &
-          MAPL_SunGetDaylightDuration, MAPL_SunGetDaylightDurationMax, &
-          MAPL_SunGetLocalSolarHourAngle, MAPL_SunOrbit
-   use MAPL_TimeInterpolation, only: MAPL_Interp_Fac, MAPL_ClimInterpFac
-   use mapl3g_FileIO, only: WRITE_PARALLEL
+module mapl3g_VerticalGrid_API
+   use mapl3g_VerticalGrid, only: VerticalGrid
+   use mapl3g_VerticalGrid, only: VERTICAL_GRID_NOT_FOUND
+   use mapl3g_VerticalGridSpec, only: VerticalGridSpec
+   use mapl3g_VerticalGridFactory, only: VerticalGridFactory
+   use mapl3g_VerticalGridManager, only: VerticalGridManager
+   use mapl3g_VerticalGridManager, only: get_vertical_grid_manager
+   use mapl3g_IntegerPair, only: IntegerPair
+   use mapl3g_VerticalStaggerLoc
+   use mapl3g_VerticalAlignment
+   use mapl3g_BasicVerticalGrid, only: BasicVerticalGrid
+   use mapl3g_BasicVerticalGrid, only: BasicVerticalGridSpec
+   use mapl3g_BasicVerticalGrid, only: BasicVerticalGridFactory
    implicit none(type,external)
    private
 
-   public :: set_reference_clock, fill_time_dict
-   public :: mapl_CommsBcast, mapl_CommsScatterV, mapl_CommsGatherV
-   public :: mapl_CommsAllGather, mapl_CommsAllGatherV
-   public :: mapl_CommsAllReduceMin, mapl_CommsAllReduceMax, mapl_CommsAllReduceSum
-   public :: mapl_CommsSend, mapl_CommsRecv, mapl_CommsSendRecv
-   public :: mapl_AM_I_ROOT, mapl_AM_I_RANK, mapl_NPES
-   public :: ArrayGather, ArrayScatter, MAPL_ROOT
-   public :: mapl_CreateRequest, mapl_CommRequest
-   public :: mapl_ArrayIGather, mapl_ArrayIScatter, mapl_CollectiveWait
-   public :: mapl_CollectiveScatter3D, mapl_CollectiveGather3D
-   public :: mapl_RoundRobinPEList, mapl_BcastShared, ArrPtr
-   public :: MAPL_EQsatSET, MAPL_EQsat
-   public :: fill_grads_template, StrTemplate, fill_grads_template_esmf
-   public :: LocalDisplacementEnsemble
-   public :: MAPL_MemUtilsInit, MAPL_MemUtilsDisable
-   public :: MAPL_MemUtilsWrite, MAPL_MemUtilsIsDisabled, MAPL_MemUtilsFree
-   public :: MAPL_MemCommited, MAPL_MemUsed, MAPL_MemReport
-   public :: MAPL_SunOrbitCreate, MAPL_SunOrbitCreateFromConfig
-   public :: MAPL_SunOrbitCreated, MAPL_SunOrbitDestroy, MAPL_SunOrbitQuery
-   public :: MAPL_SunGetInsolation, MAPL_SunGetSolarConstant
-   public :: MAPL_SunGetDaylightDuration, MAPL_SunGetDaylightDurationMax
-   public :: MAPL_SunGetLocalSolarHourAngle, MAPL_SunOrbit
-   public :: MAPL_Interp_Fac, MAPL_ClimInterpFac
-   public :: WRITE_PARALLEL
+   ! Abstract base types
+   public :: VerticalGrid
+   public :: VerticalGridSpec
+   public :: VerticalGridFactory
 
-end module mapl_base3g
+   ! Manager
+   public :: VerticalGridManager
+   public :: get_vertical_grid_manager
+   
+   ! Utility types
+   public :: IntegerPair
+   
+   ! Vertical stagger locations
+   public :: VerticalStaggerLoc
+   public :: operator(==), operator(/=)
+   public :: VERTICAL_STAGGER_NONE
+   public :: VERTICAL_STAGGER_EDGE
+   public :: VERTICAL_STAGGER_CENTER
+   public :: VERTICAL_STAGGER_MIRROR
+   public :: VERTICAL_STAGGER_INVALID
+   
+   ! Vertical alignment
+   public :: VerticalAlignment
+   public :: VALIGN_WITH_GRID
+   public :: VALIGN_UP
+   public :: VALIGN_DOWN
+   public :: VALIGN_INVALID
+   
+   ! Basic grid types
+   public :: BasicVerticalGrid
+   public :: BasicVerticalGridSpec
+   public :: BasicVerticalGridFactory
+
+   ! Parameters
+   public :: VERTICAL_GRID_NOT_FOUND
+  
+   
+end module mapl3g_VerticalGrid_API
