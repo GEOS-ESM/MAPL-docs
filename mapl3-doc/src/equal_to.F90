@@ -1,24 +1,28 @@
 #include "MAPL.h"
 
-submodule (mapl3g_EASEGeomSpec) equal_to_smod
-   use mapl3g_GeomSpec
-   use mapl3g_EASEDecomposition
+submodule (mapl3g_LatLonDecomposition) equal_to_smod
+   use mapl_ErrorHandlingMod
    implicit none (type, external)
 
 contains
 
-   pure logical module function equal_to(a, b)
-      class(EASEGeomSpec), intent(in) :: a
-      class(GeomSpec),     intent(in) :: b
+   elemental module function equal_to(decomp1, decomp2)
+      logical :: equal_to
+      type(LatLonDecomposition), intent(in) :: decomp1
+      type(LatLonDecomposition), intent(in) :: decomp2
 
-      select type (b)
-      type is (EASEGeomSpec)
-         equal_to = (a%grid_name == b%grid_name) .and. &
-                    (a%decomposition == b%decomposition)
-      class default
-         equal_to = .false.
-      end select
+      equal_to = size(decomp1%lon_distribution) == size(decomp2%lon_distribution)
+      if (.not. equal_to) return
+
+      equal_to = size(decomp1%lat_distribution) == size(decomp2%lat_distribution)
+      if (.not. equal_to) return
+
+      equal_to = all(decomp1%lon_distribution == decomp2%lon_distribution)
+      if (.not. equal_to) return
+
+      equal_to = all(decomp1%lat_distribution == decomp2%lat_distribution)
 
    end function equal_to
 
 end submodule equal_to_smod
+
