@@ -18,7 +18,7 @@
 !
 ! The module `MAPL_LocStreamMod` manipulates location streams.
 !
-module MAPL_LocStreamMod
+module mapl_LocStreamMod_impl
 
   ! !USES:
 
@@ -26,7 +26,7 @@ use ESMF
 use mapl3g_Geom_API, only: MAPL_GridGet
 use MAPL_Constants
 use mapl3g_GridGet, only: geom_GridGet => GridGet
-use NCIOMod, only: MAPL_ReadTilingNC4
+use mapl_NCIO, only: MAPL_ReadTilingNC4
 use MAPL_CommsMod
 use MAPL_HashMod
 use MAPL_ShmemMod
@@ -3285,4 +3285,4 @@ subroutine MAPL_GetImsJms(Imins, Imaxs, Jmins, Jmaxs, Ims, Jms, rc)
    _RETURN(ESMF_SUCCESS)
 end subroutine MAPL_GetImsJms
 
-end module MAPL_LocStreamMod
+end module mapl_LocStreamMod_impl
