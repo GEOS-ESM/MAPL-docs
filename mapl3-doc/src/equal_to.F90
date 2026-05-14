@@ -1,26 +1,24 @@
-#include "MAPL_ErrLog.h"
+#include "MAPL.h"
 
-submodule (mapl3g_LocStreamDecomposition) equal_to_smod
-   implicit none (type, external)
+submodule (mapl3g_CoordinateAxis) equal_to_smod
+   use mapl_ErrorHandling
+   use gftl2_StringVector
+   implicit none(type,external)
 
 contains
+   
+   elemental logical module function equal_to(a, b)
+      type(CoordinateAxis), intent(in) :: a, b
 
-   module procedure equal_to
-      
-      ! Both must have allocated distributions
-      if (.not. allocated(decomp1%point_distribution)) then
-         equal_to = .not. allocated(decomp2%point_distribution)
-         return
-      end if
+      ! Do the fast checks first
+      equal_to = size(a%centers) == size(b%centers)
+      if (.not. equal_to) return
+      equal_to = size(a%corners) == size(b%corners)
+      if (.not. equal_to) return
 
-      if (.not. allocated(decomp2%point_distribution)) then
-         equal_to = .false.
-         return
-      end if
-
-      ! Check if distributions are the same
-      equal_to = all(decomp1%point_distribution == decomp2%point_distribution)
-
-   end procedure equal_to
+      equal_to = all(a%centers == b%centers)
+      if (.not. equal_to) return
+      equal_to = all(a%corners == b%corners)
+   end function equal_to
 
 end submodule equal_to_smod

@@ -1,30 +1,49 @@
 #include "MAPL.h"
 
-submodule (mapl3g_XYGeomSpec) supports_metadata_smod
-   use mapl_ErrorHandlingMod
-   use pfio, only: FileMetadata, Attribute
-   implicit none
+submodule (mapl3g_LatLonGeomSpec) supports_metadata_smod
+
+   use mapl3g_CoordinateAxis
+   use mapl3g_GeomSpec
+   use pfio
+   use mapl_ErrorHandling
+   use esmf
+
+   implicit none (type, external)
 
 contains
 
-   ! A file metadata object represents an XY grid if it has a
-   ! 'grid_type' global attribute equal to 'XY' (set by the MAPL2
-   ! XYGridFactory via append_metadata).
    logical module function supports_metadata_(this, file_metadata, rc) result(supports)
-      class(XYGeomSpec), intent(in) :: this
+      class(LatLonGeomSpec), intent(in) :: this
       type(FileMetadata), intent(in) :: file_metadata
       integer, optional, intent(out) :: rc
 
       integer :: status
-      character(len=:), allocatable :: grid_type
-      type(Attribute), pointer :: attr
+      type(LonAxis) :: lon_axis
+      type(LatAxis) :: lat_axis
+      character(:), allocatable :: lon_dim, lat_dim
 
-      supports = file_metadata%has_attribute('grid_type')
+      supports = .false.
+
+      ! Require that both longitude and latitude axes are
+      ! supported in the usual way.
+
+      supports = lon_axis%supports(file_metadata, _RC)
       _RETURN_UNLESS(supports)
 
-      attr => file_metadata%get_attribute('grid_type', _RC)
-      grid_type = attr%get_string(_RC)
-      supports = (grid_type == 'XY')
+      supports = lat_axis%supports(file_metadata, _RC)
+      _RETURN_UNLESS(supports)
+
+      ! Distinguish regular LatLon grids from LocStreams. For
+      ! LatLon we expect distinct latitude and longitude
+      ! dimensions (e.g. lat x lon), whereas LocStreams share a
+      ! single dimension for both coordinates. If both
+      ! coordinates share the same dimension, consider this not
+      ! a LatLon grid so that LocStream factories can claim it.
+
+      lon_dim = get_dim_name(file_metadata, units='degrees_east', _RC)
+      lat_dim = get_dim_name(file_metadata, units='degrees_north', _RC)
+
+      supports = (lon_dim /= '' .and. lat_dim /= '' .and. lon_dim /= lat_dim)
 
       _RETURN(_SUCCESS)
       _UNUSED_DUMMY(this)
