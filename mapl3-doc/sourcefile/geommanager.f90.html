@@ -1,0 +1,1516 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="MAPL is a foundation layer of the GEOS architecture, whose original purpose is to supplement the Earth System Modeling Framework (ESMF)">
+    <meta name="author" content="The MAPL Developers" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>GeomManager.F90 &ndash; MAPL</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">MAPL </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>GeomManager.F90
+      <small>Source File</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.1% of total for source files.">139 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/GeomManager.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+            <li class="breadcrumb-item active" aria-current="page">GeomManager.F90</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#mods-0"
+         aria-expanded="false" aria-controls="mods-0">
+         <h4 class="card-header bg-primary text-white">Modules</h4>
+      </a>
+      <div id="mods-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/mapl3g_geommanager.html">mapl3g_GeomManager</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/geommanager.f90.html#src">GeomManager.F90</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">This file depends on</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~geommanager.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilegeommanagerf90EfferentGraph" width="641pt" height="235pt"
+ viewBox="0.00 0.00 641.00 234.72" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~geommanager.f90~~EfferentGraph" class="graph" transform="scale(0.29 0.29) rotate(0) translate(4 817.69)">
+<title>sourcefile~~geommanager.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-817.69 2240,-817.69 2240,4 -4,4"/>
+<!-- sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~geommanager.f90</title>
+<polygon fill="none" stroke="black" points="2236,-471 2123,-471 2123,-447 2236,-447 2236,-471"/>
+<text text-anchor="middle" x="2179.5" y="-456.6" font-family="Helvetica,sans-Serif" font-size="10.50">GeomManager.F90</text>
+</g>
+<!-- sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~errorhandling.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node2"><a xlink:href="../sourcefile/errorhandling.f90.html" xlink:title="ErrorHandling.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="245,-286 136,-286 136,-262 245,-262 245,-286"/>
+<text text-anchor="middle" x="190.5" y="-271.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ErrorHandling.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1826.5,-714C1755.21,-699.93 1732.4,-692.45 1663,-714"/>
+</g>
+<!-- sourcefile~filemetadata.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~filemetadata.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node3"><a xlink:href="../sourcefile/filemetadata.f90.html" xlink:title="FileMetadata.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1713.5,-590 1610.5,-590 1610.5,-566 1713.5,-566 1713.5,-590"/>
+<text text-anchor="middle" x="1662" y="-575.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FileMetadata.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~filemetadata.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~filemetadata.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2009,-714C1932.44,-737.97 1907.2,-729.54 1828.5,-714"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1826.5,-714C1795.5,-707.88 1784.43,-712.31 1758,-695 1719.98,-670.11 1689.82,-625.14 1674.36,-598.8"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1677.34,-596.95 1669.34,-590 1671.26,-600.42 1677.34,-596.95"/>
+</g>
+<!-- sourcefile~geomfactory.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~geomfactory.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node4"><a xlink:href="../sourcefile/geomfactory.f90.html" xlink:title="GeomFactory.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1714.5,-467 1609.5,-467 1609.5,-443 1714.5,-443 1714.5,-467"/>
+<text text-anchor="middle" x="1662" y="-452.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomFactory.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~geomfactory.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~geomfactory.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2122.64,-457.78C2090.06,-457.37 2048.19,-457.37 2011,-459"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2009,-459C1909.67,-463.35 1794.16,-460.4 1724.91,-457.78"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1724.74,-454.27 1714.61,-457.37 1724.47,-461.26 1724.74,-454.27"/>
+</g>
+<!-- sourcefile~geomfactoryvector.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~geomfactoryvector.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node5"><a xlink:href="../sourcefile/geomfactoryvector.f90.html" xlink:title="GeomFactoryVector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1897,-507 1758,-507 1758,-483 1897,-483 1897,-507"/>
+<text text-anchor="middle" x="1827.5" y="-492.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomFactoryVector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~geomfactoryvector.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~geomfactoryvector.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2009,-459C1964.79,-460.93 1915.59,-471.31 1879.74,-480.43"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1878.8,-477.06 1870,-482.96 1880.56,-483.83 1878.8,-477.06"/>
+</g>
+<!-- sourcefile~geomspec.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node6" class="node">
+<title>sourcefile~geomspec.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node6"><a xlink:href="../sourcefile/geomspec.f90.html" xlink:title="GeomSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1709,-391 1615,-391 1615,-367 1709,-367 1709,-391"/>
+<text text-anchor="middle" x="1662" y="-376.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~geomspec.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~geomspec.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1826.5,-379C1790.99,-376.76 1751.07,-376.71 1719.56,-377.25"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1719.14,-373.75 1709.21,-377.45 1719.28,-380.75 1719.14,-373.75"/>
+</g>
+<!-- sourcefile~geomspecvector.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node7" class="node">
+<title>sourcefile~geomspecvector.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node7"><a xlink:href="../sourcefile/geomspecvector.f90.html" xlink:title="GeomSpecVector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="2073,-431 1947,-431 1947,-407 2073,-407 2073,-431"/>
+<text text-anchor="middle" x="2010" y="-416.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomSpecVector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~geomspecvector.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~geomspecvector.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2128.24,-447C2110.36,-442.73 2090.03,-437.87 2071.38,-433.42"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="2072.05,-429.98 2061.51,-431.06 2070.42,-436.79 2072.05,-429.98"/>
+</g>
+<!-- sourcefile~integermaplgeommap.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node8" class="node">
+<title>sourcefile~integermaplgeommap.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node8"><a xlink:href="../sourcefile/integermaplgeommap.f90.html" xlink:title="IntegerMaplGeomMap.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="2087,-530 1933,-530 1933,-506 2087,-506 2087,-530"/>
+<text text-anchor="middle" x="2010" y="-515.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">IntegerMaplGeomMap.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~integermaplgeommap.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~integermaplgeommap.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2144.2,-471.08C2118.34,-480.19 2082.69,-492.75 2054.78,-502.58"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="2053.52,-499.31 2045.25,-505.93 2055.85,-505.91 2053.52,-499.31"/>
+</g>
+<!-- sourcefile~maplgeom.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node9" class="node">
+<title>sourcefile~maplgeom.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node9"><a xlink:href="../sourcefile/maplgeom.f90.html" xlink:title="MaplGeom.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1874,-549 1781,-549 1781,-525 1874,-525 1874,-549"/>
+<text text-anchor="middle" x="1827.5" y="-534.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MaplGeom.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~maplgeom.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~maplgeom.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2175.95,-471.27C2165.58,-517.37 2121.7,-679.34 2011,-714"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2009,-714C1966.22,-727.39 1876.78,-606.7 1842.38,-557.39"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1845.19,-555.3 1836.63,-549.06 1839.43,-559.28 1845.19,-555.3"/>
+</g>
+<!-- sourcefile~nullgeomspec.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node10" class="node">
+<title>sourcefile~nullgeomspec.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node10"><a xlink:href="../sourcefile/nullgeomspec.f90.html" xlink:title="NullGeomSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1884.5,-686 1770.5,-686 1770.5,-662 1884.5,-662 1884.5,-686"/>
+<text text-anchor="middle" x="1827.5" y="-671.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">NullGeomSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~nullgeomspec.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~nullgeomspec.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2009,-714C1984.1,-721.79 1918.03,-703.56 1873.13,-689.21"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1874.2,-685.88 1863.61,-686.13 1872.04,-692.54 1874.2,-685.88"/>
+</g>
+<!-- sourcefile~stringdictionary.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node11" class="node">
+<title>sourcefile~stringdictionary.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node11"><a xlink:href="../sourcefile/stringdictionary.f90.html" xlink:title="StringDictionary.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1722,-349 1602,-349 1602,-325 1722,-325 1722,-349"/>
+<text text-anchor="middle" x="1662" y="-334.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StringDictionary.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~stringdictionary.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge10" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~stringdictionary.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2165.15,-446.8C2148.33,-432.26 2117.88,-408.6 2087,-398 1978.04,-360.6 1943.47,-386.27 1828.5,-379"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1826.5,-379C1784.83,-375.33 1738.8,-362.7 1706.23,-352.24"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1707.16,-348.86 1696.57,-349.07 1704.98,-355.51 1707.16,-348.86"/>
+</g>
+<!-- sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node16" class="node">
+<title>sourcefile~mapl_throw.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node16"><a xlink:href="../sourcefile/mapl_throw.f90.html" xlink:title="MAPL_Throw.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="100,-266 0,-266 0,-242 100,-242 100,-266"/>
+<text text-anchor="middle" x="50" y="-251.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Throw.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge11" class="edge">
+<title>sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M135.95,-266.27C127.53,-265.05 118.77,-263.79 110.23,-262.55"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="110.72,-259.09 100.33,-261.12 109.72,-266.02 110.72,-259.09"/>
+</g>
+<!-- sourcefile~attribute.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node12" class="node">
+<title>sourcefile~attribute.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node12"><a xlink:href="../sourcefile/attribute.f90.html" xlink:title="Attribute.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="940,-360 859,-360 859,-336 940,-336 940,-360"/>
+<text text-anchor="middle" x="899.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Attribute.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~filemetadata.f90&#45;&gt;sourcefile~attribute.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge12" class="edge">
+<title>sourcefile~filemetadata.f90&#45;&gt;sourcefile~attribute.f90</title>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M1045,-308C1025.79,-299.98 974.17,-317.6 938.14,-331.95"/>
+<polygon fill="#ff9900" stroke="#ff9900" points="936.38,-328.88 928.43,-335.89 939.01,-335.37 936.38,-328.88"/>
+</g>
+<!-- sourcefile~coordinatevariable.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node13" class="node">
+<title>sourcefile~coordinatevariable.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node13"><a xlink:href="../sourcefile/coordinatevariable.f90.html" xlink:title="CoordinateVariable.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1397,-666 1259,-666 1259,-642 1397,-642 1397,-666"/>
+<text text-anchor="middle" x="1328" y="-651.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">CoordinateVariable.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~filemetadata.f90&#45;&gt;sourcefile~coordinatevariable.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge13" class="edge">
+<title>sourcefile~filemetadata.f90&#45;&gt;sourcefile~coordinatevariable.f90</title>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M1656.63,-590.2C1641.99,-628.77 1590.42,-747.01 1500.5,-772"/>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M1498.5,-772C1431.34,-790.67 1368.43,-712.93 1342.05,-674.44"/>
+<polygon fill="#ff9900" stroke="#ff9900" points="1344.89,-672.39 1336.42,-666.01 1339.06,-676.27 1344.89,-672.39"/>
+</g>
+<!-- sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node14" class="node">
+<title>sourcefile~keywordenforcer.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node14"><a xlink:href="../sourcefile/keywordenforcer.f90.html" xlink:title="KeywordEnforcer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1108,-706 984,-706 984,-682 1108,-682 1108,-706"/>
+<text text-anchor="middle" x="1046" y="-691.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">KeywordEnforcer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~filemetadata.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge14" class="edge">
+<title>sourcefile~filemetadata.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M1498.5,-772C1425.92,-792.17 1403.71,-781.66 1329,-772"/>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M1327,-772C1240.08,-760.76 1142.21,-728.87 1088.27,-709.52"/>
+<polygon fill="#ff9900" stroke="#ff9900" points="1089.31,-706.18 1078.72,-706.06 1086.93,-712.76 1089.31,-706.18"/>
+</g>
+<!-- sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node15" class="node">
+<title>sourcefile~mapl_exceptionhandling.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node15"><a xlink:href="../sourcefile/mapl_exceptionhandling.f90.html" xlink:title="MAPL_ExceptionHandling.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="450,-266 281,-266 281,-242 450,-242 450,-266"/>
+<text text-anchor="middle" x="365.5" y="-251.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_ExceptionHandling.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~filemetadata.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge15" class="edge">
+<title>sourcefile~filemetadata.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M1612.75,-565.92C1580.81,-557.79 1538.05,-546.65 1500.5,-536"/>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M1498.5,-536C1356.24,-495.66 1325.61,-470.2 1184.5,-426"/>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M1182.5,-426C1132.17,-403.66 1153.01,-358.72 1108,-327 1084.79,-310.64 1073.03,-319.35 1047,-308"/>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M1045,-308C978.49,-278.99 969.77,-253.63 900.5,-232"/>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M898.5,-232C801.15,-201.61 771.01,-196.92 670,-211 620.12,-217.96 611.28,-239.07 561,-242"/>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M559,-242C526.85,-243.4 491.71,-245.44 460.36,-247.44"/>
+<polygon fill="#ff9900" stroke="#ff9900" points="460.08,-243.96 450.32,-248.09 460.53,-250.94 460.08,-243.96"/>
+</g>
+<!-- sourcefile~pfio_constants.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node17" class="node">
+<title>sourcefile~pfio_constants.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node17"><a xlink:href="../sourcefile/pfio_constants.f90.html" xlink:title="pFIO_Constants.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="424,-331 307,-331 307,-307 424,-307 424,-331"/>
+<text text-anchor="middle" x="365.5" y="-316.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pFIO_Constants.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~filemetadata.f90&#45;&gt;sourcefile~pfio_constants.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge16" class="edge">
+<title>sourcefile~filemetadata.f90&#45;&gt;sourcefile~pfio_constants.f90</title>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M1327,-772C1115.42,-759.96 1061.81,-765.64 851,-744 803.07,-739.08 791.47,-734.46 743.5,-730"/>
+</g>
+<!-- sourcefile~pfio_utilities.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node18" class="node">
+<title>sourcefile~pfio_utilities.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node18"><a xlink:href="../sourcefile/pfio_utilities.f90.html" xlink:title="pFIO_Utilities.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="611.5,-342 508.5,-342 508.5,-318 611.5,-318 611.5,-342"/>
+<text text-anchor="middle" x="560" y="-327.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pFIO_Utilities.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~filemetadata.f90&#45;&gt;sourcefile~pfio_utilities.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge17" class="edge">
+<title>sourcefile~filemetadata.f90&#45;&gt;sourcefile~pfio_utilities.f90</title>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M1182.5,-426C1062.06,-391.32 1018,-382.38 900.5,-426"/>
+</g>
+<!-- sourcefile~stringintegermaputil.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node19" class="node">
+<title>sourcefile~stringintegermaputil.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node19"><a xlink:href="../sourcefile/stringintegermaputil.f90.html" xlink:title="StringIntegerMapUtil.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="815,-244 670,-244 670,-220 815,-220 815,-244"/>
+<text text-anchor="middle" x="742.5" y="-229.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StringIntegerMapUtil.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~filemetadata.f90&#45;&gt;sourcefile~stringintegermaputil.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge18" class="edge">
+<title>sourcefile~filemetadata.f90&#45;&gt;sourcefile~stringintegermaputil.f90</title>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M898.5,-232C875.35,-224.77 849.29,-222.63 825.24,-222.9"/>
+<polygon fill="#ff9900" stroke="#ff9900" points="824.98,-219.4 815.07,-223.15 825.15,-226.4 824.98,-219.4"/>
+</g>
+<!-- sourcefile~stringvariablemap.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node20" class="node">
+<title>sourcefile~stringvariablemap.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node20"><a xlink:href="../sourcefile/stringvariablemap.f90.html" xlink:title="StringVariableMap.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1566,-590 1433,-590 1433,-566 1566,-566 1566,-590"/>
+<text text-anchor="middle" x="1499.5" y="-575.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StringVariableMap.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~filemetadata.f90&#45;&gt;sourcefile~stringvariablemap.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge19" class="edge">
+<title>sourcefile~filemetadata.f90&#45;&gt;sourcefile~stringvariablemap.f90</title>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M1610.22,-578C1599.42,-578 1587.8,-578 1576.3,-578"/>
+<polygon fill="#ff9900" stroke="#ff9900" points="1576.24,-574.5 1566.24,-578 1576.24,-581.5 1576.24,-574.5"/>
+</g>
+<!-- sourcefile~stringvectorutil.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node21" class="node">
+<title>sourcefile~stringvectorutil.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node21"><a xlink:href="../sourcefile/stringvectorutil.f90.html" xlink:title="StringVectorUtil.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1105,-360 987,-360 987,-336 1105,-336 1105,-360"/>
+<text text-anchor="middle" x="1046" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StringVectorUtil.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~filemetadata.f90&#45;&gt;sourcefile~stringvectorutil.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge20" class="edge">
+<title>sourcefile~filemetadata.f90&#45;&gt;sourcefile~stringvectorutil.f90</title>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M1182.5,-426C1144.18,-414.97 1142.79,-395.49 1108,-376 1100.7,-371.91 1092.7,-367.91 1084.96,-364.28"/>
+<polygon fill="#ff9900" stroke="#ff9900" points="1086.26,-361.02 1075.72,-360.04 1083.35,-367.39 1086.26,-361.02"/>
+</g>
+<!-- sourcefile~unlimitedentity.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node22" class="node">
+<title>sourcefile~unlimitedentity.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node22"><a xlink:href="../sourcefile/unlimitedentity.f90.html" xlink:title="UnlimitedEntity.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="800,-342 685,-342 685,-318 800,-318 800,-342"/>
+<text text-anchor="middle" x="742.5" y="-327.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">UnlimitedEntity.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~filemetadata.f90&#45;&gt;sourcefile~unlimitedentity.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge21" class="edge">
+<title>sourcefile~filemetadata.f90&#45;&gt;sourcefile~unlimitedentity.f90</title>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M1045,-308C958.98,-272.09 847.19,-296.6 786.8,-314.97"/>
+<polygon fill="#ff9900" stroke="#ff9900" points="785.7,-311.65 777.2,-317.97 787.79,-318.33 785.7,-311.65"/>
+</g>
+<!-- sourcefile~variable.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node23" class="node">
+<title>sourcefile~variable.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node23"><a xlink:href="../sourcefile/variable.f90.html" xlink:title="Variable.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1223,-550 1144,-550 1144,-526 1223,-526 1223,-550"/>
+<text text-anchor="middle" x="1183.5" y="-535.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Variable.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~filemetadata.f90&#45;&gt;sourcefile~variable.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge22" class="edge">
+<title>sourcefile~filemetadata.f90&#45;&gt;sourcefile~variable.f90</title>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M1498.5,-536C1407.15,-511.81 1295.53,-521.3 1232.99,-529.95"/>
+<polygon fill="#ff9900" stroke="#ff9900" points="1232.41,-526.49 1223.01,-531.38 1233.41,-533.42 1232.41,-526.49"/>
+</g>
+<!-- sourcefile~geomfactoryvector.f90&#45;&gt;sourcefile~geomfactory.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge23" class="edge">
+<title>sourcefile~geomfactoryvector.f90&#45;&gt;sourcefile~geomfactory.f90</title>
+<path fill="none" stroke="#33ff00" stroke-dasharray="5,2" d="M1777.44,-483C1760.06,-478.75 1740.32,-473.92 1722.19,-469.48"/>
+<polygon fill="#33ff00" stroke="#33ff00" points="1722.85,-466.04 1712.3,-467.06 1721.18,-472.84 1722.85,-466.04"/>
+</g>
+<!-- sourcefile~geomspecvector.f90&#45;&gt;sourcefile~geomspec.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge24" class="edge">
+<title>sourcefile~geomspecvector.f90&#45;&gt;sourcefile~geomspec.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1946.77,-413.31C1895.92,-408.47 1822.23,-401.06 1758,-393 1745.47,-391.43 1732.04,-389.56 1719.33,-387.71"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="1719.74,-384.23 1709.33,-386.24 1718.71,-391.16 1719.74,-384.23"/>
+</g>
+<!-- sourcefile~integermaplgeommap.f90&#45;&gt;sourcefile~maplgeom.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge25" class="edge">
+<title>sourcefile~integermaplgeommap.f90&#45;&gt;sourcefile~maplgeom.f90</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M1932.97,-526C1916.69,-527.72 1899.78,-529.5 1884.42,-531.11"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="1883.64,-527.68 1874.06,-532.2 1884.37,-534.64 1883.64,-527.68"/>
+</g>
+<!-- sourcefile~maplgeom.f90&#45;&gt;sourcefile~filemetadata.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge26" class="edge">
+<title>sourcefile~maplgeom.f90&#45;&gt;sourcefile~filemetadata.f90</title>
+<path fill="none" stroke="#3200ff" stroke-dasharray="5,2" d="M1780.96,-548.42C1762.28,-553.1 1740.45,-558.58 1720.68,-563.53"/>
+<polygon fill="#3200ff" stroke="#3200ff" points="1719.71,-560.17 1710.87,-566 1721.42,-566.96 1719.71,-560.17"/>
+</g>
+<!-- sourcefile~maplgeom.f90&#45;&gt;sourcefile~geomfactory.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge27" class="edge">
+<title>sourcefile~maplgeom.f90&#45;&gt;sourcefile~geomfactory.f90</title>
+<path fill="none" stroke="#3200ff" stroke-dasharray="5,2" d="M1780.75,-526.76C1772.83,-523.95 1764.92,-520.41 1758,-516 1737.83,-503.14 1741.87,-489.31 1722,-476 1719.59,-474.38 1717.03,-472.88 1714.4,-471.47"/>
+<polygon fill="#3200ff" stroke="#3200ff" points="1715.73,-468.23 1705.19,-467.09 1712.72,-474.55 1715.73,-468.23"/>
+</g>
+<!-- sourcefile~maplgeom.f90&#45;&gt;sourcefile~geomspec.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge28" class="edge">
+<title>sourcefile~maplgeom.f90&#45;&gt;sourcefile~geomspec.f90</title>
+<path fill="none" stroke="#3200ff" stroke-dasharray="5,2" d="M1780.86,-529.02C1772.57,-525.98 1764.5,-521.79 1758,-516 1728.27,-489.54 1745.03,-466.46 1722,-434 1712.35,-420.4 1698.91,-407.55 1687.29,-397.7"/>
+<polygon fill="#3200ff" stroke="#3200ff" points="1689.19,-394.72 1679.24,-391.08 1684.75,-400.13 1689.19,-394.72"/>
+</g>
+<!-- sourcefile~maplgeom.f90&#45;&gt;sourcefile~stringdictionary.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge29" class="edge">
+<title>sourcefile~maplgeom.f90&#45;&gt;sourcefile~stringdictionary.f90</title>
+<path fill="none" stroke="#3200ff" stroke-dasharray="5,2" d="M1780.66,-530.22C1772.18,-527.09 1764.1,-522.56 1758,-516 1708.98,-463.24 1769.84,-411.84 1722,-358 1721.13,-357.02 1720.2,-356.08 1719.24,-355.19"/>
+<polygon fill="#3200ff" stroke="#3200ff" points="1721.23,-352.31 1711.12,-349.16 1717.06,-357.93 1721.23,-352.31"/>
+</g>
+<!-- sourcefile~vectorbasis.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node24" class="node">
+<title>sourcefile~vectorbasis.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node24"><a xlink:href="../sourcefile/vectorbasis.f90.html" xlink:title="VectorBasis.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="948,-166 851,-166 851,-142 948,-142 948,-166"/>
+<text text-anchor="middle" x="899.5" y="-151.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VectorBasis.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~maplgeom.f90&#45;&gt;sourcefile~vectorbasis.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge30" class="edge">
+<title>sourcefile~maplgeom.f90&#45;&gt;sourcefile~vectorbasis.f90</title>
+<path fill="none" stroke="#3200ff" stroke-dasharray="5,2" d="M1780.83,-538.32C1734.79,-538.46 1662.12,-535.39 1602,-518 1457.13,-476.1 1043.82,-237.77 929.89,-171.25"/>
+<polygon fill="#3200ff" stroke="#3200ff" points="931.41,-168.08 921.01,-166.05 927.87,-174.12 931.41,-168.08"/>
+</g>
+<!-- sourcefile~vectorbasiskind.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node25" class="node">
+<title>sourcefile~vectorbasiskind.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node25"><a xlink:href="../sourcefile/vectorbasiskind.f90.html" xlink:title="VectorBasisKind.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1722,-509 1602,-509 1602,-485 1722,-485 1722,-509"/>
+<text text-anchor="middle" x="1662" y="-494.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VectorBasisKind.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~maplgeom.f90&#45;&gt;sourcefile~vectorbasiskind.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge31" class="edge">
+<title>sourcefile~maplgeom.f90&#45;&gt;sourcefile~vectorbasiskind.f90</title>
+<path fill="none" stroke="#3200ff" stroke-dasharray="5,2" d="M1780.96,-525.86C1762.77,-521.41 1741.59,-516.23 1722.24,-511.49"/>
+<polygon fill="#3200ff" stroke="#3200ff" points="1722.85,-508.04 1712.31,-509.06 1721.19,-514.84 1722.85,-508.04"/>
+</g>
+<!-- sourcefile~nullgeomspec.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge32" class="edge">
+<title>sourcefile~nullgeomspec.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M1770.19,-685.24C1738.34,-692.22 1698.01,-702.13 1663,-714"/>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M1661,-714C1610.83,-731.01 1615.3,-766.61 1566,-786 1467.47,-824.75 1434.87,-810 1329,-810 1329,-810 1329,-810 559,-810 305.61,-810 213.97,-397.49 195.3,-296.24"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="198.71,-295.43 193.5,-286.2 191.82,-296.66 198.71,-295.43"/>
+</g>
+<!-- sourcefile~nullgeomspec.f90&#45;&gt;sourcefile~geomspec.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge33" class="edge">
+<title>sourcefile~nullgeomspec.f90&#45;&gt;sourcefile~geomspec.f90</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M1817.81,-661.68C1803.6,-641.07 1775.26,-597.93 1758,-558 1735.23,-505.32 1752.07,-482.88 1722,-434 1713.38,-419.99 1700.25,-407.25 1688.56,-397.57"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="1690.39,-394.56 1680.38,-391.09 1686.04,-400.05 1690.39,-394.56"/>
+</g>
+<!-- sourcefile~attribute.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge34" class="edge">
+<title>sourcefile~attribute.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M881.45,-335.91C853.99,-317.34 797.58,-282.8 743.5,-272"/>
+</g>
+<!-- sourcefile~attribute.f90&#45;&gt;sourcefile~pfio_utilities.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge35" class="edge">
+<title>sourcefile~attribute.f90&#45;&gt;sourcefile~pfio_utilities.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M888.63,-360.01C857.43,-397.66 761.95,-510.35 743.5,-502"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M741.5,-502C665.92,-467.81 602.35,-388.42 575.16,-350.67"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="577.97,-348.57 569.33,-342.43 572.25,-352.62 577.97,-348.57"/>
+</g>
+<!-- sourcefile~attribute.f90&#45;&gt;sourcefile~unlimitedentity.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge36" class="edge">
+<title>sourcefile~attribute.f90&#45;&gt;sourcefile~unlimitedentity.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M858.99,-343.41C844.2,-341.69 826.97,-339.69 810.4,-337.77"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="810.54,-334.26 800.2,-336.58 809.73,-341.21 810.54,-334.26"/>
+</g>
+<!-- sourcefile~coordinatevariable.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge37" class="edge">
+<title>sourcefile~coordinatevariable.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#ff6d00" stroke-dasharray="5,2" d="M1182.5,-654C1148.29,-656.47 1111.03,-668.18 1084.25,-678.29"/>
+<polygon fill="#ff6d00" stroke="#ff6d00" points="1082.94,-675.05 1074.89,-681.93 1085.48,-681.57 1082.94,-675.05"/>
+</g>
+<!-- sourcefile~coordinatevariable.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge38" class="edge">
+<title>sourcefile~coordinatevariable.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#ff6d00" stroke-dasharray="5,2" d="M1258.79,-652C1235.23,-651.84 1208.68,-652.25 1184.5,-654"/>
+<path fill="none" stroke="#ff6d00" stroke-dasharray="5,2" d="M1182.5,-654C1057.49,-663.04 1023.68,-630.88 900.5,-654"/>
+</g>
+<!-- sourcefile~coordinatevariable.f90&#45;&gt;sourcefile~pfio_constants.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge39" class="edge">
+<title>sourcefile~coordinatevariable.f90&#45;&gt;sourcefile~pfio_constants.f90</title>
+<path fill="none" stroke="#ff6d00" stroke-dasharray="5,2" d="M898.5,-730C833.74,-706.5 812.09,-736.37 743.5,-730"/>
+</g>
+<!-- sourcefile~coordinatevariable.f90&#45;&gt;sourcefile~pfio_utilities.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge40" class="edge">
+<title>sourcefile~coordinatevariable.f90&#45;&gt;sourcefile~pfio_utilities.f90</title>
+<path fill="none" stroke="#ff6d00" stroke-dasharray="5,2" d="M1303.73,-666.09C1238.51,-698.32 1048.97,-780.47 900.5,-730"/>
+<path fill="none" stroke="#ff6d00" stroke-dasharray="5,2" d="M898.5,-730C783.32,-688.2 853.7,-555.57 743.5,-502"/>
+</g>
+<!-- sourcefile~coordinatevariable.f90&#45;&gt;sourcefile~variable.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge41" class="edge">
+<title>sourcefile~coordinatevariable.f90&#45;&gt;sourcefile~variable.f90</title>
+<path fill="none" stroke="#ff6d00" stroke-dasharray="5,2" d="M1312.02,-641.81C1287.04,-621.48 1236.75,-580.53 1207.33,-556.59"/>
+<polygon fill="#ff6d00" stroke="#ff6d00" points="1209.24,-553.63 1199.28,-550.03 1204.83,-559.06 1209.24,-553.63"/>
+</g>
+<!-- sourcefile~mapl_exceptionhandling.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge42" class="edge">
+<title>sourcefile~mapl_exceptionhandling.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M280.79,-263.68C272.2,-264.67 263.58,-265.67 255.26,-266.63"/>
+<polygon fill="#b6ff00" stroke="#b6ff00" points="254.82,-263.16 245.29,-267.78 255.62,-270.11 254.82,-263.16"/>
+</g>
+<!-- sourcefile~mapl_exceptionhandling.f90&#45;&gt;sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge43" class="edge">
+<title>sourcefile~mapl_exceptionhandling.f90&#45;&gt;sourcefile~mapl_throw.f90</title>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M280.93,-253.21C268.87,-253.12 256.62,-253.05 245,-253 196.56,-252.8 184.44,-252.72 136,-253 127.82,-253.05 119.19,-253.12 110.7,-253.21"/>
+<polygon fill="#b6ff00" stroke="#b6ff00" points="110.4,-249.71 100.44,-253.32 110.48,-256.71 110.4,-249.71"/>
+</g>
+<!-- sourcefile~pfio_utilities.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge44" class="edge">
+<title>sourcefile~pfio_utilities.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#00ff91" stroke-dasharray="5,2" d="M523.95,-317.95C511.88,-313.68 498.3,-308.76 486,-304 458.16,-293.23 427.07,-280.19 403.58,-270.13"/>
+<polygon fill="#00ff91" stroke="#00ff91" points="404.9,-266.88 394.34,-266.15 402.14,-273.31 404.9,-266.88"/>
+</g>
+<!-- sourcefile~pfio_utilities.f90&#45;&gt;sourcefile~pfio_constants.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge45" class="edge">
+<title>sourcefile~pfio_utilities.f90&#45;&gt;sourcefile~pfio_constants.f90</title>
+<path fill="none" stroke="#00ff91" stroke-dasharray="5,2" d="M508.42,-327.11C485.81,-325.82 458.82,-324.28 434.47,-322.88"/>
+<polygon fill="#00ff91" stroke="#00ff91" points="434.41,-319.37 424.22,-322.3 434.01,-326.36 434.41,-319.37"/>
+</g>
+<!-- sourcefile~stringintegermaputil.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge46" class="edge">
+<title>sourcefile~stringintegermaputil.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M669.91,-235.87C636.77,-237.69 596.87,-239.91 561,-242"/>
+</g>
+<!-- sourcefile~stringintegermaputil.f90&#45;&gt;sourcefile~pfio_utilities.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge47" class="edge">
+<title>sourcefile~stringintegermaputil.f90&#45;&gt;sourcefile~pfio_utilities.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M726.22,-244.02C706.03,-259.48 668.91,-286.43 634,-304 626.4,-307.82 618.1,-311.35 609.91,-314.48"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="608.57,-311.24 600.39,-317.98 610.98,-317.81 608.57,-311.24"/>
+</g>
+<!-- sourcefile~stringvariablemap.f90&#45;&gt;sourcefile~coordinatevariable.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge48" class="edge">
+<title>sourcefile~stringvariablemap.f90&#45;&gt;sourcefile~coordinatevariable.f90</title>
+<path fill="none" stroke="#0091ff" stroke-dasharray="5,2" d="M1471.64,-590.04C1442.96,-602.9 1397.34,-623.36 1365.44,-637.66"/>
+<polygon fill="#0091ff" stroke="#0091ff" points="1363.7,-634.6 1356.01,-641.89 1366.57,-640.99 1363.7,-634.6"/>
+</g>
+<!-- sourcefile~stringvariablemap.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge49" class="edge">
+<title>sourcefile~stringvariablemap.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#0091ff" stroke-dasharray="5,2" d="M1457.43,-565.96C1404,-550.98 1307.49,-526.24 1223,-517 1117.33,-505.44 1086.37,-497.38 984,-526 867.39,-558.61 862.75,-633.02 743.5,-654"/>
+<path fill="none" stroke="#0091ff" stroke-dasharray="5,2" d="M741.5,-654C566.78,-676.44 592.41,-491.38 486,-351 468.8,-328.31 471.23,-316.98 450,-298 437.47,-286.8 421.59,-277.51 407.04,-270.4"/>
+<polygon fill="#0091ff" stroke="#0091ff" points="408.26,-267.11 397.72,-266.05 405.3,-273.45 408.26,-267.11"/>
+</g>
+<!-- sourcefile~stringvariablemap.f90&#45;&gt;sourcefile~pfio_utilities.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge50" class="edge">
+<title>sourcefile~stringvariablemap.f90&#45;&gt;sourcefile~pfio_utilities.f90</title>
+<path fill="none" stroke="#0091ff" stroke-dasharray="5,2" d="M1327,-578C1115.79,-563.45 1055.25,-615.71 851,-560 798.63,-545.71 792.32,-525.74 743.5,-502"/>
+</g>
+<!-- sourcefile~stringvariablemap.f90&#45;&gt;sourcefile~variable.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge51" class="edge">
+<title>sourcefile~stringvariablemap.f90&#45;&gt;sourcefile~variable.f90</title>
+<path fill="none" stroke="#0091ff" stroke-dasharray="5,2" d="M1432.83,-580.1C1401.38,-580.57 1363.2,-580.36 1329,-578"/>
+<path fill="none" stroke="#0091ff" stroke-dasharray="5,2" d="M1327,-578C1291,-575.52 1251.61,-563.72 1223.39,-553.58"/>
+<polygon fill="#0091ff" stroke="#0091ff" points="1224.49,-550.25 1213.89,-550.08 1222.06,-556.82 1224.49,-550.25"/>
+</g>
+<!-- sourcefile~stringvectorutil.f90&#45;&gt;sourcefile~attribute.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge52" class="edge">
+<title>sourcefile~stringvectorutil.f90&#45;&gt;sourcefile~attribute.f90</title>
+<path fill="none" stroke="#0024ff" stroke-dasharray="5,2" d="M986.64,-348C974.53,-348 961.87,-348 950.1,-348"/>
+<polygon fill="#0024ff" stroke="#0024ff" points="950.03,-344.5 940.03,-348 950.03,-351.5 950.03,-344.5"/>
+</g>
+<!-- sourcefile~stringvectorutil.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge53" class="edge">
+<title>sourcefile~stringvectorutil.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#0024ff" stroke-dasharray="5,2" d="M1002.86,-335.96C944.85,-319.72 836.93,-290.67 743.5,-272"/>
+<path fill="none" stroke="#0024ff" stroke-dasharray="5,2" d="M741.5,-272C702.15,-261.78 601.59,-239.64 561,-242"/>
+</g>
+<!-- sourcefile~stringvectorutil.f90&#45;&gt;sourcefile~pfio_utilities.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge54" class="edge">
+<title>sourcefile~stringvectorutil.f90&#45;&gt;sourcefile~pfio_utilities.f90</title>
+<path fill="none" stroke="#0024ff" stroke-dasharray="5,2" d="M1026.63,-360.1C999.93,-377.18 948.34,-408.24 900.5,-426"/>
+<path fill="none" stroke="#0024ff" stroke-dasharray="5,2" d="M898.5,-426C826.57,-452.7 813.4,-533.63 743.5,-502"/>
+</g>
+<!-- sourcefile~unlimitedentity.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge55" class="edge">
+<title>sourcefile~unlimitedentity.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#4800ff" stroke-dasharray="5,2" d="M698.88,-317.99C662.57,-308.38 608.82,-295.61 561,-290"/>
+<path fill="none" stroke="#4800ff" stroke-dasharray="5,2" d="M559,-290C515.79,-284.93 467.68,-275.93 430.36,-268.2"/>
+<polygon fill="#4800ff" stroke="#4800ff" points="430.64,-264.68 420.13,-266.06 429.2,-271.53 430.64,-264.68"/>
+</g>
+<!-- sourcefile~unlimitedentity.f90&#45;&gt;sourcefile~pfio_constants.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge56" class="edge">
+<title>sourcefile~unlimitedentity.f90&#45;&gt;sourcefile~pfio_constants.f90</title>
+<path fill="none" stroke="#4800ff" stroke-dasharray="5,2" d="M559,-290C510.01,-284.25 454.31,-294.48 415.47,-304.34"/>
+<polygon fill="#4800ff" stroke="#4800ff" points="414.26,-301.04 405.48,-306.97 416.04,-307.81 414.26,-301.04"/>
+</g>
+<!-- sourcefile~unlimitedentity.f90&#45;&gt;sourcefile~pfio_utilities.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge57" class="edge">
+<title>sourcefile~unlimitedentity.f90&#45;&gt;sourcefile~pfio_utilities.f90</title>
+<path fill="none" stroke="#4800ff" stroke-dasharray="5,2" d="M684.88,-330C664.81,-330 642.14,-330 621.73,-330"/>
+<polygon fill="#4800ff" stroke="#4800ff" points="621.61,-326.5 611.61,-330 621.61,-333.5 621.61,-326.5"/>
+</g>
+<!-- sourcefile~variable.f90&#45;&gt;sourcefile~attribute.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge58" class="edge">
+<title>sourcefile~variable.f90&#45;&gt;sourcefile~attribute.f90</title>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1174.62,-525.81C1162.26,-507.43 1136.72,-472.41 1108,-450 1057.39,-410.51 989.05,-380.56 944.87,-363.64"/>
+<polygon fill="#b600ff" stroke="#b600ff" points="945.87,-360.27 935.28,-360.02 943.4,-366.82 945.87,-360.27"/>
+</g>
+<!-- sourcefile~variable.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge59" class="edge">
+<title>sourcefile~variable.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1173.16,-550.16C1159.33,-568.02 1132.42,-602.21 1108,-630 1094.57,-645.28 1078.7,-661.88 1066.52,-674.35"/>
+<polygon fill="#b600ff" stroke="#b600ff" points="1063.97,-671.95 1059.46,-681.53 1068.97,-676.85 1063.97,-671.95"/>
+</g>
+<!-- sourcefile~variable.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge60" class="edge">
+<title>sourcefile~variable.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1045,-540C964.85,-556.38 980.9,-638.91 900.5,-654"/>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M898.5,-654C830.79,-666.71 811.35,-642.06 743.5,-654"/>
+</g>
+<!-- sourcefile~variable.f90&#45;&gt;sourcefile~pfio_constants.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge61" class="edge">
+<title>sourcefile~variable.f90&#45;&gt;sourcefile~pfio_constants.f90</title>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1167.61,-550.01C1113.93,-592.04 924.01,-730 743.5,-730"/>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M741.5,-730C624.65,-729.01 572.33,-746.75 486,-668 387.33,-578 370.12,-403.07 367.13,-341.27"/>
+<polygon fill="#b600ff" stroke="#b600ff" points="370.62,-340.95 366.72,-331.1 363.62,-341.23 370.62,-340.95"/>
+</g>
+<!-- sourcefile~variable.f90&#45;&gt;sourcefile~pfio_utilities.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge62" class="edge">
+<title>sourcefile~variable.f90&#45;&gt;sourcefile~pfio_utilities.f90</title>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1143.77,-536.13C1116.57,-535.41 1079.41,-535.63 1047,-540"/>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1045,-540C911.15,-558.07 866.55,-557.67 743.5,-502"/>
+</g>
+<!-- sourcefile~variable.f90&#45;&gt;sourcefile~stringvectorutil.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge63" class="edge">
+<title>sourcefile~variable.f90&#45;&gt;sourcefile~stringvectorutil.f90</title>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1177.6,-525.9C1162.96,-489.96 1119.83,-385.55 1108,-374 1104.48,-370.56 1100.43,-367.55 1096.14,-364.91"/>
+<polygon fill="#b600ff" stroke="#b600ff" points="1097.51,-361.67 1087.05,-360.01 1094.19,-367.84 1097.51,-361.67"/>
+</g>
+<!-- sourcefile~variable.f90&#45;&gt;sourcefile~unlimitedentity.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge64" class="edge">
+<title>sourcefile~variable.f90&#45;&gt;sourcefile~unlimitedentity.f90</title>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1157,-525.92C1082.29,-490.52 863.81,-387 778.34,-346.51"/>
+<polygon fill="#b600ff" stroke="#b600ff" points="779.61,-343.23 769.07,-342.12 776.61,-349.56 779.61,-343.23"/>
+</g>
+<!-- sourcefile~vectorbasis.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge65" class="edge">
+<title>sourcefile~vectorbasis.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff00da" stroke-dasharray="5,2" d="M741.5,-154C533.84,-154 479.4,-171.69 281,-233 261.07,-239.16 239.8,-248.76 223,-257.13"/>
+<polygon fill="#ff00da" stroke="#ff00da" points="220.99,-254.22 213.67,-261.88 224.17,-260.46 220.99,-254.22"/>
+</g>
+<!-- sourcefile~fieldblas.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node26" class="node">
+<title>sourcefile~fieldblas.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node26"><a xlink:href="../sourcefile/fieldblas.f90.html" xlink:title="FieldBLAS.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="786.5,-106 698.5,-106 698.5,-82 786.5,-82 786.5,-106"/>
+<text text-anchor="middle" x="742.5" y="-91.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBLAS.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~vectorbasis.f90&#45;&gt;sourcefile~fieldblas.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge66" class="edge">
+<title>sourcefile~vectorbasis.f90&#45;&gt;sourcefile~fieldblas.f90</title>
+<path fill="none" stroke="#ff00da" stroke-dasharray="5,2" d="M867.13,-141.86C843.21,-132.6 810.06,-119.77 784.11,-109.72"/>
+<polygon fill="#ff00da" stroke="#ff00da" points="785.14,-106.37 774.56,-106.02 782.62,-112.9 785.14,-106.37"/>
+</g>
+<!-- sourcefile~fieldpointerutilities.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node27" class="node">
+<title>sourcefile~fieldpointerutilities.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node27"><a xlink:href="../sourcefile/fieldpointerutilities.f90.html" xlink:title="FieldPointerUtilities.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="628,-146 492,-146 492,-122 628,-122 628,-146"/>
+<text text-anchor="middle" x="560" y="-131.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldPointerUtilities.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~vectorbasis.f90&#45;&gt;sourcefile~fieldpointerutilities.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge67" class="edge">
+<title>sourcefile~vectorbasis.f90&#45;&gt;sourcefile~fieldpointerutilities.f90</title>
+<path fill="none" stroke="#ff00da" stroke-dasharray="5,2" d="M850.67,-154C820.03,-154 779.42,-154 743.5,-154"/>
+<path fill="none" stroke="#ff00da" stroke-dasharray="5,2" d="M741.5,-154C707.5,-154 670.12,-150.45 638.24,-146.34"/>
+<polygon fill="#ff00da" stroke="#ff00da" points="638.47,-142.84 628.09,-144.99 637.54,-149.78 638.47,-142.84"/>
+</g>
+<!-- sourcefile~fieldblas.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge71" class="edge">
+<title>sourcefile~fieldblas.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M698.12,-87.48C645.01,-81.6 553.78,-78.49 486,-113 433.65,-139.65 395.07,-200.29 377.33,-232.68"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="374.1,-231.28 372.5,-241.75 380.28,-234.57 374.1,-231.28"/>
+</g>
+<!-- sourcefile~fieldblas.f90&#45;&gt;sourcefile~fieldpointerutilities.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge70" class="edge">
+<title>sourcefile~fieldblas.f90&#45;&gt;sourcefile~fieldpointerutilities.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M698.27,-103.58C676.36,-108.44 649.32,-114.43 625.05,-119.81"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="624.2,-116.41 615.2,-121.99 625.72,-123.24 624.2,-116.41"/>
+</g>
+<!-- sourcefile~constants.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node28" class="node">
+<title>sourcefile~constants.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node28"><a xlink:href="../sourcefile/constants.f90.html" xlink:title="Constants.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="604,-66 516,-66 516,-42 604,-42 604,-66"/>
+<text text-anchor="middle" x="560" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Constants.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldblas.f90&#45;&gt;sourcefile~constants.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge68" class="edge">
+<title>sourcefile~fieldblas.f90&#45;&gt;sourcefile~constants.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M698.27,-84.42C673.02,-78.82 640.96,-71.72 614.18,-65.78"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="614.71,-62.32 604.19,-63.57 613.2,-69.15 614.71,-62.32"/>
+</g>
+<!-- sourcefile~fieldcondensedarray.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_node29" class="node">
+<title>sourcefile~fieldcondensedarray.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~EfferentGraph_node29"><a xlink:href="../sourcefile/fieldcondensedarray.f90.html" xlink:title="FieldCondensedArray.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="634,-24 486,-24 486,0 634,0 634,-24"/>
+<text text-anchor="middle" x="560" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldCondensedArray.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldblas.f90&#45;&gt;sourcefile~fieldcondensedarray.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge69" class="edge">
+<title>sourcefile~fieldblas.f90&#45;&gt;sourcefile~fieldcondensedarray.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M723.16,-81.8C702.29,-68.36 666.84,-46.81 634,-33 629.19,-30.97 624.11,-29.07 618.98,-27.31"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="619.67,-23.85 609.08,-24.08 617.5,-30.51 619.67,-23.85"/>
+</g>
+<!-- sourcefile~fieldpointerutilities.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~geommanager.f90~~EfferentGraph_edge72" class="edge">
+<title>sourcefile~fieldpointerutilities.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M539.48,-146.17C505.24,-167.51 434.22,-211.79 394.66,-236.45"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="392.42,-233.72 385.78,-241.98 396.12,-239.66 392.42,-233.72"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefilegeommanagerf90EfferentGraph = svgPanZoom('#sourcefilegeommanagerf90EfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#EfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="EfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Files dependent on this one</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~geommanager.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilegeommanagerf90AfferentGraph" width="375pt" height="746pt"
+ viewBox="0.00 0.00 375.00 746.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~geommanager.f90~~AfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 742)">
+<title>sourcefile~~geommanager.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-742 371,-742 371,4 -4,4"/>
+<!-- sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~geommanager.f90</title>
+<polygon fill="none" stroke="black" points="113,-381 0,-381 0,-357 113,-357 113,-381"/>
+<text text-anchor="middle" x="56.5" y="-366.6" font-family="Helvetica,sans-Serif" font-size="10.50">GeomManager.F90</text>
+</g>
+<!-- sourcefile~add_factory.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~add_factory.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node2"><a xlink:href="../sourcefile/add_factory.f90.html" xlink:title="add_factory.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="306.5,-738 209.5,-738 209.5,-714 306.5,-714 306.5,-738"/>
+<text text-anchor="middle" x="258" y="-723.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">add_factory.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~add_factory.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~add_factory.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M209.45,-727.51C188.52,-725.7 165.1,-719.95 149,-705 102,-661.35 70.05,-459.23 60.49,-391.32"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="63.94,-390.7 59.11,-381.28 57.01,-391.66 63.94,-390.7"/>
+</g>
+<!-- sourcefile~add_mapl_geom.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~add_mapl_geom.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node3"><a xlink:href="../sourcefile/add_mapl_geom.f90.html" xlink:title="add_mapl_geom.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="320,-696 196,-696 196,-672 320,-672 320,-696"/>
+<text text-anchor="middle" x="258" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">add_mapl_geom.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~add_mapl_geom.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~add_mapl_geom.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M195.81,-683.43C178.95,-680.47 161.8,-674.47 149,-663 67.61,-590.08 57.86,-446.16 57.23,-391.12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="60.73,-391.05 57.21,-381.06 53.73,-391.07 60.73,-391.05"/>
+</g>
+<!-- sourcefile~api.f90~4 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~api.f90~4</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node4"><a xlink:href="../sourcefile/api.f90~4.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="285,-654 231,-654 231,-630 285,-630 285,-654"/>
+<text text-anchor="middle" x="258" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~4&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~api.f90~4&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M230.8,-643.75C206.8,-643.92 171.65,-640.36 149,-621 78.27,-560.54 62.21,-440.82 58.57,-391.27"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="62.04,-390.79 57.92,-381.03 55.06,-391.23 62.04,-390.79"/>
+</g>
+<!-- sourcefile~delete_mapl_geom.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~delete_mapl_geom.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node5"><a xlink:href="../sourcefile/delete_mapl_geom.f90.html" xlink:title="delete_mapl_geom.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="326.5,-612 189.5,-612 189.5,-588 326.5,-588 326.5,-612"/>
+<text text-anchor="middle" x="258" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">delete_mapl_geom.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~delete_mapl_geom.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~delete_mapl_geom.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M189.26,-597.05C174.82,-593.77 160.47,-588.2 149,-579 88.64,-530.59 67.18,-434.46 60.35,-391.11"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="63.79,-390.45 58.89,-381.06 56.86,-391.46 63.79,-390.45"/>
+</g>
+<!-- sourcefile~find_factory.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~find_factory.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node6"><a xlink:href="../sourcefile/find_factory.f90.html" xlink:title="find_factory.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="306.5,-570 209.5,-570 209.5,-546 306.5,-546 306.5,-570"/>
+<text text-anchor="middle" x="258" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">find_factory.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~find_factory.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~find_factory.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M209.31,-557.54C189.09,-555.24 166.26,-549.64 149,-537 98.98,-500.37 73.25,-427.82 62.99,-391.22"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="66.25,-389.86 60.29,-381.1 59.48,-391.66 66.25,-389.86"/>
+</g>
+<!-- sourcefile~geomgethorzijindex.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~geomgethorzijindex.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node7"><a xlink:href="../sourcefile/geomgethorzijindex.f90.html" xlink:title="GeomGetHorzIJIndex.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="330.5,-528 185.5,-528 185.5,-504 330.5,-504 330.5,-528"/>
+<text text-anchor="middle" x="258" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomGetHorzIJIndex.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geomgethorzijindex.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~geomgethorzijindex.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M185.25,-509.88C172.52,-506.66 159.87,-501.93 149,-495 108.62,-469.27 80.32,-418.83 66.71,-390.19"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="69.86,-388.67 62.51,-381.04 63.5,-391.59 69.86,-388.67"/>
+</g>
+<!-- sourcefile~get_geom_from_id.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~get_geom_from_id.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node8"><a xlink:href="../sourcefile/get_geom_from_id.f90.html" xlink:title="get_geom_from_id.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="324.5,-486 191.5,-486 191.5,-462 324.5,-462 324.5,-486"/>
+<text text-anchor="middle" x="258" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_geom_from_id.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~get_geom_from_id.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~get_geom_from_id.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M191.41,-467.22C176.94,-464.11 162.05,-459.58 149,-453 118.17,-437.44 90.11,-408.48 73.42,-388.97"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="76.08,-386.7 66.98,-381.26 70.7,-391.18 76.08,-386.7"/>
+</g>
+<!-- sourcefile~get_geom_manager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~get_geom_manager.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node9"><a xlink:href="../sourcefile/get_geom_manager.f90.html" xlink:title="get_geom_manager.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="328.5,-444 187.5,-444 187.5,-420 328.5,-420 328.5,-444"/>
+<text text-anchor="middle" x="258" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_geom_manager.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~get_geom_manager.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~get_geom_manager.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M187.24,-420.97C174.39,-418.22 161.18,-414.92 149,-411 128.36,-404.36 106.24,-394.3 88.92,-385.68"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="90.34,-382.48 79.84,-381.08 87.17,-388.72 90.34,-382.48"/>
+</g>
+<!-- sourcefile~get_mapl_geom.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~get_mapl_geom.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node10"><a xlink:href="../sourcefile/get_mapl_geom.f90.html" xlink:title="get_mapl_geom.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="318.5,-402 197.5,-402 197.5,-378 318.5,-378 318.5,-402"/>
+<text text-anchor="middle" x="258" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_mapl_geom.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~get_mapl_geom.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~get_mapl_geom.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M197.41,-383.73C174.01,-381.26 147.05,-378.43 123.09,-375.9"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="123.34,-372.41 113.03,-374.85 122.61,-379.37 123.34,-372.41"/>
+</g>
+<!-- sourcefile~get_mapl_geom_from_hconfig.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~get_mapl_geom_from_hconfig.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node11"><a xlink:href="../sourcefile/get_mapl_geom_from_hconfig.f90.html" xlink:title="get_mapl_geom_from_hconfig.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="356,-360 160,-360 160,-336 356,-336 356,-360"/>
+<text text-anchor="middle" x="258" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_mapl_geom_from_hconfig.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~get_mapl_geom_from_hconfig.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~get_mapl_geom_from_hconfig.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M159.88,-358.22C147.46,-359.53 134.99,-360.84 123.24,-362.08"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="122.69,-358.62 113.11,-363.15 123.42,-365.58 122.69,-358.62"/>
+</g>
+<!-- sourcefile~get_mapl_geom_from_id.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~get_mapl_geom_from_id.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node12"><a xlink:href="../sourcefile/get_mapl_geom_from_id.f90.html" xlink:title="get_mapl_geom_from_id.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="341,-318 175,-318 175,-294 341,-294 341,-318"/>
+<text text-anchor="middle" x="258" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_mapl_geom_from_id.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~get_mapl_geom_from_id.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~get_mapl_geom_from_id.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M182.62,-318.04C171.25,-320.57 159.73,-323.55 149,-327 128.36,-333.64 106.24,-343.7 88.92,-352.32"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="87.17,-349.28 79.84,-356.92 90.34,-355.52 87.17,-349.28"/>
+</g>
+<!-- sourcefile~get_mapl_geom_from_metadata.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~get_mapl_geom_from_metadata.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node13"><a xlink:href="../sourcefile/get_mapl_geom_from_metadata.f90.html" xlink:title="get_mapl_geom_from_metadata.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="362,-276 154,-276 154,-252 362,-252 362,-276"/>
+<text text-anchor="middle" x="258" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_mapl_geom_from_metadata.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~get_mapl_geom_from_metadata.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~get_mapl_geom_from_metadata.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M171.5,-276C163.7,-278.46 156.08,-281.43 149,-285 118.17,-300.56 90.11,-329.52 73.42,-349.03"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="70.7,-346.82 66.98,-356.74 76.08,-351.3 70.7,-346.82"/>
+</g>
+<!-- sourcefile~get_mapl_geom_from_spec.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node14" class="node">
+<title>sourcefile~get_mapl_geom_from_spec.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node14"><a xlink:href="../sourcefile/get_mapl_geom_from_spec.f90.html" xlink:title="get_mapl_geom_from_spec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="348.5,-234 167.5,-234 167.5,-210 348.5,-210 348.5,-234"/>
+<text text-anchor="middle" x="258" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_mapl_geom_from_spec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~get_mapl_geom_from_spec.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~get_mapl_geom_from_spec.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M167.38,-233.79C160.93,-236.32 154.72,-239.36 149,-243 108.62,-268.73 80.32,-319.17 66.71,-347.81"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="63.5,-346.41 62.51,-356.96 69.86,-349.33 63.5,-346.41"/>
+</g>
+<!-- sourcefile~initialize.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node15" class="node">
+<title>sourcefile~initialize.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node15"><a xlink:href="../sourcefile/initialize.f90.html" xlink:title="initialize.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="297.5,-192 218.5,-192 218.5,-168 297.5,-168 297.5,-192"/>
+<text text-anchor="middle" x="258" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">initialize.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~initialize.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~initialize.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M218.31,-179.63C196.15,-181.22 168.88,-186.44 149,-201 98.98,-237.63 73.25,-310.18 62.99,-346.78"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="59.48,-346.34 60.29,-356.9 66.25,-348.14 59.48,-346.34"/>
+</g>
+<!-- sourcefile~make_geom_spec_from_hconfig.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node16" class="node">
+<title>sourcefile~make_geom_spec_from_hconfig.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node16"><a xlink:href="../sourcefile/make_geom_spec_from_hconfig.f90.html" xlink:title="make_geom_spec_from_hconfig.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="361,-150 155,-150 155,-126 361,-126 361,-150"/>
+<text text-anchor="middle" x="258" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">make_geom_spec_from_hconfig.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~make_geom_spec_from_hconfig.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~make_geom_spec_from_hconfig.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M163.04,-150.08C158.05,-152.58 153.32,-155.53 149,-159 88.64,-207.41 67.18,-303.54 60.35,-346.89"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="56.86,-346.54 58.89,-356.94 63.79,-347.55 56.86,-346.54"/>
+</g>
+<!-- sourcefile~make_geom_spec_from_metadata.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node17" class="node">
+<title>sourcefile~make_geom_spec_from_metadata.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node17"><a xlink:href="../sourcefile/make_geom_spec_from_metadata.f90.html" xlink:title="make_geom_spec_from_metadata.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="367,-108 149,-108 149,-84 367,-84 367,-108"/>
+<text text-anchor="middle" x="258" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">make_geom_spec_from_metadata.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~make_geom_spec_from_metadata.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~make_geom_spec_from_metadata.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M162.27,-108.03C157.53,-110.56 153.07,-113.52 149,-117 78.27,-177.46 62.21,-297.18 58.57,-346.73"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="55.06,-346.77 57.92,-356.97 62.04,-347.21 55.06,-346.77"/>
+</g>
+<!-- sourcefile~make_mapl_geom_from_spec.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node18" class="node">
+<title>sourcefile~make_mapl_geom_from_spec.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node18"><a xlink:href="../sourcefile/make_mapl_geom_from_spec.f90.html" xlink:title="make_mapl_geom_from_spec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="354.5,-66 161.5,-66 161.5,-42 354.5,-42 354.5,-66"/>
+<text text-anchor="middle" x="258" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">make_mapl_geom_from_spec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~make_mapl_geom_from_spec.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~make_mapl_geom_from_spec.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M161.57,-66.09C157.07,-68.61 152.84,-71.56 149,-75 67.61,-147.92 57.86,-291.84 57.23,-346.88"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="53.73,-346.93 57.21,-356.94 60.73,-346.95 53.73,-346.93"/>
+</g>
+<!-- sourcefile~new_geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_node19" class="node">
+<title>sourcefile~new_geommanager.f90</title>
+<g id="a_sourcefile~~geommanager.f90~~AfferentGraph_node19"><a xlink:href="../sourcefile/new_geommanager.f90.html" xlink:title="new_GeomManager.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="328,-24 188,-24 188,0 328,0 328,-24"/>
+<text text-anchor="middle" x="258" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">new_GeomManager.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~new_geommanager.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~geommanager.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~new_geommanager.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M187.96,-13.83C173.66,-17.18 159.71,-23.06 149,-33 102,-76.65 70.05,-278.77 60.49,-346.68"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="57.01,-346.34 59.11,-356.72 63.94,-347.3 57.01,-346.34"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#AfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="AfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+<br>
+      <section>
+        <h2><span class="anchor" id="src"></span>Source Code</h2>
+        <div class="hl codehilite"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="cp">#include &quot;MAPL.h&quot;</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a>
+<a id="ln-3" name="ln-3" href="#ln-3"></a><span class="k">module </span><span class="n">mapl3g_GeomManager</span>
+<a id="ln-4" name="ln-4" href="#ln-4"></a>
+<a id="ln-5" name="ln-5" href="#ln-5"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_GeomSpec</span>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_NullGeomSpec</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_MaplGeom</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_GeomFactory</span>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_GeomFactoryVector</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_GeomSpecVector</span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_IntegerMaplGeomMap</span>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_ErrorHandlingMod</span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a><span class="w">   </span><span class="k">use </span><span class="n">pfio_FileMetadataMod</span>
+<a id="ln-14" name="ln-14" href="#ln-14"></a><span class="w">   </span><span class="k">use </span><span class="n">esmf</span>
+<a id="ln-15" name="ln-15" href="#ln-15"></a><span class="w">   </span><span class="k">use </span><span class="n">gftl2_IntegerVector</span>
+<a id="ln-16" name="ln-16" href="#ln-16"></a>
+<a id="ln-17" name="ln-17" href="#ln-17"></a><span class="w">   </span><span class="k">implicit none</span>
+<a id="ln-18" name="ln-18" href="#ln-18"></a><span class="k">   private</span>
+<a id="ln-19" name="ln-19" href="#ln-19"></a>
+<a id="ln-20" name="ln-20" href="#ln-20"></a><span class="k">   public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">GeomManager</span>
+<a id="ln-21" name="ln-21" href="#ln-21"></a><span class="w">   </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">geom_manager</span><span class="w"> </span><span class="c">! singleton</span>
+<a id="ln-22" name="ln-22" href="#ln-22"></a><span class="w">   </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_geom_manager</span>
+<a id="ln-23" name="ln-23" href="#ln-23"></a><span class="w">   </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_mapl_geom</span>
+<a id="ln-24" name="ln-24" href="#ln-24"></a>
+<a id="ln-25" name="ln-25" href="#ln-25"></a><span class="w">   </span><span class="k">type </span><span class="n">GeomManager</span>
+<a id="ln-26" name="ln-26" href="#ln-26"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">GeomFactoryVector</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">factories</span>
+<a id="ln-27" name="ln-27" href="#ln-27"></a>
+<a id="ln-28" name="ln-28" href="#ln-28"></a><span class="w">      </span><span class="c">! A GeomSpecId map would be more elegant here, but imposing an ordering</span>
+<a id="ln-29" name="ln-29" href="#ln-29"></a><span class="w">      </span><span class="c">! on GeomSpec subclasses is tedious at best.    If gFTL ever has an</span>
+<a id="ln-30" name="ln-30" href="#ln-30"></a><span class="w">      </span><span class="c">! unordered map template (i.e., based on a hash instead of ordering), then</span>
+<a id="ln-31" name="ln-31" href="#ln-31"></a><span class="w">      </span><span class="c">! this decision could be revisited.</span>
+<a id="ln-32" name="ln-32" href="#ln-32"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">IntegerVector</span><span class="p">)</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">geom_ids</span>
+<a id="ln-33" name="ln-33" href="#ln-33"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">GeomSpecVector</span><span class="p">)</span><span class="w">     </span><span class="kd">::</span><span class="w"> </span><span class="n">geom_specs</span>
+<a id="ln-34" name="ln-34" href="#ln-34"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">IntegerMaplGeomMap</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mapl_geoms</span>
+<a id="ln-35" name="ln-35" href="#ln-35"></a>
+<a id="ln-36" name="ln-36" href="#ln-36"></a><span class="w">      </span><span class="c">! A counter (id_counter) is used to assign each new geom</span>
+<a id="ln-37" name="ln-37" href="#ln-37"></a><span class="w">      </span><span class="c">! a unique label.  This allows other classes to support</span>
+<a id="ln-38" name="ln-38" href="#ln-38"></a><span class="w">      </span><span class="c">! time-varying geoms by detecting when the ID has changed.</span>
+<a id="ln-39" name="ln-39" href="#ln-39"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">id_counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<a id="ln-40" name="ln-40" href="#ln-40"></a>
+<a id="ln-41" name="ln-41" href="#ln-41"></a><span class="w">   </span><span class="k">contains</span>
+<a id="ln-42" name="ln-42" href="#ln-42"></a>
+<a id="ln-43" name="ln-43" href="#ln-43"></a><span class="w">      </span><span class="c">! Public API</span>
+<a id="ln-44" name="ln-44" href="#ln-44"></a><span class="w">      </span><span class="c">! ----------</span>
+<a id="ln-45" name="ln-45" href="#ln-45"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">initialize</span>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">add_factory</span>
+<a id="ln-47" name="ln-47" href="#ln-47"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_mapl_geom_from_hconfig</span>
+<a id="ln-48" name="ln-48" href="#ln-48"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_mapl_geom_from_metadata</span>
+<a id="ln-49" name="ln-49" href="#ln-49"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_mapl_geom_from_spec</span>
+<a id="ln-50" name="ln-50" href="#ln-50"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_mapl_geom_from_id</span>
+<a id="ln-51" name="ln-51" href="#ln-51"></a><span class="w">      </span><span class="k">generic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_mapl_geom</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-52" name="ln-52" href="#ln-52"></a><span class="w">           </span><span class="n">get_mapl_geom_from_hconfig</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-53" name="ln-53" href="#ln-53"></a><span class="w">           </span><span class="n">get_mapl_geom_from_metadata</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-54" name="ln-54" href="#ln-54"></a><span class="w">           </span><span class="n">get_mapl_geom_from_spec</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-55" name="ln-55" href="#ln-55"></a><span class="w">           </span><span class="n">get_mapl_geom_from_id</span>
+<a id="ln-56" name="ln-56" href="#ln-56"></a>
+<a id="ln-57" name="ln-57" href="#ln-57"></a><span class="w">      </span><span class="c">! Internal API</span>
+<a id="ln-58" name="ln-58" href="#ln-58"></a><span class="w">      </span><span class="c">! ------------</span>
+<a id="ln-59" name="ln-59" href="#ln-59"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">delete_mapl_geom</span>
+<a id="ln-60" name="ln-60" href="#ln-60"></a>
+<a id="ln-61" name="ln-61" href="#ln-61"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">make_geom_spec_from_hconfig</span>
+<a id="ln-62" name="ln-62" href="#ln-62"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">make_geom_spec_from_metadata</span>
+<a id="ln-63" name="ln-63" href="#ln-63"></a><span class="w">      </span><span class="k">generic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">make_geom_spec</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-64" name="ln-64" href="#ln-64"></a><span class="w">           </span><span class="n">make_geom_spec_from_hconfig</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-65" name="ln-65" href="#ln-65"></a><span class="w">           </span><span class="n">make_geom_spec_from_metadata</span>
+<a id="ln-66" name="ln-66" href="#ln-66"></a>
+<a id="ln-67" name="ln-67" href="#ln-67"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">make_mapl_geom_from_spec</span>
+<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">      </span><span class="k">generic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">make_mapl_geom</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">make_mapl_geom_from_spec</span>
+<a id="ln-69" name="ln-69" href="#ln-69"></a>
+<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">add_mapl_geom</span>
+<a id="ln-71" name="ln-71" href="#ln-71"></a>
+<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="w">   </span><span class="k">end type </span><span class="n">GeomManager</span>
+<a id="ln-73" name="ln-73" href="#ln-73"></a>
+<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="w">   </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">MAX_ID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10000</span>
+<a id="ln-75" name="ln-75" href="#ln-75"></a>
+<a id="ln-76" name="ln-76" href="#ln-76"></a><span class="w">   </span><span class="c">! Singleton - must be initialized in mapl_init()</span>
+<a id="ln-77" name="ln-77" href="#ln-77"></a><span class="w">   </span><span class="k">type</span><span class="p">(</span><span class="n">GeomManager</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">protected</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">geom_manager</span>
+<a id="ln-78" name="ln-78" href="#ln-78"></a>
+<a id="ln-79" name="ln-79" href="#ln-79"></a><span class="w">   </span><span class="k">interface </span><span class="n">GeomManager</span>
+<a id="ln-80" name="ln-80" href="#ln-80"></a><span class="w">      </span><span class="k">procedure </span><span class="n">new_GeomManager</span>
+<a id="ln-81" name="ln-81" href="#ln-81"></a><span class="w">   </span><span class="k">end interface </span><span class="n">GeomManager</span>
+<a id="ln-82" name="ln-82" href="#ln-82"></a>
+<a id="ln-83" name="ln-83" href="#ln-83"></a><span class="w">   </span><span class="k">abstract interface</span>
+<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="k">      </span><span class="kt">logical </span><span class="k">function </span><span class="n">I_FactoryPredicate</span><span class="p">(</span><span class="n">factory</span><span class="p">)</span>
+<a id="ln-85" name="ln-85" href="#ln-85"></a><span class="w">         </span><span class="k">import </span><span class="n">GeomFactory</span>
+<a id="ln-86" name="ln-86" href="#ln-86"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomFactory</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">factory</span>
+<a id="ln-87" name="ln-87" href="#ln-87"></a><span class="w">      </span><span class="k">end function </span><span class="n">I_FactoryPredicate</span>
+<a id="ln-88" name="ln-88" href="#ln-88"></a><span class="w">   </span><span class="k">end interface</span>
+<a id="ln-89" name="ln-89" href="#ln-89"></a>
+<a id="ln-90" name="ln-90" href="#ln-90"></a><span class="k">   interface</span>
+<a id="ln-91" name="ln-91" href="#ln-91"></a><span class="k">      module function </span><span class="n">new_GeomManager</span><span class="p">()</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">mgr</span><span class="p">)</span>
+<a id="ln-92" name="ln-92" href="#ln-92"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">GeomManager</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mgr</span>
+<a id="ln-93" name="ln-93" href="#ln-93"></a><span class="w">      </span><span class="k">end function </span><span class="n">new_GeomManager</span>
+<a id="ln-94" name="ln-94" href="#ln-94"></a>
+<a id="ln-95" name="ln-95" href="#ln-95"></a><span class="w">      </span><span class="k">module subroutine </span><span class="n">initialize</span><span class="p">(</span><span class="n">this</span><span class="p">)</span>
+<a id="ln-96" name="ln-96" href="#ln-96"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomManager</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-97" name="ln-97" href="#ln-97"></a><span class="w">      </span><span class="k">end subroutine</span>
+<a id="ln-98" name="ln-98" href="#ln-98"></a>
+<a id="ln-99" name="ln-99" href="#ln-99"></a><span class="k">      module subroutine </span><span class="n">add_factory</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">factory</span><span class="p">)</span>
+<a id="ln-100" name="ln-100" href="#ln-100"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomManager</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-101" name="ln-101" href="#ln-101"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomFactory</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">factory</span>
+<a id="ln-102" name="ln-102" href="#ln-102"></a><span class="w">      </span><span class="k">end subroutine </span><span class="n">add_factory</span>
+<a id="ln-103" name="ln-103" href="#ln-103"></a>
+<a id="ln-104" name="ln-104" href="#ln-104"></a><span class="w">      </span><span class="k">module subroutine </span><span class="n">delete_mapl_geom</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">geom_spec</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-105" name="ln-105" href="#ln-105"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomManager</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-106" name="ln-106" href="#ln-106"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomSpec</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">geom_spec</span>
+<a id="ln-107" name="ln-107" href="#ln-107"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-108" name="ln-108" href="#ln-108"></a><span class="w">      </span><span class="k">end subroutine </span><span class="n">delete_mapl_geom</span>
+<a id="ln-109" name="ln-109" href="#ln-109"></a>
+<a id="ln-110" name="ln-110" href="#ln-110"></a><span class="w">      </span><span class="k">module function </span><span class="n">get_mapl_geom_from_hconfig</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">hconfig</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">mapl_geom</span><span class="p">)</span>
+<a id="ln-111" name="ln-111" href="#ln-111"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">MaplGeom</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mapl_geom</span>
+<a id="ln-112" name="ln-112" href="#ln-112"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomManager</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-113" name="ln-113" href="#ln-113"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_HConfig</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">hconfig</span>
+<a id="ln-114" name="ln-114" href="#ln-114"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-115" name="ln-115" href="#ln-115"></a><span class="w">      </span><span class="k">end function </span><span class="n">get_mapl_geom_from_hconfig</span>
+<a id="ln-116" name="ln-116" href="#ln-116"></a>
+<a id="ln-117" name="ln-117" href="#ln-117"></a><span class="w">      </span><span class="k">module function </span><span class="n">get_mapl_geom_from_metadata</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">mapl_geom</span><span class="p">)</span>
+<a id="ln-118" name="ln-118" href="#ln-118"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">MaplGeom</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mapl_geom</span>
+<a id="ln-119" name="ln-119" href="#ln-119"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomManager</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-120" name="ln-120" href="#ln-120"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">FileMetadata</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">metadata</span>
+<a id="ln-121" name="ln-121" href="#ln-121"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-122" name="ln-122" href="#ln-122"></a><span class="w">      </span><span class="k">end function </span><span class="n">get_mapl_geom_from_metadata</span>
+<a id="ln-123" name="ln-123" href="#ln-123"></a>
+<a id="ln-124" name="ln-124" href="#ln-124"></a><span class="w">      </span><span class="k">module function </span><span class="n">get_mapl_geom_from_id</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">mapl_geom</span><span class="p">)</span>
+<a id="ln-125" name="ln-125" href="#ln-125"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">MaplGeom</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mapl_geom</span>
+<a id="ln-126" name="ln-126" href="#ln-126"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomManager</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-127" name="ln-127" href="#ln-127"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">id</span>
+<a id="ln-128" name="ln-128" href="#ln-128"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-129" name="ln-129" href="#ln-129"></a><span class="w">      </span><span class="k">end function </span><span class="n">get_mapl_geom_from_id</span>
+<a id="ln-130" name="ln-130" href="#ln-130"></a>
+<a id="ln-131" name="ln-131" href="#ln-131"></a><span class="w">      </span><span class="k">module function </span><span class="n">get_mapl_geom_from_spec</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">geom_spec</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">mapl_geom</span><span class="p">)</span>
+<a id="ln-132" name="ln-132" href="#ln-132"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">MaplGeom</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mapl_geom</span>
+<a id="ln-133" name="ln-133" href="#ln-133"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomManager</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-134" name="ln-134" href="#ln-134"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomSpec</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">geom_spec</span>
+<a id="ln-135" name="ln-135" href="#ln-135"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-136" name="ln-136" href="#ln-136"></a><span class="w">      </span><span class="k">end function </span><span class="n">get_mapl_geom_from_spec</span>
+<a id="ln-137" name="ln-137" href="#ln-137"></a>
+<a id="ln-138" name="ln-138" href="#ln-138"></a><span class="w">      </span><span class="c">! Add a new mapl_geom given a geom_spec.</span>
+<a id="ln-139" name="ln-139" href="#ln-139"></a><span class="w">      </span><span class="c">! This also labels the geom with a unique id using ESMF_Info.</span>
+<a id="ln-140" name="ln-140" href="#ln-140"></a><span class="w">      </span><span class="k">module function </span><span class="n">add_mapl_geom</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">geom_spec</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">mapl_geom</span><span class="p">)</span>
+<a id="ln-141" name="ln-141" href="#ln-141"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">MaplGeom</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mapl_geom</span>
+<a id="ln-142" name="ln-142" href="#ln-142"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomManager</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-143" name="ln-143" href="#ln-143"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomSpec</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">geom_spec</span>
+<a id="ln-144" name="ln-144" href="#ln-144"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-145" name="ln-145" href="#ln-145"></a><span class="w">      </span><span class="k">end function </span><span class="n">add_mapl_geom</span>
+<a id="ln-146" name="ln-146" href="#ln-146"></a>
+<a id="ln-147" name="ln-147" href="#ln-147"></a><span class="w">      </span><span class="k">module function </span><span class="n">make_geom_spec_from_metadata</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">file_metadata</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">geom_spec</span><span class="p">)</span>
+<a id="ln-148" name="ln-148" href="#ln-148"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomSpec</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">geom_spec</span>
+<a id="ln-149" name="ln-149" href="#ln-149"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomManager</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-150" name="ln-150" href="#ln-150"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">FileMetadata</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">file_metadata</span>
+<a id="ln-151" name="ln-151" href="#ln-151"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-152" name="ln-152" href="#ln-152"></a><span class="w">      </span><span class="k">end function </span><span class="n">make_geom_spec_from_metadata</span>
+<a id="ln-153" name="ln-153" href="#ln-153"></a>
+<a id="ln-154" name="ln-154" href="#ln-154"></a><span class="w">      </span><span class="k">module function </span><span class="n">make_geom_spec_from_hconfig</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">hconfig</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">geom_spec</span><span class="p">)</span>
+<a id="ln-155" name="ln-155" href="#ln-155"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomSpec</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">geom_spec</span>
+<a id="ln-156" name="ln-156" href="#ln-156"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomManager</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-157" name="ln-157" href="#ln-157"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_HConfig</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">hconfig</span>
+<a id="ln-158" name="ln-158" href="#ln-158"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-159" name="ln-159" href="#ln-159"></a><span class="w">      </span><span class="k">end function </span><span class="n">make_geom_spec_from_hconfig</span>
+<a id="ln-160" name="ln-160" href="#ln-160"></a>
+<a id="ln-161" name="ln-161" href="#ln-161"></a><span class="w">      </span><span class="k">module function </span><span class="n">make_mapl_geom_from_spec</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">spec</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">mapl_geom</span><span class="p">)</span>
+<a id="ln-162" name="ln-162" href="#ln-162"></a><span class="w">         </span><span class="k">use </span><span class="n">gftl2_StringVector</span>
+<a id="ln-163" name="ln-163" href="#ln-163"></a><span class="w">         </span><span class="k">use </span><span class="n">mapl3g_StringDictionary</span>
+<a id="ln-164" name="ln-164" href="#ln-164"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">MaplGeom</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mapl_geom</span>
+<a id="ln-165" name="ln-165" href="#ln-165"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomManager</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-166" name="ln-166" href="#ln-166"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomSpec</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spec</span>
+<a id="ln-167" name="ln-167" href="#ln-167"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-168" name="ln-168" href="#ln-168"></a><span class="w">      </span><span class="k">end function </span><span class="n">make_mapl_geom_from_spec</span>
+<a id="ln-169" name="ln-169" href="#ln-169"></a>
+<a id="ln-170" name="ln-170" href="#ln-170"></a><span class="w">      </span><span class="k">module function </span><span class="n">get_geom_from_id</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+<a id="ln-171" name="ln-171" href="#ln-171"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Geom</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">geom</span>
+<a id="ln-172" name="ln-172" href="#ln-172"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomManager</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-173" name="ln-173" href="#ln-173"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">id</span>
+<a id="ln-174" name="ln-174" href="#ln-174"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-175" name="ln-175" href="#ln-175"></a><span class="w">      </span><span class="k">end function </span><span class="n">get_geom_from_id</span>
+<a id="ln-176" name="ln-176" href="#ln-176"></a>
+<a id="ln-177" name="ln-177" href="#ln-177"></a><span class="w">      </span><span class="k">module function </span><span class="n">get_geom_manager</span><span class="p">()</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">geom_mgr</span><span class="p">)</span>
+<a id="ln-178" name="ln-178" href="#ln-178"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">GeomManager</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">geom_mgr</span>
+<a id="ln-179" name="ln-179" href="#ln-179"></a><span class="w">      </span><span class="k">end function </span><span class="n">get_geom_manager</span>
+<a id="ln-180" name="ln-180" href="#ln-180"></a>
+<a id="ln-181" name="ln-181" href="#ln-181"></a><span class="w">      </span><span class="k">module function </span><span class="n">get_mapl_geom</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">mapl_geom</span><span class="p">)</span>
+<a id="ln-182" name="ln-182" href="#ln-182"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Geom</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">geom</span>
+<a id="ln-183" name="ln-183" href="#ln-183"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-184" name="ln-184" href="#ln-184"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">MaplGeom</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mapl_geom</span>
+<a id="ln-185" name="ln-185" href="#ln-185"></a><span class="w">      </span><span class="k">end function </span><span class="n">get_mapl_geom</span>
+<a id="ln-186" name="ln-186" href="#ln-186"></a>
+<a id="ln-187" name="ln-187" href="#ln-187"></a><span class="w">      </span><span class="k">module function </span><span class="n">find_factory</span><span class="p">(</span><span class="n">factories</span><span class="p">,</span><span class="w"> </span><span class="n">predicate</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">factory</span><span class="p">)</span>
+<a id="ln-188" name="ln-188" href="#ln-188"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GeomFactory</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">factory</span>
+<a id="ln-189" name="ln-189" href="#ln-189"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">GeomFactoryVector</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">factories</span><span class="w"> </span><span class="c">! Force TARGET attr on actual</span>
+<a id="ln-190" name="ln-190" href="#ln-190"></a><span class="w">         </span><span class="k">procedure</span><span class="p">(</span><span class="n">I_FactoryPredicate</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">predicate</span>
+<a id="ln-191" name="ln-191" href="#ln-191"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-192" name="ln-192" href="#ln-192"></a><span class="w">      </span><span class="k">end function </span><span class="n">find_factory</span>
+<a id="ln-193" name="ln-193" href="#ln-193"></a><span class="w">   </span><span class="k">end interface</span>
+<a id="ln-194" name="ln-194" href="#ln-194"></a>
+<a id="ln-195" name="ln-195" href="#ln-195"></a><span class="k">end module </span><span class="n">mapl3g_GeomManager</span>
+</pre></div>
+
+      </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              MAPL
+ was developed by The MAPL Developers<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-05-15T18:02:17.839351+0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
