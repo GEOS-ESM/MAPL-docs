@@ -1,0 +1,559 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="MAPL is a foundation layer of the GEOS architecture, whose original purpose is to supplement the Earth System Modeling Framework (ESMF)">
+    <meta name="author" content="The MAPL Developers" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>RegridderParam.F90 &ndash; MAPL</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">MAPL </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>RegridderParam.F90
+      <small>Source File</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.0% of total for source files.">17 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/RegridderParam.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+            <li class="breadcrumb-item active" aria-current="page">RegridderParam.F90</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#mods-0"
+         aria-expanded="false" aria-controls="mods-0">
+         <h4 class="card-header bg-primary text-white">Modules</h4>
+      </a>
+      <div id="mods-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/mapl3g_regridderparam.html">mapl3g_RegridderParam</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/regridderparam.f90.html#src">RegridderParam.F90</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Files dependent on this one</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~regridderparam.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefileregridderparamf90AfferentGraph" width="641pt" height="292pt"
+ viewBox="0.00 0.00 641.00 292.41" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph" class="graph" transform="scale(0.72 0.72) rotate(0) translate(4 402)">
+<title>sourcefile~~regridderparam.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-402 886,-402 886,4 -4,4"/>
+<!-- sourcefile~regridderparam.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~regridderparam.f90</title>
+<polygon fill="none" stroke="black" points="122,-208 0,-208 0,-184 122,-184 122,-208"/>
+<text text-anchor="middle" x="61" y="-193.6" font-family="Helvetica,sans-Serif" font-size="10.50">RegridderParam.F90</text>
+</g>
+<!-- sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~esmfregridder.f90</title>
+<g id="a_sourcefile~~regridderparam.f90~~AfferentGraph_node2"><a xlink:href="../sourcefile/esmfregridder.f90.html" xlink:title="EsmfRegridder.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="437,-230 325,-230 325,-206 437,-206 437,-230"/>
+<text text-anchor="middle" x="381" y="-215.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">EsmfRegridder.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~esmfregridder.f90&#45;&gt;sourcefile~regridderparam.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~esmfregridder.f90&#45;&gt;sourcefile~regridderparam.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M343.84,-230.07C303.41,-242.99 240.41,-261.23 216,-258"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M214,-258C168.87,-252.04 120.89,-229.38 91.18,-213.18"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="92.64,-209.99 82.2,-208.18 89.24,-216.11 92.64,-209.99"/>
+</g>
+<!-- sourcefile~regridderspec.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~regridderspec.f90</title>
+<g id="a_sourcefile~~regridderparam.f90~~AfferentGraph_node4"><a xlink:href="../sourcefile/regridderspec.f90.html" xlink:title="RegridderSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="272,-167 158,-167 158,-143 272,-143 272,-167"/>
+<text text-anchor="middle" x="215" y="-152.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RegridderSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~esmfregridder.f90&#45;&gt;sourcefile~regridderspec.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~esmfregridder.f90&#45;&gt;sourcefile~regridderspec.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M335.12,-206C326.06,-203.27 316.67,-200.22 308,-197 288,-189.56 266.27,-179.73 248.94,-171.44"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="250.34,-168.23 239.81,-167.02 247.29,-174.53 250.34,-168.23"/>
+</g>
+<!-- sourcefile~esmfregridderfactory.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~esmfregridderfactory.f90</title>
+<g id="a_sourcefile~~regridderparam.f90~~AfferentGraph_node3"><a xlink:href="../sourcefile/esmfregridderfactory.f90.html" xlink:title="EsmfRegridderFactory.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="677,-398 526,-398 526,-374 677,-374 677,-398"/>
+<text text-anchor="middle" x="601.5" y="-383.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">EsmfRegridderFactory.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~esmfregridderfactory.f90&#45;&gt;sourcefile~regridderparam.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~esmfregridderfactory.f90&#45;&gt;sourcefile~regridderparam.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M380,-258C313.25,-228.72 288.26,-267.55 216,-258"/>
+</g>
+<!-- sourcefile~esmfregridderfactory.f90&#45;&gt;sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~esmfregridderfactory.f90&#45;&gt;sourcefile~esmfregridder.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M525.76,-383.21C512.63,-379.72 500,-374.03 490,-365 448.37,-327.39 492.52,-284.8 454,-244 450.7,-240.5 446.88,-237.47 442.78,-234.85"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="444.44,-231.77 434,-230.01 441.07,-237.9 444.44,-231.77"/>
+</g>
+<!-- sourcefile~esmfregridderfactory.f90&#45;&gt;sourcefile~regridderspec.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~esmfregridderfactory.f90&#45;&gt;sourcefile~regridderspec.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M525.93,-378.1C513.5,-375.04 501.06,-370.82 490,-365 430.2,-333.54 443.88,-285.14 382,-258"/>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M380,-258C349.69,-244.7 337.06,-254.84 308,-239 277.76,-222.52 249.54,-194.04 232.53,-174.86"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="235.15,-172.54 225.95,-167.28 229.86,-177.13 235.15,-172.54"/>
+</g>
+<!-- sourcefile~regridderspec.f90&#45;&gt;sourcefile~regridderparam.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~regridderspec.f90&#45;&gt;sourcefile~regridderparam.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M169.22,-167.08C152.75,-171.52 133.91,-176.6 116.66,-181.26"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="115.47,-177.95 106.73,-183.94 117.29,-184.71 115.47,-177.95"/>
+</g>
+<!-- sourcefile~fieldbundleread.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~fieldbundleread.f90</title>
+<g id="a_sourcefile~~regridderparam.f90~~AfferentGraph_node5"><a xlink:href="../sourcefile/fieldbundleread.f90.html" xlink:title="FieldBundleRead.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="443,-188 319,-188 319,-164 443,-164 443,-188"/>
+<text text-anchor="middle" x="381" y="-173.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBundleRead.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundleread.f90&#45;&gt;sourcefile~regridderspec.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~fieldbundleread.f90&#45;&gt;sourcefile~regridderspec.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M318.93,-168.18C306.98,-166.65 294.39,-165.04 282.28,-163.49"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="282.6,-160 272.24,-162.2 281.71,-166.94 282.6,-160"/>
+</g>
+<!-- sourcefile~geomaspect.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~geomaspect.f90</title>
+<g id="a_sourcefile~~regridderparam.f90~~AfferentGraph_node6"><a xlink:href="../sourcefile/geomaspect.f90.html" xlink:title="GeomAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="653,-356 550,-356 550,-332 653,-332 653,-356"/>
+<text text-anchor="middle" x="601.5" y="-341.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geomaspect.f90&#45;&gt;sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~geomaspect.f90&#45;&gt;sourcefile~esmfregridder.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M549.88,-344.21C529.47,-341.95 506.82,-336.2 490,-323 459.65,-299.18 482.37,-270.16 454,-244 450.13,-240.43 445.73,-237.34 441.07,-234.68"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="442.33,-231.4 431.83,-230.04 439.2,-237.65 442.33,-231.4"/>
+</g>
+<!-- sourcefile~historycollectiongridcomp_private.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~historycollectiongridcomp_private.f90</title>
+<g id="a_sourcefile~~regridderparam.f90~~AfferentGraph_node7"><a xlink:href="../sourcefile/historycollectiongridcomp_private.f90.html" xlink:title="HistoryCollectionGridComp_private.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="713,-314 490,-314 490,-290 713,-290 713,-314"/>
+<text text-anchor="middle" x="601.5" y="-299.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">HistoryCollectionGridComp_private.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~historycollectiongridcomp_private.f90&#45;&gt;sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~historycollectiongridcomp_private.f90&#45;&gt;sourcefile~esmfregridder.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M511.08,-289.99C503.75,-287.53 496.62,-284.56 490,-281 469.79,-270.13 473.28,-256.44 454,-244 448.15,-240.23 441.67,-236.91 435.08,-234.01"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="435.97,-230.6 425.39,-230.08 433.34,-237.08 435.97,-230.6"/>
+</g>
+<!-- sourcefile~nullregridder.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~nullregridder.f90</title>
+<g id="a_sourcefile~~regridderparam.f90~~AfferentGraph_node8"><a xlink:href="../sourcefile/nullregridder.f90.html" xlink:title="NullRegridder.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="434,-146 328,-146 328,-122 434,-122 434,-146"/>
+<text text-anchor="middle" x="381" y="-131.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">NullRegridder.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~nullregridder.f90&#45;&gt;sourcefile~regridderspec.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~nullregridder.f90&#45;&gt;sourcefile~regridderspec.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M327.66,-140.7C313.26,-142.55 297.46,-144.57 282.39,-146.5"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="281.57,-143.08 272.09,-147.82 282.46,-150.02 281.57,-143.08"/>
+</g>
+<!-- sourcefile~primaryexport.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~primaryexport.f90</title>
+<g id="a_sourcefile~~regridderparam.f90~~AfferentGraph_node9"><a xlink:href="../sourcefile/primaryexport.f90.html" xlink:title="PrimaryExport.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="657,-272 546,-272 546,-248 657,-248 657,-272"/>
+<text text-anchor="middle" x="601.5" y="-257.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">PrimaryExport.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~primaryexport.f90&#45;&gt;sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~primaryexport.f90&#45;&gt;sourcefile~esmfregridder.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M545.97,-249.69C528.13,-246.3 508.22,-242.5 490,-239 476.19,-236.34 461.39,-233.48 447.31,-230.75"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="447.7,-227.25 437.21,-228.78 446.36,-234.13 447.7,-227.25"/>
+</g>
+<!-- sourcefile~regridder.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~regridder.f90</title>
+<g id="a_sourcefile~~regridderparam.f90~~AfferentGraph_node10"><a xlink:href="../sourcefile/regridder.f90.html" xlink:title="Regridder.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="424,-104 338,-104 338,-80 424,-80 424,-104"/>
+<text text-anchor="middle" x="381" y="-89.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Regridder.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regridder.f90&#45;&gt;sourcefile~regridderspec.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~regridder.f90&#45;&gt;sourcefile~regridderspec.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M337.79,-103.21C327.92,-106.13 317.52,-109.46 308,-113 288,-120.44 266.27,-130.27 248.94,-138.56"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="247.29,-135.47 239.81,-142.98 250.34,-141.77 247.29,-135.47"/>
+</g>
+<!-- sourcefile~regridder_mgr.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~regridder_mgr.f90</title>
+<g id="a_sourcefile~~regridderparam.f90~~AfferentGraph_node11"><a xlink:href="../sourcefile/regridder_mgr.f90.html" xlink:title="regridder_mgr.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="656.5,-104 546.5,-104 546.5,-80 656.5,-80 656.5,-104"/>
+<text text-anchor="middle" x="601.5" y="-89.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">regridder_mgr.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regridder_mgr.f90&#45;&gt;sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~regridder_mgr.f90&#45;&gt;sourcefile~esmfregridder.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M546.35,-92C526.83,-94.49 505.76,-100.34 490,-113 458.34,-138.44 484.41,-170.07 454,-197 451.51,-199.2 448.81,-201.17 445.95,-202.94"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="444.23,-199.89 437,-207.64 447.48,-206.09 444.23,-199.89"/>
+</g>
+<!-- sourcefile~regridder_mgr.f90&#45;&gt;sourcefile~regridderspec.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~regridder_mgr.f90&#45;&gt;sourcefile~regridderspec.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M547.44,-79.98C488,-66.88 397.86,-48.25 382,-52"/>
+</g>
+<!-- sourcefile~regriddermanager.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~regriddermanager.f90</title>
+<g id="a_sourcefile~~regridderparam.f90~~AfferentGraph_node12"><a xlink:href="../sourcefile/regriddermanager.f90.html" xlink:title="RegridderManager.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="882,-231 749,-231 749,-207 882,-207 882,-231"/>
+<text text-anchor="middle" x="815.5" y="-216.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RegridderManager.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regriddermanager.f90&#45;&gt;sourcefile~esmfregridderfactory.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~regriddermanager.f90&#45;&gt;sourcefile~esmfregridderfactory.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M809.84,-231.22C798.27,-259.78 765.31,-331.06 713,-365 705.04,-370.17 696.11,-374.13 686.88,-377.16"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="685.8,-373.83 677.18,-379.99 687.76,-380.55 685.8,-373.83"/>
+</g>
+<!-- sourcefile~regriddermanager.f90&#45;&gt;sourcefile~regridderspec.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~regriddermanager.f90&#45;&gt;sourcefile~regridderspec.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M810.33,-206.59C799.63,-176.93 768.09,-102.07 713,-71 584.65,1.38 525.39,-18.06 382,-52"/>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M380,-52C347.84,-59.8 337.06,-55.16 308,-71 277.76,-87.48 249.54,-115.96 232.53,-135.14"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="229.86,-132.87 225.95,-142.72 235.15,-137.46 229.86,-132.87"/>
+</g>
+<!-- sourcefile~regriddermethods.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~regriddermethods.f90</title>
+<g id="a_sourcefile~~regridderparam.f90~~AfferentGraph_node13"><a xlink:href="../sourcefile/regriddermethods.f90.html" xlink:title="RegridderMethods.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="668,-230 535,-230 535,-206 668,-206 668,-230"/>
+<text text-anchor="middle" x="601.5" y="-215.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RegridderMethods.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regriddermethods.f90&#45;&gt;sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~regriddermethods.f90&#45;&gt;sourcefile~esmfregridder.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M534.94,-218C507.3,-218 475.19,-218 447.55,-218"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="447.19,-214.5 437.19,-218 447.19,-221.5 447.19,-214.5"/>
+</g>
+<!-- sourcefile~regridderspecvector.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_node14" class="node">
+<title>sourcefile~regridderspecvector.f90</title>
+<g id="a_sourcefile~~regridderparam.f90~~AfferentGraph_node14"><a xlink:href="../sourcefile/regridderspecvector.f90.html" xlink:title="RegridderSpecVector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="454,-24 308,-24 308,0 454,0 454,-24"/>
+<text text-anchor="middle" x="381" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RegridderSpecVector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regridderspecvector.f90&#45;&gt;sourcefile~regridderspec.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge20" class="edge">
+<title>sourcefile~regridderspecvector.f90&#45;&gt;sourcefile~regridderspec.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M334.66,-24.01C325.35,-27.64 315.97,-32.24 308,-38 271.96,-64.03 242.82,-107.9 227.57,-133.89"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="224.35,-132.48 222.42,-142.9 230.42,-135.95 224.35,-132.48"/>
+</g>
+<!-- sourcefile~variablespec.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_node15" class="node">
+<title>sourcefile~variablespec.f90</title>
+<g id="a_sourcefile~~regridderparam.f90~~AfferentGraph_node15"><a xlink:href="../sourcefile/variablespec.f90.html" xlink:title="VariableSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="654,-188 549,-188 549,-164 654,-164 654,-188"/>
+<text text-anchor="middle" x="601.5" y="-173.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VariableSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~variablespec.f90&#45;&gt;sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~variablespec.f90&#45;&gt;sourcefile~esmfregridder.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M548.77,-185.78C530.23,-189.3 509.18,-193.31 490,-197 476.19,-199.66 461.39,-202.52 447.31,-205.25"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="446.36,-201.87 437.21,-207.22 447.7,-208.75 446.36,-201.87"/>
+</g>
+<!-- sourcefile~variablespec_private.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_node16" class="node">
+<title>sourcefile~variablespec_private.f90</title>
+<g id="a_sourcefile~~regridderparam.f90~~AfferentGraph_node16"><a xlink:href="../sourcefile/variablespec_private.f90.html" xlink:title="VariableSpec_private.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="675.5,-146 527.5,-146 527.5,-122 675.5,-122 675.5,-146"/>
+<text text-anchor="middle" x="601.5" y="-131.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VariableSpec_private.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~variablespec_private.f90&#45;&gt;sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~regridderparam.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~variablespec_private.f90&#45;&gt;sourcefile~esmfregridder.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M527.26,-140.72C514.29,-143.88 501.32,-148.44 490,-155 468.73,-167.32 474.66,-183.67 454,-197 451.26,-198.76 448.38,-200.39 445.39,-201.87"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="443.93,-198.69 436.21,-205.95 446.77,-205.09 443.93,-198.69"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefileregridderparamf90AfferentGraph = svgPanZoom('#sourcefileregridderparamf90AfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#AfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="AfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+<br>
+      <section>
+        <h2><span class="anchor" id="src"></span>Source Code</h2>
+        <div class="hl codehilite"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="k">module </span><span class="n">mapl3g_RegridderParam</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a><span class="w">   </span><span class="k">implicit none</span>
+<a id="ln-3" name="ln-3" href="#ln-3"></a><span class="k">   private</span>
+<a id="ln-4" name="ln-4" href="#ln-4"></a>
+<a id="ln-5" name="ln-5" href="#ln-5"></a><span class="k">   public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">RegridderParam</span>
+<a id="ln-6" name="ln-6" href="#ln-6"></a>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="w">   </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">abstract</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">RegridderParam</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a><span class="w">   </span><span class="k">contains</span>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="k">      procedure</span><span class="p">(</span><span class="n">I_equal_to</span><span class="p">),</span><span class="w"> </span><span class="k">deferred</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">equal_to</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="w">      </span><span class="k">generic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">operator</span><span class="p">(</span><span class="o">==</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">equal_to</span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a><span class="w">   </span><span class="k">end type </span><span class="n">RegridderParam</span>
+<a id="ln-12" name="ln-12" href="#ln-12"></a>
+<a id="ln-13" name="ln-13" href="#ln-13"></a><span class="w">   </span><span class="k">abstract interface</span>
+<a id="ln-14" name="ln-14" href="#ln-14"></a><span class="k">      </span><span class="kt">logical </span><span class="k">function </span><span class="n">I_equal_to</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">other</span><span class="p">)</span>
+<a id="ln-15" name="ln-15" href="#ln-15"></a><span class="w">         </span><span class="k">import </span><span class="n">RegridderParam</span>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">RegridderParam</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">RegridderParam</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">other</span>
+<a id="ln-18" name="ln-18" href="#ln-18"></a><span class="w">      </span><span class="k">end function </span><span class="n">I_equal_to</span>
+<a id="ln-19" name="ln-19" href="#ln-19"></a><span class="w">   </span><span class="k">end interface</span>
+<a id="ln-20" name="ln-20" href="#ln-20"></a>
+<a id="ln-21" name="ln-21" href="#ln-21"></a><span class="k">end module </span><span class="n">mapl3g_RegridderParam</span>
+</pre></div>
+
+      </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              MAPL
+ was developed by The MAPL Developers<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-05-15T16:35:58.293265+0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

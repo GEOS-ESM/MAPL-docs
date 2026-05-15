@@ -1,0 +1,769 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="MAPL is a foundation layer of the GEOS architecture, whose original purpose is to supplement the Earth System Modeling Framework (ESMF)">
+    <meta name="author" content="The MAPL Developers" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>StatisticsVector.F90 &ndash; MAPL</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">MAPL </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>StatisticsVector.F90
+      <small>Source File</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.6% of total for source files.">1248 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/StatisticsVector.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+            <li class="breadcrumb-item active" aria-current="page">StatisticsVector.F90</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#mods-0"
+         aria-expanded="false" aria-controls="mods-0">
+         <h4 class="card-header bg-primary text-white">Modules</h4>
+      </a>
+      <div id="mods-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/mapl3g_statisticsvector.html">mapl3g_StatisticsVector</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/statisticsvector.f90.html#src">StatisticsVector.F90</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">This file depends on</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~statisticsvector.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilestatisticsvectorf90EfferentGraph" width="634pt" height="830pt"
+ viewBox="0.00 0.00 634.00 830.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 826)">
+<title>sourcefile~~statisticsvector.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-826 630,-826 630,4 -4,4"/>
+<!-- sourcefile~statisticsvector.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~statisticsvector.f90</title>
+<polygon fill="none" stroke="black" points="626,-234 511,-234 511,-210 626,-210 626,-234"/>
+<text text-anchor="middle" x="568.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50">StatisticsVector.F90</text>
+</g>
+<!-- sourcefile~abstracttimestatistic.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~abstracttimestatistic.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node2"><a xlink:href="../sourcefile/abstracttimestatistic.f90.html" xlink:title="AbstractTimeStatistic.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="475,-234 327,-234 327,-210 475,-210 475,-234"/>
+<text text-anchor="middle" x="401" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">AbstractTimeStatistic.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~statisticsvector.f90&#45;&gt;sourcefile~abstracttimestatistic.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~statisticsvector.f90&#45;&gt;sourcefile~abstracttimestatistic.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M510.54,-222C502.35,-222 493.77,-222 485.19,-222"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="485.14,-218.5 475.14,-222 485.14,-225.5 485.14,-218.5"/>
+</g>
+<!-- sourcefile~mapl.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~mapl.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node3"><a xlink:href="../sourcefile/mapl.f90.html" xlink:title="MAPL.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="271,-423 207,-423 207,-399 271,-399 271,-423"/>
+<text text-anchor="middle" x="239" y="-408.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~abstracttimestatistic.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~abstracttimestatistic.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M389.75,-234.11C362.94,-265.77 290.56,-351.27 257.23,-390.65"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="254.16,-388.85 250.37,-398.75 259.51,-393.38 254.16,-388.85"/>
+</g>
+<!-- sourcefile~simplealarm.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~simplealarm.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node4"><a xlink:href="../sourcefile/simplealarm.f90.html" xlink:title="SimpleAlarm.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="291,-213 187,-213 187,-189 291,-189 291,-213"/>
+<text text-anchor="middle" x="239" y="-198.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SimpleAlarm.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~abstracttimestatistic.f90&#45;&gt;sourcefile~simplealarm.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~abstracttimestatistic.f90&#45;&gt;sourcefile~simplealarm.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M326.56,-212.36C318.03,-211.24 309.4,-210.11 301.07,-209.01"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="301.44,-205.53 291.07,-207.7 300.53,-212.47 301.44,-205.53"/>
+</g>
+<!-- sourcefile~api.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~api.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node5"><a xlink:href="../sourcefile/api.f90.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="102.5,-822 48.5,-822 48.5,-798 102.5,-798 102.5,-822"/>
+<text text-anchor="middle" x="75.5" y="-807.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M236.86,-423.09C231.11,-481.49 203.49,-733.9 151,-789 141.1,-799.39 126.5,-804.77 112.84,-807.5"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="112,-804.09 102.67,-809.12 113.1,-811.01 112,-804.09"/>
+</g>
+<!-- sourcefile~api.f90~3 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node6" class="node">
+<title>sourcefile~api.f90~3</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node6"><a xlink:href="../sourcefile/api.f90~3.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="102.5,-780 48.5,-780 48.5,-756 102.5,-756 102.5,-780"/>
+<text text-anchor="middle" x="75.5" y="-765.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~3 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~3</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M236.47,-423.18C229.41,-477.69 198.21,-698.77 151,-747 140.96,-757.25 126.34,-762.61 112.7,-765.37"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="111.86,-761.95 102.55,-767.01 112.98,-768.86 111.86,-761.95"/>
+</g>
+<!-- sourcefile~api.f90~4 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node7" class="node">
+<title>sourcefile~api.f90~4</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node7"><a xlink:href="../sourcefile/api.f90~4.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="102.5,-738 48.5,-738 48.5,-714 102.5,-714 102.5,-738"/>
+<text text-anchor="middle" x="75.5" y="-723.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~4 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~4</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M238.28,-423.12C238.61,-467.6 233.58,-623.48 151,-705 140.86,-715.01 126.35,-720.33 112.82,-723.13"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="112.04,-719.71 102.76,-724.81 113.2,-726.61 112.04,-719.71"/>
+</g>
+<!-- sourcefile~api.f90~5 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node8" class="node">
+<title>sourcefile~api.f90~5</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node8"><a xlink:href="../sourcefile/api.f90~5.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="102.5,-696 48.5,-696 48.5,-672 102.5,-672 102.5,-696"/>
+<text text-anchor="middle" x="75.5" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~5 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~5</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M237.59,-423.06C235.54,-463.38 223.36,-594.69 151,-663 140.64,-672.78 126.09,-678.06 112.6,-680.89"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="111.83,-677.47 102.57,-682.61 113.02,-684.37 111.83,-677.47"/>
+</g>
+<!-- sourcefile~api.f90~6 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node9" class="node">
+<title>sourcefile~api.f90~6</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node9"><a xlink:href="../sourcefile/api.f90~6.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="102.5,-654 48.5,-654 48.5,-630 102.5,-630 102.5,-654"/>
+<text text-anchor="middle" x="75.5" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~6 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~6</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M236.65,-423.06C231.99,-458.9 213.25,-565.7 151,-621 140.43,-630.39 125.97,-635.61 112.6,-638.5"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="111.89,-635.07 102.67,-640.28 113.13,-641.96 111.89,-635.07"/>
+</g>
+<!-- sourcefile~api.f90~7 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node10" class="node">
+<title>sourcefile~api.f90~7</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node10"><a xlink:href="../sourcefile/api.f90~7.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="102.5,-612 48.5,-612 48.5,-588 102.5,-588 102.5,-612"/>
+<text text-anchor="middle" x="75.5" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~7 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~7</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M235.23,-423.28C227.58,-454.32 203.19,-536.46 151,-579 140.23,-587.78 126.01,-592.89 112.89,-595.87"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="111.84,-592.5 102.68,-597.82 113.16,-599.38 111.84,-592.5"/>
+</g>
+<!-- sourcefile~api.f90~8 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node11" class="node">
+<title>sourcefile~api.f90~8</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node11"><a xlink:href="../sourcefile/api.f90~8.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="102.5,-570 48.5,-570 48.5,-546 102.5,-546 102.5,-570"/>
+<text text-anchor="middle" x="75.5" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge10" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M233.06,-423.14C222.16,-448.35 193.6,-506.55 151,-537 139.79,-545.02 125.6,-549.98 112.62,-553.05"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="111.63,-549.68 102.55,-555.13 113.05,-556.54 111.63,-549.68"/>
+</g>
+<!-- sourcefile~api.f90~9 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node12" class="node">
+<title>sourcefile~api.f90~9</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node12"><a xlink:href="../sourcefile/api.f90~9.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="102.5,-528 48.5,-528 48.5,-504 102.5,-504 102.5,-528"/>
+<text text-anchor="middle" x="75.5" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~9 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge11" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~9</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M228.7,-423.23C214.13,-441.54 184.14,-475.97 151,-495 139.23,-501.76 125.15,-506.45 112.42,-509.66"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="111.53,-506.27 102.56,-511.92 113.09,-513.1 111.53,-506.27"/>
+</g>
+<!-- sourcefile~fieldutils.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node14" class="node">
+<title>sourcefile~fieldutils.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node14"><a xlink:href="../sourcefile/fieldutils.f90.html" xlink:title="FieldUtils.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="116.5,-486 34.5,-486 34.5,-462 116.5,-462 116.5,-486"/>
+<text text-anchor="middle" x="75.5" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldUtils.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~fieldutils.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge12" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~fieldutils.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M215.58,-423.17C198.29,-432.22 173.58,-444.44 151,-453 143.14,-455.98 134.68,-458.75 126.37,-461.25"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="125.37,-457.9 116.74,-464.04 127.32,-464.62 125.37,-457.9"/>
+</g>
+<!-- sourcefile~generic3g.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node15" class="node">
+<title>sourcefile~generic3g.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node15"><a xlink:href="../sourcefile/generic3g.f90.html" xlink:title="Generic3g.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="121,-444 30,-444 30,-420 121,-420 121,-444"/>
+<text text-anchor="middle" x="75.5" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Generic3g.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~generic3g.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge13" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~generic3g.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M206.86,-415.05C185.51,-417.82 156.61,-421.58 131.45,-424.86"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="130.75,-421.42 121.29,-426.18 131.65,-428.36 130.75,-421.42"/>
+</g>
+<!-- sourcefile~mapl_profiler.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node16" class="node">
+<title>sourcefile~mapl_profiler.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node16"><a xlink:href="../sourcefile/mapl_profiler.f90.html" xlink:title="MAPL_Profiler.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="128,-402 23,-402 23,-378 128,-378 128,-402"/>
+<text text-anchor="middle" x="75.5" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Profiler.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~mapl_profiler.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge14" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~mapl_profiler.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M206.86,-406.95C187.46,-404.43 161.82,-401.09 138.41,-398.05"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="138.56,-394.54 128.2,-396.72 137.66,-401.48 138.56,-394.54"/>
+</g>
+<!-- sourcefile~maplframework.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node17" class="node">
+<title>sourcefile~maplframework.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node17"><a xlink:href="../sourcefile/maplframework.f90.html" xlink:title="MaplFramework.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="135.5,-360 15.5,-360 15.5,-336 135.5,-336 135.5,-360"/>
+<text text-anchor="middle" x="75.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MaplFramework.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~maplframework.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge15" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~maplframework.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M215.58,-398.83C198.29,-389.78 173.58,-377.56 151,-369 145.53,-366.93 139.76,-364.95 133.95,-363.1"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="134.79,-359.69 124.2,-360.1 132.73,-366.38 134.79,-359.69"/>
+</g>
+<!-- sourcefile~maplshared.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node18" class="node">
+<title>sourcefile~maplshared.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node18"><a xlink:href="../sourcefile/maplshared.f90.html" xlink:title="MaplShared.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="124.5,-318 26.5,-318 26.5,-294 124.5,-294 124.5,-318"/>
+<text text-anchor="middle" x="75.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MaplShared.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~maplshared.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge16" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~maplshared.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M228.7,-398.77C214.13,-380.46 184.14,-346.03 151,-327 145.85,-324.04 140.26,-321.48 134.53,-319.26"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="135.4,-315.86 124.81,-315.85 133.09,-322.47 135.4,-315.86"/>
+</g>
+<!-- sourcefile~pfio.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node19" class="node">
+<title>sourcefile~pfio.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node19"><a xlink:href="../sourcefile/pfio.f90.html" xlink:title="pFIO.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="104.5,-276 46.5,-276 46.5,-252 104.5,-252 104.5,-276"/>
+<text text-anchor="middle" x="75.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pFIO.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~pfio.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge17" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~pfio.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M233.06,-398.86C222.16,-373.65 193.6,-315.45 151,-285 140.41,-277.43 127.17,-272.58 114.79,-269.48"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="115.2,-265.99 104.68,-267.26 113.7,-272.82 115.2,-265.99"/>
+</g>
+<!-- sourcefile~pythonbridge.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node20" class="node">
+<title>sourcefile~pythonbridge.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node20"><a xlink:href="../sourcefile/pythonbridge.f90.html" xlink:title="PythonBridge.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="128.5,-234 22.5,-234 22.5,-210 128.5,-210 128.5,-234"/>
+<text text-anchor="middle" x="75.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">PythonBridge.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~pythonbridge.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge18" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~pythonbridge.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M235.23,-398.72C227.58,-367.68 203.19,-285.54 151,-243 147.17,-239.87 142.89,-237.21 138.39,-234.95"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="139.45,-231.59 128.88,-230.83 136.67,-238.02 139.45,-231.59"/>
+</g>
+<!-- sourcefile~statearithmeticparser.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node21" class="node">
+<title>sourcefile~statearithmeticparser.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node21"><a xlink:href="../sourcefile/statearithmeticparser.f90.html" xlink:title="StateArithmeticParser.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="151,-192 0,-192 0,-168 151,-168 151,-192"/>
+<text text-anchor="middle" x="75.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StateArithmeticParser.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~statearithmeticparser.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge19" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~statearithmeticparser.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M236.65,-398.94C231.99,-363.1 213.25,-256.3 151,-201 149.65,-199.8 148.24,-198.67 146.78,-197.61"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="148.25,-194.41 137.89,-192.18 144.6,-200.38 148.25,-194.41"/>
+</g>
+<!-- sourcefile~statefilter.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node22" class="node">
+<title>sourcefile~statefilter.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node22"><a xlink:href="../sourcefile/statefilter.f90.html" xlink:title="StateFilter.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="119.5,-150 31.5,-150 31.5,-126 119.5,-126 119.5,-150"/>
+<text text-anchor="middle" x="75.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StateFilter.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~statefilter.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge20" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~statefilter.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M235.38,-398.91C225.32,-353.48 187.86,-193.79 151,-159 144.82,-153.17 137.14,-148.93 129.09,-145.87"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="130.12,-142.52 119.53,-142.77 127.97,-149.18 130.12,-142.52"/>
+</g>
+<!-- sourcefile~statemasking.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node23" class="node">
+<title>sourcefile~statemasking.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node23"><a xlink:href="../sourcefile/statemasking.f90.html" xlink:title="StateMasking.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="128.5,-108 22.5,-108 22.5,-84 128.5,-84 128.5,-108"/>
+<text text-anchor="middle" x="75.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StateMasking.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~statemasking.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge21" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~statemasking.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M234.76,-398.86C220.26,-344.71 161.61,-127.47 151,-117 147.21,-113.26 142.81,-110.18 138.08,-107.63"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="139.2,-104.3 128.65,-103.38 136.33,-110.68 139.2,-104.3"/>
+</g>
+<!-- sourcefile~ungriddeddims.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node24" class="node">
+<title>sourcefile~ungriddeddims.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node24"><a xlink:href="../sourcefile/ungriddeddims.f90.html" xlink:title="UngriddedDims.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="134.5,-66 16.5,-66 16.5,-42 134.5,-42 134.5,-66"/>
+<text text-anchor="middle" x="75.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">UngriddedDims.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~ungriddeddims.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge22" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~ungriddeddims.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M234.56,-398.64C226.19,-368.51 204.19,-288.82 187,-222 170.24,-156.86 197.73,-123.38 151,-75 148.67,-72.58 146.08,-70.44 143.31,-68.54"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="144.94,-65.44 134.52,-63.52 141.47,-71.52 144.94,-65.44"/>
+</g>
+<!-- sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_node13" class="node">
+<title>sourcefile~errorhandling.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~EfferentGraph_node13"><a xlink:href="../sourcefile/errorhandling.f90.html" xlink:title="ErrorHandling.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="130,-24 21,-24 21,0 130,0 130,-24"/>
+<text text-anchor="middle" x="75.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ErrorHandling.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~simplealarm.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~EfferentGraph_edge23" class="edge">
+<title>sourcefile~simplealarm.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M235.23,-188.72C227.58,-157.68 203.19,-75.54 151,-33 147.45,-30.1 143.52,-27.61 139.38,-25.45"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="140.59,-22.16 130.03,-21.27 137.73,-28.55 140.59,-22.16"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#EfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="EfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Files dependent on this one</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~statisticsvector.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilestatisticsvectorf90AfferentGraph" width="641pt" height="50pt"
+ viewBox="0.00 0.00 641.00 50.27" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~statisticsvector.f90~~AfferentGraph" class="graph" transform="scale(0.97 0.97) rotate(0) translate(4 48)">
+<title>sourcefile~~statisticsvector.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-48 659,-48 659,4 -4,4"/>
+<!-- sourcefile~statisticsvector.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~statisticsvector.f90</title>
+<polygon fill="none" stroke="black" points="115,-44 0,-44 0,-20 115,-20 115,-44"/>
+<text text-anchor="middle" x="57.5" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50">StatisticsVector.F90</text>
+</g>
+<!-- sourcefile~statisticsgridcomp.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~statisticsgridcomp.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~AfferentGraph_node2"><a xlink:href="../sourcefile/statisticsgridcomp.f90.html" xlink:title="StatisticsGridComp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="287,-44 151,-44 151,-20 287,-20 287,-44"/>
+<text text-anchor="middle" x="219" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StatisticsGridComp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~statisticsgridcomp.f90&#45;&gt;sourcefile~statisticsvector.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~statisticsgridcomp.f90&#45;&gt;sourcefile~statisticsvector.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M150.82,-32C142.35,-32 133.68,-32 125.21,-32"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="125.01,-28.5 115.01,-32 125.01,-35.5 125.01,-28.5"/>
+</g>
+<!-- sourcefile~historygridcomp.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~historygridcomp.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~AfferentGraph_node3"><a xlink:href="../sourcefile/historygridcomp.f90.html" xlink:title="HistoryGridComp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="655,-44 528,-44 528,-20 655,-20 655,-44"/>
+<text text-anchor="middle" x="591.5" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">HistoryGridComp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~historygridcomp.f90&#45;&gt;sourcefile~statisticsgridcomp.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~historygridcomp.f90&#45;&gt;sourcefile~statisticsgridcomp.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M527.97,-32.73C516.03,-32.84 503.63,-32.94 492,-33 416.89,-33.38 398.11,-33.36 323,-33 314.65,-32.96 305.91,-32.9 297.21,-32.83"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="297.07,-29.33 287.04,-32.75 297.01,-36.33 297.07,-29.33"/>
+</g>
+<!-- sourcefile~historygridcomp_private.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~historygridcomp_private.f90</title>
+<g id="a_sourcefile~~statisticsvector.f90~~AfferentGraph_node4"><a xlink:href="../sourcefile/historygridcomp_private.f90.html" xlink:title="HistoryGridComp_private.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="492,-24 323,-24 323,0 492,0 492,-24"/>
+<text text-anchor="middle" x="407.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">HistoryGridComp_private.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~historygridcomp.f90&#45;&gt;sourcefile~historygridcomp_private.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~historygridcomp.f90&#45;&gt;sourcefile~historygridcomp_private.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M527.87,-25.12C519.59,-24.21 510.96,-23.26 502.3,-22.31"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="502.46,-18.8 492.14,-21.19 501.7,-25.76 502.46,-18.8"/>
+</g>
+<!-- sourcefile~historygridcomp_private.f90&#45;&gt;sourcefile~statisticsgridcomp.f90 -->
+<g id="sourcefile~~statisticsvector.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~historygridcomp_private.f90&#45;&gt;sourcefile~statisticsgridcomp.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M322.8,-20.98C314.33,-21.88 305.76,-22.8 297.36,-23.7"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="296.79,-20.24 287.22,-24.79 297.54,-27.2 296.79,-20.24"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefilestatisticsvectorf90AfferentGraph = svgPanZoom('#sourcefilestatisticsvectorf90AfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#AfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="AfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+<br>
+      <section>
+        <h2><span class="anchor" id="src"></span>Source Code</h2>
+        <div class="hl codehilite"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="k">module </span><span class="n">mapl3g_StatisticsVector</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_AbstractTimeStatistic</span>
+<a id="ln-3" name="ln-3" href="#ln-3"></a>
+<a id="ln-4" name="ln-4" href="#ln-4"></a><span class="cp">#define T AbstractTimeStatistic</span>
+<a id="ln-5" name="ln-5" href="#ln-5"></a><span class="cp">#define T_polymorphic</span>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="cp">#define Vector StatisticsVector</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="cp">#define VectorIterator StatisticsVectorIterator</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="cp">#include &quot;vector/template.inc&quot;</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a>
+<a id="ln-11" name="ln-11" href="#ln-11"></a>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="cp">#undef VectorIterator</span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a><span class="cp">#undef Vector</span>
+<a id="ln-14" name="ln-14" href="#ln-14"></a><span class="cp">#undef T_polymorphic</span>
+<a id="ln-15" name="ln-15" href="#ln-15"></a><span class="cp">#undef T</span>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="w">   </span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a><span class="k">end module </span><span class="n">mapl3g_StatisticsVector</span>
+</pre></div>
+
+      </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              MAPL
+ was developed by The MAPL Developers<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-05-15T16:35:58.293265+0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

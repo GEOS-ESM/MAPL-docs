@@ -1,0 +1,1688 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="MAPL is a foundation layer of the GEOS architecture, whose original purpose is to supplement the Earth System Modeling Framework (ESMF)">
+    <meta name="author" content="The MAPL Developers" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>ModelVerticalGrid.F90 &ndash; MAPL</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">MAPL </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>ModelVerticalGrid.F90
+      <small>Source File</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.2% of total for source files.">445 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/ModelVerticalGrid.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+            <li class="breadcrumb-item active" aria-current="page">ModelVerticalGrid.F90</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#mods-0"
+         aria-expanded="false" aria-controls="mods-0">
+         <h4 class="card-header bg-primary text-white">Modules</h4>
+      </a>
+      <div id="mods-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/mapl3g_modelverticalgrid.html">mapl3g_ModelVerticalGrid</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/modelverticalgrid.f90.html#src">ModelVerticalGrid.F90</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">This file depends on</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~modelverticalgrid.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilemodelverticalgridf90EfferentGraph" width="328pt" height="998pt"
+ viewBox="0.00 0.00 328.00 998.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 994)">
+<title>sourcefile~~modelverticalgrid.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-994 324,-994 324,4 -4,4"/>
+<!-- sourcefile~modelverticalgrid.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~modelverticalgrid.f90</title>
+<polygon fill="none" stroke="black" points="320,-507 190,-507 190,-483 320,-483 320,-507"/>
+<text text-anchor="middle" x="255" y="-492.6" font-family="Helvetica,sans-Serif" font-size="10.50">ModelVerticalGrid.F90</text>
+</g>
+<!-- sourcefile~api.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~api.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node2"><a xlink:href="../sourcefile/api.f90.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="104,-990 50,-990 50,-966 104,-966 104,-990"/>
+<text text-anchor="middle" x="77" y="-975.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M253.05,-507.05C247.63,-572.91 218.54,-888.71 154,-957 143.71,-967.89 128.33,-973.3 114.09,-975.94"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="113.41,-972.5 104.01,-977.4 114.41,-979.43 113.41,-972.5"/>
+</g>
+<!-- sourcefile~api.f90~8 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~api.f90~8</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node3"><a xlink:href="../sourcefile/api.f90~8.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="104,-948 50,-948 50,-924 104,-924 104,-948"/>
+<text text-anchor="middle" x="77" y="-933.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M252.76,-507.18C246.15,-569.65 213.2,-853.64 154,-915 143.68,-925.7 128.43,-931.1 114.29,-933.77"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="113.66,-930.33 104.29,-935.27 114.69,-937.25 113.66,-930.33"/>
+</g>
+<!-- sourcefile~aspectid.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~aspectid.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node4"><a xlink:href="../sourcefile/aspectid.f90.html" xlink:title="AspectId.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="117.5,-906 36.5,-906 36.5,-882 117.5,-882 117.5,-906"/>
+<text text-anchor="middle" x="77" y="-891.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">AspectId.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~aspectid.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~aspectid.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M252.42,-507.11C244.58,-565.62 207.94,-818.46 154,-873 146.78,-880.3 137.27,-885.12 127.43,-888.3"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="126.3,-884.98 117.55,-890.95 128.11,-891.74 126.3,-884.98"/>
+</g>
+<!-- sourcefile~attributesaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~attributesaspect.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node5"><a xlink:href="../sourcefile/attributesaspect.f90.html" xlink:title="AttributesAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="138,-864 16,-864 16,-840 138,-840 138,-864"/>
+<text text-anchor="middle" x="77" y="-849.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">AttributesAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~attributesaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~attributesaspect.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M254.29,-507.17C254.76,-555.67 249.82,-737.04 154,-831 151.85,-833.11 149.5,-835.01 147.01,-836.73"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="145,-833.85 138.07,-841.87 148.48,-839.92 145,-833.85"/>
+</g>
+<!-- sourcefile~classaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node6" class="node">
+<title>sourcefile~classaspect.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node6"><a xlink:href="../sourcefile/classaspect.f90.html" xlink:title="ClassAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="126.5,-822 27.5,-822 27.5,-798 126.5,-798 126.5,-822"/>
+<text text-anchor="middle" x="77" y="-807.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ClassAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~classaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~classaspect.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M253.7,-507.18C251.9,-551.86 239.49,-708.35 154,-789 148.92,-793.8 142.84,-797.52 136.36,-800.39"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="134.79,-797.25 126.66,-804.04 137.25,-803.8 134.79,-797.25"/>
+</g>
+<!-- sourcefile~componentdriver.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node7" class="node">
+<title>sourcefile~componentdriver.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node7"><a xlink:href="../sourcefile/componentdriver.f90.html" xlink:title="ComponentDriver.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="141.5,-780 12.5,-780 12.5,-756 141.5,-756 141.5,-780"/>
+<text text-anchor="middle" x="77" y="-765.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ComponentDriver.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~componentdriver.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~componentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M252.92,-507.12C248.66,-547.61 229.32,-679.42 154,-747 152.51,-748.34 150.94,-749.59 149.31,-750.76"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="147.41,-747.82 140.68,-756 151.05,-753.8 147.41,-747.82"/>
+</g>
+<!-- sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node8" class="node">
+<title>sourcefile~errorhandling.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node8"><a xlink:href="../sourcefile/errorhandling.f90.html" xlink:title="ErrorHandling.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="131.5,-738 22.5,-738 22.5,-714 131.5,-714 131.5,-738"/>
+<text text-anchor="middle" x="77" y="-723.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ErrorHandling.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M251.87,-507.11C244.88,-543.09 219.28,-650.24 154,-705 150.04,-708.32 145.59,-711.12 140.89,-713.48"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="139.38,-710.32 131.58,-717.5 142.15,-716.75 139.38,-710.32"/>
+</g>
+<!-- sourcefile~extensionfamily.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node9" class="node">
+<title>sourcefile~extensionfamily.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node9"><a xlink:href="../sourcefile/extensionfamily.f90.html" xlink:title="ExtensionFamily.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="137,-696 17,-696 17,-672 137,-672 137,-696"/>
+<text text-anchor="middle" x="77" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ExtensionFamily.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~extensionfamily.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~extensionfamily.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M250.26,-507.32C240.17,-538.45 209.32,-620.79 154,-663 151.52,-664.89 148.88,-666.61 146.13,-668.18"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="144.45,-665.1 137.03,-672.67 147.54,-671.38 144.45,-665.1"/>
+</g>
+<!-- sourcefile~fieldclassaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node10" class="node">
+<title>sourcefile~fieldclassaspect.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node10"><a xlink:href="../sourcefile/fieldclassaspect.f90.html" xlink:title="FieldClassAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="139,-654 15,-654 15,-630 139,-630 139,-654"/>
+<text text-anchor="middle" x="77" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldClassAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~fieldclassaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~fieldclassaspect.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M247.82,-507.15C234.36,-532.39 199.88,-590.63 154,-621 151.4,-622.72 148.66,-624.3 145.83,-625.75"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="144.19,-622.65 136.53,-629.96 147.08,-629.03 144.19,-622.65"/>
+</g>
+<!-- sourcefile~geomaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node11" class="node">
+<title>sourcefile~geomaspect.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node11"><a xlink:href="../sourcefile/geomaspect.f90.html" xlink:title="GeomAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="128.5,-612 25.5,-612 25.5,-588 128.5,-588 128.5,-612"/>
+<text text-anchor="middle" x="77" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~geomaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge10" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~geomaspect.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M242.92,-507.18C225.66,-525.44 190.52,-559.79 154,-579 149.08,-581.59 143.8,-583.88 138.41,-585.91"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="136.95,-582.72 128.64,-589.29 139.23,-589.33 136.95,-582.72"/>
+</g>
+<!-- sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node12" class="node">
+<title>sourcefile~keywordenforcer.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node12"><a xlink:href="../sourcefile/keywordenforcer.f90.html" xlink:title="KeywordEnforcer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="139,-570 15,-570 15,-546 139,-546 139,-570"/>
+<text text-anchor="middle" x="77" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">KeywordEnforcer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge11" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M227.62,-507.17C207.66,-516.11 179.44,-528.18 154,-537 147.97,-539.09 141.62,-541.11 135.27,-543.03"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="133.93,-539.77 125.32,-545.94 135.9,-546.49 133.93,-539.77"/>
+</g>
+<!-- sourcefile~normalizationaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node13" class="node">
+<title>sourcefile~normalizationaspect.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node13"><a xlink:href="../sourcefile/normalizationaspect.f90.html" xlink:title="NormalizationAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="149.5,-528 4.5,-528 4.5,-504 149.5,-504 149.5,-528"/>
+<text text-anchor="middle" x="77" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">NormalizationAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~normalizationaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge12" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~normalizationaspect.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M189.96,-502.64C180.16,-503.81 169.92,-505.03 159.8,-506.24"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="159.25,-502.78 149.73,-507.44 160.08,-509.73 159.25,-502.78"/>
+</g>
+<!-- sourcefile~pfio.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node14" class="node">
+<title>sourcefile~pfio.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node14"><a xlink:href="../sourcefile/pfio.f90.html" xlink:title="pFIO.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="106,-486 48,-486 48,-462 106,-462 106,-486"/>
+<text text-anchor="middle" x="77" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pFIO.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~pfio.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge13" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~pfio.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M189.96,-487.36C165.3,-484.42 137.92,-481.15 116.4,-478.58"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="116.7,-475.09 106.35,-477.38 115.87,-482.04 116.7,-475.09"/>
+</g>
+<!-- sourcefile~quantitytypeaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node15" class="node">
+<title>sourcefile~quantitytypeaspect.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node15"><a xlink:href="../sourcefile/quantitytypeaspect.f90.html" xlink:title="QuantityTypeAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="147,-444 7,-444 7,-420 147,-420 147,-444"/>
+<text text-anchor="middle" x="77" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">QuantityTypeAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~quantitytypeaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge14" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~quantitytypeaspect.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M227.62,-482.83C207.66,-473.89 179.44,-461.82 154,-453 147.97,-450.91 141.62,-448.89 135.27,-446.97"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="135.9,-443.51 125.32,-444.06 133.93,-450.23 135.9,-443.51"/>
+</g>
+<!-- sourcefile~stateitemaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node16" class="node">
+<title>sourcefile~stateitemaspect.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node16"><a xlink:href="../sourcefile/stateitemaspect.f90.html" xlink:title="StateItemAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="138.5,-402 15.5,-402 15.5,-378 138.5,-378 138.5,-402"/>
+<text text-anchor="middle" x="77" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StateItemAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~stateitemaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge15" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~stateitemaspect.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M242.92,-482.82C225.66,-464.56 190.52,-430.21 154,-411 150.25,-409.03 146.3,-407.23 142.25,-405.58"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="143.25,-402.22 132.66,-402.03 140.82,-408.79 143.25,-402.22"/>
+</g>
+<!-- sourcefile~stateitemspec.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node17" class="node">
+<title>sourcefile~stateitemspec.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node17"><a xlink:href="../sourcefile/stateitemspec.f90.html" xlink:title="StateItemSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="133.5,-360 20.5,-360 20.5,-336 133.5,-336 133.5,-360"/>
+<text text-anchor="middle" x="77" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StateItemSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~stateitemspec.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge16" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~stateitemspec.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M247.82,-482.85C234.36,-457.61 199.88,-399.37 154,-369 150.63,-366.77 147.02,-364.77 143.29,-362.99"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="144.34,-359.63 133.77,-358.97 141.62,-366.08 144.34,-359.63"/>
+</g>
+<!-- sourcefile~stateregistry.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node18" class="node">
+<title>sourcefile~stateregistry.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node18"><a xlink:href="../sourcefile/stateregistry.f90.html" xlink:title="StateRegistry.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="129,-318 25,-318 25,-294 129,-294 129,-318"/>
+<text text-anchor="middle" x="77" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StateRegistry.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~stateregistry.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge17" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~stateregistry.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M250.26,-482.68C240.17,-451.55 209.32,-369.21 154,-327 149.33,-323.44 144.09,-320.48 138.6,-318.02"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="139.77,-314.72 129.18,-314.34 137.22,-321.24 139.77,-314.72"/>
+</g>
+<!-- sourcefile~typekindaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node19" class="node">
+<title>sourcefile~typekindaspect.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node19"><a xlink:href="../sourcefile/typekindaspect.f90.html" xlink:title="TypekindAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="136,-276 18,-276 18,-252 136,-252 136,-276"/>
+<text text-anchor="middle" x="77" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">TypekindAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~typekindaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge18" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~typekindaspect.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M251.87,-482.89C244.88,-446.91 219.28,-339.76 154,-285 151.3,-282.73 148.37,-280.71 145.28,-278.9"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="146.76,-275.72 136.25,-274.36 143.61,-281.98 146.76,-275.72"/>
+</g>
+<!-- sourcefile~ungriddeddims.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node20" class="node">
+<title>sourcefile~ungriddeddims.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node20"><a xlink:href="../sourcefile/ungriddeddims.f90.html" xlink:title="UngriddedDims.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="136,-234 18,-234 18,-210 136,-210 136,-234"/>
+<text text-anchor="middle" x="77" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">UngriddedDims.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~ungriddeddims.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge19" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~ungriddeddims.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M252.92,-482.88C248.66,-442.39 229.32,-310.58 154,-243 151.32,-240.6 148.39,-238.46 145.29,-236.57"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="146.65,-233.34 136.16,-231.86 143.44,-239.56 146.65,-233.34"/>
+</g>
+<!-- sourcefile~ungriddeddimsaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node21" class="node">
+<title>sourcefile~ungriddeddimsaspect.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node21"><a xlink:href="../sourcefile/ungriddeddimsaspect.f90.html" xlink:title="UngriddedDimsAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="154,-192 0,-192 0,-168 154,-168 154,-192"/>
+<text text-anchor="middle" x="77" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">UngriddedDimsAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~ungriddeddimsaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge20" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~ungriddeddimsaspect.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M253.7,-482.82C251.9,-438.14 239.49,-281.65 154,-201 152.73,-199.81 151.41,-198.68 150.02,-197.61"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="151.91,-194.66 141.61,-192.18 148.11,-200.54 151.91,-194.66"/>
+</g>
+<!-- sourcefile~unitsaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node22" class="node">
+<title>sourcefile~unitsaspect.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node22"><a xlink:href="../sourcefile/unitsaspect.f90.html" xlink:title="UnitsAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="125.5,-150 28.5,-150 28.5,-126 125.5,-126 125.5,-150"/>
+<text text-anchor="middle" x="77" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">UnitsAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~unitsaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge21" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~unitsaspect.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M254.29,-482.83C254.76,-434.33 249.82,-252.96 154,-159 148.69,-153.79 142.21,-149.85 135.3,-146.87"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="136.27,-143.5 125.68,-143.38 133.88,-150.08 136.27,-143.5"/>
+</g>
+<!-- sourcefile~verticalgridaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node23" class="node">
+<title>sourcefile~verticalgridaspect.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node23"><a xlink:href="../sourcefile/verticalgridaspect.f90.html" xlink:title="VerticalGridAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="143.5,-108 10.5,-108 10.5,-84 143.5,-84 143.5,-108"/>
+<text text-anchor="middle" x="77" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VerticalGridAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~verticalgridaspect.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge22" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~verticalgridaspect.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M252.42,-482.89C244.58,-424.38 207.94,-171.54 154,-117 152.92,-115.91 151.78,-114.87 150.6,-113.88"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="152.45,-110.91 142.24,-108.11 148.48,-116.67 152.45,-110.91"/>
+</g>
+<!-- sourcefile~verticalstaggerloc.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node24" class="node">
+<title>sourcefile~verticalstaggerloc.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node24"><a xlink:href="../sourcefile/verticalstaggerloc.f90.html" xlink:title="VerticalStaggerLoc.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="145,-66 9,-66 9,-42 145,-42 145,-66"/>
+<text text-anchor="middle" x="77" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VerticalStaggerLoc.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~verticalstaggerloc.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge23" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~verticalstaggerloc.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M252.76,-482.82C246.15,-420.35 213.2,-136.36 154,-75 152.93,-73.89 151.81,-72.84 150.64,-71.84"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="152.53,-68.89 142.33,-66.01 148.51,-74.62 152.53,-68.89"/>
+</g>
+<!-- sourcefile~virtualconnectionpt.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_node25" class="node">
+<title>sourcefile~virtualconnectionpt.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~EfferentGraph_node25"><a xlink:href="../sourcefile/virtualconnectionpt.f90.html" xlink:title="VirtualConnectionPt.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="147,-24 7,-24 7,0 147,0 147,-24"/>
+<text text-anchor="middle" x="77" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VirtualConnectionPt.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~virtualconnectionpt.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~EfferentGraph_edge24" class="edge">
+<title>sourcefile~modelverticalgrid.f90&#45;&gt;sourcefile~virtualconnectionpt.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M253.05,-482.95C247.63,-417.09 218.54,-101.29 154,-33 153.07,-32.02 152.11,-31.09 151.1,-30.19"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="152.92,-27.18 142.77,-24.14 148.81,-32.85 152.92,-27.18"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#EfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="EfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Files dependent on this one</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~modelverticalgrid.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilemodelverticalgridf90AfferentGraph" width="641pt" height="529pt"
+ viewBox="0.00 0.00 641.00 529.46" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph" class="graph" transform="scale(0.67 0.67) rotate(0) translate(4 784)">
+<title>sourcefile~~modelverticalgrid.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-784 950,-784 950,4 -4,4"/>
+<!-- sourcefile~modelverticalgrid.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~modelverticalgrid.f90</title>
+<polygon fill="none" stroke="black" points="130,-519 0,-519 0,-495 130,-495 130,-519"/>
+<text text-anchor="middle" x="65" y="-504.6" font-family="Helvetica,sans-Serif" font-size="10.50">ModelVerticalGrid.F90</text>
+</g>
+<!-- sourcefile~generic3g.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~generic3g.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node2"><a xlink:href="../sourcefile/generic3g.f90.html" xlink:title="Generic3g.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="287.5,-581 196.5,-581 196.5,-557 287.5,-557 287.5,-581"/>
+<text text-anchor="middle" x="242" y="-566.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Generic3g.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~generic3g.f90&#45;&gt;sourcefile~modelverticalgrid.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~generic3g.f90&#45;&gt;sourcefile~modelverticalgrid.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M206.84,-556.9C179.14,-547.08 139.9,-533.18 109.87,-522.54"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="110.67,-519.11 100.07,-519.07 108.33,-525.71 110.67,-519.11"/>
+</g>
+<!-- sourcefile~maplframework.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~maplframework.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node3"><a xlink:href="../sourcefile/maplframework.f90.html" xlink:title="MaplFramework.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="302,-519 182,-519 182,-495 302,-495 302,-519"/>
+<text text-anchor="middle" x="242" y="-504.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MaplFramework.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~maplframework.f90&#45;&gt;sourcefile~modelverticalgrid.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~maplframework.f90&#45;&gt;sourcefile~modelverticalgrid.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M181.75,-507C168.56,-507 154.4,-507 140.68,-507"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="140.29,-503.5 130.29,-507 140.29,-510.5 140.29,-503.5"/>
+</g>
+<!-- sourcefile~parse_geometry_spec.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~parse_geometry_spec.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node4"><a xlink:href="../sourcefile/parse_geometry_spec.f90.html" xlink:title="parse_geometry_spec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="318,-477 166,-477 166,-453 318,-453 318,-477"/>
+<text text-anchor="middle" x="242" y="-462.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">parse_geometry_spec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~parse_geometry_spec.f90&#45;&gt;sourcefile~modelverticalgrid.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~parse_geometry_spec.f90&#45;&gt;sourcefile~modelverticalgrid.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M190.85,-477.04C170.62,-481.89 147.12,-487.53 125.99,-492.6"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="125.06,-489.23 116.16,-494.96 126.7,-496.03 125.06,-489.23"/>
+</g>
+<!-- sourcefile~capgridcomp.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~capgridcomp.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node5"><a xlink:href="../sourcefile/capgridcomp.f90.html" xlink:title="CapGridComp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="486,-730 376,-730 376,-706 486,-706 486,-730"/>
+<text text-anchor="middle" x="431" y="-715.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">CapGridComp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~capgridcomp.f90&#45;&gt;sourcefile~generic3g.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~capgridcomp.f90&#45;&gt;sourcefile~generic3g.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M399.46,-705.96C385.03,-699.58 367.96,-691 354,-681 315.97,-653.77 279.26,-613 259.05,-588.89"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="261.68,-586.58 252.61,-581.11 256.29,-591.04 261.68,-586.58"/>
+</g>
+<!-- sourcefile~extdatagridcomp.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~extdatagridcomp.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node6"><a xlink:href="../sourcefile/extdatagridcomp.f90.html" xlink:title="ExtDataGridComp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="681,-695 550,-695 550,-671 681,-671 681,-695"/>
+<text text-anchor="middle" x="615.5" y="-680.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ExtDataGridComp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~generic3g.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~generic3g.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M549.9,-680.43C495.96,-676.52 417.84,-666.68 354,-642 320.19,-628.93 286.07,-604.4 264.75,-587.4"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="266.94,-584.67 256.97,-581.08 262.52,-590.1 266.94,-584.67"/>
+</g>
+<!-- sourcefile~primaryexport.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~primaryexport.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node8"><a xlink:href="../sourcefile/primaryexport.f90.html" xlink:title="PrimaryExport.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="486.5,-633 375.5,-633 375.5,-609 486.5,-609 486.5,-633"/>
+<text text-anchor="middle" x="431" y="-618.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">PrimaryExport.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~primaryexport.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge32" class="edge">
+<title>sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~primaryexport.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M572.61,-670.98C563.17,-668.15 553.21,-665.06 544,-662 520.25,-654.12 493.96,-644.55 472.82,-636.63"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="473.79,-633.25 463.2,-633.01 471.33,-639.8 473.79,-633.25"/>
+</g>
+<!-- sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~mapl.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node7"><a xlink:href="../sourcefile/mapl.f90.html" xlink:title="MAPL.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="647.5,-444 583.5,-444 583.5,-420 647.5,-420 647.5,-444"/>
+<text text-anchor="middle" x="615.5" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~generic3g.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~generic3g.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M430,-497C396.5,-506.49 386.76,-504.22 354,-516 326.17,-526.01 295.96,-540.7 274.09,-552.08"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="272.19,-549.13 264.97,-556.89 275.45,-555.32 272.19,-549.13"/>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~maplframework.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~maplframework.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M584.54,-444.05C548.7,-458.14 486.69,-481.5 432,-497"/>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M430,-497C392.14,-507.73 348.27,-510.55 312.54,-510.54"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="312.24,-507.04 302.21,-510.46 312.19,-514.04 312.24,-507.04"/>
+</g>
+<!-- sourcefile~pythonbridge.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~pythonbridge.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node10"><a xlink:href="../sourcefile/pythonbridge.f90.html" xlink:title="PythonBridge.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="484,-591 378,-591 378,-567 484,-567 484,-591"/>
+<text text-anchor="middle" x="431" y="-576.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">PythonBridge.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~pythonbridge.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge35" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~pythonbridge.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M607.71,-444.15C592.97,-469.37 555.52,-527.58 508,-558 503.57,-560.83 498.77,-563.29 493.79,-565.42"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="492.17,-562.29 484.07,-569.12 494.66,-568.83 492.17,-562.29"/>
+</g>
+<!-- sourcefile~primaryexport.f90&#45;&gt;sourcefile~generic3g.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~primaryexport.f90&#45;&gt;sourcefile~generic3g.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M386.19,-608.92C375.65,-606 364.42,-602.89 354,-600 334.96,-594.71 314.1,-588.89 295.64,-583.73"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="296.53,-580.35 285.95,-581.03 294.64,-587.09 296.53,-580.35"/>
+</g>
+<!-- sourcefile~python_fortran_bridge.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~python_fortran_bridge.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node9"><a xlink:href="../sourcefile/python_fortran_bridge.f90.html" xlink:title="python_fortran_bridge.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="508,-549 354,-549 354,-525 508,-525 508,-549"/>
+<text text-anchor="middle" x="431" y="-534.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">python_fortran_bridge.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~python_fortran_bridge.f90&#45;&gt;sourcefile~generic3g.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~python_fortran_bridge.f90&#45;&gt;sourcefile~generic3g.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M359.84,-549.01C339.27,-552.53 317.1,-556.32 297.66,-559.65"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="297.03,-556.2 287.76,-561.34 298.21,-563.1 297.03,-556.2"/>
+</g>
+<!-- sourcefile~pythonbridge.f90&#45;&gt;sourcefile~generic3g.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~pythonbridge.f90&#45;&gt;sourcefile~generic3g.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M377.91,-576.21C352.93,-574.88 323.01,-573.28 297.7,-571.92"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="297.69,-568.42 287.52,-571.38 297.32,-575.41 297.69,-568.42"/>
+</g>
+<!-- sourcefile~abstracttimestatistic.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~abstracttimestatistic.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node11"><a xlink:href="../sourcefile/abstracttimestatistic.f90.html" xlink:title="AbstractTimeStatistic.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="908.5,-444 760.5,-444 760.5,-420 908.5,-420 908.5,-444"/>
+<text text-anchor="middle" x="834.5" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">AbstractTimeStatistic.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~abstracttimestatistic.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~abstracttimestatistic.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M760.34,-432C726.15,-432 686.7,-432 657.77,-432"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="657.62,-428.5 647.62,-432 657.62,-435.5 657.62,-428.5"/>
+</g>
+<!-- sourcefile~cap.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~cap.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node12"><a xlink:href="../sourcefile/cap.f90.html" xlink:title="Cap.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="862.5,-780 806.5,-780 806.5,-756 862.5,-756 862.5,-780"/>
+<text text-anchor="middle" x="834.5" y="-765.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Cap.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~cap.f90&#45;&gt;sourcefile~capgridcomp.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~cap.f90&#45;&gt;sourcefile~capgridcomp.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M806.22,-764.6C743.08,-756.74 585.5,-737.12 496.26,-726"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="496.62,-722.52 486.26,-724.76 495.75,-729.47 496.62,-722.52"/>
+</g>
+<!-- sourcefile~cap.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~cap.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M806.36,-770.81C781.2,-771.8 744.51,-768.85 723,-747 657.49,-680.46 721.23,-626.88 687,-540 673.86,-506.64 649.57,-472.76 633.23,-452.06"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="635.76,-449.63 626.76,-444.04 630.31,-454.02 635.76,-449.63"/>
+</g>
+<!-- sourcefile~componentdrivergridcomp.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~componentdrivergridcomp.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node13"><a xlink:href="../sourcefile/componentdrivergridcomp.f90.html" xlink:title="componentDriverGridComp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="926,-402 743,-402 743,-378 926,-378 926,-402"/>
+<text text-anchor="middle" x="834.5" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">componentDriverGridComp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~componentdrivergridcomp.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~componentdrivergridcomp.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M769.79,-402.03C754.47,-404.95 738.15,-408.07 723,-411 701.41,-415.18 677.39,-419.91 657.62,-423.82"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="656.84,-420.41 647.71,-425.79 658.2,-427.28 656.84,-420.41"/>
+</g>
+<!-- sourcefile~extdataconfig.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node14" class="node">
+<title>sourcefile~extdataconfig.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node14"><a xlink:href="../sourcefile/extdataconfig.f90.html" xlink:title="ExtDataConfig.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="671.5,-653 559.5,-653 559.5,-629 671.5,-629 671.5,-653"/>
+<text text-anchor="middle" x="615.5" y="-638.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ExtDataConfig.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extdataconfig.f90&#45;&gt;sourcefile~primaryexport.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge31" class="edge">
+<title>sourcefile~extdataconfig.f90&#45;&gt;sourcefile~primaryexport.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M559.25,-634.95C539.59,-632.79 517.29,-630.35 496.9,-628.11"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="497.07,-624.61 486.75,-627 496.31,-631.57 497.07,-624.61"/>
+</g>
+<!-- sourcefile~extdataderived.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node15" class="node">
+<title>sourcefile~extdataderived.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node15"><a xlink:href="../sourcefile/extdataderived.f90.html" xlink:title="ExtDataDerived.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="894,-360 775,-360 775,-336 894,-336 894,-360"/>
+<text text-anchor="middle" x="834.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ExtDataDerived.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extdataderived.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~extdataderived.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M774.82,-355.26C757.77,-358.4 739.35,-362.83 723,-369 693.1,-380.29 661.99,-399.73 641.17,-414.04"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="639.1,-411.21 632.91,-419.81 643.11,-416.95 639.1,-411.21"/>
+</g>
+<!-- sourcefile~extdatagridcomp_private.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node16" class="node">
+<title>sourcefile~extdatagridcomp_private.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node16"><a xlink:href="../sourcefile/extdatagridcomp_private.f90.html" xlink:title="ExtDataGridComp_private.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="921.5,-738 747.5,-738 747.5,-714 921.5,-714 921.5,-738"/>
+<text text-anchor="middle" x="834.5" y="-723.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ExtDataGridComp_private.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extdatagridcomp_private.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~extdatagridcomp_private.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M747.32,-720.21C738.31,-716.66 729.93,-711.74 723,-705 669.21,-652.65 715.99,-609.23 687,-540 673.15,-506.93 649.04,-472.98 632.93,-452.18"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="635.51,-449.8 626.57,-444.12 630.01,-454.14 635.51,-449.8"/>
+</g>
+<!-- sourcefile~extdatagridcomp_private.f90&#45;&gt;sourcefile~primaryexport.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge33" class="edge">
+<title>sourcefile~extdatagridcomp_private.f90&#45;&gt;sourcefile~primaryexport.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M747.37,-718.49C738.56,-715.21 730.22,-710.83 723,-705 691.07,-679.24 721.2,-642.66 687,-620 656.96,-600.1 562.01,-605.91 496.85,-612.78"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="496.23,-609.33 486.66,-613.89 496.98,-616.29 496.23,-609.33"/>
+</g>
+<!-- sourcefile~geos.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node17" class="node">
+<title>sourcefile~geos.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node17"><a xlink:href="../sourcefile/geos.f90.html" xlink:title="GEOS.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="867,-318 802,-318 802,-294 867,-294 867,-318"/>
+<text text-anchor="middle" x="834.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GEOS.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geos.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~geos.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M801.89,-307.12C778.87,-309.07 747.56,-314.12 723,-327 683.68,-347.62 649.37,-387.54 630.92,-411.78"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="628.02,-409.82 624.86,-419.94 633.64,-414 628.02,-409.82"/>
+</g>
+<!-- sourcefile~historycollectiongridcomp.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node18" class="node">
+<title>sourcefile~historycollectiongridcomp.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node18"><a xlink:href="../sourcefile/historycollectiongridcomp.f90.html" xlink:title="HistoryCollectionGridComp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="924.5,-276 744.5,-276 744.5,-252 924.5,-252 924.5,-276"/>
+<text text-anchor="middle" x="834.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">HistoryCollectionGridComp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~historycollectiongridcomp.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~historycollectiongridcomp.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M744.33,-274.68C736.82,-277.42 729.59,-280.81 723,-285 674.3,-315.93 640.79,-377.79 625.65,-410.53"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="622.44,-409.14 621.54,-419.69 628.83,-412 622.44,-409.14"/>
+</g>
+<!-- sourcefile~historycollectiongridcomp_private.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node19" class="node">
+<title>sourcefile~historycollectiongridcomp_private.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node19"><a xlink:href="../sourcefile/historycollectiongridcomp_private.f90.html" xlink:title="HistoryCollectionGridComp_private.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="946,-234 723,-234 723,-210 946,-210 946,-234"/>
+<text text-anchor="middle" x="834.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">HistoryCollectionGridComp_private.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~historycollectiongridcomp_private.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~historycollectiongridcomp_private.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M738.59,-234.09C733.09,-236.58 727.84,-239.53 723,-243 664.43,-285.06 633.9,-369.91 622.23,-410.03"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="618.8,-409.3 619.49,-419.87 625.54,-411.18 618.8,-409.3"/>
+</g>
+<!-- sourcefile~historygridcomp.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node20" class="node">
+<title>sourcefile~historygridcomp.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node20"><a xlink:href="../sourcefile/historygridcomp.f90.html" xlink:title="HistoryGridComp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="898,-192 771,-192 771,-168 898,-168 898,-192"/>
+<text text-anchor="middle" x="834.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">HistoryGridComp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~historygridcomp.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge20" class="edge">
+<title>sourcefile~historygridcomp.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M770.98,-181.54C754.03,-184.57 736.62,-190.36 723,-201 654.22,-254.74 628.16,-363.2 619.86,-409.85"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="616.39,-409.37 618.19,-419.81 623.29,-410.53 616.39,-409.37"/>
+</g>
+<!-- sourcefile~historygridcomp_private.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node21" class="node">
+<title>sourcefile~historygridcomp_private.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node21"><a xlink:href="../sourcefile/historygridcomp_private.f90.html" xlink:title="HistoryGridComp_private.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="919,-150 750,-150 750,-126 919,-126 919,-150"/>
+<text text-anchor="middle" x="834.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">HistoryGridComp_private.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~historygridcomp_private.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge21" class="edge">
+<title>sourcefile~historygridcomp_private.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M749.98,-144.29C740.18,-147.7 730.88,-152.45 723,-159 643.89,-224.73 623.31,-356.9 618.15,-409.58"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="614.64,-409.57 617.25,-419.84 621.61,-410.18 614.64,-409.57"/>
+</g>
+<!-- sourcefile~historyutilities.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node22" class="node">
+<title>sourcefile~historyutilities.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node22"><a xlink:href="../sourcefile/historyutilities.f90.html" xlink:title="HistoryUtilities.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="890.5,-108 778.5,-108 778.5,-84 890.5,-84 890.5,-108"/>
+<text text-anchor="middle" x="834.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">HistoryUtilities.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~historyutilities.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge22" class="edge">
+<title>sourcefile~historyutilities.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M778.24,-95.42C758.82,-97.87 738.1,-103.86 723,-117 633.4,-195 619.03,-351.14 616.84,-409.4"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="613.34,-409.59 616.55,-419.69 620.33,-409.79 613.34,-409.59"/>
+</g>
+<!-- sourcefile~mapl_initialize.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node23" class="node">
+<title>sourcefile~mapl_initialize.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node23"><a xlink:href="../sourcefile/mapl_initialize.f90.html" xlink:title="MAPL_Initialize.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="891,-66 778,-66 778,-42 891,-42 891,-66"/>
+<text text-anchor="middle" x="834.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Initialize.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl_initialize.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge23" class="edge">
+<title>sourcefile~mapl_initialize.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M777.98,-53.13C758.53,-55.55 737.86,-61.59 723,-75 622.46,-165.77 615.14,-346.94 615.81,-409.86"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="612.31,-409.94 616,-419.87 619.31,-409.81 612.31,-409.94"/>
+</g>
+<!-- sourcefile~primaryexportvector.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node24" class="node">
+<title>sourcefile~primaryexportvector.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node24"><a xlink:href="../sourcefile/primaryexportvector.f90.html" xlink:title="PrimaryExportVector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="687,-573 544,-573 544,-549 687,-549 687,-573"/>
+<text text-anchor="middle" x="615.5" y="-558.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">PrimaryExportVector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~primaryexportvector.f90&#45;&gt;sourcefile~primaryexport.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge34" class="edge">
+<title>sourcefile~primaryexportvector.f90&#45;&gt;sourcefile~primaryexport.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M581.82,-573.04C551.91,-584.05 511.73,-598.81 508,-600 501.52,-602.08 494.69,-604.14 487.89,-606.12"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="486.65,-602.83 477.99,-608.94 488.57,-609.56 486.65,-602.83"/>
+</g>
+<!-- sourcefile~regrid_util.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node25" class="node">
+<title>sourcefile~regrid_util.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node25"><a xlink:href="../sourcefile/regrid_util.f90.html" xlink:title="Regrid_Util.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="880.5,-24 788.5,-24 788.5,0 880.5,0 880.5,-24"/>
+<text text-anchor="middle" x="834.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Regrid_Util.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regrid_util.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge24" class="edge">
+<title>sourcefile~regrid_util.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M788.44,-9.92C766.15,-11.3 740.38,-16.85 723,-33 666.31,-85.7 629.49,-333.34 619.35,-409.59"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="615.82,-409.56 618,-419.93 622.76,-410.47 615.82,-409.56"/>
+</g>
+<!-- sourcefile~statisticsgridcomp.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node26" class="node">
+<title>sourcefile~statisticsgridcomp.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node26"><a xlink:href="../sourcefile/statisticsgridcomp.f90.html" xlink:title="StatisticsGridComp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="902.5,-696 766.5,-696 766.5,-672 902.5,-672 902.5,-696"/>
+<text text-anchor="middle" x="834.5" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StatisticsGridComp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~statisticsgridcomp.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge25" class="edge">
+<title>sourcefile~statisticsgridcomp.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M766.47,-683.06C750.65,-679.86 734.93,-673.83 723,-663 680.82,-624.72 710.82,-591.74 687,-540 672,-507.43 648.19,-473.35 632.45,-452.39"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="635.09,-450.09 626.25,-444.26 629.53,-454.33 635.09,-450.09"/>
+</g>
+<!-- sourcefile~time_support.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node27" class="node">
+<title>sourcefile~time_support.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node27"><a xlink:href="../sourcefile/time_support.f90.html" xlink:title="time_support.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="887,-654 782,-654 782,-630 887,-630 887,-654"/>
+<text text-anchor="middle" x="834.5" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">time_support.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~time_support.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge26" class="edge">
+<title>sourcefile~time_support.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M781.98,-642.19C761.78,-639.88 739.53,-634.1 723,-621 692.13,-596.53 705.83,-574.61 687,-540 669.77,-508.33 646.33,-473.78 631.3,-452.5"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="634.07,-450.35 625.42,-444.24 628.37,-454.41 634.07,-450.35"/>
+</g>
+<!-- sourcefile~timeaccumulate.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node28" class="node">
+<title>sourcefile~timeaccumulate.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node28"><a xlink:href="../sourcefile/timeaccumulate.f90.html" xlink:title="TimeAccumulate.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="896.5,-612 772.5,-612 772.5,-588 896.5,-588 896.5,-612"/>
+<text text-anchor="middle" x="834.5" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">TimeAccumulate.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~timeaccumulate.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge27" class="edge">
+<title>sourcefile~timeaccumulate.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M772.22,-596.69C755.3,-593.63 737.59,-588.26 723,-579 710.13,-570.83 655.88,-491.03 630.15,-452.55"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="633.01,-450.53 624.55,-444.15 627.18,-454.41 633.01,-450.53"/>
+</g>
+<!-- sourcefile~timeaverage.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node29" class="node">
+<title>sourcefile~timeaverage.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node29"><a xlink:href="../sourcefile/timeaverage.f90.html" xlink:title="TimeAverage.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="887.5,-570 781.5,-570 781.5,-546 887.5,-546 887.5,-570"/>
+<text text-anchor="middle" x="834.5" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">TimeAverage.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~timeaverage.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge28" class="edge">
+<title>sourcefile~timeaverage.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M781.36,-554.47C762.18,-551.57 740.81,-546.34 723,-537 683.68,-516.38 649.37,-476.46 630.92,-452.22"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="633.64,-450 624.86,-444.06 628.02,-454.18 633.64,-450"/>
+</g>
+<!-- sourcefile~timemax.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node30" class="node">
+<title>sourcefile~timemax.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node30"><a xlink:href="../sourcefile/timemax.f90.html" xlink:title="TimeMax.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="876,-528 793,-528 793,-504 876,-504 876,-528"/>
+<text text-anchor="middle" x="834.5" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">TimeMax.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~timemax.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge29" class="edge">
+<title>sourcefile~timemax.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M792.95,-511.72C771.64,-508.62 745.38,-503.45 723,-495 693.1,-483.71 661.99,-464.27 641.17,-449.96"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="643.11,-447.05 632.91,-444.19 639.1,-452.79 643.11,-447.05"/>
+</g>
+<!-- sourcefile~timemin.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_node31" class="node">
+<title>sourcefile~timemin.f90</title>
+<g id="a_sourcefile~~modelverticalgrid.f90~~AfferentGraph_node31"><a xlink:href="../sourcefile/timemin.f90.html" xlink:title="TimeMin.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="874.5,-486 794.5,-486 794.5,-462 874.5,-462 874.5,-486"/>
+<text text-anchor="middle" x="834.5" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">TimeMin.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~timemin.f90&#45;&gt;sourcefile~mapl.f90 -->
+<g id="sourcefile~~modelverticalgrid.f90~~AfferentGraph_edge30" class="edge">
+<title>sourcefile~timemin.f90&#45;&gt;sourcefile~mapl.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M794.37,-466.63C773.23,-462.63 746.68,-457.58 723,-453 701.41,-448.82 677.39,-444.09 657.62,-440.18"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="658.2,-436.72 647.71,-438.21 656.84,-443.59 658.2,-436.72"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefilemodelverticalgridf90AfferentGraph = svgPanZoom('#sourcefilemodelverticalgridf90AfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#AfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="AfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+<br>
+      <section>
+        <h2><span class="anchor" id="src"></span>Source Code</h2>
+        <div class="hl codehilite"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="cp">#include &quot;MAPL.h&quot;</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a>
+<a id="ln-3" name="ln-3" href="#ln-3"></a><span class="k">module </span><span class="n">mapl3g_ModelVerticalGrid</span>
+<a id="ln-4" name="ln-4" href="#ln-4"></a>
+<a id="ln-5" name="ln-5" href="#ln-5"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_ErrorHandling</span>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_KeywordEnforcer</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_VerticalGrid_API</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_Field_API</span>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_StateRegistry</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_VirtualConnectionPt</span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_StateItemSpec</span>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_StateItemSpec</span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_UngriddedDims</span>
+<a id="ln-14" name="ln-14" href="#ln-14"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_StateItemSpec</span>
+<a id="ln-15" name="ln-15" href="#ln-15"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_ExtensionFamily</span>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_ComponentDriver</span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_VerticalStaggerLoc</span>
+<a id="ln-18" name="ln-18" href="#ln-18"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_AspectId</span>
+<a id="ln-19" name="ln-19" href="#ln-19"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_StateItemAspect</span>
+<a id="ln-20" name="ln-20" href="#ln-20"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_ClassAspect</span>
+<a id="ln-21" name="ln-21" href="#ln-21"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_FieldClassAspect</span>
+<a id="ln-22" name="ln-22" href="#ln-22"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_GeomAspect</span>
+<a id="ln-23" name="ln-23" href="#ln-23"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_UnitsAspect</span>
+<a id="ln-24" name="ln-24" href="#ln-24"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_UngriddedDimsAspect</span>
+<a id="ln-25" name="ln-25" href="#ln-25"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_AttributesAspect</span>
+<a id="ln-26" name="ln-26" href="#ln-26"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_TypekindAspect</span>
+<a id="ln-27" name="ln-27" href="#ln-27"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_QuantityTypeAspect</span>
+<a id="ln-28" name="ln-28" href="#ln-28"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_NormalizationAspect</span>
+<a id="ln-29" name="ln-29" href="#ln-29"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_VerticalGridAspect</span>
+<a id="ln-30" name="ln-30" href="#ln-30"></a><span class="w">   </span><span class="k">use </span><span class="n">pfio</span>
+<a id="ln-31" name="ln-31" href="#ln-31"></a><span class="w">   </span><span class="k">use </span><span class="n">esmf</span>
+<a id="ln-32" name="ln-32" href="#ln-32"></a><span class="w">   </span><span class="k">use </span><span class="n">gftl2_StringVector</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">StringVector</span>
+<a id="ln-33" name="ln-33" href="#ln-33"></a>
+<a id="ln-34" name="ln-34" href="#ln-34"></a><span class="w">   </span><span class="k">implicit none</span><span class="p">(</span><span class="k">type</span><span class="p">,</span><span class="k">external</span><span class="p">)</span>
+<a id="ln-35" name="ln-35" href="#ln-35"></a><span class="w">   </span><span class="k">private</span>
+<a id="ln-36" name="ln-36" href="#ln-36"></a>
+<a id="ln-37" name="ln-37" href="#ln-37"></a><span class="k">   public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ModelVerticalGridSpec</span>
+<a id="ln-38" name="ln-38" href="#ln-38"></a><span class="w">   </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ModelVerticalGrid</span>
+<a id="ln-39" name="ln-39" href="#ln-39"></a><span class="w">   </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ModelVerticalGridFactory</span>
+<a id="ln-40" name="ln-40" href="#ln-40"></a>
+<a id="ln-41" name="ln-41" href="#ln-41"></a><span class="w">   </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">extends</span><span class="p">(</span><span class="n">VerticalGridSpec</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ModelVerticalGridSpec</span>
+<a id="ln-42" name="ln-42" href="#ln-42"></a><span class="w">      </span><span class="k">private</span>
+<a id="ln-43" name="ln-43" href="#ln-43"></a><span class="k">      type</span><span class="p">(</span><span class="n">StringVector</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">names</span>
+<a id="ln-44" name="ln-44" href="#ln-44"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StringVector</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">physical_dimensions</span>
+<a id="ln-45" name="ln-45" href="#ln-45"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">num_levels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="w">   </span><span class="k">end type </span><span class="n">ModelVerticalGridSpec</span>
+<a id="ln-47" name="ln-47" href="#ln-47"></a>
+<a id="ln-48" name="ln-48" href="#ln-48"></a><span class="w">    </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">extends</span><span class="p">(</span><span class="n">VerticalGrid</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ModelVerticalGrid</span>
+<a id="ln-49" name="ln-49" href="#ln-49"></a><span class="w">       </span><span class="k">private</span>
+<a id="ln-50" name="ln-50" href="#ln-50"></a><span class="k">       type</span><span class="p">(</span><span class="n">ModelVerticalGridSpec</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spec</span>
+<a id="ln-51" name="ln-51" href="#ln-51"></a><span class="w">       </span><span class="k">type</span><span class="p">(</span><span class="n">StateRegistry</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">registry</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="nb">null</span><span class="p">()</span>
+<a id="ln-52" name="ln-52" href="#ln-52"></a><span class="w">    </span><span class="k">contains</span>
+<a id="ln-53" name="ln-53" href="#ln-53"></a><span class="k">       procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">initialize</span>
+<a id="ln-54" name="ln-54" href="#ln-54"></a><span class="w">       </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_num_layers</span>
+<a id="ln-55" name="ln-55" href="#ln-55"></a><span class="w">       </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_units</span>
+<a id="ln-56" name="ln-56" href="#ln-56"></a><span class="w">       </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_coordinate_field</span>
+<a id="ln-57" name="ln-57" href="#ln-57"></a><span class="c">!#      procedure :: is_identical_to</span>
+<a id="ln-58" name="ln-58" href="#ln-58"></a><span class="w">       </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">write_formatted</span>
+<a id="ln-59" name="ln-59" href="#ln-59"></a><span class="w">       </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_supported_physical_dimensions</span>
+<a id="ln-60" name="ln-60" href="#ln-60"></a><span class="w">       </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">matches</span>
+<a id="ln-61" name="ln-61" href="#ln-61"></a>
+<a id="ln-62" name="ln-62" href="#ln-62"></a><span class="w">       </span><span class="c">! subclass-specific methods</span>
+<a id="ln-63" name="ln-63" href="#ln-63"></a><span class="w">       </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">add_field</span>
+<a id="ln-64" name="ln-64" href="#ln-64"></a><span class="w">       </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">set_registry</span>
+<a id="ln-65" name="ln-65" href="#ln-65"></a><span class="w">       </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_registry</span>
+<a id="ln-66" name="ln-66" href="#ln-66"></a><span class="w">    </span><span class="k">end type </span><span class="n">ModelVerticalGrid</span>
+<a id="ln-67" name="ln-67" href="#ln-67"></a>
+<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">   </span><span class="c">! Factory type</span>
+<a id="ln-69" name="ln-69" href="#ln-69"></a><span class="w">   </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">extends</span><span class="p">(</span><span class="n">VerticalGridFactory</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ModelVerticalGridFactory</span>
+<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">   </span><span class="k">contains</span>
+<a id="ln-71" name="ln-71" href="#ln-71"></a><span class="k">      procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_name</span>
+<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">supports_spec</span>
+<a id="ln-73" name="ln-73" href="#ln-73"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">supports_file_metadata</span>
+<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">supports_config</span>
+<a id="ln-75" name="ln-75" href="#ln-75"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">create_spec_from_config</span>
+<a id="ln-76" name="ln-76" href="#ln-76"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">create_spec_from_file_metadata</span>
+<a id="ln-77" name="ln-77" href="#ln-77"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">create_grid_from_spec</span>
+<a id="ln-78" name="ln-78" href="#ln-78"></a><span class="w">   </span><span class="k">end type </span><span class="n">ModelVerticalGridFactory</span>
+<a id="ln-79" name="ln-79" href="#ln-79"></a>
+<a id="ln-80" name="ln-80" href="#ln-80"></a><span class="w">   </span><span class="k">interface </span><span class="n">ModelVerticalGridSpec</span>
+<a id="ln-81" name="ln-81" href="#ln-81"></a><span class="w">      </span><span class="k">procedure </span><span class="n">new_ModelVerticalGridSpec</span>
+<a id="ln-82" name="ln-82" href="#ln-82"></a><span class="w">   </span><span class="k">end interface </span><span class="n">ModelVerticalGridSpec</span>
+<a id="ln-83" name="ln-83" href="#ln-83"></a>
+<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">   </span><span class="k">interface </span><span class="n">ModelVerticalGrid</span>
+<a id="ln-85" name="ln-85" href="#ln-85"></a><span class="w">      </span><span class="k">procedure </span><span class="n">new_ModelVerticalGrid_basic</span>
+<a id="ln-86" name="ln-86" href="#ln-86"></a><span class="w">   </span><span class="k">end interface </span><span class="n">ModelVerticalGrid</span>
+<a id="ln-87" name="ln-87" href="#ln-87"></a>
+<a id="ln-88" name="ln-88" href="#ln-88"></a><span class="c">!#   interface operator(==)</span>
+<a id="ln-89" name="ln-89" href="#ln-89"></a><span class="c">!#      module procedure equal_ModelVerticalGrid</span>
+<a id="ln-90" name="ln-90" href="#ln-90"></a><span class="c">!#   end interface operator(==)</span>
+<a id="ln-91" name="ln-91" href="#ln-91"></a>
+<a id="ln-92" name="ln-92" href="#ln-92"></a><span class="c">!#   interface operator(/=)</span>
+<a id="ln-93" name="ln-93" href="#ln-93"></a><span class="c">!#      module procedure not_equal_ModelVerticalGrid</span>
+<a id="ln-94" name="ln-94" href="#ln-94"></a><span class="c">!#   end interface operator(/=)</span>
+<a id="ln-95" name="ln-95" href="#ln-95"></a>
+<a id="ln-96" name="ln-96" href="#ln-96"></a><span class="w">   </span><span class="c">! TODO:</span>
+<a id="ln-97" name="ln-97" href="#ln-97"></a><span class="w">   </span><span class="c">! - Ensure that there really is a vertical dimension</span>
+<a id="ln-98" name="ln-98" href="#ln-98"></a>
+<a id="ln-99" name="ln-99" href="#ln-99"></a><span class="k">contains</span>
+<a id="ln-100" name="ln-100" href="#ln-100"></a>
+<a id="ln-101" name="ln-101" href="#ln-101"></a><span class="k">   function </span><span class="n">new_ModelVerticalGridSpec</span><span class="p">(</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">physical_dimensions</span><span class="p">,</span><span class="w"> </span><span class="n">num_levels</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+<a id="ln-102" name="ln-102" href="#ln-102"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ModelVerticalGridSpec</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spec</span>
+<a id="ln-103" name="ln-103" href="#ln-103"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StringVector</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">names</span>
+<a id="ln-104" name="ln-104" href="#ln-104"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StringVector</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">physical_dimensions</span>
+<a id="ln-105" name="ln-105" href="#ln-105"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w">  </span><span class="n">num_levels</span>
+<a id="ln-106" name="ln-106" href="#ln-106"></a>
+<a id="ln-107" name="ln-107" href="#ln-107"></a><span class="w">      </span><span class="n">spec</span><span class="p">%</span><span class="n">names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">names</span>
+<a id="ln-108" name="ln-108" href="#ln-108"></a><span class="w">      </span><span class="n">spec</span><span class="p">%</span><span class="n">physical_dimensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">physical_dimensions</span>
+<a id="ln-109" name="ln-109" href="#ln-109"></a><span class="w">      </span><span class="n">spec</span><span class="p">%</span><span class="n">num_levels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">num_levels</span>
+<a id="ln-110" name="ln-110" href="#ln-110"></a>
+<a id="ln-111" name="ln-111" href="#ln-111"></a><span class="w">   </span><span class="k">end function </span><span class="n">new_ModelVerticalGridSpec</span>
+<a id="ln-112" name="ln-112" href="#ln-112"></a>
+<a id="ln-113" name="ln-113" href="#ln-113"></a><span class="w">   </span><span class="k">function </span><span class="n">new_ModelVerticalGrid_basic</span><span class="p">(</span><span class="n">physical_dimension</span><span class="p">,</span><span class="w"> </span><span class="n">short_name</span><span class="p">,</span><span class="w"> </span><span class="n">num_levels</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">vgrid</span><span class="p">)</span>
+<a id="ln-114" name="ln-114" href="#ln-114"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ModelVerticalGrid</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">vgrid</span>
+<a id="ln-115" name="ln-115" href="#ln-115"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">physical_dimension</span>
+<a id="ln-116" name="ln-116" href="#ln-116"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">short_name</span>
+<a id="ln-117" name="ln-117" href="#ln-117"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">num_levels</span>
+<a id="ln-118" name="ln-118" href="#ln-118"></a>
+<a id="ln-119" name="ln-119" href="#ln-119"></a><span class="w">      </span><span class="n">vgrid</span><span class="p">%</span><span class="n">spec</span><span class="p">%</span><span class="n">num_levels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">num_levels</span>
+<a id="ln-120" name="ln-120" href="#ln-120"></a><span class="w">      </span><span class="k">call </span><span class="n">vgrid</span><span class="p">%</span><span class="n">spec</span><span class="p">%</span><span class="n">names</span><span class="p">%</span><span class="n">push_back</span><span class="p">(</span><span class="n">short_name</span><span class="p">)</span>
+<a id="ln-121" name="ln-121" href="#ln-121"></a><span class="w">      </span><span class="k">call </span><span class="n">vgrid</span><span class="p">%</span><span class="n">spec</span><span class="p">%</span><span class="n">physical_dimensions</span><span class="p">%</span><span class="n">push_back</span><span class="p">(</span><span class="n">physical_dimension</span><span class="p">)</span>
+<a id="ln-122" name="ln-122" href="#ln-122"></a><span class="w">      </span><span class="c">! Default coordinate direction is already set to VCOORD_DIRECTION_DOWN in VerticalGrid</span>
+<a id="ln-123" name="ln-123" href="#ln-123"></a><span class="w">   </span><span class="k">end function </span><span class="n">new_ModelVerticalGrid_basic</span>
+<a id="ln-124" name="ln-124" href="#ln-124"></a>
+<a id="ln-125" name="ln-125" href="#ln-125"></a>
+<a id="ln-126" name="ln-126" href="#ln-126"></a><span class="w">   </span><span class="kt">integer </span><span class="k">function </span><span class="n">get_num_layers</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">num_layers</span><span class="p">)</span>
+<a id="ln-127" name="ln-127" href="#ln-127"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGrid</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-128" name="ln-128" href="#ln-128"></a><span class="w">      </span><span class="n">num_layers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">spec</span><span class="p">%</span><span class="n">num_levels</span>
+<a id="ln-129" name="ln-129" href="#ln-129"></a><span class="w">   </span><span class="k">end function </span><span class="n">get_num_layers</span>
+<a id="ln-130" name="ln-130" href="#ln-130"></a>
+<a id="ln-131" name="ln-131" href="#ln-131"></a><span class="w">   </span><span class="k">function </span><span class="n">get_units</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">physical_dimension</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">units</span><span class="p">)</span>
+<a id="ln-132" name="ln-132" href="#ln-132"></a><span class="w">      </span><span class="kt">character</span><span class="p">(:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">units</span>
+<a id="ln-133" name="ln-133" href="#ln-133"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGrid</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-134" name="ln-134" href="#ln-134"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">physical_dimension</span>
+<a id="ln-135" name="ln-135" href="#ln-135"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-136" name="ln-136" href="#ln-136"></a><span class="w">      </span>
+<a id="ln-137" name="ln-137" href="#ln-137"></a><span class="w">      </span><span class="kt">character</span><span class="p">(:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">short_name</span>
+<a id="ln-138" name="ln-138" href="#ln-138"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">VirtualConnectionPt</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">v_pt</span>
+<a id="ln-139" name="ln-139" href="#ln-139"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StateItemSpec</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">primary</span>
+<a id="ln-140" name="ln-140" href="#ln-140"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StateItemSpec</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spec</span>
+<a id="ln-141" name="ln-141" href="#ln-141"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">StateItemAspect</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">class_aspect</span>
+<a id="ln-142" name="ln-142" href="#ln-142"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">esmf_Field</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">field</span>
+<a id="ln-143" name="ln-143" href="#ln-143"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-144" name="ln-144" href="#ln-144"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-145" name="ln-145" href="#ln-145"></a>
+<a id="ln-146" name="ln-146" href="#ln-146"></a><span class="w">      </span><span class="n">units</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&lt;invalid&gt;&#39;</span>
+<a id="ln-147" name="ln-147" href="#ln-147"></a>
+<a id="ln-148" name="ln-148" href="#ln-148"></a><span class="w">      </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">spec</span><span class="p">%</span><span class="n">physical_dimensions</span><span class="p">%</span><span class="n">size</span><span class="p">()</span>
+<a id="ln-149" name="ln-149" href="#ln-149"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-150" name="ln-150" href="#ln-150"></a><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">spec</span><span class="p">%</span><span class="n">physical_dimensions</span><span class="p">%</span><span class="n">of</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">physical_dimension</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-151" name="ln-151" href="#ln-151"></a><span class="k">            </span><span class="n">short_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">spec</span><span class="p">%</span><span class="n">names</span><span class="p">%</span><span class="n">of</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<a id="ln-152" name="ln-152" href="#ln-152"></a><span class="w">            </span><span class="k">exit</span>
+<a id="ln-153" name="ln-153" href="#ln-153"></a><span class="k">         end if</span>
+<a id="ln-154" name="ln-154" href="#ln-154"></a><span class="k">      end do</span>
+<a id="ln-155" name="ln-155" href="#ln-155"></a><span class="k">      </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Physical dimension not found.&#39;</span><span class="p">)</span>
+<a id="ln-156" name="ln-156" href="#ln-156"></a>
+<a id="ln-157" name="ln-157" href="#ln-157"></a><span class="w">      </span><span class="n">v_pt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VirtualConnectionPt</span><span class="p">(</span><span class="n">state_intent</span><span class="o">=</span><span class="s2">&quot;export&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">short_name</span><span class="o">=</span><span class="n">short_name</span><span class="p">)</span>
+<a id="ln-158" name="ln-158" href="#ln-158"></a><span class="w">      </span><span class="n">primary</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">registry</span><span class="p">%</span><span class="n">get_primary_spec</span><span class="p">(</span><span class="n">v_pt</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-159" name="ln-159" href="#ln-159"></a><span class="w">      </span><span class="n">spec</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">primary</span>
+<a id="ln-160" name="ln-160" href="#ln-160"></a>
+<a id="ln-161" name="ln-161" href="#ln-161"></a><span class="w">      </span><span class="n">class_aspect</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">spec</span><span class="p">%</span><span class="n">get_aspect</span><span class="p">(</span><span class="n">CLASS_ASPECT_ID</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-162" name="ln-162" href="#ln-162"></a><span class="w">      </span><span class="k">select type</span><span class="w"> </span><span class="p">(</span><span class="n">class_aspect</span><span class="p">)</span>
+<a id="ln-163" name="ln-163" href="#ln-163"></a><span class="w">      </span><span class="k">type is</span><span class="w"> </span><span class="p">(</span><span class="n">FieldClassAspect</span><span class="p">)</span>
+<a id="ln-164" name="ln-164" href="#ln-164"></a><span class="w">         </span><span class="k">call </span><span class="n">class_aspect</span><span class="p">%</span><span class="n">get_payload</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-165" name="ln-165" href="#ln-165"></a><span class="w">         </span><span class="k">call </span><span class="n">mapl_FieldGet</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-166" name="ln-166" href="#ln-166"></a><span class="w">      </span><span class="k">class </span><span class="n">default</span>
+<a id="ln-167" name="ln-167" href="#ln-167"></a><span class="w">         </span><span class="err">_</span><span class="n">FAIL</span><span class="p">(</span><span class="s2">&quot;unsupported aspect type; must be FieldClassAspect&quot;</span><span class="p">)</span>
+<a id="ln-168" name="ln-168" href="#ln-168"></a><span class="w">      </span><span class="k">end select</span>
+<a id="ln-169" name="ln-169" href="#ln-169"></a>
+<a id="ln-170" name="ln-170" href="#ln-170"></a><span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-171" name="ln-171" href="#ln-171"></a><span class="w">   </span><span class="k">end function </span><span class="n">get_units</span>
+<a id="ln-172" name="ln-172" href="#ln-172"></a>
+<a id="ln-173" name="ln-173" href="#ln-173"></a>
+<a id="ln-174" name="ln-174" href="#ln-174"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">add_field</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">short_name</span><span class="p">,</span><span class="w"> </span><span class="n">physical_dimension</span><span class="p">)</span>
+<a id="ln-175" name="ln-175" href="#ln-175"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGrid</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-176" name="ln-176" href="#ln-176"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">short_name</span>
+<a id="ln-177" name="ln-177" href="#ln-177"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">physical_dimension</span>
+<a id="ln-178" name="ln-178" href="#ln-178"></a>
+<a id="ln-179" name="ln-179" href="#ln-179"></a><span class="w">      </span><span class="k">call </span><span class="n">this</span><span class="p">%</span><span class="n">spec</span><span class="p">%</span><span class="n">names</span><span class="p">%</span><span class="n">push_back</span><span class="p">(</span><span class="n">short_name</span><span class="p">)</span>
+<a id="ln-180" name="ln-180" href="#ln-180"></a><span class="w">      </span><span class="k">call </span><span class="n">this</span><span class="p">%</span><span class="n">spec</span><span class="p">%</span><span class="n">physical_dimensions</span><span class="p">%</span><span class="n">push_back</span><span class="p">(</span><span class="n">physical_dimension</span><span class="p">)</span>
+<a id="ln-181" name="ln-181" href="#ln-181"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">add_field</span>
+<a id="ln-182" name="ln-182" href="#ln-182"></a>
+<a id="ln-183" name="ln-183" href="#ln-183"></a>
+<a id="ln-184" name="ln-184" href="#ln-184"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">set_registry</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">registry</span><span class="p">)</span>
+<a id="ln-185" name="ln-185" href="#ln-185"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGrid</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-186" name="ln-186" href="#ln-186"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StateRegistry</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">registry</span>
+<a id="ln-187" name="ln-187" href="#ln-187"></a>
+<a id="ln-188" name="ln-188" href="#ln-188"></a><span class="w">      </span><span class="n">this</span><span class="p">%</span><span class="n">registry</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">registry</span>
+<a id="ln-189" name="ln-189" href="#ln-189"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">set_registry</span>
+<a id="ln-190" name="ln-190" href="#ln-190"></a>
+<a id="ln-191" name="ln-191" href="#ln-191"></a>
+<a id="ln-192" name="ln-192" href="#ln-192"></a><span class="w">   </span><span class="k">function </span><span class="n">get_registry</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+<a id="ln-193" name="ln-193" href="#ln-193"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGrid</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-194" name="ln-194" href="#ln-194"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StateRegistry</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">registry</span>
+<a id="ln-195" name="ln-195" href="#ln-195"></a><span class="w">      </span><span class="n">registry</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">registry</span>
+<a id="ln-196" name="ln-196" href="#ln-196"></a><span class="w">   </span><span class="k">end function </span><span class="n">get_registry</span>
+<a id="ln-197" name="ln-197" href="#ln-197"></a>
+<a id="ln-198" name="ln-198" href="#ln-198"></a><span class="w">   </span><span class="k">function </span><span class="n">get_coordinate_field</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">physical_dimension</span><span class="p">,</span><span class="w"> </span><span class="n">aspects</span><span class="p">,</span><span class="w"> </span><span class="n">coupler</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+<a id="ln-199" name="ln-199" href="#ln-199"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">field</span>
+<a id="ln-200" name="ln-200" href="#ln-200"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGrid</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-201" name="ln-201" href="#ln-201"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">physical_dimension</span>
+<a id="ln-202" name="ln-202" href="#ln-202"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">aspects</span>
+<a id="ln-203" name="ln-203" href="#ln-203"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">coupler</span>
+<a id="ln-204" name="ln-204" href="#ln-204"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-205" name="ln-205" href="#ln-205"></a>
+<a id="ln-206" name="ln-206" href="#ln-206"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-207" name="ln-207" href="#ln-207"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-208" name="ln-208" href="#ln-208"></a><span class="w">      </span><span class="kt">character</span><span class="p">(:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">short_name</span>
+<a id="ln-209" name="ln-209" href="#ln-209"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">VirtualConnectionPt</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">v_pt</span>
+<a id="ln-210" name="ln-210" href="#ln-210"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StateItemSpec</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">new_extension</span>
+<a id="ln-211" name="ln-211" href="#ln-211"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StateItemSpec</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">new_spec</span>
+<a id="ln-212" name="ln-212" href="#ln-212"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StateItemSpec</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">goal_spec</span>
+<a id="ln-213" name="ln-213" href="#ln-213"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">AspectMap</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">goal_aspects</span>
+<a id="ln-214" name="ln-214" href="#ln-214"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">StateItemAspect</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">class_aspect</span>
+<a id="ln-215" name="ln-215" href="#ln-215"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">StateItemAspect</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">aspect</span>
+<a id="ln-216" name="ln-216" href="#ln-216"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">esmf_Field</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">field_</span>
+<a id="ln-217" name="ln-217" href="#ln-217"></a>
+<a id="ln-218" name="ln-218" href="#ln-218"></a><span class="w">      </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">spec</span><span class="p">%</span><span class="n">physical_dimensions</span><span class="p">%</span><span class="n">size</span><span class="p">()</span>
+<a id="ln-219" name="ln-219" href="#ln-219"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-220" name="ln-220" href="#ln-220"></a><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">spec</span><span class="p">%</span><span class="n">physical_dimensions</span><span class="p">%</span><span class="n">of</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">physical_dimension</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-221" name="ln-221" href="#ln-221"></a><span class="k">            </span><span class="n">short_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">spec</span><span class="p">%</span><span class="n">names</span><span class="p">%</span><span class="n">of</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<a id="ln-222" name="ln-222" href="#ln-222"></a><span class="w">            </span><span class="k">exit</span>
+<a id="ln-223" name="ln-223" href="#ln-223"></a><span class="k">         end if</span>
+<a id="ln-224" name="ln-224" href="#ln-224"></a><span class="k">      end do</span>
+<a id="ln-225" name="ln-225" href="#ln-225"></a><span class="k">      </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Physical dimension not found.&#39;</span><span class="p">)</span>
+<a id="ln-226" name="ln-226" href="#ln-226"></a>
+<a id="ln-227" name="ln-227" href="#ln-227"></a><span class="w">      </span><span class="n">v_pt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VirtualConnectionPt</span><span class="p">(</span><span class="n">state_intent</span><span class="o">=</span><span class="s2">&quot;export&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">short_name</span><span class="o">=</span><span class="n">short_name</span><span class="p">)</span>
+<a id="ln-228" name="ln-228" href="#ln-228"></a>
+<a id="ln-229" name="ln-229" href="#ln-229"></a><span class="w">      </span><span class="c">! Copy all provided aspects to goal_spec</span>
+<a id="ln-230" name="ln-230" href="#ln-230"></a><span class="w">      </span><span class="n">goal_aspects</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">goal_spec</span><span class="p">%</span><span class="n">get_aspects</span><span class="p">()</span>
+<a id="ln-231" name="ln-231" href="#ln-231"></a><span class="w">      </span><span class="k">select type</span><span class="w"> </span><span class="p">(</span><span class="n">aspects</span><span class="p">)</span>
+<a id="ln-232" name="ln-232" href="#ln-232"></a><span class="w">      </span><span class="k">type is</span><span class="w"> </span><span class="p">(</span><span class="n">AspectMap</span><span class="p">)</span>
+<a id="ln-233" name="ln-233" href="#ln-233"></a><span class="w">         </span><span class="n">goal_aspects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aspects</span>
+<a id="ln-234" name="ln-234" href="#ln-234"></a><span class="w">      </span><span class="k">class </span><span class="n">default</span>
+<a id="ln-235" name="ln-235" href="#ln-235"></a><span class="w">         </span><span class="err">_</span><span class="n">FAIL</span><span class="p">(</span><span class="s1">&#39;aspects must be of type AspectMap&#39;</span><span class="p">)</span>
+<a id="ln-236" name="ln-236" href="#ln-236"></a><span class="w">      </span><span class="k">end select</span>
+<a id="ln-237" name="ln-237" href="#ln-237"></a><span class="w">      </span>
+<a id="ln-238" name="ln-238" href="#ln-238"></a><span class="w">      </span><span class="c">! Add VerticalGridAspect (cannot be in input aspects due to aliasing)</span>
+<a id="ln-239" name="ln-239" href="#ln-239"></a><span class="w">      </span><span class="k">call </span><span class="n">goal_aspects</span><span class="p">%</span><span class="n">insert</span><span class="p">(</span><span class="n">VERTICAL_GRID_ASPECT_ID</span><span class="p">,</span><span class="w"> </span><span class="n">VerticalGridAspect</span><span class="p">(</span><span class="n">vertical_grid</span><span class="o">=</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">vertical_stagger</span><span class="o">=</span><span class="n">VERTICAL_STAGGER_EDGE</span><span class="p">))</span>
+<a id="ln-240" name="ln-240" href="#ln-240"></a><span class="w">      </span>
+<a id="ln-241" name="ln-241" href="#ln-241"></a><span class="w">      </span><span class="c">! Add mirror aspects for coordinate field - these will inherit from source vertical grid</span>
+<a id="ln-242" name="ln-242" href="#ln-242"></a><span class="w">      </span><span class="c">! No transform needed for these aspects on coordinate fields</span>
+<a id="ln-243" name="ln-243" href="#ln-243"></a><span class="w">      </span><span class="k">allocate</span><span class="p">(</span><span class="n">aspect</span><span class="p">,</span><span class="w"> </span><span class="n">source</span><span class="o">=</span><span class="n">QuantityTypeAspect</span><span class="p">())</span>
+<a id="ln-244" name="ln-244" href="#ln-244"></a><span class="w">      </span><span class="k">call </span><span class="n">aspect</span><span class="p">%</span><span class="n">set_mirror</span><span class="p">(.</span><span class="n">true</span><span class="p">.)</span>
+<a id="ln-245" name="ln-245" href="#ln-245"></a><span class="w">      </span><span class="k">call </span><span class="n">goal_aspects</span><span class="p">%</span><span class="n">insert</span><span class="p">(</span><span class="n">QUANTITY_TYPE_ASPECT_ID</span><span class="p">,</span><span class="w"> </span><span class="n">aspect</span><span class="p">)</span>
+<a id="ln-246" name="ln-246" href="#ln-246"></a><span class="w">      </span>
+<a id="ln-247" name="ln-247" href="#ln-247"></a><span class="w">      </span><span class="k">deallocate</span><span class="p">(</span><span class="n">aspect</span><span class="p">)</span>
+<a id="ln-248" name="ln-248" href="#ln-248"></a><span class="w">      </span><span class="k">allocate</span><span class="p">(</span><span class="n">aspect</span><span class="p">,</span><span class="w"> </span><span class="n">source</span><span class="o">=</span><span class="n">NormalizationAspect</span><span class="p">())</span>
+<a id="ln-249" name="ln-249" href="#ln-249"></a><span class="w">      </span><span class="k">call </span><span class="n">aspect</span><span class="p">%</span><span class="n">set_mirror</span><span class="p">(.</span><span class="n">true</span><span class="p">.)</span>
+<a id="ln-250" name="ln-250" href="#ln-250"></a><span class="w">      </span><span class="k">call </span><span class="n">goal_aspects</span><span class="p">%</span><span class="n">insert</span><span class="p">(</span><span class="n">NORMALIZATION_ASPECT_ID</span><span class="p">,</span><span class="w"> </span><span class="n">aspect</span><span class="p">)</span>
+<a id="ln-251" name="ln-251" href="#ln-251"></a><span class="w">      </span>
+<a id="ln-252" name="ln-252" href="#ln-252"></a><span class="w">      </span><span class="k">call </span><span class="n">goal_spec</span><span class="p">%</span><span class="n">create</span><span class="p">(</span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-253" name="ln-253" href="#ln-253"></a><span class="w">      </span>
+<a id="ln-254" name="ln-254" href="#ln-254"></a><span class="w">      </span><span class="n">new_extension</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">registry</span><span class="p">%</span><span class="n">extend</span><span class="p">(</span><span class="n">v_pt</span><span class="p">,</span><span class="w"> </span><span class="n">goal_spec</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-255" name="ln-255" href="#ln-255"></a><span class="w">      </span><span class="n">coupler</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">new_extension</span><span class="p">%</span><span class="n">get_producer</span><span class="p">()</span>
+<a id="ln-256" name="ln-256" href="#ln-256"></a><span class="w">      </span><span class="n">new_spec</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">new_extension</span>
+<a id="ln-257" name="ln-257" href="#ln-257"></a>
+<a id="ln-258" name="ln-258" href="#ln-258"></a><span class="w">      </span><span class="n">class_aspect</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">new_spec</span><span class="p">%</span><span class="n">get_aspect</span><span class="p">(</span><span class="n">CLASS_ASPECT_ID</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-259" name="ln-259" href="#ln-259"></a><span class="w">      </span><span class="k">select type</span><span class="w"> </span><span class="p">(</span><span class="n">class_aspect</span><span class="p">)</span>
+<a id="ln-260" name="ln-260" href="#ln-260"></a><span class="w">      </span><span class="k">type is</span><span class="w"> </span><span class="p">(</span><span class="n">FieldClassAspect</span><span class="p">)</span>
+<a id="ln-261" name="ln-261" href="#ln-261"></a><span class="w">         </span><span class="k">call </span><span class="n">class_aspect</span><span class="p">%</span><span class="n">get_payload</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">field_</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-262" name="ln-262" href="#ln-262"></a><span class="w">         </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">field_</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;expected payload to have a field&#39;</span><span class="p">)</span>
+<a id="ln-263" name="ln-263" href="#ln-263"></a><span class="w">         </span><span class="n">field</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">field_</span>
+<a id="ln-264" name="ln-264" href="#ln-264"></a><span class="w">      </span><span class="k">class </span><span class="n">default</span>
+<a id="ln-265" name="ln-265" href="#ln-265"></a><span class="w">         </span><span class="err">_</span><span class="n">FAIL</span><span class="p">(</span><span class="s2">&quot;unsupported aspect type; must be FieldClassAspect&quot;</span><span class="p">)</span>
+<a id="ln-266" name="ln-266" href="#ln-266"></a><span class="w">      </span><span class="k">end select</span>
+<a id="ln-267" name="ln-267" href="#ln-267"></a>
+<a id="ln-268" name="ln-268" href="#ln-268"></a><span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-269" name="ln-269" href="#ln-269"></a><span class="w">   </span><span class="k">end function </span><span class="n">get_coordinate_field</span>
+<a id="ln-270" name="ln-270" href="#ln-270"></a>
+<a id="ln-271" name="ln-271" href="#ln-271"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">write_formatted</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">unit</span><span class="p">,</span><span class="w"> </span><span class="n">iotype</span><span class="p">,</span><span class="w"> </span><span class="n">v_list</span><span class="p">,</span><span class="w"> </span><span class="n">iostat</span><span class="p">,</span><span class="w"> </span><span class="n">iomsg</span><span class="p">)</span>
+<a id="ln-272" name="ln-272" href="#ln-272"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGrid</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-273" name="ln-273" href="#ln-273"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">unit</span>
+<a id="ln-274" name="ln-274" href="#ln-274"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iotype</span>
+<a id="ln-275" name="ln-275" href="#ln-275"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">v_list</span><span class="p">(:)</span>
+<a id="ln-276" name="ln-276" href="#ln-276"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iostat</span>
+<a id="ln-277" name="ln-277" href="#ln-277"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iomsg</span>
+<a id="ln-278" name="ln-278" href="#ln-278"></a>
+<a id="ln-279" name="ln-279" href="#ln-279"></a><span class="c">!#      write(unit, &quot;(a)&quot;, iostat=iostat, iomsg=iomsg) &quot;ModelVerticalGrid(&quot;</span>
+<a id="ln-280" name="ln-280" href="#ln-280"></a><span class="c">!#      if (allocated(this%physical_dimension)) then</span>
+<a id="ln-281" name="ln-281" href="#ln-281"></a><span class="c">!#         write(unit, &quot;(a, 3x, a, a)&quot;, iostat=iostat, iomsg=iomsg) new_line(&quot;a&quot;), &quot;physical_dimension: &quot;, this%physical_dimension</span>
+<a id="ln-282" name="ln-282" href="#ln-282"></a><span class="c">!#      end if</span>
+<a id="ln-283" name="ln-283" href="#ln-283"></a><span class="c">!#      write(unit, &quot;(a, 3x, a, g0)&quot;, iostat=iostat, iomsg=iomsg) new_line(&quot;a&quot;), &quot;num_levels: &quot;, this%num_levels</span>
+<a id="ln-284" name="ln-284" href="#ln-284"></a><span class="c">!#      if (allocated(this%short_name)) then</span>
+<a id="ln-285" name="ln-285" href="#ln-285"></a><span class="c">!#         write(unit, &quot;(a, 3x, a, a)&quot;, iostat=iostat, iomsg=iomsg) new_line(&quot;a&quot;), &quot;field: &quot;, this%short_name</span>
+<a id="ln-286" name="ln-286" href="#ln-286"></a><span class="c">!#      end if</span>
+<a id="ln-287" name="ln-287" href="#ln-287"></a><span class="c">!#      write(unit, &quot;(a)&quot;) &quot;)&quot;</span>
+<a id="ln-288" name="ln-288" href="#ln-288"></a>
+<a id="ln-289" name="ln-289" href="#ln-289"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">this</span><span class="p">)</span>
+<a id="ln-290" name="ln-290" href="#ln-290"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">unit</span><span class="p">)</span>
+<a id="ln-291" name="ln-291" href="#ln-291"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">iotype</span><span class="p">)</span>
+<a id="ln-292" name="ln-292" href="#ln-292"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">v_list</span><span class="p">)</span>
+<a id="ln-293" name="ln-293" href="#ln-293"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">iostat</span><span class="p">)</span>
+<a id="ln-294" name="ln-294" href="#ln-294"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">iomsg</span><span class="p">)</span>
+<a id="ln-295" name="ln-295" href="#ln-295"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">write_formatted</span>
+<a id="ln-296" name="ln-296" href="#ln-296"></a>
+<a id="ln-297" name="ln-297" href="#ln-297"></a>
+<a id="ln-298" name="ln-298" href="#ln-298"></a><span class="w">   </span><span class="k">function </span><span class="n">get_supported_physical_dimensions</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">dimensions</span><span class="p">)</span>
+<a id="ln-299" name="ln-299" href="#ln-299"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StringVector</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">dimensions</span>
+<a id="ln-300" name="ln-300" href="#ln-300"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGrid</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-301" name="ln-301" href="#ln-301"></a>
+<a id="ln-302" name="ln-302" href="#ln-302"></a><span class="w">      </span><span class="n">dimensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">spec</span><span class="p">%</span><span class="n">physical_dimensions</span>
+<a id="ln-303" name="ln-303" href="#ln-303"></a><span class="w">   </span><span class="k">end function </span><span class="n">get_supported_physical_dimensions</span>
+<a id="ln-304" name="ln-304" href="#ln-304"></a>
+<a id="ln-305" name="ln-305" href="#ln-305"></a><span class="w">   </span><span class="c">! Factory methods</span>
+<a id="ln-306" name="ln-306" href="#ln-306"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">initialize</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">spec</span><span class="p">)</span>
+<a id="ln-307" name="ln-307" href="#ln-307"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGrid</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-308" name="ln-308" href="#ln-308"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ModelVerticalGridSpec</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spec</span>
+<a id="ln-309" name="ln-309" href="#ln-309"></a>
+<a id="ln-310" name="ln-310" href="#ln-310"></a><span class="w">      </span><span class="n">this</span><span class="p">%</span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spec</span>
+<a id="ln-311" name="ln-311" href="#ln-311"></a><span class="w">      </span><span class="c">! Default coordinate direction is already set to VCOORD_DIRECTION_DOWN in VerticalGrid</span>
+<a id="ln-312" name="ln-312" href="#ln-312"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">initialize</span>
+<a id="ln-313" name="ln-313" href="#ln-313"></a>
+<a id="ln-314" name="ln-314" href="#ln-314"></a><span class="w">   </span><span class="kt">logical </span><span class="k">function </span><span class="n">matches</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">other</span><span class="p">)</span>
+<a id="ln-315" name="ln-315" href="#ln-315"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGrid</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-316" name="ln-316" href="#ln-316"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">VerticalGrid</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">other</span>
+<a id="ln-317" name="ln-317" href="#ln-317"></a>
+<a id="ln-318" name="ln-318" href="#ln-318"></a><span class="w">      </span><span class="n">matches</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">get_num_layers</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">other</span><span class="p">%</span><span class="n">get_num_layers</span><span class="p">()</span>
+<a id="ln-319" name="ln-319" href="#ln-319"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="n">matches</span><span class="p">)</span><span class="w"> </span><span class="k">return</span>
+<a id="ln-320" name="ln-320" href="#ln-320"></a>
+<a id="ln-321" name="ln-321" href="#ln-321"></a><span class="k">      select type</span><span class="w"> </span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+<a id="ln-322" name="ln-322" href="#ln-322"></a><span class="w">      </span><span class="k">type is</span><span class="w"> </span><span class="p">(</span><span class="n">BasicVerticalGrid</span><span class="p">)</span>
+<a id="ln-323" name="ln-323" href="#ln-323"></a><span class="w">         </span><span class="n">matches</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<a id="ln-324" name="ln-324" href="#ln-324"></a><span class="w">         </span><span class="k">return</span>
+<a id="ln-325" name="ln-325" href="#ln-325"></a><span class="k">      class </span><span class="n">default</span>
+<a id="ln-326" name="ln-326" href="#ln-326"></a><span class="w">         </span><span class="n">matches</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<a id="ln-327" name="ln-327" href="#ln-327"></a><span class="w">      </span><span class="k">end select</span>
+<a id="ln-328" name="ln-328" href="#ln-328"></a><span class="k">   end function </span><span class="n">matches</span>
+<a id="ln-329" name="ln-329" href="#ln-329"></a>
+<a id="ln-330" name="ln-330" href="#ln-330"></a><span class="w">   </span><span class="k">function </span><span class="n">get_name</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<a id="ln-331" name="ln-331" href="#ln-331"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">name</span>
+<a id="ln-332" name="ln-332" href="#ln-332"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGridFactory</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-333" name="ln-333" href="#ln-333"></a><span class="w">      </span>
+<a id="ln-334" name="ln-334" href="#ln-334"></a><span class="w">      </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ModelVerticalGrid&quot;</span>
+<a id="ln-335" name="ln-335" href="#ln-335"></a>
+<a id="ln-336" name="ln-336" href="#ln-336"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">this</span><span class="p">)</span>
+<a id="ln-337" name="ln-337" href="#ln-337"></a><span class="w">   </span><span class="k">end function </span><span class="n">get_name</span>
+<a id="ln-338" name="ln-338" href="#ln-338"></a>
+<a id="ln-339" name="ln-339" href="#ln-339"></a><span class="w">   </span><span class="k">function </span><span class="n">supports_spec</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">spec</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">is_supported</span><span class="p">)</span>
+<a id="ln-340" name="ln-340" href="#ln-340"></a><span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">is_supported</span>
+<a id="ln-341" name="ln-341" href="#ln-341"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGridFactory</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-342" name="ln-342" href="#ln-342"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">VerticalGridSpec</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spec</span>
+<a id="ln-343" name="ln-343" href="#ln-343"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-344" name="ln-344" href="#ln-344"></a>
+<a id="ln-345" name="ln-345" href="#ln-345"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ModelVerticalGridSpec</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fixed_spec</span>
+<a id="ln-346" name="ln-346" href="#ln-346"></a>
+<a id="ln-347" name="ln-347" href="#ln-347"></a><span class="w">      </span><span class="n">is_supported</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">same_type_as</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span><span class="w"> </span><span class="n">fixed_spec</span><span class="p">)</span>
+<a id="ln-348" name="ln-348" href="#ln-348"></a>
+<a id="ln-349" name="ln-349" href="#ln-349"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-350" name="ln-350" href="#ln-350"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">this</span><span class="p">)</span>
+<a id="ln-351" name="ln-351" href="#ln-351"></a><span class="w">   </span><span class="k">end function </span><span class="n">supports_spec</span>
+<a id="ln-352" name="ln-352" href="#ln-352"></a>
+<a id="ln-353" name="ln-353" href="#ln-353"></a><span class="w">   </span><span class="k">function </span><span class="n">supports_file_metadata</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">file_metadata</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">is_supported</span><span class="p">)</span>
+<a id="ln-354" name="ln-354" href="#ln-354"></a><span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">is_supported</span>
+<a id="ln-355" name="ln-355" href="#ln-355"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGridFactory</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-356" name="ln-356" href="#ln-356"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">FileMetadata</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">file_metadata</span>
+<a id="ln-357" name="ln-357" href="#ln-357"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-358" name="ln-358" href="#ln-358"></a><span class="w">      </span>
+<a id="ln-359" name="ln-359" href="#ln-359"></a><span class="w">      </span><span class="c">! Implementation would check if file_metadata contains required information</span>
+<a id="ln-360" name="ln-360" href="#ln-360"></a><span class="w">      </span><span class="n">is_supported</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w">  </span><span class="c">! Placeholder</span>
+<a id="ln-361" name="ln-361" href="#ln-361"></a>
+<a id="ln-362" name="ln-362" href="#ln-362"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-363" name="ln-363" href="#ln-363"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">this</span><span class="p">)</span>
+<a id="ln-364" name="ln-364" href="#ln-364"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">file_metadata</span><span class="p">)</span>
+<a id="ln-365" name="ln-365" href="#ln-365"></a><span class="w">   </span><span class="k">end function </span><span class="n">supports_file_metadata</span>
+<a id="ln-366" name="ln-366" href="#ln-366"></a>
+<a id="ln-367" name="ln-367" href="#ln-367"></a><span class="w">   </span><span class="k">function </span><span class="n">supports_config</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">is_supported</span><span class="p">)</span>
+<a id="ln-368" name="ln-368" href="#ln-368"></a><span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">is_supported</span>
+<a id="ln-369" name="ln-369" href="#ln-369"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGridFactory</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-370" name="ln-370" href="#ln-370"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">esmf_HConfig</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">config</span>
+<a id="ln-371" name="ln-371" href="#ln-371"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-372" name="ln-372" href="#ln-372"></a>
+<a id="ln-373" name="ln-373" href="#ln-373"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-374" name="ln-374" href="#ln-374"></a><span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">has_grid_type</span>
+<a id="ln-375" name="ln-375" href="#ln-375"></a><span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">has_fields</span>
+<a id="ln-376" name="ln-376" href="#ln-376"></a><span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">has_num_levels</span>
+<a id="ln-377" name="ln-377" href="#ln-377"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">grid_type</span>
+<a id="ln-378" name="ln-378" href="#ln-378"></a>
+<a id="ln-379" name="ln-379" href="#ln-379"></a><span class="w">      </span><span class="n">is_supported</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<a id="ln-380" name="ln-380" href="#ln-380"></a>
+<a id="ln-381" name="ln-381" href="#ln-381"></a><span class="w">      </span><span class="n">has_grid_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">esmf_HConfigIsDefined</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">keyString</span><span class="o">=</span><span class="s2">&quot;grid_type&quot;</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-382" name="ln-382" href="#ln-382"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN_UNLESS</span><span class="p">(</span><span class="n">has_grid_type</span><span class="p">)</span>
+<a id="ln-383" name="ln-383" href="#ln-383"></a>
+<a id="ln-384" name="ln-384" href="#ln-384"></a><span class="w">      </span><span class="n">grid_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">esmf_HConfigAsString</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">keyString</span><span class="o">=</span><span class="s2">&quot;grid_type&quot;</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-385" name="ln-385" href="#ln-385"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN_UNLESS</span><span class="p">(</span><span class="n">grid_type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;model&#39;</span><span class="p">)</span>
+<a id="ln-386" name="ln-386" href="#ln-386"></a>
+<a id="ln-387" name="ln-387" href="#ln-387"></a><span class="w">      </span><span class="n">has_fields</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">esmf_HConfigIsDefined</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">keyString</span><span class="o">=</span><span class="s2">&quot;fields&quot;</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-388" name="ln-388" href="#ln-388"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN_UNLESS</span><span class="p">(</span><span class="n">has_fields</span><span class="p">)</span>
+<a id="ln-389" name="ln-389" href="#ln-389"></a>
+<a id="ln-390" name="ln-390" href="#ln-390"></a><span class="w">      </span><span class="c">! We need num_levels to bootstrap, as field gets num levels from grid</span>
+<a id="ln-391" name="ln-391" href="#ln-391"></a><span class="w">      </span><span class="n">has_num_levels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">esmf_HConfigIsDefined</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">keyString</span><span class="o">=</span><span class="s2">&quot;num_levels&quot;</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-392" name="ln-392" href="#ln-392"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN_UNLESS</span><span class="p">(</span><span class="n">has_num_levels</span><span class="p">)</span>
+<a id="ln-393" name="ln-393" href="#ln-393"></a><span class="w">      </span>
+<a id="ln-394" name="ln-394" href="#ln-394"></a><span class="w">      </span><span class="n">is_supported</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<a id="ln-395" name="ln-395" href="#ln-395"></a>
+<a id="ln-396" name="ln-396" href="#ln-396"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-397" name="ln-397" href="#ln-397"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">this</span><span class="p">)</span>
+<a id="ln-398" name="ln-398" href="#ln-398"></a><span class="w">   </span><span class="k">end function </span><span class="n">supports_config</span>
+<a id="ln-399" name="ln-399" href="#ln-399"></a>
+<a id="ln-400" name="ln-400" href="#ln-400"></a><span class="w">   </span><span class="k">function </span><span class="n">create_spec_from_config</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+<a id="ln-401" name="ln-401" href="#ln-401"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">VerticalGridSpec</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spec</span>
+<a id="ln-402" name="ln-402" href="#ln-402"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGridFactory</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-403" name="ln-403" href="#ln-403"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">esmf_HConfig</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">config</span>
+<a id="ln-404" name="ln-404" href="#ln-404"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-405" name="ln-405" href="#ln-405"></a>
+<a id="ln-406" name="ln-406" href="#ln-406"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-407" name="ln-407" href="#ln-407"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_HConfig</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fields_cfg</span>
+<a id="ln-408" name="ln-408" href="#ln-408"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_HConfigIter</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iter</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">e</span>
+<a id="ln-409" name="ln-409" href="#ln-409"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">physical_dimension</span>
+<a id="ln-410" name="ln-410" href="#ln-410"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">field_name</span>
+<a id="ln-411" name="ln-411" href="#ln-411"></a>
+<a id="ln-412" name="ln-412" href="#ln-412"></a><span class="w">      </span><span class="k">allocate</span><span class="p">(</span><span class="n">ModelVerticalGridSpec</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spec</span><span class="p">)</span>
+<a id="ln-413" name="ln-413" href="#ln-413"></a>
+<a id="ln-414" name="ln-414" href="#ln-414"></a><span class="w">      </span><span class="k">select type</span><span class="w"> </span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+<a id="ln-415" name="ln-415" href="#ln-415"></a><span class="w">      </span><span class="k">type is</span><span class="w"> </span><span class="p">(</span><span class="n">ModelVerticalGridSpec</span><span class="p">)</span>
+<a id="ln-416" name="ln-416" href="#ln-416"></a><span class="w">         </span>
+<a id="ln-417" name="ln-417" href="#ln-417"></a><span class="w">         </span><span class="n">spec</span><span class="p">%</span><span class="n">num_levels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">esmf_HConfigAsI4</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">keyString</span><span class="o">=</span><span class="s2">&quot;num_levels&quot;</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-418" name="ln-418" href="#ln-418"></a><span class="w">         </span>
+<a id="ln-419" name="ln-419" href="#ln-419"></a><span class="w">         </span><span class="n">fields_cfg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">esmf_HConfigCreateAt</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">keyString</span><span class="o">=</span><span class="s2">&quot;fields&quot;</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-420" name="ln-420" href="#ln-420"></a><span class="w">         </span>
+<a id="ln-421" name="ln-421" href="#ln-421"></a><span class="w">         </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">esmf_HConfigIterBegin</span><span class="p">(</span><span class="n">fields_cfg</span><span class="p">)</span>
+<a id="ln-422" name="ln-422" href="#ln-422"></a><span class="w">         </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ESMF_HConfigIterEnd</span><span class="p">(</span><span class="n">fields_cfg</span><span class="p">)</span>
+<a id="ln-423" name="ln-423" href="#ln-423"></a><span class="w">         </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span>
+<a id="ln-424" name="ln-424" href="#ln-424"></a><span class="w">         </span><span class="k">do while</span><span class="w"> </span><span class="p">(</span><span class="n">ESMF_HConfigIterLoop</span><span class="p">(</span><span class="n">iter</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">))</span>
+<a id="ln-425" name="ln-425" href="#ln-425"></a><span class="w">            </span><span class="n">physical_dimension</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ESMF_HConfigAsStringMapKey</span><span class="p">(</span><span class="n">iter</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-426" name="ln-426" href="#ln-426"></a><span class="w">            </span><span class="n">field_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ESMF_HConfigAsStringMapVal</span><span class="p">(</span><span class="n">iter</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-427" name="ln-427" href="#ln-427"></a><span class="w">            </span><span class="k">call </span><span class="n">spec</span><span class="p">%</span><span class="n">names</span><span class="p">%</span><span class="n">push_back</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
+<a id="ln-428" name="ln-428" href="#ln-428"></a><span class="w">            </span><span class="k">call </span><span class="n">spec</span><span class="p">%</span><span class="n">physical_dimensions</span><span class="p">%</span><span class="n">push_back</span><span class="p">(</span><span class="n">physical_dimension</span><span class="p">)</span>
+<a id="ln-429" name="ln-429" href="#ln-429"></a><span class="w">         </span><span class="k">end do</span>
+<a id="ln-430" name="ln-430" href="#ln-430"></a><span class="k">         call </span><span class="n">esmf_HConfigDestroy</span><span class="p">(</span><span class="n">fields_cfg</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-431" name="ln-431" href="#ln-431"></a><span class="w">      </span><span class="k">end select</span>
+<a id="ln-432" name="ln-432" href="#ln-432"></a>
+<a id="ln-433" name="ln-433" href="#ln-433"></a><span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-434" name="ln-434" href="#ln-434"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">this</span><span class="p">)</span>
+<a id="ln-435" name="ln-435" href="#ln-435"></a><span class="w">   </span><span class="k">end function </span><span class="n">create_spec_from_config</span>
+<a id="ln-436" name="ln-436" href="#ln-436"></a>
+<a id="ln-437" name="ln-437" href="#ln-437"></a><span class="w">   </span><span class="k">function </span><span class="n">create_spec_from_file_metadata</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">file_metadata</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+<a id="ln-438" name="ln-438" href="#ln-438"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">VerticalGridSpec</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spec</span>
+<a id="ln-439" name="ln-439" href="#ln-439"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGridFactory</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-440" name="ln-440" href="#ln-440"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">FileMetadata</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">file_metadata</span>
+<a id="ln-441" name="ln-441" href="#ln-441"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-442" name="ln-442" href="#ln-442"></a><span class="w">      </span>
+<a id="ln-443" name="ln-443" href="#ln-443"></a><span class="w">      </span><span class="c">! Placeholder implementation - not yet implemented</span>
+<a id="ln-444" name="ln-444" href="#ln-444"></a><span class="w">      </span><span class="c">! Return empty spec to satisfy Fortran requirement for defined result</span>
+<a id="ln-445" name="ln-445" href="#ln-445"></a><span class="w">      </span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ModelVerticalGridSpec</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="n">StringVector</span><span class="p">(),</span><span class="w"> </span><span class="n">physical_dimensions</span><span class="o">=</span><span class="n">StringVector</span><span class="p">(),</span><span class="w"> </span><span class="n">num_levels</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<a id="ln-446" name="ln-446" href="#ln-446"></a><span class="w">      </span>
+<a id="ln-447" name="ln-447" href="#ln-447"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">this</span><span class="p">)</span>
+<a id="ln-448" name="ln-448" href="#ln-448"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">file_metadata</span><span class="p">)</span>
+<a id="ln-449" name="ln-449" href="#ln-449"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">FAILURE</span><span class="p">)</span>
+<a id="ln-450" name="ln-450" href="#ln-450"></a><span class="w">   </span><span class="k">end function </span><span class="n">create_spec_from_file_metadata</span>
+<a id="ln-451" name="ln-451" href="#ln-451"></a>
+<a id="ln-452" name="ln-452" href="#ln-452"></a><span class="w">   </span><span class="k">function </span><span class="n">create_grid_from_spec</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">spec</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+<a id="ln-453" name="ln-453" href="#ln-453"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">VerticalGrid</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">grid</span>
+<a id="ln-454" name="ln-454" href="#ln-454"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ModelVerticalGridFactory</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-455" name="ln-455" href="#ln-455"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">VerticalGridSpec</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spec</span>
+<a id="ln-456" name="ln-456" href="#ln-456"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-457" name="ln-457" href="#ln-457"></a><span class="w">      </span>
+<a id="ln-458" name="ln-458" href="#ln-458"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ModelVerticalGrid</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">local_grid</span>
+<a id="ln-459" name="ln-459" href="#ln-459"></a><span class="w">      </span>
+<a id="ln-460" name="ln-460" href="#ln-460"></a><span class="w">      </span><span class="k">select type</span><span class="w"> </span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+<a id="ln-461" name="ln-461" href="#ln-461"></a><span class="w">      </span><span class="k">type is</span><span class="w"> </span><span class="p">(</span><span class="n">ModelVerticalGridSpec</span><span class="p">)</span>
+<a id="ln-462" name="ln-462" href="#ln-462"></a><span class="w">         </span><span class="k">call </span><span class="n">local_grid</span><span class="p">%</span><span class="n">initialize</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+<a id="ln-463" name="ln-463" href="#ln-463"></a><span class="w">         </span><span class="k">allocate</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="w"> </span><span class="n">source</span><span class="o">=</span><span class="n">local_grid</span><span class="p">)</span>
+<a id="ln-464" name="ln-464" href="#ln-464"></a><span class="w">      </span><span class="k">class </span><span class="n">default</span>
+<a id="ln-465" name="ln-465" href="#ln-465"></a><span class="w">         </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">FAILURE</span><span class="p">)</span>
+<a id="ln-466" name="ln-466" href="#ln-466"></a><span class="w">      </span><span class="k">end select</span>
+<a id="ln-467" name="ln-467" href="#ln-467"></a>
+<a id="ln-468" name="ln-468" href="#ln-468"></a><span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-469" name="ln-469" href="#ln-469"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">this</span><span class="p">)</span>
+<a id="ln-470" name="ln-470" href="#ln-470"></a><span class="w">   </span><span class="k">end function </span><span class="n">create_grid_from_spec</span>
+<a id="ln-471" name="ln-471" href="#ln-471"></a>
+<a id="ln-472" name="ln-472" href="#ln-472"></a><span class="w">   </span><span class="c">! Helper function to get default units for a physical dimension</span>
+<a id="ln-473" name="ln-473" href="#ln-473"></a><span class="w">   </span><span class="k">function </span><span class="n">get_default_units</span><span class="p">(</span><span class="n">physical_dimension</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">units</span><span class="p">)</span>
+<a id="ln-474" name="ln-474" href="#ln-474"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">units</span>
+<a id="ln-475" name="ln-475" href="#ln-475"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">physical_dimension</span>
+<a id="ln-476" name="ln-476" href="#ln-476"></a><span class="w">      </span>
+<a id="ln-477" name="ln-477" href="#ln-477"></a><span class="w">      </span><span class="k">select case</span><span class="w"> </span><span class="p">(</span><span class="n">physical_dimension</span><span class="p">)</span>
+<a id="ln-478" name="ln-478" href="#ln-478"></a><span class="w">         </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;pressure&#39;</span><span class="p">)</span>
+<a id="ln-479" name="ln-479" href="#ln-479"></a><span class="w">            </span><span class="n">units</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Pa&#39;</span>
+<a id="ln-480" name="ln-480" href="#ln-480"></a><span class="w">         </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;altitude&#39;</span><span class="p">)</span>
+<a id="ln-481" name="ln-481" href="#ln-481"></a><span class="w">            </span><span class="n">units</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;m&#39;</span>
+<a id="ln-482" name="ln-482" href="#ln-482"></a><span class="w">         </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;depth&#39;</span><span class="p">)</span>
+<a id="ln-483" name="ln-483" href="#ln-483"></a><span class="w">            </span><span class="n">units</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;m&#39;</span>
+<a id="ln-484" name="ln-484" href="#ln-484"></a><span class="w">         </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;layer&#39;</span><span class="p">)</span>
+<a id="ln-485" name="ln-485" href="#ln-485"></a><span class="w">            </span><span class="n">units</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;1&#39;</span>
+<a id="ln-486" name="ln-486" href="#ln-486"></a><span class="w">         </span><span class="k">case </span><span class="n">default</span>
+<a id="ln-487" name="ln-487" href="#ln-487"></a><span class="w">            </span><span class="n">units</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&lt;unknown&gt;&#39;</span>
+<a id="ln-488" name="ln-488" href="#ln-488"></a><span class="w">      </span><span class="k">end select</span>
+<a id="ln-489" name="ln-489" href="#ln-489"></a><span class="k">   end function </span><span class="n">get_default_units</span>
+<a id="ln-490" name="ln-490" href="#ln-490"></a><span class="w">   </span>
+<a id="ln-491" name="ln-491" href="#ln-491"></a><span class="k">end module </span><span class="n">mapl3g_ModelVerticalGrid</span>
+</pre></div>
+
+      </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              MAPL
+ was developed by The MAPL Developers<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-05-15T16:35:58.293265+0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

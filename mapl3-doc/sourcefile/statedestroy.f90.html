@@ -1,0 +1,965 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="MAPL is a foundation layer of the GEOS architecture, whose original purpose is to supplement the Earth System Modeling Framework (ESMF)">
+    <meta name="author" content="The MAPL Developers" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>StateDestroy.F90 &ndash; MAPL</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">MAPL </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>StateDestroy.F90
+      <small>Source File</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.1% of total for source files.">175 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/StateDestroy.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+            <li class="breadcrumb-item active" aria-current="page">StateDestroy.F90</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#mods-0"
+         aria-expanded="false" aria-controls="mods-0">
+         <h4 class="card-header bg-primary text-white">Modules</h4>
+      </a>
+      <div id="mods-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/mapl3g_statedestroy.html">mapl3g_StateDestroy</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/statedestroy.f90.html#src">StateDestroy.F90</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">This file depends on</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~statedestroy.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilestatedestroyf90EfferentGraph" width="641pt" height="445pt"
+ viewBox="0.00 0.00 641.00 444.72" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph" class="graph" transform="scale(0.5 0.5) rotate(0) translate(4 877.81)">
+<title>sourcefile~~statedestroy.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-877.81 1267,-877.81 1267,4 -4,4"/>
+<!-- sourcefile~statedestroy.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~statedestroy.f90</title>
+<polygon fill="none" stroke="black" points="1263,-668 1161,-668 1161,-644 1263,-644 1263,-668"/>
+<text text-anchor="middle" x="1212" y="-653.6" font-family="Helvetica,sans-Serif" font-size="10.50">StateDestroy.F90</text>
+</g>
+<!-- sourcefile~fieldbundledestroy.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~fieldbundledestroy.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node2"><a xlink:href="../sourcefile/fieldbundledestroy.f90.html" xlink:title="FieldBundleDestroy.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1125,-668 989,-668 989,-644 1125,-644 1125,-668"/>
+<text text-anchor="middle" x="1057" y="-653.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBundleDestroy.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~statedestroy.f90&#45;&gt;sourcefile~fieldbundledestroy.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~statedestroy.f90&#45;&gt;sourcefile~fieldbundledestroy.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1160.9,-656C1152.7,-656 1144.03,-656 1135.35,-656"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1135.17,-652.5 1125.17,-656 1135.17,-659.5 1135.17,-652.5"/>
+</g>
+<!-- sourcefile~fieldutils.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~fieldutils.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node3"><a xlink:href="../sourcefile/fieldutils.f90.html" xlink:title="FieldUtils.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="953,-728 871,-728 871,-704 953,-704 953,-728"/>
+<text text-anchor="middle" x="912" y="-713.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldUtils.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~statedestroy.f90&#45;&gt;sourcefile~fieldutils.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~statedestroy.f90&#45;&gt;sourcefile~fieldutils.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1206.64,-668.22C1192.42,-705.7 1143.34,-817.7 1058,-838"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1056,-838C994.83,-852.55 944.74,-776.09 923.69,-737.38"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="926.74,-735.64 918.98,-728.42 920.54,-738.9 926.74,-735.64"/>
+</g>
+<!-- sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~keywordenforcer.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node4"><a xlink:href="../sourcefile/keywordenforcer.f90.html" xlink:title="KeywordEnforcer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="628,-482 504,-482 504,-458 628,-458 628,-482"/>
+<text text-anchor="middle" x="566" y="-467.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">KeywordEnforcer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~statedestroy.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~statedestroy.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1176.82,-643.99C1127.84,-627.22 1034.61,-596.96 953,-580 868.15,-562.36 842.98,-579.25 759.5,-556"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M757.5,-556C702.76,-538.86 698.97,-513.01 646,-491 640.92,-488.89 635.57,-486.94 630.15,-485.14"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="630.93,-481.72 620.34,-482.08 628.85,-488.4 630.93,-481.72"/>
+</g>
+<!-- sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~mapl_exceptionhandling.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node5"><a xlink:href="../sourcefile/mapl_exceptionhandling.f90.html" xlink:title="MAPL_ExceptionHandling.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="450,-706 281,-706 281,-682 450,-682 450,-706"/>
+<text text-anchor="middle" x="365.5" y="-691.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_ExceptionHandling.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~statedestroy.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~statedestroy.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1056,-838C844.57,-888.3 779.68,-882.74 567,-838"/>
+</g>
+<!-- sourcefile~fieldbundledestroy.f90&#45;&gt;sourcefile~fieldutils.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~fieldbundledestroy.f90&#45;&gt;sourcefile~fieldutils.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1027.06,-668.14C1005.26,-677.29 975.15,-689.92 951.34,-699.91"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="949.76,-696.78 941.9,-703.88 952.47,-703.23 949.76,-696.78"/>
+</g>
+<!-- sourcefile~fieldbundledestroy.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~fieldbundledestroy.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M911,-594C849.37,-562.05 826.37,-574.63 759.5,-556"/>
+</g>
+<!-- sourcefile~fieldbundledestroy.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~fieldbundledestroy.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M911,-594C879.67,-577.76 869.18,-608.21 835,-617 776.03,-632.17 627.61,-668.14 567,-674"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M565,-674C530.79,-677.31 493.27,-681.05 460.16,-684.4"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="459.62,-680.94 450.03,-685.43 460.33,-687.9 459.62,-680.94"/>
+</g>
+<!-- sourcefile~fieldbundleget.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node9" class="node">
+<title>sourcefile~fieldbundleget.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node9"><a xlink:href="../sourcefile/fieldbundleget.f90.html" xlink:title="FieldBundleGet.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="816.5,-318 700.5,-318 700.5,-294 816.5,-294 816.5,-318"/>
+<text text-anchor="middle" x="758.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBundleGet.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundledestroy.f90&#45;&gt;sourcefile~fieldbundleget.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~fieldbundledestroy.f90&#45;&gt;sourcefile~fieldbundleget.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1024.74,-643.9C995.38,-632.2 950.47,-613.43 913,-594"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M911,-594C807.56,-540.36 772.46,-386.21 762.72,-328.33"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="766.12,-327.42 761.1,-318.09 759.21,-328.51 766.12,-327.42"/>
+</g>
+<!-- sourcefile~fieldbinaryoperations.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node7" class="node">
+<title>sourcefile~fieldbinaryoperations.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node7"><a xlink:href="../sourcefile/fieldbinaryoperations.f90.html" xlink:title="FieldBinaryOperations.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="835,-810 682,-810 682,-786 835,-786 835,-810"/>
+<text text-anchor="middle" x="758.5" y="-795.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBinaryOperations.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldbinaryoperations.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldbinaryoperations.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M899.2,-728.07C885.12,-741.81 860.29,-764.03 835,-777 831.19,-778.96 827.17,-780.75 823.05,-782.39"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="821.52,-779.22 813.33,-785.94 823.92,-785.8 821.52,-779.22"/>
+</g>
+<!-- sourcefile~fieldblas.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node8" class="node">
+<title>sourcefile~fieldblas.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node8"><a xlink:href="../sourcefile/fieldblas.f90.html" xlink:title="FieldBLAS.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="802.5,-768 714.5,-768 714.5,-744 802.5,-744 802.5,-768"/>
+<text text-anchor="middle" x="758.5" y="-753.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBLAS.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldblas.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge10" class="edge">
+<title>sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldblas.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M870.8,-726.61C852.88,-731.34 831.54,-736.98 812.35,-742.05"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="811.32,-738.7 802.55,-744.63 813.11,-745.47 811.32,-738.7"/>
+</g>
+<!-- sourcefile~fieldpointerutilities.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node10" class="node">
+<title>sourcefile~fieldpointerutilities.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node10"><a xlink:href="../sourcefile/fieldpointerutilities.f90.html" xlink:title="FieldPointerUtilities.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="634,-726 498,-726 498,-702 634,-702 634,-726"/>
+<text text-anchor="middle" x="566" y="-711.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldPointerUtilities.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldpointerutilities.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge11" class="edge">
+<title>sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldpointerutilities.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M870.87,-715.77C815.46,-715.44 714.42,-714.86 644.14,-714.45"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="644.02,-710.95 634,-714.39 643.98,-717.95 644.02,-710.95"/>
+</g>
+<!-- sourcefile~fieldunaryfunctions.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node11" class="node">
+<title>sourcefile~fieldunaryfunctions.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node11"><a xlink:href="../sourcefile/fieldunaryfunctions.f90.html" xlink:title="FieldUnaryFunctions.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="829.5,-688 687.5,-688 687.5,-664 829.5,-664 829.5,-688"/>
+<text text-anchor="middle" x="758.5" y="-673.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldUnaryFunctions.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldunaryfunctions.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge12" class="edge">
+<title>sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldunaryfunctions.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M870.8,-705.39C853.63,-700.85 833.32,-695.49 814.78,-690.59"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="815.54,-687.18 804.98,-688.01 813.75,-693.94 815.54,-687.18"/>
+</g>
+<!-- sourcefile~fieldutilities.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node12" class="node">
+<title>sourcefile~fieldutilities.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node12"><a xlink:href="../sourcefile/fieldutilities.f90.html" xlink:title="FieldUtilities.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="808,-608 709,-608 709,-584 808,-584 808,-608"/>
+<text text-anchor="middle" x="758.5" y="-593.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldUtilities.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldutilities.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge13" class="edge">
+<title>sourcefile~fieldutils.f90&#45;&gt;sourcefile~fieldutilities.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M895.91,-703.79C880.6,-691.43 856.22,-671.81 835,-655 817.78,-641.36 798.23,-626.09 783.34,-614.5"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="785.21,-611.52 775.16,-608.14 780.91,-617.05 785.21,-611.52"/>
+</g>
+<!-- sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node6" class="node">
+<title>sourcefile~errorhandling.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node6"><a xlink:href="../sourcefile/errorhandling.f90.html" xlink:title="ErrorHandling.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="245,-666 136,-666 136,-642 245,-642 245,-666"/>
+<text text-anchor="middle" x="190.5" y="-651.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ErrorHandling.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl_exceptionhandling.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge14" class="edge">
+<title>sourcefile~mapl_exceptionhandling.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M312.59,-682C294.03,-677.71 272.93,-672.83 253.59,-668.36"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="254.2,-664.9 243.67,-666.06 252.62,-671.72 254.2,-664.9"/>
+</g>
+<!-- sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node13" class="node">
+<title>sourcefile~mapl_throw.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node13"><a xlink:href="../sourcefile/mapl_throw.f90.html" xlink:title="MAPL_Throw.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="100,-686 0,-686 0,-662 100,-662 100,-686"/>
+<text text-anchor="middle" x="50" y="-671.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Throw.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl_exceptionhandling.f90&#45;&gt;sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge15" class="edge">
+<title>sourcefile~mapl_exceptionhandling.f90&#45;&gt;sourcefile~mapl_throw.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M280.9,-688.67C227.16,-685.24 158.64,-680.87 110.43,-677.79"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="110.37,-674.28 100.16,-677.14 109.92,-681.27 110.37,-674.28"/>
+</g>
+<!-- sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge16" class="edge">
+<title>sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M135.95,-661.73C127.53,-662.95 118.77,-664.21 110.23,-665.45"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="109.72,-661.98 100.33,-666.88 110.72,-668.91 109.72,-661.98"/>
+</g>
+<!-- sourcefile~fieldbinaryoperations.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge18" class="edge">
+<title>sourcefile~fieldbinaryoperations.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#ffbf00" stroke-dasharray="5,2" d="M718.62,-810.03C671.66,-823.87 595.44,-843.98 567,-838"/>
+</g>
+<!-- sourcefile~fieldbinaryoperations.f90&#45;&gt;sourcefile~fieldpointerutilities.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge17" class="edge">
+<title>sourcefile~fieldbinaryoperations.f90&#45;&gt;sourcefile~fieldpointerutilities.f90</title>
+<path fill="none" stroke="#ffbf00" stroke-dasharray="5,2" d="M699.88,-785.88C693.61,-783.44 687.51,-780.51 682,-777 661.26,-763.8 666.82,-748.08 646,-735 643.18,-733.23 640.21,-731.6 637.14,-730.11"/>
+<polygon fill="#ffbf00" stroke="#ffbf00" points="638.26,-726.79 627.7,-726.04 635.49,-733.21 638.26,-726.79"/>
+</g>
+<!-- sourcefile~fieldblas.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge22" class="edge">
+<title>sourcefile~fieldblas.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M714.11,-763.39C703.08,-766.49 691.64,-770.86 682,-777 661.26,-790.2 666.97,-806.17 646,-819 615.2,-837.85 602.34,-845.43 567,-838"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M565,-838C529.66,-830.57 517.3,-837 486,-819 439.74,-792.39 400.1,-742.47 380.2,-714.43"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="383.03,-712.37 374.45,-706.16 377.28,-716.37 383.03,-712.37"/>
+</g>
+<!-- sourcefile~fieldblas.f90&#45;&gt;sourcefile~fieldpointerutilities.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge21" class="edge">
+<title>sourcefile~fieldblas.f90&#45;&gt;sourcefile~fieldpointerutilities.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M714.27,-746.47C689.83,-741.08 658.79,-734.24 631.52,-728.23"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="632.18,-724.79 621.67,-726.05 630.68,-731.62 632.18,-724.79"/>
+</g>
+<!-- sourcefile~constants.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node17" class="node">
+<title>sourcefile~constants.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node17"><a xlink:href="../sourcefile/constants.f90.html" xlink:title="Constants.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="610,-810 522,-810 522,-786 610,-786 610,-810"/>
+<text text-anchor="middle" x="566" y="-795.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Constants.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldblas.f90&#45;&gt;sourcefile~constants.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge19" class="edge">
+<title>sourcefile~fieldblas.f90&#45;&gt;sourcefile~constants.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M714.27,-765.53C686.26,-771.71 649.59,-779.79 619.85,-786.35"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="619.07,-782.94 610.06,-788.51 620.58,-789.77 619.07,-782.94"/>
+</g>
+<!-- sourcefile~fieldcondensedarray.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node20" class="node">
+<title>sourcefile~fieldcondensedarray.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node20"><a xlink:href="../sourcefile/fieldcondensedarray.f90.html" xlink:title="FieldCondensedArray.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="640,-768 492,-768 492,-744 640,-744 640,-768"/>
+<text text-anchor="middle" x="566" y="-753.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldCondensedArray.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldblas.f90&#45;&gt;sourcefile~fieldcondensedarray.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge20" class="edge">
+<title>sourcefile~fieldblas.f90&#45;&gt;sourcefile~fieldcondensedarray.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M714.27,-756C695.33,-756 672.42,-756 650.38,-756"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="650.33,-752.5 640.33,-756 650.33,-759.5 650.33,-752.5"/>
+</g>
+<!-- sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge30" class="edge">
+<title>sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M751.58,-318.13C737.42,-345.85 698.78,-414.1 646,-449 643.28,-450.8 640.41,-452.45 637.44,-453.95"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="635.97,-450.77 628.27,-458.06 638.83,-457.16 635.97,-450.77"/>
+</g>
+<!-- sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge26" class="edge">
+<title>sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M739.74,-318.13C718.37,-332.22 680.98,-355.28 646,-369 577.96,-395.68 545.58,-364.67 486,-407 405.59,-464.12 456.83,-554.4 366.5,-594"/>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M364.5,-594C324.22,-611.66 276.95,-627.75 242.01,-638.82"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="240.54,-635.61 232.05,-641.94 242.63,-642.29 240.54,-635.61"/>
+</g>
+<!-- sourcefile~api.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node14" class="node">
+<title>sourcefile~api.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node14"><a xlink:href="../sourcefile/api.f90.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="593,-234 539,-234 539,-210 593,-210 593,-234"/>
+<text text-anchor="middle" x="566" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge23" class="edge">
+<title>sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M739.29,-293.78C717.8,-279.83 680.59,-257.1 646,-243 632.39,-237.45 616.85,-232.95 603.19,-229.57"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="603.7,-226.09 593.16,-227.19 602.08,-232.9 603.7,-226.09"/>
+</g>
+<!-- sourcefile~api.f90~8 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node15" class="node">
+<title>sourcefile~api.f90~8</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node15"><a xlink:href="../sourcefile/api.f90~8.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="593,-192 539,-192 539,-168 593,-168 593,-192"/>
+<text text-anchor="middle" x="566" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge24" class="edge">
+<title>sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M748.17,-293.9C730.61,-271.98 690.38,-225.69 646,-201 632.83,-193.67 616.98,-188.81 602.96,-185.63"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="603.63,-182.19 593.13,-183.6 602.21,-189.05 603.63,-182.19"/>
+</g>
+<!-- sourcefile~conservationmetadata.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node16" class="node">
+<title>sourcefile~conservationmetadata.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node16"><a xlink:href="../sourcefile/conservationmetadata.f90.html" xlink:title="ConservationMetadata.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="644,-150 488,-150 488,-126 644,-126 644,-150"/>
+<text text-anchor="middle" x="566" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ConservationMetadata.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~conservationmetadata.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge25" class="edge">
+<title>sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~conservationmetadata.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M751.88,-293.95C738.09,-265.73 699.73,-195.04 646,-159 643.43,-157.28 640.73,-155.69 637.93,-154.24"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="639.28,-151.01 628.73,-150.03 636.36,-157.38 639.28,-151.01"/>
+</g>
+<!-- sourcefile~fieldbundleinfo.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node18" class="node">
+<title>sourcefile~fieldbundleinfo.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node18"><a xlink:href="../sourcefile/fieldbundleinfo.f90.html" xlink:title="FieldBundleInfo.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="624.5,-108 507.5,-108 507.5,-84 624.5,-84 624.5,-108"/>
+<text text-anchor="middle" x="566" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBundleInfo.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~fieldbundleinfo.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge27" class="edge">
+<title>sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~fieldbundleinfo.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M753.87,-293.61C743.28,-259.72 709.14,-164.88 646,-117 642.34,-114.22 638.34,-111.81 634.15,-109.72"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="635.28,-106.4 624.72,-105.63 632.5,-112.82 635.28,-106.4"/>
+</g>
+<!-- sourcefile~fieldbundletype_flag.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node19" class="node">
+<title>sourcefile~fieldbundletype_flag.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node19"><a xlink:href="../sourcefile/fieldbundletype_flag.f90.html" xlink:title="FieldBundleType_Flag.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="640.5,-66 491.5,-66 491.5,-42 640.5,-42 640.5,-66"/>
+<text text-anchor="middle" x="566" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBundleType_Flag.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~fieldbundletype_flag.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge28" class="edge">
+<title>sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~fieldbundletype_flag.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M755.31,-293.75C747.75,-255.21 719.13,-135.41 646,-75 644.4,-73.68 642.72,-72.44 640.99,-71.28"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="642.28,-67.99 631.86,-66.09 638.82,-74.07 642.28,-67.99"/>
+</g>
+<!-- sourcefile~infoutilities.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node22" class="node">
+<title>sourcefile~infoutilities.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node22"><a xlink:href="../sourcefile/infoutilities.f90.html" xlink:title="InfoUtilities.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="613,-524 519,-524 519,-500 613,-500 613,-524"/>
+<text text-anchor="middle" x="566" y="-509.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">InfoUtilities.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~infoutilities.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge29" class="edge">
+<title>sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~infoutilities.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M753.79,-318.13C743,-351.31 708.37,-444.16 646,-491 639.15,-496.15 631.13,-500.03 622.89,-502.97"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="621.67,-499.68 613.16,-505.99 623.74,-506.37 621.67,-499.68"/>
+</g>
+<!-- sourcefile~lu_bound.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node23" class="node">
+<title>sourcefile~lu_bound.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node23"><a xlink:href="../sourcefile/lu_bound.f90.html" xlink:title="LU_Bound.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="610,-440 522,-440 522,-416 610,-416 610,-440"/>
+<text text-anchor="middle" x="566" y="-425.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">LU_Bound.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~lu_bound.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge31" class="edge">
+<title>sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~lu_bound.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M746.63,-318.04C727.91,-338.11 687.59,-378.5 646,-402 637.88,-406.59 628.82,-410.52 619.82,-413.83"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="618.43,-410.61 610.12,-417.18 620.72,-417.22 618.43,-410.61"/>
+</g>
+<!-- sourcefile~normalizationmetadata.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node24" class="node">
+<title>sourcefile~normalizationmetadata.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node24"><a xlink:href="../sourcefile/normalizationmetadata.f90.html" xlink:title="NormalizationMetadata.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="646,-24 486,-24 486,0 646,0 646,-24"/>
+<text text-anchor="middle" x="566" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">NormalizationMetadata.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~normalizationmetadata.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge32" class="edge">
+<title>sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~normalizationmetadata.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M756.3,-293.74C751.43,-250.84 729.23,-106.21 646,-33 644.48,-31.66 642.89,-30.41 641.23,-29.24"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="642.86,-26.14 632.49,-24 639.27,-32.14 642.86,-26.14"/>
+</g>
+<!-- sourcefile~quantitytypemetadata.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node25" class="node">
+<title>sourcefile~quantitytypemetadata.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node25"><a xlink:href="../sourcefile/quantitytypemetadata.f90.html" xlink:title="QuantityTypeMetadata.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="643,-360 489,-360 489,-336 643,-336 643,-360"/>
+<text text-anchor="middle" x="566" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">QuantityTypeMetadata.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~quantitytypemetadata.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge33" class="edge">
+<title>sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~quantitytypemetadata.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M702.91,-318.04C680.59,-322.96 654.61,-328.69 631.37,-333.81"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="630.61,-330.39 621.6,-335.96 632.12,-337.23 630.61,-330.39"/>
+</g>
+<!-- sourcefile~ungriddeddims.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node26" class="node">
+<title>sourcefile~ungriddeddims.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node26"><a xlink:href="../sourcefile/ungriddeddims.f90.html" xlink:title="UngriddedDims.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="625,-566 507,-566 507,-542 625,-542 625,-566"/>
+<text text-anchor="middle" x="566" y="-551.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">UngriddedDims.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~ungriddeddims.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge34" class="edge">
+<title>sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~ungriddeddims.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M755.24,-318.04C747.48,-355.93 718.31,-473.68 646,-533 642.45,-535.91 638.53,-538.43 634.4,-540.59"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="632.74,-537.5 625.06,-544.8 635.62,-543.88 632.74,-537.5"/>
+</g>
+<!-- sourcefile~vectorbasiskind.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node27" class="node">
+<title>sourcefile~vectorbasiskind.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node27"><a xlink:href="../sourcefile/vectorbasiskind.f90.html" xlink:title="VectorBasisKind.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="626,-318 506,-318 506,-294 626,-294 626,-318"/>
+<text text-anchor="middle" x="566" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VectorBasisKind.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~vectorbasiskind.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge35" class="edge">
+<title>sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~vectorbasiskind.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M700.34,-306C680.19,-306 657.31,-306 636.26,-306"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="636.1,-302.5 626.1,-306 636.1,-309.5 636.1,-302.5"/>
+</g>
+<!-- sourcefile~verticalalignment.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node28" class="node">
+<title>sourcefile~verticalalignment.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node28"><a xlink:href="../sourcefile/verticalalignment.f90.html" xlink:title="VerticalAlignment.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="631,-276 501,-276 501,-252 631,-252 631,-276"/>
+<text text-anchor="middle" x="566" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VerticalAlignment.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~verticalalignment.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge36" class="edge">
+<title>sourcefile~fieldbundleget.f90&#45;&gt;sourcefile~verticalalignment.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M702.91,-293.96C680.59,-289.04 654.61,-283.31 631.37,-278.19"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="632.12,-274.77 621.6,-276.04 630.61,-281.61 632.12,-274.77"/>
+</g>
+<!-- sourcefile~fieldpointerutilities.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge37" class="edge">
+<title>sourcefile~fieldpointerutilities.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M497.8,-707.23C485.73,-706.01 472.95,-704.73 460.29,-703.45"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="460.48,-699.95 450.18,-702.43 459.78,-706.92 460.48,-699.95"/>
+</g>
+<!-- sourcefile~fieldunaryfunctions.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge39" class="edge">
+<title>sourcefile~fieldunaryfunctions.f90&#45;&gt;sourcefile~mapl_exceptionhandling.f90</title>
+<path fill="none" stroke="#003fff" stroke-dasharray="5,2" d="M687.23,-671.69C651.2,-670.39 606.67,-670.17 567,-674"/>
+</g>
+<!-- sourcefile~fieldunaryfunctions.f90&#45;&gt;sourcefile~fieldpointerutilities.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge38" class="edge">
+<title>sourcefile~fieldunaryfunctions.f90&#45;&gt;sourcefile~fieldpointerutilities.f90</title>
+<path fill="none" stroke="#003fff" stroke-dasharray="5,2" d="M697.22,-688.02C678.11,-691.84 656.81,-696.09 637.07,-700.02"/>
+<polygon fill="#003fff" stroke="#003fff" points="636.33,-696.6 627.21,-701.99 637.7,-703.47 636.33,-696.6"/>
+</g>
+<!-- sourcefile~fieldutilities.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge44" class="edge">
+<title>sourcefile~fieldutilities.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M708.79,-585.72C699.11,-581.98 689.59,-576.9 682,-570 653.44,-544.06 675.47,-515.9 646,-491 643.26,-488.69 640.29,-486.62 637.17,-484.79"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="638.51,-481.55 628.01,-480.18 635.37,-487.8 638.51,-481.55"/>
+</g>
+<!-- sourcefile~fieldutilities.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge40" class="edge">
+<title>sourcefile~fieldutilities.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M708.71,-591C617.9,-582.47 426.7,-568.38 366.5,-594"/>
+</g>
+<!-- sourcefile~fieldutilities.f90&#45;&gt;sourcefile~fieldpointerutilities.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge42" class="edge">
+<title>sourcefile~fieldutilities.f90&#45;&gt;sourcefile~fieldpointerutilities.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M741.3,-608.07C725.81,-619.76 701.93,-638.12 682,-655 665.44,-669.03 664.73,-677.03 646,-688 639.25,-691.95 631.83,-695.39 624.31,-698.37"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="622.96,-695.14 614.79,-701.88 625.38,-701.7 622.96,-695.14"/>
+</g>
+<!-- sourcefile~fieldinfo.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_node21" class="node">
+<title>sourcefile~fieldinfo.f90</title>
+<g id="a_sourcefile~~statedestroy.f90~~EfferentGraph_node21"><a xlink:href="../sourcefile/fieldinfo.f90.html" xlink:title="FieldInfo.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="605.5,-646 526.5,-646 526.5,-622 605.5,-622 605.5,-646"/>
+<text text-anchor="middle" x="566" y="-631.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldInfo.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldutilities.f90&#45;&gt;sourcefile~fieldinfo.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge41" class="edge">
+<title>sourcefile~fieldutilities.f90&#45;&gt;sourcefile~fieldinfo.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M708.94,-605.69C680.37,-611.39 644.35,-618.57 615.75,-624.28"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="614.7,-620.92 605.57,-626.31 616.07,-627.78 614.7,-620.92"/>
+</g>
+<!-- sourcefile~fieldutilities.f90&#45;&gt;sourcefile~infoutilities.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge43" class="edge">
+<title>sourcefile~fieldutilities.f90&#45;&gt;sourcefile~infoutilities.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M711.21,-583.89C701.16,-580.23 690.9,-575.64 682,-570 662.63,-557.71 665.8,-544.59 646,-533 638.95,-528.87 631.07,-525.54 623.09,-522.85"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="623.96,-519.46 613.37,-519.88 621.91,-526.15 623.96,-519.46"/>
+</g>
+<!-- sourcefile~fieldutilities.f90&#45;&gt;sourcefile~lu_bound.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge45" class="edge">
+<title>sourcefile~fieldutilities.f90&#45;&gt;sourcefile~lu_bound.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M751.88,-583.95C738.09,-555.73 699.73,-485.04 646,-449 638.21,-443.77 629.18,-439.85 620.06,-436.9"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="620.77,-433.46 610.19,-434.06 618.84,-440.19 620.77,-433.46"/>
+</g>
+<!-- sourcefile~fieldutilities.f90&#45;&gt;sourcefile~ungriddeddims.f90 -->
+<g id="sourcefile~~statedestroy.f90~~EfferentGraph_edge46" class="edge">
+<title>sourcefile~fieldutilities.f90&#45;&gt;sourcefile~ungriddeddims.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M708.94,-585.29C685.39,-580.1 656.78,-573.79 631.43,-568.2"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="632.05,-564.76 621.53,-566.02 630.54,-571.59 632.05,-564.76"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefilestatedestroyf90EfferentGraph = svgPanZoom('#sourcefilestatedestroyf90EfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#EfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="EfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+<br>
+      <section>
+        <h2><span class="anchor" id="src"></span>Source Code</h2>
+        <div class="hl codehilite"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="cp">#include &quot;MAPL.h&quot;</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a><span class="cp">#include &quot;unused_dummy.H&quot;</span>
+<a id="ln-3" name="ln-3" href="#ln-3"></a>
+<a id="ln-4" name="ln-4" href="#ln-4"></a><span class="k">module </span><span class="n">mapl3g_StateDestroy</span>
+<a id="ln-5" name="ln-5" href="#ln-5"></a><span class="w">   </span><span class="k">use </span><span class="n">esmf</span>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="w">   </span><span class="k">use </span><span class="n">MAPL_FieldUtils</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">FieldsDestroy</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_FieldBundleDestroy</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a><span class="w">   </span><span class="k">use </span><span class="n">MAPL_ExceptionHandling</span>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_KeywordEnforcer</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="w">   </span><span class="k">implicit none</span><span class="p">(</span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">external</span><span class="p">)</span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="w">   </span><span class="k">private</span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a><span class="k">   public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">MAPL_StateDestroy</span>
+<a id="ln-14" name="ln-14" href="#ln-14"></a>
+<a id="ln-15" name="ln-15" href="#ln-15"></a><span class="w">   </span><span class="k">interface </span><span class="n">MAPL_StateDestroy</span>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">destroy_state</span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a><span class="w">   </span><span class="k">end interface </span><span class="n">MAPL_StateDestroy</span>
+<a id="ln-18" name="ln-18" href="#ln-18"></a><span class="w">   </span>
+<a id="ln-19" name="ln-19" href="#ln-19"></a><span class="w">   </span><span class="kt">logical</span><span class="p">,</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">NESTED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">TRUE</span><span class="p">.</span>
+<a id="ln-20" name="ln-20" href="#ln-20"></a>
+<a id="ln-21" name="ln-21" href="#ln-21"></a><span class="k">contains</span>
+<a id="ln-22" name="ln-22" href="#ln-22"></a>
+<a id="ln-23" name="ln-23" href="#ln-23"></a><span class="k">   subroutine </span><span class="n">destroy_state</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">unusable</span><span class="p">,</span><span class="w"> </span><span class="n">destroy_contents</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-24" name="ln-24" href="#ln-24"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_State</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">state</span>
+<a id="ln-25" name="ln-25" href="#ln-25"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">KeywordEnforcer</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">unusable</span>
+<a id="ln-26" name="ln-26" href="#ln-26"></a><span class="w">      </span><span class="kt">logical</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">destroy_contents</span>
+<a id="ln-27" name="ln-27" href="#ln-27"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-28" name="ln-28" href="#ln-28"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-29" name="ln-29" href="#ln-29"></a><span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">destroying_contents</span>
+<a id="ln-30" name="ln-30" href="#ln-30"></a>
+<a id="ln-31" name="ln-31" href="#ln-31"></a><span class="w">      </span><span class="n">destroying_contents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">FALSE</span><span class="p">.</span>
+<a id="ln-32" name="ln-32" href="#ln-32"></a><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">destroy_contents</span><span class="p">))</span><span class="w"> </span><span class="n">destroying_contents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">destroy_contents</span>
+<a id="ln-33" name="ln-33" href="#ln-33"></a><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">destroying_contents</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-34" name="ln-34" href="#ln-34"></a><span class="k">         call </span><span class="n">destroy_state_contents</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-35" name="ln-35" href="#ln-35"></a><span class="w">      </span><span class="k">end if</span>
+<a id="ln-36" name="ln-36" href="#ln-36"></a><span class="k">      call </span><span class="n">ESMF_StateDestroy</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-37" name="ln-37" href="#ln-37"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_StateValidate</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-38" name="ln-38" href="#ln-38"></a><span class="w">      </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="n">status</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">ESMF_SUCCESS</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;The state was not destroyed successfully.&#39;</span><span class="p">)</span>
+<a id="ln-39" name="ln-39" href="#ln-39"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-40" name="ln-40" href="#ln-40"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">unusable</span><span class="p">)</span>
+<a id="ln-41" name="ln-41" href="#ln-41"></a>
+<a id="ln-42" name="ln-42" href="#ln-42"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">destroy_state</span>
+<a id="ln-43" name="ln-43" href="#ln-43"></a>
+<a id="ln-44" name="ln-44" href="#ln-44"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">destroy_state_contents</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-45" name="ln-45" href="#ln-45"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_State</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">state</span>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-47" name="ln-47" href="#ln-47"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-48" name="ln-48" href="#ln-48"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_StateItem_Flag</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">types</span><span class="p">(:)</span>
+<a id="ln-49" name="ln-49" href="#ln-49"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="n">ESMF_MAXSTR</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">names</span><span class="p">(:)</span>
+<a id="ln-50" name="ln-50" href="#ln-50"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">itemCount</span>
+<a id="ln-51" name="ln-51" href="#ln-51"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fields</span><span class="p">(:)</span>
+<a id="ln-52" name="ln-52" href="#ln-52"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_FieldBundle</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundles</span><span class="p">(:)</span>
+<a id="ln-53" name="ln-53" href="#ln-53"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_State</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">nested_states</span><span class="p">(:)</span>
+<a id="ln-54" name="ln-54" href="#ln-54"></a>
+<a id="ln-55" name="ln-55" href="#ln-55"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">nestedFlag</span><span class="o">=</span><span class="n">NESTED</span><span class="p">,</span><span class="w"> </span><span class="n">itemCount</span><span class="o">=</span><span class="n">itemCount</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-56" name="ln-56" href="#ln-56"></a><span class="w">      </span><span class="k">allocate</span><span class="p">(</span><span class="n">types</span><span class="p">(</span><span class="n">itemCount</span><span class="p">))</span>
+<a id="ln-57" name="ln-57" href="#ln-57"></a><span class="w">      </span><span class="k">allocate</span><span class="p">(</span><span class="n">names</span><span class="p">(</span><span class="n">itemCount</span><span class="p">))</span>
+<a id="ln-58" name="ln-58" href="#ln-58"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">nestedFlag</span><span class="o">=</span><span class="n">NESTED</span><span class="p">,</span><span class="w"> </span><span class="n">itemTypeList</span><span class="o">=</span><span class="n">types</span><span class="p">,</span><span class="w"> </span><span class="n">itemNameList</span><span class="o">=</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-59" name="ln-59" href="#ln-59"></a>
+<a id="ln-60" name="ln-60" href="#ln-60"></a><span class="w">      </span><span class="k">call </span><span class="n">remove_state_fields</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="nb">pack</span><span class="p">(</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">types</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_STATEITEM_FIELD</span><span class="p">),</span><span class="w"> </span><span class="n">fields</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-61" name="ln-61" href="#ln-61"></a><span class="w">      </span><span class="k">call </span><span class="n">FieldsDestroy</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-62" name="ln-62" href="#ln-62"></a>
+<a id="ln-63" name="ln-63" href="#ln-63"></a><span class="w">      </span><span class="k">call </span><span class="n">remove_bundles</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="nb">pack</span><span class="p">(</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">types</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_STATEITEM_FIELDBUNDLE</span><span class="p">),</span><span class="w"> </span><span class="n">bundles</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-64" name="ln-64" href="#ln-64"></a><span class="w">      </span><span class="k">call </span><span class="n">destroy_bundles</span><span class="p">(</span><span class="n">bundles</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-65" name="ln-65" href="#ln-65"></a>
+<a id="ln-66" name="ln-66" href="#ln-66"></a><span class="w">      </span><span class="k">call </span><span class="n">remove_nested_states</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="nb">pack</span><span class="p">(</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">types</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_STATEITEM_STATE</span><span class="p">),</span><span class="w"> </span><span class="n">nested_states</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-67" name="ln-67" href="#ln-67"></a><span class="w">      </span><span class="k">call </span><span class="n">destroy_states</span><span class="p">(</span><span class="n">nested_states</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-68" name="ln-68" href="#ln-68"></a>
+<a id="ln-69" name="ln-69" href="#ln-69"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">nestedFlag</span><span class="o">=</span><span class="n">NESTED</span><span class="p">,</span><span class="w"> </span><span class="n">itemCount</span><span class="o">=</span><span class="n">itemCount</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">      </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="n">itemCount</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Some MAPL_StateItems remain in state.&#39;</span><span class="p">)</span>
+<a id="ln-71" name="ln-71" href="#ln-71"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-72" name="ln-72" href="#ln-72"></a>
+<a id="ln-73" name="ln-73" href="#ln-73"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">destroy_state_contents</span>
+<a id="ln-74" name="ln-74" href="#ln-74"></a>
+<a id="ln-75" name="ln-75" href="#ln-75"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">remove_state_fields</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">fields</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-76" name="ln-76" href="#ln-76"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_State</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">state</span>
+<a id="ln-77" name="ln-77" href="#ln-77"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="n">ESMF_MAXSTR</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">names</span><span class="p">(:)</span>
+<a id="ln-78" name="ln-78" href="#ln-78"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fields</span><span class="p">(:)</span>
+<a id="ln-79" name="ln-79" href="#ln-79"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-80" name="ln-80" href="#ln-80"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">itemCount</span><span class="p">,</span><span class="w"> </span><span class="n">itemCountAfter</span>
+<a id="ln-81" name="ln-81" href="#ln-81"></a>
+<a id="ln-82" name="ln-82" href="#ln-82"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">nestedFlag</span><span class="o">=</span><span class="n">NESTED</span><span class="p">,</span><span class="w"> </span><span class="n">itemCount</span><span class="o">=</span><span class="n">itemCount</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-83" name="ln-83" href="#ln-83"></a><span class="w">      </span><span class="k">allocate</span><span class="p">(</span><span class="n">fields</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">names</span><span class="p">)))</span>
+<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+<a id="ln-85" name="ln-85" href="#ln-85"></a><span class="w">         </span><span class="k">call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">names</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">fields</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-86" name="ln-86" href="#ln-86"></a><span class="w">      </span><span class="k">end do</span>
+<a id="ln-87" name="ln-87" href="#ln-87"></a><span class="k">      call </span><span class="n">ESMF_StateRemove</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">itemNameList</span><span class="o">=</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-88" name="ln-88" href="#ln-88"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">nestedFlag</span><span class="o">=</span><span class="n">NESTED</span><span class="p">,</span><span class="w"> </span><span class="n">itemCount</span><span class="o">=</span><span class="n">itemCountAfter</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-89" name="ln-89" href="#ln-89"></a><span class="w">      </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="n">itemCountAfter</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">itemCount</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">fields</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;Some fields were not removed.&#39;</span><span class="p">)</span>
+<a id="ln-90" name="ln-90" href="#ln-90"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-91" name="ln-91" href="#ln-91"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-92" name="ln-92" href="#ln-92"></a>
+<a id="ln-93" name="ln-93" href="#ln-93"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">remove_state_fields</span>
+<a id="ln-94" name="ln-94" href="#ln-94"></a>
+<a id="ln-95" name="ln-95" href="#ln-95"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">remove_bundles</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">bundles</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-96" name="ln-96" href="#ln-96"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_State</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">state</span>
+<a id="ln-97" name="ln-97" href="#ln-97"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="n">ESMF_MAXSTR</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">names</span><span class="p">(:)</span>
+<a id="ln-98" name="ln-98" href="#ln-98"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_FieldBundle</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundles</span><span class="p">(:)</span>
+<a id="ln-99" name="ln-99" href="#ln-99"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-100" name="ln-100" href="#ln-100"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">itemCount</span><span class="p">,</span><span class="w"> </span><span class="n">itemCountAfter</span>
+<a id="ln-101" name="ln-101" href="#ln-101"></a>
+<a id="ln-102" name="ln-102" href="#ln-102"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">nestedFlag</span><span class="o">=</span><span class="n">NESTED</span><span class="p">,</span><span class="w"> </span><span class="n">itemCount</span><span class="o">=</span><span class="n">itemCount</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-103" name="ln-103" href="#ln-103"></a><span class="w">      </span><span class="k">allocate</span><span class="p">(</span><span class="n">bundles</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">names</span><span class="p">)))</span>
+<a id="ln-104" name="ln-104" href="#ln-104"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">bundles</span><span class="p">)</span>
+<a id="ln-105" name="ln-105" href="#ln-105"></a><span class="w">         </span><span class="k">call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">names</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">bundles</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-106" name="ln-106" href="#ln-106"></a><span class="w">      </span><span class="k">end do</span>
+<a id="ln-107" name="ln-107" href="#ln-107"></a><span class="k">      call </span><span class="n">ESMF_StateRemove</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">itemNameList</span><span class="o">=</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-108" name="ln-108" href="#ln-108"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">nestedFlag</span><span class="o">=</span><span class="n">NESTED</span><span class="p">,</span><span class="w"> </span><span class="n">itemCount</span><span class="o">=</span><span class="n">itemCountAfter</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-109" name="ln-109" href="#ln-109"></a><span class="w">      </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="n">itemCountAfter</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">itemCount</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">bundles</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;Some bundles were not removed.&#39;</span><span class="p">)</span>
+<a id="ln-110" name="ln-110" href="#ln-110"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-111" name="ln-111" href="#ln-111"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-112" name="ln-112" href="#ln-112"></a>
+<a id="ln-113" name="ln-113" href="#ln-113"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">remove_bundles</span>
+<a id="ln-114" name="ln-114" href="#ln-114"></a>
+<a id="ln-115" name="ln-115" href="#ln-115"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">remove_nested_states</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">states</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-116" name="ln-116" href="#ln-116"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_State</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">state</span>
+<a id="ln-117" name="ln-117" href="#ln-117"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="n">ESMF_MAXSTR</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">names</span><span class="p">(:)</span>
+<a id="ln-118" name="ln-118" href="#ln-118"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_State</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">states</span><span class="p">(:)</span>
+<a id="ln-119" name="ln-119" href="#ln-119"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-120" name="ln-120" href="#ln-120"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">itemCount</span><span class="p">,</span><span class="w"> </span><span class="n">itemCountAfter</span>
+<a id="ln-121" name="ln-121" href="#ln-121"></a>
+<a id="ln-122" name="ln-122" href="#ln-122"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">nestedFlag</span><span class="o">=</span><span class="n">NESTED</span><span class="p">,</span><span class="w"> </span><span class="n">itemCount</span><span class="o">=</span><span class="n">itemCount</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-123" name="ln-123" href="#ln-123"></a><span class="w">      </span><span class="k">allocate</span><span class="p">(</span><span class="n">states</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">names</span><span class="p">)))</span>
+<a id="ln-124" name="ln-124" href="#ln-124"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
+<a id="ln-125" name="ln-125" href="#ln-125"></a><span class="w">         </span><span class="k">call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">names</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">states</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-126" name="ln-126" href="#ln-126"></a><span class="w">      </span><span class="k">end do</span>
+<a id="ln-127" name="ln-127" href="#ln-127"></a><span class="k">      call </span><span class="n">ESMF_StateRemove</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">itemNameList</span><span class="o">=</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-128" name="ln-128" href="#ln-128"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">nestedFlag</span><span class="o">=</span><span class="n">NESTED</span><span class="p">,</span><span class="w"> </span><span class="n">itemCount</span><span class="o">=</span><span class="n">itemCountAfter</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-129" name="ln-129" href="#ln-129"></a><span class="w">      </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="n">itemCountAfter</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">itemCount</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">states</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;Some states were not removed.&#39;</span><span class="p">)</span>
+<a id="ln-130" name="ln-130" href="#ln-130"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-131" name="ln-131" href="#ln-131"></a><span class="w">      </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-132" name="ln-132" href="#ln-132"></a>
+<a id="ln-133" name="ln-133" href="#ln-133"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">remove_nested_states</span>
+<a id="ln-134" name="ln-134" href="#ln-134"></a><span class="w">     </span>
+<a id="ln-135" name="ln-135" href="#ln-135"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">destroy_states</span><span class="p">(</span><span class="n">states</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-136" name="ln-136" href="#ln-136"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_State</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">states</span><span class="p">(:)</span>
+<a id="ln-137" name="ln-137" href="#ln-137"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-138" name="ln-138" href="#ln-138"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">i</span>
+<a id="ln-139" name="ln-139" href="#ln-139"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="n">ESMF_MAXSTR</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">name</span>
+<a id="ln-140" name="ln-140" href="#ln-140"></a>
+<a id="ln-141" name="ln-141" href="#ln-141"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
+<a id="ln-142" name="ln-142" href="#ln-142"></a><span class="w">         </span><span class="k">call </span><span class="n">ESMF_StateGet</span><span class="p">(</span><span class="n">states</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-143" name="ln-143" href="#ln-143"></a><span class="w">         </span><span class="k">call </span><span class="n">ESMF_StateDestroy</span><span class="p">(</span><span class="n">states</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-144" name="ln-144" href="#ln-144"></a><span class="w">         </span><span class="k">call </span><span class="n">ESMF_StateValidate</span><span class="p">(</span><span class="n">states</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-145" name="ln-145" href="#ln-145"></a><span class="w">         </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="n">status</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">ESMF_SUCCESS</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;State &quot;&#39;</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="s1">&#39;&quot; was not destroyed.&#39;</span><span class="p">)</span>
+<a id="ln-146" name="ln-146" href="#ln-146"></a><span class="w">      </span><span class="k">end do</span>
+<a id="ln-147" name="ln-147" href="#ln-147"></a><span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-148" name="ln-148" href="#ln-148"></a><span class="w">         </span>
+<a id="ln-149" name="ln-149" href="#ln-149"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">destroy_states</span>
+<a id="ln-150" name="ln-150" href="#ln-150"></a>
+<a id="ln-151" name="ln-151" href="#ln-151"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">destroy_bundles</span><span class="p">(</span><span class="n">bundles</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-152" name="ln-152" href="#ln-152"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_FieldBundle</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundles</span><span class="p">(:)</span>
+<a id="ln-153" name="ln-153" href="#ln-153"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-154" name="ln-154" href="#ln-154"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">i</span>
+<a id="ln-155" name="ln-155" href="#ln-155"></a><span class="w">      </span>
+<a id="ln-156" name="ln-156" href="#ln-156"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">bundles</span><span class="p">)</span>
+<a id="ln-157" name="ln-157" href="#ln-157"></a><span class="w">         </span><span class="k">call </span><span class="n">MAPL_FieldBundleDestroy</span><span class="p">(</span><span class="n">bundles</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-158" name="ln-158" href="#ln-158"></a><span class="w">      </span><span class="k">end do</span>
+<a id="ln-159" name="ln-159" href="#ln-159"></a><span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-160" name="ln-160" href="#ln-160"></a><span class="w">     </span>
+<a id="ln-161" name="ln-161" href="#ln-161"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">destroy_bundles</span>
+<a id="ln-162" name="ln-162" href="#ln-162"></a>
+<a id="ln-163" name="ln-163" href="#ln-163"></a><span class="k">end module </span><span class="n">mapl3g_StateDestroy</span>
+</pre></div>
+
+      </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              MAPL
+ was developed by The MAPL Developers<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-05-15T16:35:58.293265+0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
