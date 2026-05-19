@@ -1,37 +1,25 @@
 #include "MAPL.h"
 
-submodule (mapl3g_LatLonGeomFactory) make_geom_smod
-
-   use mapl3g_GeomSpec
-   use mapl3g_LonAxis
-   use mapl3g_LatAxis
-   use mapl3g_LatLonDecomposition
-   use mapl3g_LatLonGeomSpec
-   use mapl_MinMaxMod
+submodule (mapl3g_XYGeomFactory) make_geom_smod
    use mapl_ErrorHandlingMod
-   use mapl_Constants
-   use pFIO
-   use gFTL2_StringVector
    use esmf
-   use mapl_KeywordEnforcer, only: KE => KeywordEnforcer
-
-   implicit none (type, external)
+   implicit none
 
 contains
 
    module function make_geom(this, geom_spec, rc) result(geom)
       type(ESMF_Geom) :: geom
-      class(LatLonGeomFactory), intent(in) :: this
+      class(XYGeomFactory), intent(in) :: this
       class(GeomSpec), intent(in) :: geom_spec
       integer, optional, intent(out) :: rc
 
       integer :: status
 
       select type (geom_spec)
-      type is (LatLonGeomSpec)
+      type is (XYGeomSpec)
          geom = typesafe_make_geom(geom_spec, _RC)
       class default
-         _FAIL("geom_spec type not supported")
+         _FAIL("geom_spec type not supported by XYGeomFactory")
       end select
 
       _RETURN(_SUCCESS)
