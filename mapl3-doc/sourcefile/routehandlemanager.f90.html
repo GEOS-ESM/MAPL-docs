@@ -1,0 +1,1304 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="MAPL is a foundation layer of the GEOS architecture, whose original purpose is to supplement the Earth System Modeling Framework (ESMF)">
+    <meta name="author" content="The MAPL Developers" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>RoutehandleManager.F90 &ndash; MAPL</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">MAPL </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>RoutehandleManager.F90
+      <small>Source File</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.0% of total for source files.">80 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/RoutehandleManager.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+            <li class="breadcrumb-item active" aria-current="page">RoutehandleManager.F90</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#mods-0"
+         aria-expanded="false" aria-controls="mods-0">
+         <h4 class="card-header bg-primary text-white">Modules</h4>
+      </a>
+      <div id="mods-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/mapl3g_routehandlemanager.html">mapl3g_RoutehandleManager</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/routehandlemanager.f90.html#src">RoutehandleManager.F90</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">This file depends on</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~routehandlemanager.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefileroutehandlemanagerf90EfferentGraph" width="641pt" height="277pt"
+ viewBox="0.00 0.00 641.00 276.95" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph" class="graph" transform="scale(0.44 0.44) rotate(0) translate(4 632)">
+<title>sourcefile~~routehandlemanager.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-632 1468,-632 1468,4 -4,4"/>
+<!-- sourcefile~routehandlemanager.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~routehandlemanager.f90</title>
+<polygon fill="none" stroke="black" points="1464,-206 1316,-206 1316,-182 1464,-182 1464,-206"/>
+<text text-anchor="middle" x="1390" y="-191.6" font-family="Helvetica,sans-Serif" font-size="10.50">RoutehandleManager.F90</text>
+</g>
+<!-- sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~errorhandling.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node2"><a xlink:href="../sourcefile/errorhandling.f90.html" xlink:title="ErrorHandling.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="296.5,-390 187.5,-390 187.5,-366 296.5,-366 296.5,-390"/>
+<text text-anchor="middle" x="242" y="-375.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ErrorHandling.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~routehandlemanager.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~routehandlemanager.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1315.8,-187.7C1241.3,-181.84 1122.45,-174 1019.5,-174 1019.5,-174 1019.5,-174 717,-174 635.15,-174 420.34,-192.7 355,-242 326.44,-263.55 341.14,-285.9 319,-314 305.04,-331.72 285.51,-348.04 269.74,-359.76"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="267.47,-357.08 261.43,-365.78 271.58,-362.75 267.47,-357.08"/>
+</g>
+<!-- sourcefile~routehandlespec.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~routehandlespec.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node3"><a xlink:href="../sourcefile/routehandlespec.f90.html" xlink:title="RoutehandleSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1083,-266 954,-266 954,-242 1083,-242 1083,-266"/>
+<text text-anchor="middle" x="1018.5" y="-251.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RoutehandleSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~routehandlemanager.f90&#45;&gt;sourcefile~routehandlespec.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~routehandlemanager.f90&#45;&gt;sourcefile~routehandlespec.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1363.21,-206.11C1341.52,-215.71 1309.42,-228.53 1280,-235 1218.03,-248.62 1145.98,-253.02 1093.38,-254.22"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1093.06,-250.73 1083.13,-254.42 1093.2,-257.73 1093.06,-250.73"/>
+</g>
+<!-- sourcefile~routehandlespecvector.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~routehandlespecvector.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node4"><a xlink:href="../sourcefile/routehandlespecvector.f90.html" xlink:title="RoutehandleSpecVector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1280,-226 1119,-226 1119,-202 1280,-202 1280,-226"/>
+<text text-anchor="middle" x="1199.5" y="-211.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RoutehandleSpecVector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~routehandlemanager.f90&#45;&gt;sourcefile~routehandlespecvector.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~routehandlemanager.f90&#45;&gt;sourcefile~routehandlespecvector.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1315.85,-201.76C1307.45,-202.65 1298.8,-203.57 1290.21,-204.48"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1289.74,-201.01 1280.17,-205.55 1290.48,-207.97 1289.74,-201.01"/>
+</g>
+<!-- sourcefile~routehandlevector.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~routehandlevector.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node5"><a xlink:href="../sourcefile/routehandlevector.f90.html" xlink:title="RoutehandleVector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1267,-146 1132,-146 1132,-122 1267,-122 1267,-146"/>
+<text text-anchor="middle" x="1199.5" y="-131.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RoutehandleVector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~routehandlemanager.f90&#45;&gt;sourcefile~routehandlevector.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~routehandlemanager.f90&#45;&gt;sourcefile~routehandlevector.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1350.85,-181.86C1321.12,-172.39 1279.67,-159.2 1247.82,-149.06"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1248.86,-145.72 1238.27,-146.02 1246.73,-152.39 1248.86,-145.72"/>
+</g>
+<!-- sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node7" class="node">
+<title>sourcefile~mapl_throw.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node7"><a xlink:href="../sourcefile/mapl_throw.f90.html" xlink:title="MAPL_Throw.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="114.5,-396 14.5,-396 14.5,-372 114.5,-372 114.5,-396"/>
+<text text-anchor="middle" x="64.5" y="-381.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Throw.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M187.39,-379.83C167.56,-380.51 144.97,-381.28 124.67,-381.98"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="124.47,-378.48 114.6,-382.32 124.71,-385.48 124.47,-378.48"/>
+</g>
+<!-- sourcefile~routehandlespec.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~routehandlespec.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M953.92,-254.2C905.97,-255.4 838.8,-259.33 781,-271 752.48,-276.76 748.01,-289.81 719,-292"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M717,-292C583.2,-299.35 547.5,-270.91 415.5,-294"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M413.5,-294C386.6,-298.87 378.93,-299.79 355,-313 336.77,-323.07 336.61,-331.88 319,-343 307.85,-350.04 295.06,-356.48 283.19,-361.87"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="281.65,-358.72 273.91,-365.96 284.48,-365.13 281.65,-358.72"/>
+</g>
+<!-- sourcefile~api.f90~4 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node6" class="node">
+<title>sourcefile~api.f90~4</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node6"><a xlink:href="../sourcefile/api.f90~4.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="745,-344 691,-344 691,-320 745,-320 745,-344"/>
+<text text-anchor="middle" x="718" y="-329.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~routehandlespec.f90&#45;&gt;sourcefile~api.f90~4 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~routehandlespec.f90&#45;&gt;sourcefile~api.f90~4</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1002.02,-266.17C983.29,-280.14 950.27,-302.48 918,-313 863.33,-330.83 796.06,-333.54 755.41,-333.23"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="755.23,-329.73 745.18,-333.08 755.13,-336.73 755.23,-329.73"/>
+</g>
+<!-- sourcefile~routehandleparam.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node8" class="node">
+<title>sourcefile~routehandleparam.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node8"><a xlink:href="../sourcefile/routehandleparam.f90.html" xlink:title="RoutehandleParam.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="918,-304 781,-304 781,-280 918,-280 918,-304"/>
+<text text-anchor="middle" x="849.5" y="-289.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RoutehandleParam.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~routehandlespec.f90&#45;&gt;sourcefile~routehandleparam.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~routehandlespec.f90&#45;&gt;sourcefile~routehandleparam.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M964.66,-266.02C948.28,-269.75 930.08,-273.89 913.11,-277.75"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="912.26,-274.36 903.28,-279.99 913.81,-281.18 912.26,-274.36"/>
+</g>
+<!-- sourcefile~routehandlespecvector.f90&#45;&gt;sourcefile~routehandlespec.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~routehandlespecvector.f90&#45;&gt;sourcefile~routehandlespec.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1144.79,-226C1125.5,-230.31 1103.55,-235.22 1083.47,-239.7"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="1082.47,-236.34 1073.48,-241.94 1084,-243.17 1082.47,-236.34"/>
+</g>
+<!-- sourcefile~geomget.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node9" class="node">
+<title>sourcefile~geomget.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node9"><a xlink:href="../sourcefile/geomget.f90.html" xlink:title="GeomGet.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="457.5,-506 371.5,-506 371.5,-482 457.5,-482 457.5,-506"/>
+<text text-anchor="middle" x="414.5" y="-491.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomGet.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~4&#45;&gt;sourcefile~geomget.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge10" class="edge">
+<title>sourcefile~api.f90~4&#45;&gt;sourcefile~geomget.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M581.5,-534C559.77,-545.56 496.38,-525.29 454.52,-509.62"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="455.75,-506.34 445.16,-506.06 453.26,-512.89 455.75,-506.34"/>
+</g>
+<!-- sourcefile~geomgethorzijindex.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node10" class="node">
+<title>sourcefile~geomgethorzijindex.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node10"><a xlink:href="../sourcefile/geomgethorzijindex.f90.html" xlink:title="GeomGetHorzIJIndex.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="655,-264 510,-264 510,-240 655,-240 655,-264"/>
+<text text-anchor="middle" x="582.5" y="-249.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomGetHorzIJIndex.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~4&#45;&gt;sourcefile~geomgethorzijindex.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge11" class="edge">
+<title>sourcefile~api.f90~4&#45;&gt;sourcefile~geomgethorzijindex.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M696.72,-319.85C674.25,-306.38 637.81,-284.55 612.36,-269.3"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="613.91,-266.14 603.53,-264 610.31,-272.14 613.91,-266.14"/>
+</g>
+<!-- sourcefile~geommanager.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node11" class="node">
+<title>sourcefile~geommanager.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node11"><a xlink:href="../sourcefile/geommanager.f90.html" xlink:title="GeomManager.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="471,-188 358,-188 358,-164 471,-164 471,-188"/>
+<text text-anchor="middle" x="414.5" y="-173.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomManager.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~4&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge12" class="edge">
+<title>sourcefile~api.f90~4&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M713.09,-319.87C705.52,-298.4 686.75,-253.81 655,-231 604.17,-194.48 532.93,-181.75 481.38,-177.55"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="481.57,-174.05 471.34,-176.81 481.06,-181.03 481.57,-174.05"/>
+</g>
+<!-- sourcefile~geomspec.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node12" class="node">
+<title>sourcefile~geomspec.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node12"><a xlink:href="../sourcefile/geomspec.f90.html" xlink:title="GeomSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="111.5,-354 17.5,-354 17.5,-330 111.5,-330 111.5,-354"/>
+<text text-anchor="middle" x="64.5" y="-339.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~4&#45;&gt;sourcefile~geomspec.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge13" class="edge">
+<title>sourcefile~api.f90~4&#45;&gt;sourcefile~geomspec.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M581.5,-534C509.08,-572.24 496.89,-604.93 415.5,-614"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M413.5,-614C371.43,-618.69 189.91,-506.19 165,-474 133.26,-432.99 165.57,-399.78 129,-363 126.47,-360.45 123.62,-358.21 120.57,-356.25"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="122,-353.04 111.53,-351.39 118.68,-359.21 122,-353.04"/>
+</g>
+<!-- sourcefile~geomutilities.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node13" class="node">
+<title>sourcefile~geomutilities.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node13"><a xlink:href="../sourcefile/geomutilities.f90.html" xlink:title="GeomUtilities.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="467.5,-346 361.5,-346 361.5,-322 467.5,-322 467.5,-346"/>
+<text text-anchor="middle" x="414.5" y="-331.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomUtilities.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~4&#45;&gt;sourcefile~geomutilities.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge14" class="edge">
+<title>sourcefile~api.f90~4&#45;&gt;sourcefile~geomutilities.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M690.94,-342.94C680.04,-346.96 667.11,-351 655,-353 591.41,-363.48 574.13,-359.38 510,-353 498.79,-351.88 486.95,-350.04 475.58,-347.93"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="476.22,-344.49 465.73,-346.02 474.88,-351.36 476.22,-344.49"/>
+</g>
+<!-- sourcefile~gridget.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node14" class="node">
+<title>sourcefile~gridget.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node14"><a xlink:href="../sourcefile/gridget.f90.html" xlink:title="GridGet.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="452.5,-464 376.5,-464 376.5,-440 452.5,-440 452.5,-464"/>
+<text text-anchor="middle" x="414.5" y="-449.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GridGet.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~4&#45;&gt;sourcefile~gridget.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge15" class="edge">
+<title>sourcefile~api.f90~4&#45;&gt;sourcefile~gridget.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M713.85,-344.1C706.68,-370.06 687.21,-432.19 655,-475 630.23,-507.92 619.88,-514.65 583.5,-534"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M581.5,-534C533,-559.79 523.92,-495.92 474,-473 469.97,-471.15 465.74,-469.36 461.46,-467.64"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="462.68,-464.36 452.09,-464.04 460.17,-470.9 462.68,-464.36"/>
+</g>
+<!-- sourcefile~gridgetglobal.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node15" class="node">
+<title>sourcefile~gridgetglobal.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node15"><a xlink:href="../sourcefile/gridgetglobal.f90.html" xlink:title="GridGetGlobal.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="638,-344 527,-344 527,-320 638,-320 638,-344"/>
+<text text-anchor="middle" x="582.5" y="-329.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GridGetGlobal.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~4&#45;&gt;sourcefile~gridgetglobal.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge16" class="edge">
+<title>sourcefile~api.f90~4&#45;&gt;sourcefile~gridgetglobal.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M690.94,-332C678.74,-332 663.59,-332 648.56,-332"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="648.21,-328.5 638.21,-332 648.21,-335.5 648.21,-328.5"/>
+</g>
+<!-- sourcefile~gridgethorzijindex.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node16" class="node">
+<title>sourcefile~gridgethorzijindex.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node16"><a xlink:href="../sourcefile/gridgethorzijindex.f90.html" xlink:title="GridGetHorzIJIndex.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="650.5,-424 514.5,-424 514.5,-400 650.5,-400 650.5,-424"/>
+<text text-anchor="middle" x="582.5" y="-409.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GridGetHorzIJIndex.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~4&#45;&gt;sourcefile~gridgethorzijindex.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge17" class="edge">
+<title>sourcefile~api.f90~4&#45;&gt;sourcefile~gridgethorzijindex.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M705.68,-344.19C693.97,-356.21 674.67,-374.4 655,-386 648.59,-389.78 641.53,-393.16 634.42,-396.13"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="632.79,-393.01 624.76,-399.92 635.35,-399.52 632.79,-393.01"/>
+</g>
+<!-- sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node17" class="node">
+<title>sourcefile~keywordenforcer.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node17"><a xlink:href="../sourcefile/keywordenforcer.f90.html" xlink:title="KeywordEnforcer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="304,-432 180,-432 180,-408 304,-408 304,-432"/>
+<text text-anchor="middle" x="242" y="-417.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">KeywordEnforcer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~4&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge18" class="edge">
+<title>sourcefile~api.f90~4&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M581.5,-534C536.9,-557.72 397.06,-542.97 355,-515 326.2,-495.85 345.24,-468.54 319,-446 314.77,-442.37 310,-439.23 304.98,-436.53"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="306.24,-433.25 295.7,-432.12 303.23,-439.58 306.24,-433.25"/>
+</g>
+<!-- sourcefile~maplgeom.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node18" class="node">
+<title>sourcefile~maplgeom.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node18"><a xlink:href="../sourcefile/maplgeom.f90.html" xlink:title="MaplGeom.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="288.5,-66 195.5,-66 195.5,-42 288.5,-42 288.5,-66"/>
+<text text-anchor="middle" x="242" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MaplGeom.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~4&#45;&gt;sourcefile~maplgeom.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge19" class="edge">
+<title>sourcefile~api.f90~4&#45;&gt;sourcefile~maplgeom.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M716.01,-319.58C712.93,-289.78 700.75,-213.99 655,-177 571.02,-109.1 515.46,-176.87 415.5,-136"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M413.5,-136C365.26,-114.43 310.32,-87.59 276.15,-70.62"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="277.6,-67.43 267.08,-66.1 274.48,-73.69 277.6,-67.43"/>
+</g>
+<!-- sourcefile~subgrid.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node19" class="node">
+<title>sourcefile~subgrid.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node19"><a xlink:href="../sourcefile/subgrid.f90.html" xlink:title="Subgrid.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="620.5,-466 544.5,-466 544.5,-442 620.5,-442 620.5,-466"/>
+<text text-anchor="middle" x="582.5" y="-451.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subgrid.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~4&#45;&gt;sourcefile~subgrid.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge20" class="edge">
+<title>sourcefile~api.f90~4&#45;&gt;sourcefile~subgrid.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M712.83,-344.28C704.96,-365.58 685.89,-409.37 655,-433 647.83,-438.48 639.26,-442.54 630.59,-445.53"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="629.38,-442.24 620.82,-448.49 631.4,-448.94 629.38,-442.24"/>
+</g>
+<!-- sourcefile~xygeomfactory.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node20" class="node">
+<title>sourcefile~xygeomfactory.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node20"><a xlink:href="../sourcefile/xygeomfactory.f90.html" xlink:title="XYGeomFactory.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="474,-586 355,-586 355,-562 474,-562 474,-586"/>
+<text text-anchor="middle" x="414.5" y="-571.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">XYGeomFactory.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~4&#45;&gt;sourcefile~xygeomfactory.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge21" class="edge">
+<title>sourcefile~api.f90~4&#45;&gt;sourcefile~xygeomfactory.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M581.5,-534C551.51,-549.95 515.1,-559.64 484.04,-565.47"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="483.38,-562.03 474.15,-567.23 484.61,-568.92 483.38,-562.03"/>
+</g>
+<!-- sourcefile~xygeomspec.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node21" class="node">
+<title>sourcefile~xygeomspec.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node21"><a xlink:href="../sourcefile/xygeomspec.f90.html" xlink:title="XYGeomSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="296,-626 188,-626 188,-602 296,-602 296,-626"/>
+<text text-anchor="middle" x="242" y="-611.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">XYGeomSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~4&#45;&gt;sourcefile~xygeomspec.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge22" class="edge">
+<title>sourcefile~api.f90~4&#45;&gt;sourcefile~xygeomspec.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M413.5,-614C378.19,-617.94 338.52,-618.18 306.33,-617.33"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="306.26,-613.83 296.16,-617.02 306.05,-620.83 306.26,-613.83"/>
+</g>
+<!-- sourcefile~routehandleparam.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge24" class="edge">
+<title>sourcefile~routehandleparam.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M780.88,-290.07C760.93,-290.03 739.06,-290.48 719,-292"/>
+</g>
+<!-- sourcefile~routehandleparam.f90&#45;&gt;sourcefile~api.f90~4 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge23" class="edge">
+<title>sourcefile~routehandleparam.f90&#45;&gt;sourcefile~api.f90~4</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M809.65,-304C792.21,-309.39 771.77,-315.7 754.72,-320.97"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="753.64,-317.64 745.12,-323.93 755.71,-324.33 753.64,-317.64"/>
+</g>
+<!-- sourcefile~geomget.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge25" class="edge">
+<title>sourcefile~geomget.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M371.31,-483.39C365.4,-480.66 359.74,-477.25 355,-473 327.78,-448.57 347.12,-422.39 319,-399 315.02,-395.69 310.57,-392.9 305.86,-390.55"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="307.11,-387.29 296.54,-386.55 304.35,-393.72 307.11,-387.29"/>
+</g>
+<!-- sourcefile~geomget.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge26" class="edge">
+<title>sourcefile~geomget.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M374.71,-481.93C367.99,-479.32 361.18,-476.33 355,-473 337.39,-463.52 336.68,-455.35 319,-446 311.56,-442.06 303.4,-438.54 295.27,-435.45"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="296.39,-432.13 285.8,-432.02 294.01,-438.71 296.39,-432.13"/>
+</g>
+<!-- sourcefile~geomgethorzijindex.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge27" class="edge">
+<title>sourcefile~geomgethorzijindex.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff7500" stroke-dasharray="5,2" d="M413.5,-256C386.48,-263.74 375.6,-260.88 355,-280 328.78,-304.34 345.94,-328.45 319,-352 314.8,-355.67 310.06,-358.83 305.04,-361.55"/>
+<polygon fill="#ff7500" stroke="#ff7500" points="303.3,-358.5 295.79,-365.98 306.32,-364.82 303.3,-358.5"/>
+</g>
+<!-- sourcefile~geomgethorzijindex.f90&#45;&gt;sourcefile~geommanager.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge28" class="edge">
+<title>sourcefile~geomgethorzijindex.f90&#45;&gt;sourcefile~geommanager.f90</title>
+<path fill="none" stroke="#ff7500" stroke-dasharray="5,2" d="M545.47,-239.99C534,-235.88 521.35,-231.04 510,-226 487.79,-216.14 463.59,-203.3 445.24,-193.09"/>
+<polygon fill="#ff7500" stroke="#ff7500" points="446.91,-190.02 436.48,-188.17 443.48,-196.12 446.91,-190.02"/>
+</g>
+<!-- sourcefile~geomgethorzijindex.f90&#45;&gt;sourcefile~geomspec.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge29" class="edge">
+<title>sourcefile~geomgethorzijindex.f90&#45;&gt;sourcefile~geomspec.f90</title>
+<path fill="none" stroke="#ff7500" stroke-dasharray="5,2" d="M509.63,-245.88C479.97,-245.36 445.57,-247.39 415.5,-256"/>
+<path fill="none" stroke="#ff7500" stroke-dasharray="5,2" d="M413.5,-256C386.48,-263.74 378.61,-264.76 355,-280 336.51,-291.93 338.97,-304.76 319,-314 256.09,-343.11 175.31,-347.09 122.05,-345.79"/>
+<polygon fill="#ff7500" stroke="#ff7500" points="121.89,-342.28 111.78,-345.46 121.67,-349.28 121.89,-342.28"/>
+</g>
+<!-- sourcefile~geomgethorzijindex.f90&#45;&gt;sourcefile~maplgeom.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge30" class="edge">
+<title>sourcefile~geomgethorzijindex.f90&#45;&gt;sourcefile~maplgeom.f90</title>
+<path fill="none" stroke="#ff7500" stroke-dasharray="5,2" d="M571.15,-239.78C553.3,-219.44 514.7,-178.52 474,-155 450.33,-141.32 440.8,-146.34 415.5,-136"/>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge31" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ffeb00" stroke-dasharray="5,2" d="M373.96,-188.06C366.93,-191.65 360.2,-196.21 355,-202 320.06,-240.9 348.13,-270.58 319,-314 306.59,-332.49 287.37,-348.61 271.37,-360.04"/>
+<polygon fill="#ffeb00" stroke="#ffeb00" points="269.12,-357.34 262.87,-365.9 273.09,-363.11 269.12,-357.34"/>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~geomspec.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge35" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~geomspec.f90</title>
+<path fill="none" stroke="#ffeb00" stroke-dasharray="5,2" d="M241,-300C202.33,-315.02 156.7,-325.74 121.67,-332.59"/>
+<polygon fill="#ffeb00" stroke="#ffeb00" points="120.78,-329.2 111.62,-334.51 122.1,-336.07 120.78,-329.2"/>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~maplgeom.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge38" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~maplgeom.f90</title>
+<path fill="none" stroke="#ffeb00" stroke-dasharray="5,2" d="M376.21,-163.97C368.59,-160.33 361.06,-155.72 355,-150 329.57,-125.97 345.47,-102.88 319,-80 312.85,-74.68 305.56,-70.44 297.97,-67.06"/>
+<polygon fill="#ffeb00" stroke="#ffeb00" points="299.2,-63.78 288.61,-63.34 296.61,-70.29 299.2,-63.78"/>
+</g>
+<!-- sourcefile~filemetadata.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node22" class="node">
+<title>sourcefile~filemetadata.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node22"><a xlink:href="../sourcefile/filemetadata.f90.html" xlink:title="FileMetadata.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="116,-24 13,-24 13,0 116,0 116,-24"/>
+<text text-anchor="middle" x="64.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FileMetadata.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~filemetadata.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge32" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~filemetadata.f90</title>
+<path fill="none" stroke="#ffeb00" stroke-dasharray="5,2" d="M409.56,-163.69C399.66,-134.96 370.72,-63.63 319,-33 260.46,1.67 180.56,2.22 126.22,-2.85"/>
+<polygon fill="#ffeb00" stroke="#ffeb00" points="125.64,0.61 116.04,-3.89 126.35,-6.35 125.64,0.61"/>
+</g>
+<!-- sourcefile~geomfactory.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node23" class="node">
+<title>sourcefile~geomfactory.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node23"><a xlink:href="../sourcefile/geomfactory.f90.html" xlink:title="GeomFactory.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="117,-150 12,-150 12,-126 117,-126 117,-150"/>
+<text text-anchor="middle" x="64.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomFactory.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~geomfactory.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge33" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~geomfactory.f90</title>
+<path fill="none" stroke="#ffeb00" stroke-dasharray="5,2" d="M380.44,-163.93C371.8,-160.08 362.75,-155.4 355,-150 336.18,-136.88 340.14,-121.93 319,-113 255.95,-86.37 232.93,-104.6 165,-113 148.17,-115.08 130.09,-119.08 114.02,-123.27"/>
+<polygon fill="#ffeb00" stroke="#ffeb00" points="113.05,-119.91 104.3,-125.89 114.87,-126.66 113.05,-119.91"/>
+</g>
+<!-- sourcefile~geomfactoryvector.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node24" class="node">
+<title>sourcefile~geomfactoryvector.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node24"><a xlink:href="../sourcefile/geomfactoryvector.f90.html" xlink:title="GeomFactoryVector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="311.5,-188 172.5,-188 172.5,-164 311.5,-164 311.5,-188"/>
+<text text-anchor="middle" x="242" y="-173.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomFactoryVector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~geomfactoryvector.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge34" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~geomfactoryvector.f90</title>
+<path fill="none" stroke="#ffeb00" stroke-dasharray="5,2" d="M357.67,-176C346.21,-176 333.95,-176 321.86,-176"/>
+<polygon fill="#ffeb00" stroke="#ffeb00" points="321.76,-172.5 311.76,-176 321.76,-179.5 321.76,-172.5"/>
+</g>
+<!-- sourcefile~geomspecvector.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node25" class="node">
+<title>sourcefile~geomspecvector.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node25"><a xlink:href="../sourcefile/geomspecvector.f90.html" xlink:title="GeomSpecVector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="305,-146 179,-146 179,-122 305,-122 305,-146"/>
+<text text-anchor="middle" x="242" y="-131.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomSpecVector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~geomspecvector.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge36" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~geomspecvector.f90</title>
+<path fill="none" stroke="#ffeb00" stroke-dasharray="5,2" d="M364.64,-163.96C345.02,-159.13 322.24,-153.52 301.73,-148.47"/>
+<polygon fill="#ffeb00" stroke="#ffeb00" points="302.41,-145.03 291.87,-146.04 300.74,-151.83 302.41,-145.03"/>
+</g>
+<!-- sourcefile~integermaplgeommap.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node26" class="node">
+<title>sourcefile~integermaplgeommap.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node26"><a xlink:href="../sourcefile/integermaplgeommap.f90.html" xlink:title="IntegerMaplGeomMap.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="319,-272 165,-272 165,-248 319,-248 319,-272"/>
+<text text-anchor="middle" x="242" y="-257.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">IntegerMaplGeomMap.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~integermaplgeommap.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge37" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~integermaplgeommap.f90</title>
+<path fill="none" stroke="#ffeb00" stroke-dasharray="5,2" d="M380.44,-188.07C371.8,-191.92 362.75,-196.6 355,-202 336.18,-215.12 338.75,-227.32 319,-239 315.96,-240.8 312.77,-242.45 309.47,-243.96"/>
+<polygon fill="#ffeb00" stroke="#ffeb00" points="307.91,-240.82 299.99,-247.86 310.57,-247.29 307.91,-240.82"/>
+</g>
+<!-- sourcefile~nullgeomspec.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node28" class="node">
+<title>sourcefile~nullgeomspec.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node28"><a xlink:href="../sourcefile/nullgeomspec.f90.html" xlink:title="NullGeomSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="299,-230 185,-230 185,-206 299,-206 299,-230"/>
+<text text-anchor="middle" x="242" y="-215.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">NullGeomSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~nullgeomspec.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge39" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~nullgeomspec.f90</title>
+<path fill="none" stroke="#ffeb00" stroke-dasharray="5,2" d="M364.64,-188.04C345.02,-192.87 322.24,-198.48 301.73,-203.53"/>
+<polygon fill="#ffeb00" stroke="#ffeb00" points="300.74,-200.17 291.87,-205.96 302.41,-206.97 300.74,-200.17"/>
+</g>
+<!-- sourcefile~stringdictionary.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node30" class="node">
+<title>sourcefile~stringdictionary.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node30"><a xlink:href="../sourcefile/stringdictionary.f90.html" xlink:title="StringDictionary.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="124.5,-312 4.5,-312 4.5,-288 124.5,-288 124.5,-312"/>
+<text text-anchor="middle" x="64.5" y="-297.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StringDictionary.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geommanager.f90&#45;&gt;sourcefile~stringdictionary.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge40" class="edge">
+<title>sourcefile~geommanager.f90&#45;&gt;sourcefile~stringdictionary.f90</title>
+<path fill="none" stroke="#ffeb00" stroke-dasharray="5,2" d="M375.39,-188.11C368,-191.72 360.76,-196.29 355,-202 327.59,-229.16 348.66,-256.32 319,-281 292.24,-303.27 275.45,-287.39 243,-300"/>
+<path fill="none" stroke="#ffeb00" stroke-dasharray="5,2" d="M241,-300C207.67,-312.95 168.01,-314.02 134.84,-311.39"/>
+<polygon fill="#ffeb00" stroke="#ffeb00" points="135.04,-307.9 124.77,-310.47 134.4,-314.87 135.04,-307.9"/>
+</g>
+<!-- sourcefile~geomutilities.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge41" class="edge">
+<title>sourcefile~geomutilities.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#27ff00" stroke-dasharray="5,2" d="M366.91,-346.02C346.05,-351.41 321.27,-357.8 299.37,-363.45"/>
+<polygon fill="#27ff00" stroke="#27ff00" points="298.34,-360.1 289.53,-365.99 300.09,-366.88 298.34,-360.1"/>
+</g>
+<!-- sourcefile~gridget.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge42" class="edge">
+<title>sourcefile~gridget.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#00ff4e" stroke-dasharray="5,2" d="M382.79,-439.9C373.64,-435.89 363.72,-431.12 355,-426 337.75,-415.87 336.95,-407.82 319,-399 314.95,-397.01 310.69,-395.19 306.33,-393.52"/>
+<polygon fill="#00ff4e" stroke="#00ff4e" points="307.27,-390.14 296.68,-390.1 304.94,-396.74 307.27,-390.14"/>
+</g>
+<!-- sourcefile~gridget.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge43" class="edge">
+<title>sourcefile~gridget.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#00ff4e" stroke-dasharray="5,2" d="M376.08,-444.98C357.89,-441.56 335.4,-437.34 314.11,-433.35"/>
+<polygon fill="#00ff4e" stroke="#00ff4e" points="314.59,-429.88 304.12,-431.47 313.3,-436.75 314.59,-429.88"/>
+</g>
+<!-- sourcefile~gridgetglobal.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge44" class="edge">
+<title>sourcefile~gridgetglobal.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#00ffc4" stroke-dasharray="5,2" d="M544.44,-319.99C503.43,-307.32 439.89,-289.73 415.5,-294"/>
+</g>
+<!-- sourcefile~gridgethorzijindex.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge45" class="edge">
+<title>sourcefile~gridgethorzijindex.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#00c4ff" stroke-dasharray="5,2" d="M514.46,-402.82C501.07,-401.11 487.1,-399.42 474,-398 417.63,-391.89 353.37,-386.45 306.95,-382.79"/>
+<polygon fill="#00c4ff" stroke="#00c4ff" points="306.98,-379.28 296.74,-381.99 306.44,-386.26 306.98,-379.28"/>
+</g>
+<!-- sourcefile~maplgeom.f90&#45;&gt;sourcefile~geomspec.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge48" class="edge">
+<title>sourcefile~maplgeom.f90&#45;&gt;sourcefile~geomspec.f90</title>
+<path fill="none" stroke="#2700ff" stroke-dasharray="5,2" d="M217.2,-66.16C199.89,-76.29 177.39,-92.38 165,-113 116.68,-193.42 190.25,-249.94 129,-321 126.5,-323.9 123.6,-326.4 120.43,-328.55"/>
+<polygon fill="#2700ff" stroke="#2700ff" points="118.58,-325.58 111.53,-333.49 121.97,-331.7 118.58,-325.58"/>
+</g>
+<!-- sourcefile~maplgeom.f90&#45;&gt;sourcefile~filemetadata.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge46" class="edge">
+<title>sourcefile~maplgeom.f90&#45;&gt;sourcefile~filemetadata.f90</title>
+<path fill="none" stroke="#2700ff" stroke-dasharray="5,2" d="M195.35,-43.07C174.11,-37.99 148.57,-31.88 125.78,-26.43"/>
+<polygon fill="#2700ff" stroke="#2700ff" points="126.4,-22.98 115.86,-24.05 124.78,-29.78 126.4,-22.98"/>
+</g>
+<!-- sourcefile~maplgeom.f90&#45;&gt;sourcefile~geomfactory.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge47" class="edge">
+<title>sourcefile~maplgeom.f90&#45;&gt;sourcefile~geomfactory.f90</title>
+<path fill="none" stroke="#2700ff" stroke-dasharray="5,2" d="M195.2,-65.79C184.84,-69.5 174.19,-74.18 165,-80 145.61,-92.27 148.45,-104.83 129,-117 126.24,-118.72 123.33,-120.32 120.33,-121.8"/>
+<polygon fill="#2700ff" stroke="#2700ff" points="118.84,-118.63 111.12,-125.89 121.68,-125.03 118.84,-118.63"/>
+</g>
+<!-- sourcefile~maplgeom.f90&#45;&gt;sourcefile~stringdictionary.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge49" class="edge">
+<title>sourcefile~maplgeom.f90&#45;&gt;sourcefile~stringdictionary.f90</title>
+<path fill="none" stroke="#2700ff" stroke-dasharray="5,2" d="M221,-66.11C204.46,-76.87 181.14,-93.83 165,-113 120.81,-165.49 88.18,-240.8 73.73,-277.79"/>
+<polygon fill="#2700ff" stroke="#2700ff" points="70.3,-276.97 69.99,-287.56 76.84,-279.47 70.3,-276.97"/>
+</g>
+<!-- sourcefile~vectorbasis.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node31" class="node">
+<title>sourcefile~vectorbasis.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node31"><a xlink:href="../sourcefile/vectorbasis.f90.html" xlink:title="VectorBasis.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="113,-108 16,-108 16,-84 113,-84 113,-108"/>
+<text text-anchor="middle" x="64.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VectorBasis.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~maplgeom.f90&#45;&gt;sourcefile~vectorbasis.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge50" class="edge">
+<title>sourcefile~maplgeom.f90&#45;&gt;sourcefile~vectorbasis.f90</title>
+<path fill="none" stroke="#2700ff" stroke-dasharray="5,2" d="M195.35,-64.93C173.22,-70.22 146.41,-76.64 122.91,-82.26"/>
+<polygon fill="#2700ff" stroke="#2700ff" points="121.98,-78.88 113.07,-84.62 123.61,-85.69 121.98,-78.88"/>
+</g>
+<!-- sourcefile~vectorbasiskind.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node32" class="node">
+<title>sourcefile~vectorbasiskind.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node32"><a xlink:href="../sourcefile/vectorbasiskind.f90.html" xlink:title="VectorBasisKind.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="124.5,-66 4.5,-66 4.5,-42 124.5,-42 124.5,-66"/>
+<text text-anchor="middle" x="64.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VectorBasisKind.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~maplgeom.f90&#45;&gt;sourcefile~vectorbasiskind.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge51" class="edge">
+<title>sourcefile~maplgeom.f90&#45;&gt;sourcefile~vectorbasiskind.f90</title>
+<path fill="none" stroke="#2700ff" stroke-dasharray="5,2" d="M195.35,-54C176.93,-54 155.27,-54 134.97,-54"/>
+<polygon fill="#2700ff" stroke="#2700ff" points="134.82,-50.5 124.82,-54 134.82,-57.5 134.82,-50.5"/>
+</g>
+<!-- sourcefile~subgrid.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge52" class="edge">
+<title>sourcefile~subgrid.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#9c00ff" stroke-dasharray="5,2" d="M544.15,-443.74C503.18,-432.62 440.01,-415.96 415.5,-412"/>
+<path fill="none" stroke="#9c00ff" stroke-dasharray="5,2" d="M413.5,-412C378.01,-406.27 338.63,-398.51 306.67,-391.85"/>
+<polygon fill="#9c00ff" stroke="#9c00ff" points="307.08,-388.36 296.57,-389.73 305.64,-395.21 307.08,-388.36"/>
+</g>
+<!-- sourcefile~subgrid.f90&#45;&gt;sourcefile~gridget.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge53" class="edge">
+<title>sourcefile~subgrid.f90&#45;&gt;sourcefile~gridget.f90</title>
+<path fill="none" stroke="#9c00ff" stroke-dasharray="5,2" d="M544.25,-453.55C520.22,-453.26 488.75,-452.88 462.94,-452.57"/>
+<polygon fill="#9c00ff" stroke="#9c00ff" points="462.67,-449.07 452.63,-452.45 462.59,-456.07 462.67,-449.07"/>
+</g>
+<!-- sourcefile~subgrid.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge54" class="edge">
+<title>sourcefile~subgrid.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#9c00ff" stroke-dasharray="5,2" d="M413.5,-412C381.17,-406.78 344.98,-407.56 314.29,-410.13"/>
+<polygon fill="#9c00ff" stroke="#9c00ff" points="313.74,-406.66 304.11,-411.06 314.38,-413.63 313.74,-406.66"/>
+</g>
+<!-- sourcefile~xygeomfactory.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge55" class="edge">
+<title>sourcefile~xygeomfactory.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff00eb" stroke-dasharray="5,2" d="M397.71,-561.79C384.56,-550.84 366.22,-533.67 355,-515 327.2,-468.73 357.76,-436.57 319,-399 315.17,-395.28 310.74,-392.21 305.98,-389.68"/>
+<polygon fill="#ff00eb" stroke="#ff00eb" points="307.07,-386.33 296.51,-385.43 304.2,-392.71 307.07,-386.33"/>
+</g>
+<!-- sourcefile~xygeomfactory.f90&#45;&gt;sourcefile~geomspec.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge57" class="edge">
+<title>sourcefile~xygeomfactory.f90&#45;&gt;sourcefile~geomspec.f90</title>
+<path fill="none" stroke="#ff00eb" stroke-dasharray="5,2" d="M241,-460C214.7,-437.19 191.82,-463.21 165,-441 135.59,-416.65 157.48,-388.43 129,-363 126.49,-360.76 123.73,-358.75 120.82,-356.96"/>
+<polygon fill="#ff00eb" stroke="#ff00eb" points="122.17,-353.72 111.68,-352.2 118.93,-359.93 122.17,-353.72"/>
+</g>
+<!-- sourcefile~xygeomfactory.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge58" class="edge">
+<title>sourcefile~xygeomfactory.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#ff00eb" stroke-dasharray="5,2" d="M374.39,-561.97C367.24,-558.38 360.36,-553.8 355,-548 322.37,-512.69 353.16,-479.83 319,-446 315.47,-442.5 311.45,-439.48 307.15,-436.86"/>
+<polygon fill="#ff00eb" stroke="#ff00eb" points="308.46,-433.59 297.98,-432.03 305.2,-439.79 308.46,-433.59"/>
+</g>
+<!-- sourcefile~xygeomfactory.f90&#45;&gt;sourcefile~xygeomspec.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge61" class="edge">
+<title>sourcefile~xygeomfactory.f90&#45;&gt;sourcefile~xygeomspec.f90</title>
+<path fill="none" stroke="#ff00eb" stroke-dasharray="5,2" d="M362.34,-586C344.05,-590.29 323.25,-595.17 304.2,-599.64"/>
+<polygon fill="#ff00eb" stroke="#ff00eb" points="303.35,-596.25 294.41,-601.94 304.95,-603.06 303.35,-596.25"/>
+</g>
+<!-- sourcefile~xygeomfactory.f90&#45;&gt;sourcefile~geomfactory.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge56" class="edge">
+<title>sourcefile~xygeomfactory.f90&#45;&gt;sourcefile~geomfactory.f90</title>
+<path fill="none" stroke="#ff00eb" stroke-dasharray="5,2" d="M382.42,-561.89C373.34,-557.91 363.57,-553.16 355,-548 341.44,-539.83 254.96,-470.37 243,-460"/>
+<path fill="none" stroke="#ff00eb" stroke-dasharray="5,2" d="M241,-460C214.7,-437.19 189.29,-465.94 165,-441 113.54,-388.16 152.26,-348.99 129,-279 114.37,-234.98 90.56,-186.15 76.63,-159.06"/>
+<polygon fill="#ff00eb" stroke="#ff00eb" points="79.7,-157.37 71.98,-150.11 73.48,-160.6 79.7,-157.37"/>
+</g>
+<!-- sourcefile~pfio.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node29" class="node">
+<title>sourcefile~pfio.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node29"><a xlink:href="../sourcefile/pfio.f90.html" xlink:title="pFIO.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="93.5,-586 35.5,-586 35.5,-562 93.5,-562 93.5,-586"/>
+<text text-anchor="middle" x="64.5" y="-571.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pFIO.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~xygeomfactory.f90&#45;&gt;sourcefile~pfio.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge59" class="edge">
+<title>sourcefile~xygeomfactory.f90&#45;&gt;sourcefile~pfio.f90</title>
+<path fill="none" stroke="#ff00eb" stroke-dasharray="5,2" d="M354.86,-574C283.41,-574 164.73,-574 103.95,-574"/>
+<polygon fill="#ff00eb" stroke="#ff00eb" points="103.65,-570.5 93.65,-574 103.65,-577.5 103.65,-570.5"/>
+</g>
+<!-- sourcefile~xygeomfactory.f90&#45;&gt;sourcefile~stringdictionary.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge60" class="edge">
+<title>sourcefile~xygeomfactory.f90&#45;&gt;sourcefile~stringdictionary.f90</title>
+<path fill="none" stroke="#ff00eb" stroke-dasharray="5,2" d="M241,-460C214.7,-437.19 190.19,-465.04 165,-441 124.72,-402.55 167.82,-360.92 129,-321 127.94,-319.91 126.82,-318.87 125.65,-317.89"/>
+<polygon fill="#ff00eb" stroke="#ff00eb" points="127.53,-314.94 117.31,-312.16 123.57,-320.71 127.53,-314.94"/>
+</g>
+<!-- sourcefile~xygeomspec.f90&#45;&gt;sourcefile~geomspec.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge62" class="edge">
+<title>sourcefile~xygeomspec.f90&#45;&gt;sourcefile~geomspec.f90</title>
+<path fill="none" stroke="#ff0075" stroke-dasharray="5,2" d="M219.78,-601.87C202.25,-590.7 178.18,-572.47 165,-550 122.17,-477 184.86,-426.59 129,-363 126.52,-360.17 123.64,-357.73 120.52,-355.61"/>
+<polygon fill="#ff0075" stroke="#ff0075" points="122.2,-352.54 111.77,-350.73 118.8,-358.65 122.2,-352.54"/>
+</g>
+<!-- sourcefile~internalconstants.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_node27" class="node">
+<title>sourcefile~internalconstants.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~EfferentGraph_node27"><a xlink:href="../sourcefile/internalconstants.f90.html" xlink:title="InternalConstants.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="129,-628 0,-628 0,-604 129,-604 129,-628"/>
+<text text-anchor="middle" x="64.5" y="-613.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">InternalConstants.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~xygeomspec.f90&#45;&gt;sourcefile~internalconstants.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge63" class="edge">
+<title>sourcefile~xygeomspec.f90&#45;&gt;sourcefile~internalconstants.f90</title>
+<path fill="none" stroke="#ff0075" stroke-dasharray="5,2" d="M187.87,-614.61C172.58,-614.78 155.62,-614.97 139.32,-615.16"/>
+<polygon fill="#ff0075" stroke="#ff0075" points="139.23,-611.66 129.28,-615.27 139.31,-618.66 139.23,-611.66"/>
+</g>
+<!-- sourcefile~xygeomspec.f90&#45;&gt;sourcefile~pfio.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~EfferentGraph_edge64" class="edge">
+<title>sourcefile~xygeomspec.f90&#45;&gt;sourcefile~pfio.f90</title>
+<path fill="none" stroke="#ff0075" stroke-dasharray="5,2" d="M188.34,-602C161.01,-595.77 128.24,-588.3 103.42,-582.64"/>
+<polygon fill="#ff0075" stroke="#ff0075" points="104.18,-579.23 93.65,-580.42 102.63,-586.05 104.18,-579.23"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefileroutehandlemanagerf90EfferentGraph = svgPanZoom('#sourcefileroutehandlemanagerf90EfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#EfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="EfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Files dependent on this one</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~routehandlemanager.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefileroutehandlemanagerf90AfferentGraph" width="641pt" height="285pt"
+ viewBox="0.00 0.00 641.00 285.47" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph" class="graph" transform="scale(0.88 0.88) rotate(0) translate(4 322)">
+<title>sourcefile~~routehandlemanager.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-322 728,-322 728,4 -4,4"/>
+<!-- sourcefile~routehandlemanager.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~routehandlemanager.f90</title>
+<polygon fill="none" stroke="black" points="148,-212 0,-212 0,-188 148,-188 148,-212"/>
+<text text-anchor="middle" x="74" y="-197.6" font-family="Helvetica,sans-Serif" font-size="10.50">RoutehandleManager.F90</text>
+</g>
+<!-- sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~esmfregridder.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~AfferentGraph_node2"><a xlink:href="../sourcefile/esmfregridder.f90.html" xlink:title="EsmfRegridder.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="296,-192 184,-192 184,-168 296,-168 296,-192"/>
+<text text-anchor="middle" x="240" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">EsmfRegridder.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~esmfregridder.f90&#45;&gt;sourcefile~routehandlemanager.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~esmfregridder.f90&#45;&gt;sourcefile~routehandlemanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M183.93,-186.72C175.71,-187.72 167.07,-188.77 158.42,-189.83"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="157.78,-186.38 148.27,-191.06 158.62,-193.33 157.78,-186.38"/>
+</g>
+<!-- sourcefile~esmfregridderfactory.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~esmfregridderfactory.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~AfferentGraph_node3"><a xlink:href="../sourcefile/esmfregridderfactory.f90.html" xlink:title="EsmfRegridderFactory.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="519,-318 368,-318 368,-294 519,-294 519,-318"/>
+<text text-anchor="middle" x="443.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">EsmfRegridderFactory.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~esmfregridderfactory.f90&#45;&gt;sourcefile~routehandlemanager.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~esmfregridderfactory.f90&#45;&gt;sourcefile~routehandlemanager.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M371.75,-293.99C358.47,-291.33 344.76,-288.31 332,-285 254.81,-264.99 167.03,-234.16 116.62,-215.65"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="117.64,-212.3 107.05,-212.12 115.22,-218.86 117.64,-212.3"/>
+</g>
+<!-- sourcefile~esmfregridderfactory.f90&#45;&gt;sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~esmfregridderfactory.f90&#45;&gt;sourcefile~esmfregridder.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M367.83,-298.87C355.35,-295.73 342.92,-291.28 332,-285 322.49,-279.52 280.49,-228.75 257.02,-199.86"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="259.67,-197.58 250.66,-192.01 254.23,-201.98 259.67,-197.58"/>
+</g>
+<!-- sourcefile~geomaspect.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~geomaspect.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~AfferentGraph_node4"><a xlink:href="../sourcefile/geomaspect.f90.html" xlink:title="GeomAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="495,-276 392,-276 392,-252 495,-252 495,-276"/>
+<text text-anchor="middle" x="443.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geomaspect.f90&#45;&gt;sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~geomaspect.f90&#45;&gt;sourcefile~esmfregridder.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M391.98,-258.92C372.69,-255.83 350.82,-250.88 332,-243 305.96,-232.09 279.83,-212.95 262.29,-198.62"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="264.33,-195.76 254.41,-192.03 259.84,-201.13 264.33,-195.76"/>
+</g>
+<!-- sourcefile~historycollectiongridcomp_private.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~historycollectiongridcomp_private.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~AfferentGraph_node5"><a xlink:href="../sourcefile/historycollectiongridcomp_private.f90.html" xlink:title="HistoryCollectionGridComp_private.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="555,-234 332,-234 332,-210 555,-210 555,-234"/>
+<text text-anchor="middle" x="443.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">HistoryCollectionGridComp_private.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~historycollectiongridcomp_private.f90&#45;&gt;sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~historycollectiongridcomp_private.f90&#45;&gt;sourcefile~esmfregridder.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M376.97,-209.98C362.16,-207.15 346.52,-204.05 332,-201 322.12,-198.92 311.67,-196.61 301.5,-194.31"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="301.99,-190.83 291.46,-192.01 300.43,-197.65 301.99,-190.83"/>
+</g>
+<!-- sourcefile~primaryexport.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~primaryexport.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~AfferentGraph_node6"><a xlink:href="../sourcefile/primaryexport.f90.html" xlink:title="PrimaryExport.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="499,-192 388,-192 388,-168 499,-168 499,-192"/>
+<text text-anchor="middle" x="443.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">PrimaryExport.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~primaryexport.f90&#45;&gt;sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~primaryexport.f90&#45;&gt;sourcefile~esmfregridder.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M387.97,-180C362.86,-180 332.87,-180 306.54,-180"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="306.27,-176.5 296.27,-180 306.27,-183.5 306.27,-176.5"/>
+</g>
+<!-- sourcefile~regridder_mgr.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~regridder_mgr.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~AfferentGraph_node7"><a xlink:href="../sourcefile/regridder_mgr.f90.html" xlink:title="regridder_mgr.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="498.5,-150 388.5,-150 388.5,-126 498.5,-126 498.5,-150"/>
+<text text-anchor="middle" x="443.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">regridder_mgr.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regridder_mgr.f90&#45;&gt;sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~regridder_mgr.f90&#45;&gt;sourcefile~esmfregridder.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M388.46,-147.83C370.47,-151.22 350.34,-155.14 332,-159 322.12,-161.08 311.67,-163.39 301.5,-165.69"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="300.43,-162.35 291.46,-167.99 301.99,-169.17 300.43,-162.35"/>
+</g>
+<!-- sourcefile~regriddermanager.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~regriddermanager.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~AfferentGraph_node8"><a xlink:href="../sourcefile/regriddermanager.f90.html" xlink:title="RegridderManager.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="724,-318 591,-318 591,-294 724,-294 724,-318"/>
+<text text-anchor="middle" x="657.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RegridderManager.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regriddermanager.f90&#45;&gt;sourcefile~esmfregridderfactory.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~regriddermanager.f90&#45;&gt;sourcefile~esmfregridderfactory.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M590.87,-306C571.42,-306 549.83,-306 529.35,-306"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="529.07,-302.5 519.07,-306 529.07,-309.5 529.07,-302.5"/>
+</g>
+<!-- sourcefile~regriddermethods.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~regriddermethods.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~AfferentGraph_node9"><a xlink:href="../sourcefile/regriddermethods.f90.html" xlink:title="RegridderMethods.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="510,-108 377,-108 377,-84 510,-84 510,-108"/>
+<text text-anchor="middle" x="443.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RegridderMethods.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regriddermethods.f90&#45;&gt;sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~regriddermethods.f90&#45;&gt;sourcefile~esmfregridder.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M376.9,-103.8C361.79,-106.87 346.05,-111.12 332,-117 305.96,-127.91 279.83,-147.05 262.29,-161.38"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="259.84,-158.87 254.41,-167.97 264.33,-164.24 259.84,-158.87"/>
+</g>
+<!-- sourcefile~variablespec.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~variablespec.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~AfferentGraph_node10"><a xlink:href="../sourcefile/variablespec.f90.html" xlink:title="VariableSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="496,-66 391,-66 391,-42 496,-42 496,-66"/>
+<text text-anchor="middle" x="443.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VariableSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~variablespec.f90&#45;&gt;sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~variablespec.f90&#45;&gt;sourcefile~esmfregridder.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M390.79,-56.66C371.35,-59.45 349.69,-64.82 332,-75 296.56,-95.4 268.16,-134.81 253.01,-159.12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="249.87,-157.56 247.69,-167.93 255.86,-161.18 249.87,-157.56"/>
+</g>
+<!-- sourcefile~variablespec_private.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~variablespec_private.f90</title>
+<g id="a_sourcefile~~routehandlemanager.f90~~AfferentGraph_node11"><a xlink:href="../sourcefile/variablespec_private.f90.html" xlink:title="VariableSpec_private.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="517.5,-24 369.5,-24 369.5,0 517.5,0 517.5,-24"/>
+<text text-anchor="middle" x="443.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VariableSpec_private.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~variablespec_private.f90&#45;&gt;sourcefile~esmfregridder.f90 -->
+<g id="sourcefile~~routehandlemanager.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~variablespec_private.f90&#45;&gt;sourcefile~esmfregridder.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M369.24,-17.1C356.06,-20.4 343.02,-25.42 332,-33 286.91,-63.99 259.9,-125.37 248.08,-158.16"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="244.73,-157.13 244.77,-167.72 251.35,-159.41 244.73,-157.13"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefileroutehandlemanagerf90AfferentGraph = svgPanZoom('#sourcefileroutehandlemanagerf90AfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#AfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="AfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+<br>
+      <section>
+        <h2><span class="anchor" id="src"></span>Source Code</h2>
+        <div class="hl codehilite"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="cp">#include &quot;MAPL.h&quot;</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a>
+<a id="ln-3" name="ln-3" href="#ln-3"></a><span class="c">! This purpose of this class is to provide a caching mechanism for</span>
+<a id="ln-4" name="ln-4" href="#ln-4"></a><span class="c">! ESMF Routehandle objects and thereby minimize the creation of</span>
+<a id="ln-5" name="ln-5" href="#ln-5"></a><span class="c">! distinct ESMF Routehandle objects during execution.  The creation of</span>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="c">! these objects can be expensive in terms of time and memory, so it is</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="c">! best to recognize when the objects can be used in new contexts.</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="c">! A Routehandle can be reused in any regridding scenario with the same</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="c">! in/out geometries.  At the same time there are options to</span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a><span class="c">! FieldRegrid() that are independent of Routehandle which in turn</span>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="c">! results in the situation that distinct EsmfRegidder objects may</span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a><span class="c">! utilize identical Routehandles due to the additional arguments.</span>
+<a id="ln-14" name="ln-14" href="#ln-14"></a>
+<a id="ln-15" name="ln-15" href="#ln-15"></a><span class="c">! One nice thing is that since MAPL/GEOS only need a single</span>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="c">! EsmfRegridderFactory object, it is sensible to put a RH Manager</span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a><span class="c">! object in that derived type rather than use a global object.</span>
+<a id="ln-18" name="ln-18" href="#ln-18"></a>
+<a id="ln-19" name="ln-19" href="#ln-19"></a>
+<a id="ln-20" name="ln-20" href="#ln-20"></a><span class="k">module </span><span class="n">mapl3g_RoutehandleManager</span>
+<a id="ln-21" name="ln-21" href="#ln-21"></a><span class="w">   </span><span class="k">use </span><span class="n">esmf</span>
+<a id="ln-22" name="ln-22" href="#ln-22"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_RoutehandleSpec</span>
+<a id="ln-23" name="ln-23" href="#ln-23"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_RoutehandleSpecVector</span>
+<a id="ln-24" name="ln-24" href="#ln-24"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl3g_RoutehandleVector</span>
+<a id="ln-25" name="ln-25" href="#ln-25"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_ErrorHandlingMod</span>
+<a id="ln-26" name="ln-26" href="#ln-26"></a><span class="w">   </span><span class="k">implicit none</span>
+<a id="ln-27" name="ln-27" href="#ln-27"></a>
+<a id="ln-28" name="ln-28" href="#ln-28"></a><span class="k">   public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">RoutehandleManager</span>
+<a id="ln-29" name="ln-29" href="#ln-29"></a>
+<a id="ln-30" name="ln-30" href="#ln-30"></a><span class="w">   </span><span class="k">type</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">RoutehandleManager</span>
+<a id="ln-31" name="ln-31" href="#ln-31"></a><span class="w">      </span><span class="k">private</span>
+<a id="ln-32" name="ln-32" href="#ln-32"></a><span class="k">      type</span><span class="p">(</span><span class="n">RoutehandleSpecVector</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">specs</span>
+<a id="ln-33" name="ln-33" href="#ln-33"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">RoutehandleVector</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">routehandles</span>
+<a id="ln-34" name="ln-34" href="#ln-34"></a><span class="w">   </span><span class="k">contains</span>
+<a id="ln-35" name="ln-35" href="#ln-35"></a><span class="k">      procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_routehandle</span>
+<a id="ln-36" name="ln-36" href="#ln-36"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">add_routehandle</span>
+<a id="ln-37" name="ln-37" href="#ln-37"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">delete_routehandle</span>
+<a id="ln-38" name="ln-38" href="#ln-38"></a><span class="w">   </span><span class="k">end type </span><span class="n">RoutehandleManager</span>
+<a id="ln-39" name="ln-39" href="#ln-39"></a>
+<a id="ln-40" name="ln-40" href="#ln-40"></a><span class="w">   </span><span class="k">interface </span><span class="n">RoutehandleManager</span>
+<a id="ln-41" name="ln-41" href="#ln-41"></a><span class="w">      </span><span class="k">module procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">new_RoutehandleManager</span>
+<a id="ln-42" name="ln-42" href="#ln-42"></a><span class="w">   </span><span class="k">end interface </span><span class="n">RoutehandleManager</span>
+<a id="ln-43" name="ln-43" href="#ln-43"></a>
+<a id="ln-44" name="ln-44" href="#ln-44"></a><span class="k">contains</span>
+<a id="ln-45" name="ln-45" href="#ln-45"></a>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="k">   function </span><span class="n">new_RoutehandleManager</span><span class="p">()</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">mgr</span><span class="p">)</span>
+<a id="ln-47" name="ln-47" href="#ln-47"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">RoutehandleManager</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mgr</span>
+<a id="ln-48" name="ln-48" href="#ln-48"></a>
+<a id="ln-49" name="ln-49" href="#ln-49"></a><span class="w">      </span><span class="n">mgr</span><span class="p">%</span><span class="n">specs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RoutehandleSpecVector</span><span class="p">()</span>
+<a id="ln-50" name="ln-50" href="#ln-50"></a><span class="w">      </span><span class="n">mgr</span><span class="p">%</span><span class="n">routehandles</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RoutehandleVector</span><span class="p">()</span>
+<a id="ln-51" name="ln-51" href="#ln-51"></a>
+<a id="ln-52" name="ln-52" href="#ln-52"></a><span class="w">   </span><span class="k">end function </span><span class="n">new_RoutehandleManager</span>
+<a id="ln-53" name="ln-53" href="#ln-53"></a>
+<a id="ln-54" name="ln-54" href="#ln-54"></a><span class="w">   </span><span class="k">function </span><span class="n">get_routehandle</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">spec</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">routehandle</span><span class="p">)</span>
+<a id="ln-55" name="ln-55" href="#ln-55"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Routehandle</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">routehandle</span>
+<a id="ln-56" name="ln-56" href="#ln-56"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">RoutehandleManager</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-57" name="ln-57" href="#ln-57"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">RoutehandleSpec</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spec</span>
+<a id="ln-58" name="ln-58" href="#ln-58"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-59" name="ln-59" href="#ln-59"></a>
+<a id="ln-60" name="ln-60" href="#ln-60"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-61" name="ln-61" href="#ln-61"></a>
+<a id="ln-62" name="ln-62" href="#ln-62"></a><span class="w">      </span><span class="k">associate</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">specs</span><span class="p">%</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">specs</span><span class="p">%</span><span class="k">end</span><span class="p">())</span>
+<a id="ln-63" name="ln-63" href="#ln-63"></a><span class="w">        </span><span class="k">associate</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">iter</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">find</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="n">spec</span><span class="p">))</span>
+<a id="ln-64" name="ln-64" href="#ln-64"></a><span class="w">          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">iter</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">specs</span><span class="p">%</span><span class="k">end</span><span class="p">())</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-65" name="ln-65" href="#ln-65"></a><span class="k">             </span><span class="n">routehandle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">routehandles</span><span class="p">%</span><span class="n">of</span><span class="p">(</span><span class="n">iter</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">specs</span><span class="p">%</span><span class="n">begin</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<a id="ln-66" name="ln-66" href="#ln-66"></a><span class="w">             </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-67" name="ln-67" href="#ln-67"></a><span class="w">          </span><span class="k">end if</span>
+<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="k">        end associate</span>
+<a id="ln-69" name="ln-69" href="#ln-69"></a><span class="k">      end associate</span>
+<a id="ln-70" name="ln-70" href="#ln-70"></a>
+<a id="ln-71" name="ln-71" href="#ln-71"></a><span class="k">      call </span><span class="n">this</span><span class="p">%</span><span class="n">add_routehandle</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="w">      </span><span class="n">routehandle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">routehandles</span><span class="p">%</span><span class="n">back</span><span class="p">()</span>
+<a id="ln-73" name="ln-73" href="#ln-73"></a>
+<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-75" name="ln-75" href="#ln-75"></a><span class="w">   </span><span class="k">end function </span><span class="n">get_routehandle</span>
+<a id="ln-76" name="ln-76" href="#ln-76"></a>
+<a id="ln-77" name="ln-77" href="#ln-77"></a>
+<a id="ln-78" name="ln-78" href="#ln-78"></a><span class="w">      </span><span class="k">subroutine </span><span class="n">add_routehandle</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">spec</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-79" name="ln-79" href="#ln-79"></a><span class="w">        </span><span class="k">class</span><span class="p">(</span><span class="n">RoutehandleManager</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-80" name="ln-80" href="#ln-80"></a><span class="w">        </span><span class="k">type</span><span class="p">(</span><span class="n">RoutehandleSpec</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spec</span>
+<a id="ln-81" name="ln-81" href="#ln-81"></a><span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-82" name="ln-82" href="#ln-82"></a>
+<a id="ln-83" name="ln-83" href="#ln-83"></a><span class="w">        </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Routehandle</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">routehandle</span>
+<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-85" name="ln-85" href="#ln-85"></a>
+<a id="ln-86" name="ln-86" href="#ln-86"></a><span class="w">        </span><span class="k">associate</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">specs</span><span class="p">%</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">specs</span><span class="p">%</span><span class="k">end</span><span class="p">())</span>
+<a id="ln-87" name="ln-87" href="#ln-87"></a><span class="w">           </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="n">find</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="n">spec</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Spec already exists in registry.&quot;</span><span class="p">)</span>
+<a id="ln-88" name="ln-88" href="#ln-88"></a><span class="w">        </span><span class="k">end associate</span>
+<a id="ln-89" name="ln-89" href="#ln-89"></a>
+<a id="ln-90" name="ln-90" href="#ln-90"></a><span class="k">        </span><span class="n">routehandle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_routehandle</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-91" name="ln-91" href="#ln-91"></a>
+<a id="ln-92" name="ln-92" href="#ln-92"></a><span class="w">      </span><span class="k">call </span><span class="n">this</span><span class="p">%</span><span class="n">specs</span><span class="p">%</span><span class="n">push_back</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+<a id="ln-93" name="ln-93" href="#ln-93"></a><span class="w">      </span><span class="k">call </span><span class="n">this</span><span class="p">%</span><span class="n">routehandles</span><span class="p">%</span><span class="n">push_back</span><span class="p">(</span><span class="n">routehandle</span><span class="p">)</span>
+<a id="ln-94" name="ln-94" href="#ln-94"></a>
+<a id="ln-95" name="ln-95" href="#ln-95"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-96" name="ln-96" href="#ln-96"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">add_routehandle</span>
+<a id="ln-97" name="ln-97" href="#ln-97"></a>
+<a id="ln-98" name="ln-98" href="#ln-98"></a><span class="w">   </span>
+<a id="ln-99" name="ln-99" href="#ln-99"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">delete_routehandle</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">spec</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-100" name="ln-100" href="#ln-100"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">RoutehandleManager</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-101" name="ln-101" href="#ln-101"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">RoutehandleSpec</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spec</span>
+<a id="ln-102" name="ln-102" href="#ln-102"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-103" name="ln-103" href="#ln-103"></a>
+<a id="ln-104" name="ln-104" href="#ln-104"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">RoutehandleSpecVectorIterator</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iter</span>
+<a id="ln-105" name="ln-105" href="#ln-105"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">RoutehandleVectorIterator</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rh_iter</span>
+<a id="ln-106" name="ln-106" href="#ln-106"></a><span class="w">      </span><span class="k">associate</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">specs</span><span class="p">%</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">specs</span><span class="p">%</span><span class="k">end</span><span class="p">())</span>
+<a id="ln-107" name="ln-107" href="#ln-107"></a><span class="w">        </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">find</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="n">spec</span><span class="p">)</span>
+<a id="ln-108" name="ln-108" href="#ln-108"></a><span class="w">        </span><span class="err">_</span><span class="n">ASSERT</span><span class="p">(</span><span class="n">iter</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Spec not found in registry.&quot;</span><span class="p">)</span>
+<a id="ln-109" name="ln-109" href="#ln-109"></a>
+<a id="ln-110" name="ln-110" href="#ln-110"></a><span class="w">        </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">specs</span><span class="p">%</span><span class="n">erase</span><span class="p">(</span><span class="n">iter</span><span class="p">)</span>
+<a id="ln-111" name="ln-111" href="#ln-111"></a><span class="w">        </span><span class="n">rh_iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">routehandles</span><span class="p">%</span><span class="n">begin</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">iter</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
+<a id="ln-112" name="ln-112" href="#ln-112"></a><span class="w">        </span><span class="n">rh_iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">routehandles</span><span class="p">%</span><span class="n">erase</span><span class="p">(</span><span class="n">rh_iter</span><span class="p">)</span>
+<a id="ln-113" name="ln-113" href="#ln-113"></a>
+<a id="ln-114" name="ln-114" href="#ln-114"></a><span class="w">      </span><span class="k">end associate</span>
+<a id="ln-115" name="ln-115" href="#ln-115"></a>
+<a id="ln-116" name="ln-116" href="#ln-116"></a><span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-117" name="ln-117" href="#ln-117"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">delete_routehandle</span>
+<a id="ln-118" name="ln-118" href="#ln-118"></a>
+<a id="ln-119" name="ln-119" href="#ln-119"></a><span class="k">end module </span><span class="n">mapl3g_RoutehandleManager</span>
+</pre></div>
+
+      </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              MAPL
+ was developed by The MAPL Developers<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-05-19T15:21:25.795049+0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
