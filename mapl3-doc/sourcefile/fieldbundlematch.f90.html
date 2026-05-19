@@ -1,0 +1,919 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="MAPL is a foundation layer of the GEOS architecture, whose original purpose is to supplement the Earth System Modeling Framework (ESMF)">
+    <meta name="author" content="The MAPL Developers" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>FieldBundleMatch.F90 &ndash; MAPL</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">MAPL </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>FieldBundleMatch.F90
+      <small>Source File</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.0% of total for source files.">46 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/FieldBundleMatch.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+            <li class="breadcrumb-item active" aria-current="page">FieldBundleMatch.F90</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#mods-0"
+         aria-expanded="false" aria-controls="mods-0">
+         <h4 class="card-header bg-primary text-white">Modules</h4>
+      </a>
+      <div id="mods-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/mapl3g_fieldbundlematch.html">mapl3g_FieldBundleMatch</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/fieldbundlematch.f90.html#src">FieldBundleMatch.F90</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">This file depends on</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~fieldbundlematch.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilefieldbundlematchf90EfferentGraph" width="591pt" height="52pt"
+ viewBox="0.00 0.00 591.00 52.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~fieldbundlematch.f90~~EfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 48)">
+<title>sourcefile~~fieldbundlematch.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-48 587,-48 587,4 -4,4"/>
+<!-- sourcefile~fieldbundlematch.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~fieldbundlematch.f90</title>
+<polygon fill="none" stroke="black" points="583,-44 453,-44 453,-20 583,-20 583,-44"/>
+<text text-anchor="middle" x="518" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50">FieldBundleMatch.F90</text>
+</g>
+<!-- sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~errorhandling.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~EfferentGraph_node2"><a xlink:href="../sourcefile/errorhandling.f90.html" xlink:title="ErrorHandling.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="245,-44 136,-44 136,-20 245,-20 245,-44"/>
+<text text-anchor="middle" x="190.5" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ErrorHandling.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundlematch.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~fieldbundlematch.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M452.98,-32.74C441.03,-32.85 428.63,-32.94 417,-33 356.56,-33.3 341.44,-33.34 281,-33 272.74,-32.95 264.04,-32.88 255.45,-32.8"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="255.49,-29.3 245.45,-32.7 255.42,-36.3 255.49,-29.3"/>
+</g>
+<!-- sourcefile~fieldpointerutilities.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~fieldpointerutilities.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~EfferentGraph_node3"><a xlink:href="../sourcefile/fieldpointerutilities.f90.html" xlink:title="FieldPointerUtilities.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="417,-24 281,-24 281,0 417,0 417,-24"/>
+<text text-anchor="middle" x="349" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldPointerUtilities.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundlematch.f90&#45;&gt;sourcefile~fieldpointerutilities.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~fieldbundlematch.f90&#45;&gt;sourcefile~fieldpointerutilities.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M452.91,-24.32C444.51,-23.32 435.84,-22.28 427.26,-21.25"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="427.59,-17.77 417.24,-20.05 426.75,-24.72 427.59,-17.77"/>
+</g>
+<!-- sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~mapl_throw.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~EfferentGraph_node4"><a xlink:href="../sourcefile/mapl_throw.f90.html" xlink:title="MAPL_Throw.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="100,-44 0,-44 0,-20 100,-20 100,-44"/>
+<text text-anchor="middle" x="50" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Throw.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M135.95,-32C127.62,-32 118.96,-32 110.51,-32"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="110.33,-28.5 100.33,-32 110.33,-35.5 110.33,-28.5"/>
+</g>
+<!-- sourcefile~fieldpointerutilities.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~fieldpointerutilities.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M280.72,-20.6C272.24,-21.68 263.58,-22.79 255.16,-23.86"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="254.51,-20.42 245.03,-25.16 255.39,-27.36 254.51,-20.42"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#EfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="EfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Files dependent on this one</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~fieldbundlematch.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilefieldbundlematchf90AfferentGraph" width="448pt" height="1250pt"
+ viewBox="0.00 0.00 448.00 1250.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 1246)">
+<title>sourcefile~~fieldbundlematch.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-1246 444,-1246 444,4 -4,4"/>
+<!-- sourcefile~fieldbundlematch.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~fieldbundlematch.f90</title>
+<polygon fill="none" stroke="black" points="130,-633 0,-633 0,-609 130,-609 130,-633"/>
+<text text-anchor="middle" x="65" y="-618.6" font-family="Helvetica,sans-Serif" font-size="10.50">FieldBundleMatch.F90</text>
+</g>
+<!-- sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~api.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node2"><a xlink:href="../sourcefile/api.f90.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="220,-633 166,-633 166,-609 220,-609 220,-633"/>
+<text text-anchor="middle" x="193" y="-618.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90&#45;&gt;sourcefile~fieldbundlematch.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~api.f90&#45;&gt;sourcefile~fieldbundlematch.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M165.89,-621C158.16,-621 149.29,-621 140.09,-621"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="140.02,-617.5 130.02,-621 140.02,-624.5 140.02,-617.5"/>
+</g>
+<!-- sourcefile~bracketclassaspect.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~bracketclassaspect.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node3"><a xlink:href="../sourcefile/bracketclassaspect.f90.html" xlink:title="BracketClassAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="418,-1242 278,-1242 278,-1218 418,-1218 418,-1242"/>
+<text text-anchor="middle" x="348" y="-1227.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">BracketClassAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~bracketclassaspect.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~bracketclassaspect.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M277.73,-1223.84C269.48,-1220.46 261.91,-1215.68 256,-1209 217.76,-1165.8 198.87,-744.98 194.83,-643.12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="198.33,-642.9 194.44,-633.04 191.33,-643.17 198.33,-642.9"/>
+</g>
+<!-- sourcefile~climdatasetfileselector.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~climdatasetfileselector.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node4"><a xlink:href="../sourcefile/climdatasetfileselector.f90.html" xlink:title="ClimDataSetFileSelector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="429.5,-1200 266.5,-1200 266.5,-1176 429.5,-1176 429.5,-1200"/>
+<text text-anchor="middle" x="348" y="-1185.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ClimDataSetFileSelector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~climdatasetfileselector.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~climdatasetfileselector.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M266.22,-1175.76C262.47,-1173.29 259.02,-1170.39 256,-1167 220.56,-1127.29 199.79,-741.9 195.05,-643.68"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="198.53,-643.23 194.56,-633.41 191.54,-643.56 198.53,-643.23"/>
+</g>
+<!-- sourcefile~conservationaspect.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~conservationaspect.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node5"><a xlink:href="../sourcefile/conservationaspect.f90.html" xlink:title="ConservationAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="419,-1158 277,-1158 277,-1134 419,-1134 419,-1158"/>
+<text text-anchor="middle" x="348" y="-1143.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ConservationAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~conservationaspect.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~conservationaspect.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M276.94,-1139.37C269.02,-1136.03 261.75,-1131.39 256,-1125 191,-1052.83 191.96,-731.52 193.49,-643.41"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="196.99,-643.28 193.69,-633.21 189.99,-643.14 196.99,-643.28"/>
+</g>
+<!-- sourcefile~couplermetacomponent.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~couplermetacomponent.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node6"><a xlink:href="../sourcefile/couplermetacomponent.f90.html" xlink:title="CouplerMetaComponent.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431,-1116 265,-1116 265,-1092 431,-1092 431,-1116"/>
+<text text-anchor="middle" x="348" y="-1101.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">CouplerMetaComponent.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~couplermetacomponent.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~couplermetacomponent.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M266.71,-1091.95C262.78,-1089.43 259.17,-1086.48 256,-1083 196.35,-1017.5 193.38,-726.13 193.77,-643.13"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="197.27,-643.07 193.84,-633.05 190.27,-643.02 197.27,-643.07"/>
+</g>
+<!-- sourcefile~extdatafilereader.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~extdatafilereader.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node7"><a xlink:href="../sourcefile/extdatafilereader.f90.html" xlink:title="ExtDataFileReader.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="414,-1074 282,-1074 282,-1050 414,-1050 414,-1074"/>
+<text text-anchor="middle" x="348" y="-1059.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ExtDataFileReader.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extdatafilereader.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~extdatafilereader.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M281.63,-1056.99C271.96,-1053.59 262.93,-1048.51 256,-1041 201.81,-982.27 194.94,-721.71 194.1,-643.36"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="197.6,-643.14 194.02,-633.17 190.6,-643.19 197.6,-643.14"/>
+</g>
+<!-- sourcefile~extdatagridcomp.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~extdatagridcomp.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node8"><a xlink:href="../sourcefile/extdatagridcomp.f90.html" xlink:title="ExtDataGridComp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="413.5,-1032 282.5,-1032 282.5,-1008 413.5,-1008 413.5,-1032"/>
+<text text-anchor="middle" x="348" y="-1017.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ExtDataGridComp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M282.2,-1015.05C272.33,-1011.67 263.1,-1006.57 256,-999 207.21,-946.97 196.65,-716.7 194.51,-643.45"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="198,-643 194.24,-633.1 191,-643.19 198,-643"/>
+</g>
+<!-- sourcefile~extensiontransformutils.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~extensiontransformutils.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node9"><a xlink:href="../sourcefile/extensiontransformutils.f90.html" xlink:title="ExtensionTransformUtils.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="429.5,-990 266.5,-990 266.5,-966 429.5,-966 429.5,-990"/>
+<text text-anchor="middle" x="348" y="-975.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ExtensionTransformUtils.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extensiontransformutils.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~extensiontransformutils.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M266.91,-965.76C262.93,-963.3 259.25,-960.4 256,-957 212.59,-911.62 198.57,-711.43 195.03,-643.58"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="198.5,-643 194.51,-633.19 191.51,-643.35 198.5,-643"/>
+</g>
+<!-- sourcefile~fieldbundleclassaspect.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~fieldbundleclassaspect.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node10"><a xlink:href="../sourcefile/fieldbundleclassaspect.f90.html" xlink:title="FieldBundleClassAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="428.5,-948 267.5,-948 267.5,-924 428.5,-924 428.5,-948"/>
+<text text-anchor="middle" x="348" y="-933.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBundleClassAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundleclassaspect.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~fieldbundleclassaspect.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M267.42,-923.92C263.26,-921.42 259.41,-918.47 256,-915 217.91,-876.18 200.74,-705.54 195.68,-643.58"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="199.14,-643.03 194.87,-633.33 192.17,-643.58 199.14,-643.03"/>
+</g>
+<!-- sourcefile~fieldbundleread.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~fieldbundleread.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node11"><a xlink:href="../sourcefile/fieldbundleread.f90.html" xlink:title="FieldBundleRead.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="410,-906 286,-906 286,-882 410,-882 410,-906"/>
+<text text-anchor="middle" x="348" y="-891.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBundleRead.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundleread.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~fieldbundleread.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M285.96,-889.61C274.85,-886.3 264.2,-881.08 256,-873 223.13,-840.6 203.16,-698.65 196.5,-643.25"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="199.95,-642.63 195.31,-633.1 192.99,-643.44 199.95,-642.63"/>
+</g>
+<!-- sourcefile~fieldclassaspect.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~fieldclassaspect.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node12"><a xlink:href="../sourcefile/fieldclassaspect.f90.html" xlink:title="FieldClassAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="410,-864 286,-864 286,-840 410,-840 410,-864"/>
+<text text-anchor="middle" x="348" y="-849.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldClassAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldclassaspect.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~fieldclassaspect.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M285.78,-847.17C274.81,-843.88 264.26,-838.78 256,-831 202.39,-780.53 194.41,-686.22 193.7,-643.3"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="197.2,-643.07 193.66,-633.09 190.2,-643.1 197.2,-643.07"/>
+</g>
+<!-- sourcefile~geomaspect.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~geomaspect.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node13"><a xlink:href="../sourcefile/geomaspect.f90.html" xlink:title="GeomAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="399.5,-822 296.5,-822 296.5,-798 399.5,-798 399.5,-822"/>
+<text text-anchor="middle" x="348" y="-807.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geomaspect.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~geomaspect.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M296.12,-807.23C281.77,-804.22 267.07,-798.75 256,-789 212.65,-750.83 199.57,-679.58 195.65,-643.37"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="199.13,-642.96 194.71,-633.33 192.16,-643.61 199.13,-642.96"/>
+</g>
+<!-- sourcefile~mapl.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node14" class="node">
+<title>sourcefile~mapl.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node14"><a xlink:href="../sourcefile/mapl.f90.html" xlink:title="MAPL.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="380,-780 316,-780 316,-756 380,-756 380,-780"/>
+<text text-anchor="middle" x="348" y="-765.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M315.87,-767.39C296.8,-765.54 272.9,-760.39 256,-747 222.62,-720.55 205.93,-671.53 198.69,-643.06"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="202.08,-642.16 196.36,-633.24 195.26,-643.78 202.08,-642.16"/>
+</g>
+<!-- sourcefile~mapl_orbgridcompmod.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node15" class="node">
+<title>sourcefile~mapl_orbgridcompmod.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node15"><a xlink:href="../sourcefile/mapl_orbgridcompmod.f90.html" xlink:title="MAPL_OrbGridCompMod.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="430.5,-738 265.5,-738 265.5,-714 430.5,-714 430.5,-738"/>
+<text text-anchor="middle" x="348" y="-723.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_OrbGridCompMod.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl_orbgridcompmod.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~mapl_orbgridcompmod.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M273.55,-713.98C267.37,-711.52 261.42,-708.56 256,-705 232.28,-689.43 214.38,-661.49 204.06,-642.13"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="207.14,-640.47 199.48,-633.16 200.91,-643.65 207.14,-640.47"/>
+</g>
+<!-- sourcefile~nonclimdatasetfileselector.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node16" class="node">
+<title>sourcefile~nonclimdatasetfileselector.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node16"><a xlink:href="../sourcefile/nonclimdatasetfileselector.f90.html" xlink:title="NonClimDataSetFileSelector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="440,-696 256,-696 256,-672 440,-672 440,-696"/>
+<text text-anchor="middle" x="348" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">NonClimDataSetFileSelector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~nonclimdatasetfileselector.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~nonclimdatasetfileselector.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M281.43,-671.94C272.71,-669.46 264.03,-666.5 256,-663 241.94,-656.87 227.68,-647.48 216.38,-639.12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="218.45,-636.3 208.38,-633.01 214.2,-641.86 218.45,-636.3"/>
+</g>
+<!-- sourcefile~normalizationaspect.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node17" class="node">
+<title>sourcefile~normalizationaspect.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node17"><a xlink:href="../sourcefile/normalizationaspect.f90.html" xlink:title="NormalizationAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="420.5,-654 275.5,-654 275.5,-630 420.5,-630 420.5,-654"/>
+<text text-anchor="middle" x="348" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">NormalizationAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~normalizationaspect.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~normalizationaspect.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M275.43,-632.18C259.84,-630.04 243.98,-627.86 230.45,-626"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="230.53,-622.48 220.14,-624.59 229.57,-629.42 230.53,-622.48"/>
+</g>
+<!-- sourcefile~quantitytypeaspect.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node18" class="node">
+<title>sourcefile~quantitytypeaspect.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node18"><a xlink:href="../sourcefile/quantitytypeaspect.f90.html" xlink:title="QuantityTypeAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="418,-612 278,-612 278,-588 418,-588 418,-612"/>
+<text text-anchor="middle" x="348" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">QuantityTypeAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~quantitytypeaspect.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~quantitytypeaspect.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M277.66,-609.52C261.41,-611.75 244.72,-614.04 230.56,-615.98"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="229.71,-612.57 220.28,-617.39 230.66,-619.5 229.71,-612.57"/>
+</g>
+<!-- sourcefile~regridder.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node19" class="node">
+<title>sourcefile~regridder.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node19"><a xlink:href="../sourcefile/regridder.f90.html" xlink:title="Regridder.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="391,-570 305,-570 305,-546 391,-546 391,-570"/>
+<text text-anchor="middle" x="348" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Regridder.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regridder.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~regridder.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M304.74,-564.39C289.03,-567.62 271.31,-572.33 256,-579 241.94,-585.13 227.68,-594.52 216.38,-602.88"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="214.2,-600.14 208.38,-608.99 218.45,-605.7 214.2,-600.14"/>
+</g>
+<!-- sourcefile~regridtransform.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node20" class="node">
+<title>sourcefile~regridtransform.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node20"><a xlink:href="../sourcefile/regridtransform.f90.html" xlink:title="RegridTransform.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="409.5,-528 286.5,-528 286.5,-504 409.5,-504 409.5,-528"/>
+<text text-anchor="middle" x="348" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RegridTransform.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regridtransform.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~regridtransform.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M286.29,-523.69C275.64,-526.76 265.08,-531.04 256,-537 232.28,-552.57 214.38,-580.51 204.06,-599.87"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="200.91,-598.35 199.48,-608.84 207.14,-601.53 200.91,-598.35"/>
+</g>
+<!-- sourcefile~restarthandler.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node21" class="node">
+<title>sourcefile~restarthandler.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node21"><a xlink:href="../sourcefile/restarthandler.f90.html" xlink:title="RestartHandler.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="405,-486 291,-486 291,-462 405,-462 405,-486"/>
+<text text-anchor="middle" x="348" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RestartHandler.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~restarthandler.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge20" class="edge">
+<title>sourcefile~restarthandler.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M290.57,-478.95C278.23,-482.13 265.91,-487.14 256,-495 222.62,-521.45 205.93,-570.47 198.69,-598.94"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="195.26,-598.22 196.36,-608.76 202.08,-599.84 195.26,-598.22"/>
+</g>
+<!-- sourcefile~serviceclassaspect.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node22" class="node">
+<title>sourcefile~serviceclassaspect.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node22"><a xlink:href="../sourcefile/serviceclassaspect.f90.html" xlink:title="ServiceClassAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="417.5,-444 278.5,-444 278.5,-420 417.5,-420 417.5,-444"/>
+<text text-anchor="middle" x="348" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ServiceClassAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~serviceclassaspect.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge21" class="edge">
+<title>sourcefile~serviceclassaspect.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M278.25,-439.96C270.13,-443.09 262.45,-447.32 256,-453 212.65,-491.17 199.57,-562.42 195.65,-598.63"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="192.16,-598.39 194.71,-608.67 199.13,-599.04 192.16,-598.39"/>
+</g>
+<!-- sourcefile~sharedio.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node23" class="node">
+<title>sourcefile~sharedio.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node23"><a xlink:href="../sourcefile/sharedio.f90.html" xlink:title="SharedIO.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="389.5,-402 306.5,-402 306.5,-378 389.5,-378 389.5,-402"/>
+<text text-anchor="middle" x="348" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SharedIO.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~sharedio.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge22" class="edge">
+<title>sourcefile~sharedio.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M306.49,-390.52C288.98,-392.78 269.46,-398.33 256,-411 202.39,-461.47 194.41,-555.78 193.7,-598.7"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="190.2,-598.9 193.66,-608.91 197.2,-598.93 190.2,-598.9"/>
+</g>
+<!-- sourcefile~simplebundlemod.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node24" class="node">
+<title>sourcefile~simplebundlemod.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node24"><a xlink:href="../sourcefile/simplebundlemod.f90.html" xlink:title="SimpleBundleMod.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="414,-360 282,-360 282,-336 414,-336 414,-360"/>
+<text text-anchor="middle" x="348" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SimpleBundleMod.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~simplebundlemod.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge23" class="edge">
+<title>sourcefile~simplebundlemod.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M281.76,-353.74C272.19,-357.07 263.16,-361.94 256,-369 223.13,-401.4 203.16,-543.35 196.5,-598.75"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="192.99,-598.56 195.31,-608.9 199.95,-599.37 192.99,-598.56"/>
+</g>
+<!-- sourcefile~stateitemspec.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node25" class="node">
+<title>sourcefile~stateitemspec.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node25"><a xlink:href="../sourcefile/stateitemspec.f90.html" xlink:title="StateItemSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="404.5,-318 291.5,-318 291.5,-294 404.5,-294 404.5,-318"/>
+<text text-anchor="middle" x="348" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StateItemSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~stateitemspec.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge24" class="edge">
+<title>sourcefile~stateitemspec.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M291.41,-308.65C278.3,-311.81 265.43,-317.39 256,-327 217.91,-365.82 200.74,-536.46 195.68,-598.42"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="192.17,-598.42 194.87,-608.67 199.14,-598.97 192.17,-598.42"/>
+</g>
+<!-- sourcefile~timeinterpolatetransform.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node26" class="node">
+<title>sourcefile~timeinterpolatetransform.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node26"><a xlink:href="../sourcefile/timeinterpolatetransform.f90.html" xlink:title="TimeInterpolateTransform.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="434.5,-276 261.5,-276 261.5,-252 434.5,-252 434.5,-276"/>
+<text text-anchor="middle" x="348" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">TimeInterpolateTransform.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge25" class="edge">
+<title>sourcefile~timeinterpolatetransform.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M266.91,-276.24C262.93,-278.7 259.25,-281.6 256,-285 212.59,-330.38 198.57,-530.57 195.03,-598.42"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="191.51,-598.65 194.51,-608.81 198.5,-599 191.51,-598.65"/>
+</g>
+<!-- sourcefile~typekindaspect.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node27" class="node">
+<title>sourcefile~typekindaspect.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node27"><a xlink:href="../sourcefile/typekindaspect.f90.html" xlink:title="TypekindAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="407,-234 289,-234 289,-210 407,-210 407,-234"/>
+<text text-anchor="middle" x="348" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">TypekindAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~typekindaspect.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge26" class="edge">
+<title>sourcefile~typekindaspect.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M288.74,-224.96C276.48,-228.22 264.65,-233.77 256,-243 207.21,-295.03 196.65,-525.3 194.51,-598.55"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="191,-598.81 194.24,-608.9 198,-599 191,-598.81"/>
+</g>
+<!-- sourcefile~ungriddeddimsaspect.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node28" class="node">
+<title>sourcefile~ungriddeddimsaspect.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node28"><a xlink:href="../sourcefile/ungriddeddimsaspect.f90.html" xlink:title="UngriddedDimsAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="425,-192 271,-192 271,-168 425,-168 425,-192"/>
+<text text-anchor="middle" x="348" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">UngriddedDimsAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~ungriddeddimsaspect.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge27" class="edge">
+<title>sourcefile~ungriddeddimsaspect.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M270.94,-189.67C265.38,-192.63 260.29,-196.35 256,-201 201.81,-259.73 194.94,-520.29 194.1,-598.64"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="190.6,-598.81 194.02,-608.83 197.6,-598.86 190.6,-598.81"/>
+</g>
+<!-- sourcefile~unitsaspect.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node29" class="node">
+<title>sourcefile~unitsaspect.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node29"><a xlink:href="../sourcefile/unitsaspect.f90.html" xlink:title="UnitsAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="396.5,-150 299.5,-150 299.5,-126 396.5,-126 396.5,-150"/>
+<text text-anchor="middle" x="348" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">UnitsAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~unitsaspect.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge28" class="edge">
+<title>sourcefile~unitsaspect.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M299.44,-138.46C283.52,-141.07 267.03,-146.89 256,-159 196.35,-224.5 193.38,-515.87 193.77,-598.87"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="190.27,-598.98 193.84,-608.95 197.27,-598.93 190.27,-598.98"/>
+</g>
+<!-- sourcefile~vectorbracketclassaspect.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node30" class="node">
+<title>sourcefile~vectorbracketclassaspect.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node30"><a xlink:href="../sourcefile/vectorbracketclassaspect.f90.html" xlink:title="VectorBracketClassAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="435,-108 261,-108 261,-84 435,-84 435,-108"/>
+<text text-anchor="middle" x="348" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VectorBracketClassAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~vectorbracketclassaspect.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge29" class="edge">
+<title>sourcefile~vectorbracketclassaspect.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M266.66,-108.01C262.75,-110.53 259.15,-113.51 256,-117 191,-189.17 191.96,-510.48 193.49,-598.59"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="189.99,-598.86 193.69,-608.79 196.99,-598.72 189.99,-598.86"/>
+</g>
+<!-- sourcefile~vectorclassaspect.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node31" class="node">
+<title>sourcefile~vectorclassaspect.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node31"><a xlink:href="../sourcefile/vectorclassaspect.f90.html" xlink:title="VectorClassAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="414.5,-66 281.5,-66 281.5,-42 414.5,-42 414.5,-66"/>
+<text text-anchor="middle" x="348" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VectorClassAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~vectorclassaspect.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge30" class="edge">
+<title>sourcefile~vectorclassaspect.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M281.42,-58.81C271.77,-62.24 262.8,-67.38 256,-75 220.56,-114.71 199.79,-500.1 195.05,-598.32"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="191.54,-598.44 194.56,-608.59 198.53,-598.77 191.54,-598.44"/>
+</g>
+<!-- sourcefile~verticalgridaspect.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_node32" class="node">
+<title>sourcefile~verticalgridaspect.f90</title>
+<g id="a_sourcefile~~fieldbundlematch.f90~~AfferentGraph_node32"><a xlink:href="../sourcefile/verticalgridaspect.f90.html" xlink:title="VerticalGridAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="414.5,-24 281.5,-24 281.5,0 414.5,0 414.5,-24"/>
+<text text-anchor="middle" x="348" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VerticalGridAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~verticalgridaspect.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~fieldbundlematch.f90~~AfferentGraph_edge31" class="edge">
+<title>sourcefile~verticalgridaspect.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M281.36,-16.77C271.72,-20.2 262.77,-25.35 256,-33 217.76,-76.2 198.87,-497.02 194.83,-598.88"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="191.33,-598.83 194.44,-608.96 198.33,-599.1 191.33,-598.83"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#AfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="AfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+<br>
+      <section>
+        <h2><span class="anchor" id="src"></span>Source Code</h2>
+        <div class="hl codehilite"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="cp">#include &quot;MAPL.h&quot;</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a><span class="cp">#include &quot;unused_dummy.H&quot;</span>
+<a id="ln-3" name="ln-3" href="#ln-3"></a>
+<a id="ln-4" name="ln-4" href="#ln-4"></a><span class="k">module </span><span class="n">mapl3g_FieldBundleMatch</span>
+<a id="ln-5" name="ln-5" href="#ln-5"></a>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="w">   </span><span class="k">use </span><span class="n">ESMF</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">ESMF_Field</span><span class="p">,</span><span class="w"> </span><span class="n">ESMF_FieldBundle</span><span class="p">,</span><span class="w"> </span><span class="n">ESMF_FieldBundleGet</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="w">   </span><span class="k">use </span><span class="n">ESMF</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">ESMF_ITEMORDER_ADDORDER</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a><span class="w">   </span><span class="k">use </span><span class="n">MAPL_FieldPointerUtilities</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">FieldSameData</span>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="w">   </span><span class="k">use </span><span class="n">MAPL_ExceptionHandling</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">MAPL_Verify</span><span class="p">,</span><span class="w"> </span><span class="n">MAPL_Return</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a>
+<a id="ln-11" name="ln-11" href="#ln-11"></a><span class="w">   </span><span class="k">implicit none</span><span class="p">(</span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">external</span><span class="p">)</span>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="w">   </span><span class="k">private</span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a>
+<a id="ln-14" name="ln-14" href="#ln-14"></a><span class="k">   public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">FieldBundleSameData</span>
+<a id="ln-15" name="ln-15" href="#ln-15"></a>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="w">   </span><span class="k">interface </span><span class="n">FieldBundleSameData</span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a><span class="w">      </span><span class="k">module procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">same_data_order_addorder</span>
+<a id="ln-18" name="ln-18" href="#ln-18"></a><span class="w">   </span><span class="k">end interface</span>
+<a id="ln-19" name="ln-19" href="#ln-19"></a>
+<a id="ln-20" name="ln-20" href="#ln-20"></a><span class="k">contains</span>
+<a id="ln-21" name="ln-21" href="#ln-21"></a>
+<a id="ln-22" name="ln-22" href="#ln-22"></a><span class="k">   function </span><span class="n">same_data_order_addorder</span><span class="p">(</span><span class="n">bundle_1</span><span class="p">,</span><span class="w"> </span><span class="n">bundle_2</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+<a id="ln-23" name="ln-23" href="#ln-23"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_FieldBundle</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle_1</span><span class="p">,</span><span class="w"> </span><span class="n">bundle_2</span>
+<a id="ln-24" name="ln-24" href="#ln-24"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-25" name="ln-25" href="#ln-25"></a><span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">match</span>
+<a id="ln-26" name="ln-26" href="#ln-26"></a>
+<a id="ln-27" name="ln-27" href="#ln-27"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-28" name="ln-28" href="#ln-28"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">field_count</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">iter</span>
+<a id="ln-29" name="ln-29" href="#ln-29"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fields_1</span><span class="p">(:),</span><span class="w"> </span><span class="n">fields_2</span><span class="p">(:)</span>
+<a id="ln-30" name="ln-30" href="#ln-30"></a>
+<a id="ln-31" name="ln-31" href="#ln-31"></a><span class="w">      </span><span class="n">match</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<a id="ln-32" name="ln-32" href="#ln-32"></a>
+<a id="ln-33" name="ln-33" href="#ln-33"></a><span class="w">      </span><span class="c">! Match field count</span>
+<a id="ln-34" name="ln-34" href="#ln-34"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_FieldBundleGet</span><span class="p">(</span><span class="n">bundle_1</span><span class="p">,</span><span class="w"> </span><span class="n">fieldCount</span><span class="o">=</span><span class="n">field_count</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-35" name="ln-35" href="#ln-35"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_FieldBundleGet</span><span class="p">(</span><span class="n">bundle_2</span><span class="p">,</span><span class="w"> </span><span class="n">fieldCount</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-36" name="ln-36" href="#ln-36"></a><span class="w">      </span><span class="n">match</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">field_count</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
+<a id="ln-37" name="ln-37" href="#ln-37"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN_IF</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="n">match</span><span class="p">)</span>
+<a id="ln-38" name="ln-38" href="#ln-38"></a>
+<a id="ln-39" name="ln-39" href="#ln-39"></a><span class="w">      </span><span class="c">! Match field data</span>
+<a id="ln-40" name="ln-40" href="#ln-40"></a><span class="w">      </span><span class="k">allocate</span><span class="p">(</span><span class="n">fields_1</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">fields_2</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+<a id="ln-41" name="ln-41" href="#ln-41"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_FieldBundleGet</span><span class="p">(</span><span class="n">bundle_1</span><span class="p">,</span><span class="w"> </span><span class="n">itemorderflag</span><span class="o">=</span><span class="n">ESMF_ITEMORDER_ADDORDER</span><span class="p">,</span><span class="w"> </span><span class="n">fieldList</span><span class="o">=</span><span class="n">fields_1</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-42" name="ln-42" href="#ln-42"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_FieldBundleGet</span><span class="p">(</span><span class="n">bundle_2</span><span class="p">,</span><span class="w"> </span><span class="n">itemorderflag</span><span class="o">=</span><span class="n">ESMF_ITEMORDER_ADDORDER</span><span class="p">,</span><span class="w"> </span><span class="n">fieldList</span><span class="o">=</span><span class="n">fields_2</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-43" name="ln-43" href="#ln-43"></a><span class="w">      </span><span class="k">do </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">field_count</span>
+<a id="ln-44" name="ln-44" href="#ln-44"></a><span class="w">         </span><span class="n">match</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FieldSameData</span><span class="p">(</span><span class="n">fields_1</span><span class="p">(</span><span class="n">iter</span><span class="p">),</span><span class="w"> </span><span class="n">fields_2</span><span class="p">(</span><span class="n">iter</span><span class="p">),</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-45" name="ln-45" href="#ln-45"></a><span class="w">         </span><span class="err">_</span><span class="n">RETURN_IF</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="n">match</span><span class="p">)</span>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="w">      </span><span class="k">end do</span>
+<a id="ln-47" name="ln-47" href="#ln-47"></a>
+<a id="ln-48" name="ln-48" href="#ln-48"></a><span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-49" name="ln-49" href="#ln-49"></a><span class="w">   </span><span class="k">end function </span><span class="n">same_data_order_addorder</span>
+<a id="ln-50" name="ln-50" href="#ln-50"></a>
+<a id="ln-51" name="ln-51" href="#ln-51"></a><span class="k">end module </span><span class="n">mapl3g_FieldBundleMatch</span>
+</pre></div>
+
+      </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              MAPL
+ was developed by The MAPL Developers<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-05-19T17:50:43.891780+0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,1048 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="MAPL is a foundation layer of the GEOS architecture, whose original purpose is to supplement the Earth System Modeling Framework (ESMF)">
+    <meta name="author" content="The MAPL Developers" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>Subgrid.F90 &ndash; MAPL</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">MAPL </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>Subgrid.F90
+      <small>Source File</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.1% of total for source files.">208 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/Subgrid.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+            <li class="breadcrumb-item active" aria-current="page">Subgrid.F90</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#mods-0"
+         aria-expanded="false" aria-controls="mods-0">
+         <h4 class="card-header bg-primary text-white">Modules</h4>
+      </a>
+      <div id="mods-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/mapl3g_subgrid.html">mapl3g_Subgrid</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/subgrid.f90.html#src">Subgrid.F90</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">This file depends on</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~subgrid.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilesubgridf90EfferentGraph" width="492pt" height="83pt"
+ viewBox="0.00 0.00 492.00 83.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~subgrid.f90~~EfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 79)">
+<title>sourcefile~~subgrid.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-79 488,-79 488,4 -4,4"/>
+<!-- sourcefile~subgrid.f90 -->
+<g id="sourcefile~~subgrid.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~subgrid.f90</title>
+<polygon fill="none" stroke="black" points="484,-45 408,-45 408,-21 484,-21 484,-45"/>
+<text text-anchor="middle" x="446" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50">Subgrid.F90</text>
+</g>
+<!-- sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~subgrid.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~errorhandling.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~EfferentGraph_node2"><a xlink:href="../sourcefile/errorhandling.f90.html" xlink:title="ErrorHandling.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="252.5,-75 143.5,-75 143.5,-51 252.5,-51 252.5,-75"/>
+<text text-anchor="middle" x="198" y="-60.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ErrorHandling.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~subgrid.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~subgrid.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~subgrid.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M409.36,-45.01C397.59,-48.5 384.36,-51.93 372,-54 336.27,-59.99 295.86,-62.33 263.08,-63.14"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="262.65,-59.65 252.73,-63.35 262.8,-66.64 262.65,-59.65"/>
+</g>
+<!-- sourcefile~gridget.f90 -->
+<g id="sourcefile~~subgrid.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~gridget.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~EfferentGraph_node3"><a xlink:href="../sourcefile/gridget.f90.html" xlink:title="GridGet.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="372,-45 296,-45 296,-21 372,-21 372,-45"/>
+<text text-anchor="middle" x="334" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GridGet.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~subgrid.f90&#45;&gt;sourcefile~gridget.f90 -->
+<g id="sourcefile~~subgrid.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~subgrid.f90&#45;&gt;sourcefile~gridget.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M407.76,-33C399.61,-33 390.87,-33 382.38,-33"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="382.2,-29.5 372.2,-33 382.2,-36.5 382.2,-29.5"/>
+</g>
+<!-- sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~subgrid.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~keywordenforcer.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~EfferentGraph_node4"><a xlink:href="../sourcefile/keywordenforcer.f90.html" xlink:title="KeywordEnforcer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="260,-24 136,-24 136,0 260,0 260,-24"/>
+<text text-anchor="middle" x="198" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">KeywordEnforcer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~subgrid.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~subgrid.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~subgrid.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M410.53,-20.94C398.49,-17.3 384.8,-13.8 372,-12 338.87,-7.33 301.81,-6.72 270.52,-7.53"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="270.02,-4.04 260.14,-7.85 270.24,-11.04 270.02,-4.04"/>
+</g>
+<!-- sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~subgrid.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~mapl_throw.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~EfferentGraph_node5"><a xlink:href="../sourcefile/mapl_throw.f90.html" xlink:title="MAPL_Throw.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="100,-75 0,-75 0,-51 100,-51 100,-75"/>
+<text text-anchor="middle" x="50" y="-60.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Throw.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~subgrid.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M143.46,-63C132.73,-63 121.4,-63 110.48,-63"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="110.17,-59.5 100.17,-63 110.17,-66.5 110.17,-59.5"/>
+</g>
+<!-- sourcefile~gridget.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~subgrid.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~gridget.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M295.67,-41.36C285.37,-43.66 273.9,-46.23 262.55,-48.77"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="261.65,-45.39 252.65,-50.99 263.18,-52.22 261.65,-45.39"/>
+</g>
+<!-- sourcefile~gridget.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~subgrid.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~gridget.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M295.67,-27.15C287.63,-25.89 278.87,-24.52 270.01,-23.13"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="270.43,-19.65 260.01,-21.56 269.34,-26.57 270.43,-19.65"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#EfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="EfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Files dependent on this one</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~subgrid.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilesubgridf90AfferentGraph" width="447pt" height="998pt"
+ viewBox="0.00 0.00 447.00 998.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~subgrid.f90~~AfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 994)">
+<title>sourcefile~~subgrid.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-994 443,-994 443,4 -4,4"/>
+<!-- sourcefile~subgrid.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~subgrid.f90</title>
+<polygon fill="none" stroke="black" points="76,-381 0,-381 0,-357 76,-357 76,-381"/>
+<text text-anchor="middle" x="38" y="-366.6" font-family="Helvetica,sans-Serif" font-size="10.50">Subgrid.F90</text>
+</g>
+<!-- sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~api.f90~8</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node2"><a xlink:href="../sourcefile/api.f90~8.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="202,-507 148,-507 148,-483 202,-483 202,-507"/>
+<text text-anchor="middle" x="175" y="-492.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~8&#45;&gt;sourcefile~subgrid.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~api.f90~8&#45;&gt;sourcefile~subgrid.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M161.06,-482.92C137.53,-460.96 87.59,-414.35 59.43,-388.07"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="61.8,-385.49 52.1,-381.23 57.03,-390.61 61.8,-385.49"/>
+</g>
+<!-- sourcefile~openmp_support.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~openmp_support.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node3"><a xlink:href="../sourcefile/openmp_support.f90.html" xlink:title="OpenMP_Support.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="238,-255 112,-255 112,-231 238,-231 238,-255"/>
+<text text-anchor="middle" x="175" y="-240.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">OpenMP_Support.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~openmp_support.f90&#45;&gt;sourcefile~subgrid.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~openmp_support.f90&#45;&gt;sourcefile~subgrid.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M161.06,-255.08C137.53,-277.04 87.59,-323.65 59.43,-349.93"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="57.03,-347.39 52.1,-356.77 61.8,-352.51 57.03,-347.39"/>
+</g>
+<!-- sourcefile~componentspecparser.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~componentspecparser.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node4"><a xlink:href="../sourcefile/componentspecparser.f90.html" xlink:title="ComponentSpecParser.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="434.5,-990 278.5,-990 278.5,-966 434.5,-966 434.5,-990"/>
+<text text-anchor="middle" x="356.5" y="-975.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ComponentSpecParser.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~componentspecparser.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~componentspecparser.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M285.31,-965.88C281.16,-963.42 277.34,-960.48 274,-957 211.92,-892.18 184.35,-600.32 177.66,-517.17"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="181.14,-516.77 176.87,-507.07 174.16,-517.31 181.14,-516.77"/>
+</g>
+<!-- sourcefile~extdatagridcomp.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~extdatagridcomp.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node5"><a xlink:href="../sourcefile/extdatagridcomp.f90.html" xlink:title="ExtDataGridComp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="422,-948 291,-948 291,-924 422,-924 422,-948"/>
+<text text-anchor="middle" x="356.5" y="-933.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ExtDataGridComp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M290.83,-926.68C284.58,-923.73 278.8,-919.91 274,-915 217.26,-856.94 186.33,-595.91 178.2,-517.41"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="181.65,-516.79 177.16,-507.19 174.69,-517.49 181.65,-516.79"/>
+</g>
+<!-- sourcefile~fieldbundleread.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~fieldbundleread.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node6"><a xlink:href="../sourcefile/fieldbundleread.f90.html" xlink:title="FieldBundleRead.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="418.5,-906 294.5,-906 294.5,-882 418.5,-882 418.5,-906"/>
+<text text-anchor="middle" x="356.5" y="-891.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBundleRead.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundleread.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~fieldbundleread.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M294.19,-885.99C286.69,-882.89 279.69,-878.68 274,-873 222.44,-821.51 188.37,-589.96 178.77,-517.05"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="182.24,-516.6 177.49,-507.13 175.3,-517.49 182.24,-516.6"/>
+</g>
+<!-- sourcefile~generic3g.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~generic3g.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node7"><a xlink:href="../sourcefile/generic3g.f90.html" xlink:title="Generic3g.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="402,-24 311,-24 311,0 402,0 402,-24"/>
+<text text-anchor="middle" x="356.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Generic3g.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~generic3g.f90&#45;&gt;sourcefile~openmp_support.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge26" class="edge">
+<title>sourcefile~generic3g.f90&#45;&gt;sourcefile~openmp_support.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M310.74,-16.24C297.77,-19.28 284.34,-24.41 274,-33 213.93,-82.9 188.61,-177.86 179.88,-220.86"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="176.41,-220.36 177.97,-230.84 183.29,-221.68 176.41,-220.36"/>
+</g>
+<!-- sourcefile~geom_pfio.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~geom_pfio.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node8"><a xlink:href="../sourcefile/geom_pfio.f90.html" xlink:title="Geom_PFIO.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="404,-864 309,-864 309,-840 404,-840 404,-864"/>
+<text text-anchor="middle" x="356.5" y="-849.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Geom_PFIO.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geom_pfio.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~geom_pfio.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M308.63,-848.4C296.04,-845.34 283.34,-840.05 274,-831 183.6,-743.41 175.33,-577.57 175.47,-517.47"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="178.97,-517.25 175.58,-507.21 171.97,-517.17 178.97,-517.25"/>
+</g>
+<!-- sourcefile~geomaspect.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~geomaspect.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node9"><a xlink:href="../sourcefile/geomaspect.f90.html" xlink:title="GeomAspect.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="408,-822 305,-822 305,-798 408,-798 408,-822"/>
+<text text-anchor="middle" x="356.5" y="-807.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomAspect.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geomaspect.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~geomaspect.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M304.6,-805.06C293.43,-801.89 282.44,-796.87 274,-789 193.76,-714.15 179.17,-571.96 176.55,-517.24"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="180.05,-517.08 176.17,-507.22 173.06,-517.35 180.05,-517.08"/>
+</g>
+<!-- sourcefile~geometryspec.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~geometryspec.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node10"><a xlink:href="../sourcefile/geometryspec.f90.html" xlink:title="GeometrySpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="414,-780 299,-780 299,-756 414,-756 414,-780"/>
+<text text-anchor="middle" x="356.5" y="-765.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeometrySpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geometryspec.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~geometryspec.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M298.95,-760.9C289.85,-757.76 281.1,-753.31 274,-747 203.98,-684.84 183.58,-566.56 177.98,-517.35"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="181.44,-516.75 176.93,-507.16 174.48,-517.47 181.44,-516.75"/>
+</g>
+<!-- sourcefile~initialize_geom_a.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~initialize_geom_a.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node11"><a xlink:href="../sourcefile/initialize_geom_a.f90.html" xlink:title="initialize_geom_a.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="420,-738 293,-738 293,-714 420,-714 420,-738"/>
+<text text-anchor="middle" x="356.5" y="-723.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">initialize_geom_a.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~initialize_geom_a.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~initialize_geom_a.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M292.62,-715.99C285.89,-713.17 279.51,-709.57 274,-705 213.93,-655.1 188.61,-560.14 179.88,-517.14"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="183.29,-516.32 177.97,-507.16 176.41,-517.64 183.29,-516.32"/>
+</g>
+<!-- sourcefile~mapl.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~mapl.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node12"><a xlink:href="../sourcefile/mapl.f90.html" xlink:title="MAPL.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="388.5,-696 324.5,-696 324.5,-672 388.5,-672 388.5,-696"/>
+<text text-anchor="middle" x="356.5" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M324.37,-681.72C308.02,-679.2 288.45,-673.93 274,-663 223.75,-625 194.69,-553.15 182.62,-516.98"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="185.93,-515.83 179.54,-507.38 179.27,-517.97 185.93,-515.83"/>
+</g>
+<!-- sourcefile~mapl_locstreammod.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~mapl_locstreammod.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node13"><a xlink:href="../sourcefile/mapl_locstreammod.f90.html" xlink:title="MAPL_LocStreamMod.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="430.5,-654 282.5,-654 282.5,-630 430.5,-630 430.5,-654"/>
+<text text-anchor="middle" x="356.5" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_LocStreamMod.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl_locstreammod.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~mapl_locstreammod.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M291.45,-629.91C285.31,-627.46 279.37,-624.53 274,-621 233.18,-594.2 202.12,-544.59 186.73,-516.27"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="189.71,-514.43 181.94,-507.22 183.52,-517.7 189.71,-514.43"/>
+</g>
+<!-- sourcefile~mapl_orbgridcompmod.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node14" class="node">
+<title>sourcefile~mapl_orbgridcompmod.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node14"><a xlink:href="../sourcefile/mapl_orbgridcompmod.f90.html" xlink:title="MAPL_OrbGridCompMod.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="439,-612 274,-612 274,-588 439,-588 439,-612"/>
+<text text-anchor="middle" x="356.5" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_OrbGridCompMod.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl_orbgridcompmod.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~mapl_orbgridcompmod.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M295.56,-587.94C288.1,-585.46 280.74,-582.51 274,-579 242.21,-562.43 211.89,-533.77 193.61,-514.6"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="196.15,-512.19 186.77,-507.27 191.03,-516.97 196.15,-512.19"/>
+</g>
+<!-- sourcefile~mesh_benchmark.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node15" class="node">
+<title>sourcefile~mesh_benchmark.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node15"><a xlink:href="../sourcefile/mesh_benchmark.f90.html" xlink:title="mesh_benchmark.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="421.5,-570 291.5,-570 291.5,-546 421.5,-546 421.5,-570"/>
+<text text-anchor="middle" x="356.5" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">mesh_benchmark.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mesh_benchmark.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~mesh_benchmark.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M303.85,-545.96C293.86,-543.28 283.54,-540.25 274,-537 252.52,-529.68 229.13,-519.73 210.59,-511.36"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="211.92,-508.12 201.37,-507.14 209.01,-514.49 211.92,-508.12"/>
+</g>
+<!-- sourcefile~pfioserverbounds.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node16" class="node">
+<title>sourcefile~pfioserverbounds.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node16"><a xlink:href="../sourcefile/pfioserverbounds.f90.html" xlink:title="pFIOServerBounds.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="423.5,-528 289.5,-528 289.5,-504 423.5,-504 423.5,-528"/>
+<text text-anchor="middle" x="356.5" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pFIOServerBounds.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~pfioserverbounds.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~pfioserverbounds.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M289.43,-508.27C263.36,-505.22 234.43,-501.84 212.31,-499.25"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="212.69,-495.77 202.36,-498.08 211.88,-502.72 212.69,-495.77"/>
+</g>
+<!-- sourcefile~primaryexport.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node17" class="node">
+<title>sourcefile~primaryexport.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node17"><a xlink:href="../sourcefile/primaryexport.f90.html" xlink:title="PrimaryExport.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="412,-486 301,-486 301,-462 412,-462 412,-486"/>
+<text text-anchor="middle" x="356.5" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">PrimaryExport.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~primaryexport.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~primaryexport.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M300.67,-480.41C271.85,-483.79 237.35,-487.82 211.95,-490.79"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="211.54,-487.32 202.01,-491.96 212.35,-494.27 211.54,-487.32"/>
+</g>
+<!-- sourcefile~regridder.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node18" class="node">
+<title>sourcefile~regridder.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node18"><a xlink:href="../sourcefile/regridder.f90.html" xlink:title="Regridder.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="399.5,-444 313.5,-444 313.5,-420 399.5,-420 399.5,-444"/>
+<text text-anchor="middle" x="356.5" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Regridder.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regridder.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~regridder.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M313.26,-441.58C300.52,-444.82 286.59,-448.71 274,-453 252.52,-460.32 229.13,-470.27 210.59,-478.64"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="209.01,-475.51 201.37,-482.86 211.92,-481.88 209.01,-475.51"/>
+</g>
+<!-- sourcefile~regriddermanager.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node19" class="node">
+<title>sourcefile~regriddermanager.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node19"><a xlink:href="../sourcefile/regriddermanager.f90.html" xlink:title="RegridderManager.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="423,-402 290,-402 290,-378 423,-378 423,-402"/>
+<text text-anchor="middle" x="356.5" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RegridderManager.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regriddermanager.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~regriddermanager.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M295.56,-402.06C288.1,-404.54 280.74,-407.49 274,-411 242.21,-427.57 211.89,-456.23 193.61,-475.4"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="191.03,-473.03 186.77,-482.73 196.15,-477.81 191.03,-473.03"/>
+</g>
+<!-- sourcefile~regridderspec.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node20" class="node">
+<title>sourcefile~regridderspec.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node20"><a xlink:href="../sourcefile/regridderspec.f90.html" xlink:title="RegridderSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="413.5,-360 299.5,-360 299.5,-336 413.5,-336 413.5,-360"/>
+<text text-anchor="middle" x="356.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RegridderSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~regridderspec.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~regridderspec.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M299.5,-357.2C290.54,-360.11 281.69,-363.95 274,-369 233.18,-395.8 202.12,-445.41 186.73,-473.73"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="183.52,-472.3 181.94,-482.78 189.71,-475.57 183.52,-472.3"/>
+</g>
+<!-- sourcefile~routehandleparam.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node21" class="node">
+<title>sourcefile~routehandleparam.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node21"><a xlink:href="../sourcefile/routehandleparam.f90.html" xlink:title="RoutehandleParam.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="425,-318 288,-318 288,-294 425,-294 425,-318"/>
+<text text-anchor="middle" x="356.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RoutehandleParam.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~routehandleparam.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~routehandleparam.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M289.3,-318.09C283.86,-320.54 278.66,-323.47 274,-327 223.75,-365 194.69,-436.85 182.62,-473.02"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="179.27,-472.03 179.54,-482.62 185.93,-474.17 179.27,-472.03"/>
+</g>
+<!-- sourcefile~routehandlespec.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node22" class="node">
+<title>sourcefile~routehandlespec.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node22"><a xlink:href="../sourcefile/routehandlespec.f90.html" xlink:title="RoutehandleSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="421,-276 292,-276 292,-252 421,-252 421,-276"/>
+<text text-anchor="middle" x="356.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RoutehandleSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~routehandlespec.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge20" class="edge">
+<title>sourcefile~routehandlespec.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M291.8,-274.36C285.37,-277.13 279.28,-280.61 274,-285 213.93,-334.9 188.61,-429.86 179.88,-472.86"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="176.41,-472.36 177.97,-482.84 183.29,-473.68 176.41,-472.36"/>
+</g>
+<!-- sourcefile~sharedio.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node23" class="node">
+<title>sourcefile~sharedio.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node23"><a xlink:href="../sourcefile/sharedio.f90.html" xlink:title="SharedIO.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="398,-234 315,-234 315,-210 398,-210 398,-234"/>
+<text text-anchor="middle" x="356.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SharedIO.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~sharedio.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge21" class="edge">
+<title>sourcefile~sharedio.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M314.6,-224.91C300.35,-227.76 285.15,-233.11 274,-243 203.98,-305.16 183.58,-423.44 177.98,-472.65"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="174.48,-472.53 176.93,-482.84 181.44,-473.25 174.48,-472.53"/>
+</g>
+<!-- sourcefile~simplebundlemod.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node24" class="node">
+<title>sourcefile~simplebundlemod.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node24"><a xlink:href="../sourcefile/simplebundlemod.f90.html" xlink:title="SimpleBundleMod.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="422.5,-192 290.5,-192 290.5,-168 422.5,-168 422.5,-192"/>
+<text text-anchor="middle" x="356.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SimpleBundleMod.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~simplebundlemod.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge22" class="edge">
+<title>sourcefile~simplebundlemod.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M290.47,-190.14C284.44,-192.96 278.81,-196.52 274,-201 232.8,-239.43 193.42,-411.74 180.46,-473.16"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="177.03,-472.47 178.42,-482.98 183.88,-473.9 177.03,-472.47"/>
+</g>
+<!-- sourcefile~stategetgeom.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node25" class="node">
+<title>sourcefile~stategetgeom.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node25"><a xlink:href="../sourcefile/stategetgeom.f90.html" xlink:title="StateGetGeom.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="413.5,-150 299.5,-150 299.5,-126 413.5,-126 413.5,-150"/>
+<text text-anchor="middle" x="356.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StateGetGeom.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~stategetgeom.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge23" class="edge">
+<title>sourcefile~stategetgeom.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M299.32,-144.3C289.96,-147.5 281.03,-152.19 274,-159 262.27,-170.36 201.14,-399.56 181.84,-472.74"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="178.38,-472.17 179.21,-482.73 185.14,-473.95 178.38,-472.17"/>
+</g>
+<!-- sourcefile~stategetgeom.f90~2 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node26" class="node">
+<title>sourcefile~stategetgeom.f90~2</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node26"><a xlink:href="../sourcefile/stategetgeom.f90~2.html" xlink:title="StateGetGeom.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="413.5,-108 299.5,-108 299.5,-84 413.5,-84 413.5,-108"/>
+<text text-anchor="middle" x="356.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StateGetGeom.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~stategetgeom.f90~2&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge24" class="edge">
+<title>sourcefile~stategetgeom.f90~2&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M299.49,-101.91C290.01,-105.14 280.98,-109.93 274,-117 226.72,-164.85 254.72,-198.85 238,-264 218.29,-340.8 193.49,-431.54 182.16,-472.7"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="178.74,-471.93 179.46,-482.51 185.49,-473.8 178.74,-471.93"/>
+</g>
+<!-- sourcefile~statemasking.f90 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_node27" class="node">
+<title>sourcefile~statemasking.f90</title>
+<g id="a_sourcefile~~subgrid.f90~~AfferentGraph_node27"><a xlink:href="../sourcefile/statemasking.f90.html" xlink:title="StateMasking.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="409.5,-66 303.5,-66 303.5,-42 409.5,-42 409.5,-66"/>
+<text text-anchor="middle" x="356.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StateMasking.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~statemasking.f90&#45;&gt;sourcefile~api.f90~8 -->
+<g id="sourcefile~~subgrid.f90~~AfferentGraph_edge25" class="edge">
+<title>sourcefile~statemasking.f90&#45;&gt;sourcefile~api.f90~8</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M303.4,-58.28C292.41,-61.49 281.8,-66.69 274,-75 215.5,-137.37 257.1,-180.65 238,-264 220.29,-341.28 194.51,-431.79 182.55,-472.8"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="179.14,-471.98 179.69,-482.56 185.86,-473.95 179.14,-471.98"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#AfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="AfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+<br>
+      <section>
+        <h2><span class="anchor" id="src"></span>Source Code</h2>
+        <div class="hl codehilite"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="cp">#include &quot;MAPL.h&quot;</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a>
+<a id="ln-3" name="ln-3" href="#ln-3"></a><span class="k">module </span><span class="n">mapl3g_Subgrid</span>
+<a id="ln-4" name="ln-4" href="#ln-4"></a><span class="w">    </span><span class="k">use </span><span class="n">ESMF</span>
+<a id="ln-5" name="ln-5" href="#ln-5"></a><span class="w">    </span><span class="k">use </span><span class="n">mapl3g_GridGet</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">GridGet</span><span class="p">,</span><span class="w"> </span><span class="n">GridGetCoordinates</span>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="w">    </span><span class="k">use </span><span class="n">mapl_ErrorHandling</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="w">    </span><span class="k">use </span><span class="n">mapl_KeywordEnforcer</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="w">    </span><span class="k">implicit none</span><span class="p">(</span><span class="k">type</span><span class="p">,</span><span class="k">external</span><span class="p">)</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="w">    </span><span class="k">private</span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="k">    public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Interval</span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">make_subgrids</span>
+<a id="ln-14" name="ln-14" href="#ln-14"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">find_bounds</span>
+<a id="ln-15" name="ln-15" href="#ln-15"></a>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="w">    </span><span class="k">type</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Interval</span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="nb">min</span>
+<a id="ln-18" name="ln-18" href="#ln-18"></a><span class="nb">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="nb">max</span>
+<a id="ln-19" name="ln-19" href="#ln-19"></a><span class="nb">    </span><span class="k">end type </span><span class="n">Interval</span>
+<a id="ln-20" name="ln-20" href="#ln-20"></a>
+<a id="ln-21" name="ln-21" href="#ln-21"></a><span class="w">    </span><span class="k">interface </span><span class="n">make_subgrids</span>
+<a id="ln-22" name="ln-22" href="#ln-22"></a><span class="w">        </span><span class="k">procedure </span><span class="n">make_subgrids_from_num_grids</span>
+<a id="ln-23" name="ln-23" href="#ln-23"></a><span class="w">        </span><span class="k">procedure </span><span class="n">make_subgrids_from_bounds</span>
+<a id="ln-24" name="ln-24" href="#ln-24"></a><span class="w">    </span><span class="k">end interface </span><span class="n">make_subgrids</span>
+<a id="ln-25" name="ln-25" href="#ln-25"></a>
+<a id="ln-26" name="ln-26" href="#ln-26"></a><span class="k">CONTAINS</span>
+<a id="ln-27" name="ln-27" href="#ln-27"></a>
+<a id="ln-28" name="ln-28" href="#ln-28"></a><span class="k">    function </span><span class="n">find_bounds</span><span class="p">(</span><span class="n">yDim</span><span class="p">,</span><span class="w"> </span><span class="n">num_grids</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
+<a id="ln-29" name="ln-29" href="#ln-29"></a><span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">yDim</span>
+<a id="ln-30" name="ln-30" href="#ln-30"></a><span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">num_grids</span>
+<a id="ln-31" name="ln-31" href="#ln-31"></a><span class="w">        </span><span class="k">type</span><span class="p">(</span><span class="n">Interval</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bounds</span><span class="p">(:)</span>
+<a id="ln-32" name="ln-32" href="#ln-32"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">step</span>
+<a id="ln-33" name="ln-33" href="#ln-33"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="nb">count</span><span class="p">,</span><span class="w"> </span><span class="n">numOfFirstSize</span><span class="p">,</span><span class="w"> </span><span class="n">numOfSecondSize</span><span class="p">,</span><span class="w"> </span><span class="n">firstSize</span><span class="p">,</span><span class="w"> </span><span class="n">secondSize</span>
+<a id="ln-34" name="ln-34" href="#ln-34"></a><span class="w">        </span><span class="k">allocate</span><span class="p">(</span><span class="n">bounds</span><span class="p">(</span><span class="n">num_grids</span><span class="p">))</span>
+<a id="ln-35" name="ln-35" href="#ln-35"></a>
+<a id="ln-36" name="ln-36" href="#ln-36"></a><span class="w">        </span><span class="c">! if the size of each grid is the same</span>
+<a id="ln-37" name="ln-37" href="#ln-37"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">modulo</span><span class="p">(</span><span class="n">yDim</span><span class="p">,</span><span class="w"> </span><span class="n">num_grids</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-38" name="ln-38" href="#ln-38"></a><span class="k">            </span><span class="n">step</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">yDim</span><span class="o">/</span><span class="n">num_grids</span>
+<a id="ln-39" name="ln-39" href="#ln-39"></a><span class="w">            </span><span class="nb">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-40" name="ln-40" href="#ln-40"></a><span class="w">            </span><span class="c">! go from 1-yDim incrementing by step size</span>
+<a id="ln-41" name="ln-41" href="#ln-41"></a><span class="w">            </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">yDim</span><span class="p">,</span><span class="w"> </span><span class="n">step</span>
+<a id="ln-42" name="ln-42" href="#ln-42"></a><span class="w">                </span><span class="n">bounds</span><span class="p">(</span><span class="nb">count</span><span class="p">)%</span><span class="nb">min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span>
+<a id="ln-43" name="ln-43" href="#ln-43"></a><span class="w">                </span><span class="n">bounds</span><span class="p">(</span><span class="nb">count</span><span class="p">)%</span><span class="nb">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-44" name="ln-44" href="#ln-44"></a><span class="w">                </span><span class="nb">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-45" name="ln-45" href="#ln-45"></a><span class="w">            </span><span class="k">end do</span>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="w">        </span><span class="c">! if at least one grid is a different size</span>
+<a id="ln-47" name="ln-47" href="#ln-47"></a><span class="w">        </span><span class="k">else</span>
+<a id="ln-48" name="ln-48" href="#ln-48"></a><span class="k">            </span><span class="n">firstSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">yDim</span><span class="o">/</span><span class="n">num_grids</span>
+<a id="ln-49" name="ln-49" href="#ln-49"></a><span class="w">            </span><span class="n">numOfSecondSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">modulo</span><span class="p">(</span><span class="n">yDim</span><span class="p">,</span><span class="w"> </span><span class="n">num_grids</span><span class="p">)</span>
+<a id="ln-50" name="ln-50" href="#ln-50"></a><span class="w">            </span><span class="n">numOfFirstSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">num_grids</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">numOfSecondSize</span>
+<a id="ln-51" name="ln-51" href="#ln-51"></a><span class="w">            </span><span class="n">secondSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">yDim</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">firstSize</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">numOfFirstSize</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">numOfSecondSize</span>
+<a id="ln-52" name="ln-52" href="#ln-52"></a>
+<a id="ln-53" name="ln-53" href="#ln-53"></a><span class="w">            </span><span class="nb">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-54" name="ln-54" href="#ln-54"></a><span class="w">            </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">numOfFirstSize</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">firstSize</span><span class="p">,</span><span class="w"> </span><span class="n">firstSize</span>
+<a id="ln-55" name="ln-55" href="#ln-55"></a><span class="w">                </span><span class="n">bounds</span><span class="p">(</span><span class="nb">count</span><span class="p">)%</span><span class="nb">min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span>
+<a id="ln-56" name="ln-56" href="#ln-56"></a><span class="w">                </span><span class="n">bounds</span><span class="p">(</span><span class="nb">count</span><span class="p">)%</span><span class="nb">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">firstSize</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-57" name="ln-57" href="#ln-57"></a><span class="w">                </span><span class="nb">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-58" name="ln-58" href="#ln-58"></a><span class="w">            </span><span class="k">end do</span>
+<a id="ln-59" name="ln-59" href="#ln-59"></a>
+<a id="ln-60" name="ln-60" href="#ln-60"></a><span class="k">            do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">numOfFirstSize</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">firstSize</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">yDim</span><span class="p">,</span><span class="w"> </span><span class="n">secondSize</span>
+<a id="ln-61" name="ln-61" href="#ln-61"></a><span class="w">                </span><span class="n">bounds</span><span class="p">(</span><span class="nb">count</span><span class="p">)%</span><span class="nb">min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span>
+<a id="ln-62" name="ln-62" href="#ln-62"></a><span class="w">                </span><span class="n">bounds</span><span class="p">(</span><span class="nb">count</span><span class="p">)%</span><span class="nb">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">secondSize</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-63" name="ln-63" href="#ln-63"></a><span class="w">                </span><span class="nb">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-64" name="ln-64" href="#ln-64"></a><span class="w">            </span><span class="k">end do</span>
+<a id="ln-65" name="ln-65" href="#ln-65"></a><span class="k">        end if</span>
+<a id="ln-66" name="ln-66" href="#ln-66"></a><span class="k">    end function </span><span class="n">find_bounds</span>
+<a id="ln-67" name="ln-67" href="#ln-67"></a>
+<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">    </span><span class="k">function </span><span class="n">subset_array</span><span class="p">(</span><span class="n">input_array</span><span class="p">,</span><span class="w"> </span><span class="n">bounds</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">output_array</span><span class="p">)</span>
+<a id="ln-69" name="ln-69" href="#ln-69"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">ESMF_KIND_R8</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">input_array</span><span class="p">(:,:)</span>
+<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">        </span><span class="k">type</span><span class="p">(</span><span class="n">Interval</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bounds</span>
+<a id="ln-71" name="ln-71" href="#ln-71"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">ESMF_KIND_R8</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">output_array</span><span class="p">(:,:)</span>
+<a id="ln-72" name="ln-72" href="#ln-72"></a>
+<a id="ln-73" name="ln-73" href="#ln-73"></a><span class="w">        </span><span class="k">allocate</span><span class="p">(</span><span class="n">output_array</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">input_array</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">bounds</span><span class="p">%</span><span class="nb">max</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">bounds</span><span class="p">%</span><span class="nb">min</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span>
+<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="w">        </span><span class="n">output_array</span><span class="p">(:,:)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input_array</span><span class="p">(:,</span><span class="n">bounds</span><span class="p">%</span><span class="nb">min</span><span class="p">:</span><span class="n">bounds</span><span class="p">%</span><span class="nb">max</span><span class="p">)</span>
+<a id="ln-75" name="ln-75" href="#ln-75"></a><span class="w">    </span><span class="k">end function </span><span class="n">subset_array</span>
+<a id="ln-76" name="ln-76" href="#ln-76"></a>
+<a id="ln-77" name="ln-77" href="#ln-77"></a><span class="w">    </span><span class="k">function </span><span class="n">make_subgrids_from_num_grids</span><span class="p">(</span><span class="n">primary_grid</span><span class="p">,</span><span class="w"> </span><span class="n">num_grids</span><span class="p">,</span><span class="w"> </span><span class="n">unusable</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">subgrids</span><span class="p">)</span>
+<a id="ln-78" name="ln-78" href="#ln-78"></a><span class="w">        </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Grid</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">subgrids</span><span class="p">(:)</span>
+<a id="ln-79" name="ln-79" href="#ln-79"></a><span class="w">        </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Grid</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">primary_grid</span>
+<a id="ln-80" name="ln-80" href="#ln-80"></a><span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">num_grids</span>
+<a id="ln-81" name="ln-81" href="#ln-81"></a><span class="w">        </span><span class="k">class</span><span class="p">(</span><span class="n">KeywordEnforcer</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">unusable</span>
+<a id="ln-82" name="ln-82" href="#ln-82"></a><span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-83" name="ln-83" href="#ln-83"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">im</span><span class="p">,</span><span class="w"> </span><span class="n">jm</span>
+<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-85" name="ln-85" href="#ln-85"></a><span class="w">        </span><span class="k">type</span><span class="p">(</span><span class="n">Interval</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bounds</span><span class="p">(:)</span>
+<a id="ln-86" name="ln-86" href="#ln-86"></a>
+<a id="ln-87" name="ln-87" href="#ln-87"></a><span class="w">        </span><span class="k">call </span><span class="n">GridGet</span><span class="p">(</span><span class="n">primary_grid</span><span class="p">,</span><span class="w"> </span><span class="n">im</span><span class="o">=</span><span class="n">im</span><span class="p">,</span><span class="w"> </span><span class="n">jm</span><span class="o">=</span><span class="n">jm</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-88" name="ln-88" href="#ln-88"></a><span class="w">        </span><span class="n">bounds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">find_bounds</span><span class="p">(</span><span class="n">jm</span><span class="p">,</span><span class="w"> </span><span class="n">num_grids</span><span class="p">)</span>
+<a id="ln-89" name="ln-89" href="#ln-89"></a><span class="w">        </span><span class="n">subgrids</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_subgrids</span><span class="p">(</span><span class="n">primary_grid</span><span class="p">,</span><span class="w"> </span><span class="n">bounds</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-90" name="ln-90" href="#ln-90"></a><span class="w">        </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="n">ESMF_SUCCESS</span><span class="p">)</span>
+<a id="ln-91" name="ln-91" href="#ln-91"></a><span class="w">        </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">unusable</span><span class="p">)</span>
+<a id="ln-92" name="ln-92" href="#ln-92"></a><span class="w">    </span><span class="k">end function </span><span class="n">make_subgrids_from_num_grids</span>
+<a id="ln-93" name="ln-93" href="#ln-93"></a>
+<a id="ln-94" name="ln-94" href="#ln-94"></a><span class="w">    </span><span class="k">function </span><span class="n">make_subgrids_from_bounds</span><span class="p">(</span><span class="n">primary_grid</span><span class="p">,</span><span class="w"> </span><span class="n">bounds</span><span class="p">,</span><span class="w"> </span><span class="n">unusable</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">subgrids</span><span class="p">)</span>
+<a id="ln-95" name="ln-95" href="#ln-95"></a><span class="w">        </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Grid</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">subgrids</span><span class="p">(:)</span>
+<a id="ln-96" name="ln-96" href="#ln-96"></a><span class="w">        </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Grid</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">primary_grid</span><span class="w"> </span><span class="c">! inout to use GridGetCoordinates</span>
+<a id="ln-97" name="ln-97" href="#ln-97"></a><span class="w">        </span><span class="k">type</span><span class="p">(</span><span class="n">Interval</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bounds</span><span class="p">(:)</span>
+<a id="ln-98" name="ln-98" href="#ln-98"></a><span class="w">        </span><span class="k">class</span><span class="p">(</span><span class="n">KeywordEnforcer</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">unusable</span>
+<a id="ln-99" name="ln-99" href="#ln-99"></a><span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-100" name="ln-100" href="#ln-100"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">im</span><span class="p">,</span><span class="w"> </span><span class="n">jm</span>
+<a id="ln-101" name="ln-101" href="#ln-101"></a><span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">global_count</span><span class="p">(:),</span><span class="w"> </span><span class="n">interior</span><span class="p">(:)</span>
+<a id="ln-102" name="ln-102" href="#ln-102"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-103" name="ln-103" href="#ln-103"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">petMap</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<a id="ln-104" name="ln-104" href="#ln-104"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">myPet</span><span class="p">,</span><span class="w"> </span><span class="n">section</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="nb">count</span><span class="p">,</span><span class="w"> </span><span class="n">size_</span>
+<a id="ln-105" name="ln-105" href="#ln-105"></a><span class="w">        </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_VM</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">vm</span>
+<a id="ln-106" name="ln-106" href="#ln-106"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">ESMF_KIND_R8</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">new_lats</span><span class="p">(:,:),</span><span class="w"> </span><span class="n">new_lons</span><span class="p">(:,:)</span>
+<a id="ln-107" name="ln-107" href="#ln-107"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">ESMF_KIND_R8</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">lons</span><span class="p">(:,:),</span><span class="w"> </span><span class="n">lats</span><span class="p">(:,:)</span>
+<a id="ln-108" name="ln-108" href="#ln-108"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">ESMF_KIND_R8</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">new_corner_lats</span><span class="p">(:,:),</span><span class="w"> </span><span class="n">new_corner_lons</span><span class="p">(:,:)</span>
+<a id="ln-109" name="ln-109" href="#ln-109"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">ESMF_KIND_R8</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">corners</span><span class="p">(:,:,:)</span>
+<a id="ln-110" name="ln-110" href="#ln-110"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">ESMF_KIND_R8</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">lats1d</span><span class="p">(:),</span><span class="w"> </span><span class="n">lons1d</span><span class="p">(:)</span>
+<a id="ln-111" name="ln-111" href="#ln-111"></a><span class="w">        </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="n">ESMF_MAXSTR</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">name</span>
+<a id="ln-112" name="ln-112" href="#ln-112"></a><span class="w">        </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Info</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">info_in</span><span class="p">,</span><span class="w"> </span><span class="n">info_out</span><span class="p">,</span><span class="w"> </span><span class="n">infoh</span>
+<a id="ln-113" name="ln-113" href="#ln-113"></a><span class="w">        </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">isPresent</span>
+<a id="ln-114" name="ln-114" href="#ln-114"></a>
+<a id="ln-115" name="ln-115" href="#ln-115"></a><span class="w">        </span><span class="k">call </span><span class="n">ESMF_GridGet</span><span class="p">(</span><span class="n">primary_grid</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-116" name="ln-116" href="#ln-116"></a>
+<a id="ln-117" name="ln-117" href="#ln-117"></a><span class="w">        </span><span class="k">allocate</span><span class="p">(</span><span class="n">subgrids</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">bounds</span><span class="p">)))</span>
+<a id="ln-118" name="ln-118" href="#ln-118"></a><span class="w">        </span><span class="k">call </span><span class="n">GridGet</span><span class="p">(</span><span class="n">primary_grid</span><span class="p">,</span><span class="w"> </span><span class="n">im</span><span class="o">=</span><span class="n">im</span><span class="p">,</span><span class="w"> </span><span class="n">jm</span><span class="o">=</span><span class="n">jm</span><span class="p">,</span><span class="w"> </span><span class="n">corners</span><span class="o">=</span><span class="n">corners</span><span class="p">,</span><span class="w"> </span><span class="n">interior</span><span class="o">=</span><span class="n">interior</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-119" name="ln-119" href="#ln-119"></a><span class="w">        </span><span class="k">call </span><span class="n">ESMF_VMGetCurrent</span><span class="p">(</span><span class="n">vm</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-120" name="ln-120" href="#ln-120"></a><span class="w">        </span><span class="k">call </span><span class="n">ESMF_VMGet</span><span class="p">(</span><span class="n">vm</span><span class="p">,</span><span class="w"> </span><span class="n">localPET</span><span class="o">=</span><span class="n">myPET</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-121" name="ln-121" href="#ln-121"></a>
+<a id="ln-122" name="ln-122" href="#ln-122"></a><span class="w">        </span><span class="c">! global count: use GridGet on an undecomposed view — for now derive from</span>
+<a id="ln-123" name="ln-123" href="#ln-123"></a><span class="w">        </span><span class="c">! the GLOBAL_GRID_INFO attribute if present, else query tile extents directly</span>
+<a id="ln-124" name="ln-124" href="#ln-124"></a><span class="w">        </span><span class="k">block</span>
+<a id="ln-125" name="ln-125" href="#ln-125"></a><span class="k">            </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">tileCount</span><span class="p">,</span><span class="w"> </span><span class="n">dimCount</span>
+<a id="ln-126" name="ln-126" href="#ln-126"></a><span class="w">            </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">minIndex</span><span class="p">(:),</span><span class="w"> </span><span class="n">maxIndex</span><span class="p">(:)</span>
+<a id="ln-127" name="ln-127" href="#ln-127"></a><span class="w">            </span><span class="k">call </span><span class="n">ESMF_GridGet</span><span class="p">(</span><span class="n">primary_grid</span><span class="p">,</span><span class="w"> </span><span class="n">tileCount</span><span class="o">=</span><span class="n">tileCount</span><span class="p">,</span><span class="w"> </span><span class="n">dimCount</span><span class="o">=</span><span class="n">dimCount</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-128" name="ln-128" href="#ln-128"></a><span class="w">            </span><span class="k">allocate</span><span class="p">(</span><span class="n">global_count</span><span class="p">(</span><span class="n">dimCount</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+<a id="ln-129" name="ln-129" href="#ln-129"></a><span class="w">            </span><span class="k">allocate</span><span class="p">(</span><span class="n">minIndex</span><span class="p">(</span><span class="n">dimCount</span><span class="p">),</span><span class="w"> </span><span class="n">maxIndex</span><span class="p">(</span><span class="n">dimCount</span><span class="p">))</span>
+<a id="ln-130" name="ln-130" href="#ln-130"></a><span class="w">            </span><span class="k">call </span><span class="n">ESMF_GridGet</span><span class="p">(</span><span class="n">primary_grid</span><span class="p">,</span><span class="w"> </span><span class="n">tile</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-131" name="ln-131" href="#ln-131"></a><span class="w">                </span><span class="n">staggerloc</span><span class="o">=</span><span class="n">ESMF_STAGGERLOC_CENTER_VCENTER</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-132" name="ln-132" href="#ln-132"></a><span class="w">                </span><span class="n">minIndex</span><span class="o">=</span><span class="n">minIndex</span><span class="p">,</span><span class="w"> </span><span class="n">maxIndex</span><span class="o">=</span><span class="n">maxIndex</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-133" name="ln-133" href="#ln-133"></a><span class="w">            </span><span class="n">global_count</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">dimCount</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">maxIndex</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">minIndex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-134" name="ln-134" href="#ln-134"></a><span class="w">            </span><span class="n">global_count</span><span class="p">(</span><span class="n">dimCount</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="c">! default lev count</span>
+<a id="ln-135" name="ln-135" href="#ln-135"></a><span class="w">        </span><span class="k">end block</span>
+<a id="ln-136" name="ln-136" href="#ln-136"></a>
+<a id="ln-137" name="ln-137" href="#ln-137"></a><span class="k">        </span><span class="n">petMap</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myPet</span>
+<a id="ln-138" name="ln-138" href="#ln-138"></a><span class="w">        </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
+<a id="ln-139" name="ln-139" href="#ln-139"></a><span class="w">           </span><span class="n">section</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bounds</span><span class="p">(</span><span class="n">i</span><span class="p">)%</span><span class="nb">max</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">bounds</span><span class="p">(</span><span class="n">i</span><span class="p">)%</span><span class="nb">min</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-140" name="ln-140" href="#ln-140"></a><span class="w">           </span><span class="c">! make each subgrid</span>
+<a id="ln-141" name="ln-141" href="#ln-141"></a><span class="w">           </span><span class="n">subgrids</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ESMF_GridCreateNoPeriDim</span><span class="p">(</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-142" name="ln-142" href="#ln-142"></a><span class="w">                </span><span class="n">countsPerDEDim1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">im</span><span class="p">],</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-143" name="ln-143" href="#ln-143"></a><span class="w">                </span><span class="n">countsPerDEDim2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">section</span><span class="p">],</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-144" name="ln-144" href="#ln-144"></a><span class="w">                </span><span class="n">indexFlag</span><span class="o">=</span><span class="n">ESMF_INDEX_DELOCAL</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-145" name="ln-145" href="#ln-145"></a><span class="w">                </span><span class="n">coordDep1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-146" name="ln-146" href="#ln-146"></a><span class="w">                </span><span class="n">coordDep2</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-147" name="ln-147" href="#ln-147"></a><span class="w">                </span><span class="n">coordSys</span><span class="o">=</span><span class="n">ESMF_COORDSYS_SPH_RAD</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-148" name="ln-148" href="#ln-148"></a><span class="w">                </span><span class="n">petMap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">petMap</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-149" name="ln-149" href="#ln-149"></a><span class="w">                </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-150" name="ln-150" href="#ln-150"></a><span class="w">                </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-151" name="ln-151" href="#ln-151"></a>
+<a id="ln-152" name="ln-152" href="#ln-152"></a><span class="w">           </span><span class="k">call </span><span class="n">ESMF_GridAddCoord</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="n">subgrids</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">staggerloc</span><span class="o">=</span><span class="n">ESMF_STAGGERLOC_CENTER</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-153" name="ln-153" href="#ln-153"></a><span class="w">           </span><span class="k">call </span><span class="n">ESMF_InfoGetFromHost</span><span class="p">(</span><span class="n">primary_grid</span><span class="p">,</span><span class="w"> </span><span class="n">info_in</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-154" name="ln-154" href="#ln-154"></a><span class="w">           </span><span class="k">call </span><span class="n">ESMF_InfoGetFromHost</span><span class="p">(</span><span class="n">subgrids</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">info_out</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-155" name="ln-155" href="#ln-155"></a><span class="w">           </span><span class="k">call </span><span class="n">ESMF_InfoSet</span><span class="p">(</span><span class="n">info_out</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="o">=</span><span class="n">info_in</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-156" name="ln-156" href="#ln-156"></a>
+<a id="ln-157" name="ln-157" href="#ln-157"></a><span class="w">           </span><span class="c">! delete corner lon/lat attributes in the subgrid</span>
+<a id="ln-158" name="ln-158" href="#ln-158"></a><span class="w">           </span><span class="n">isPresent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ESMF_InfoIsPresent</span><span class="p">(</span><span class="n">info_out</span><span class="p">,</span><span class="s1">&#39;GridCornerLons:&#39;</span><span class="p">,</span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-159" name="ln-159" href="#ln-159"></a><span class="w">           </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">isPresent</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-160" name="ln-160" href="#ln-160"></a><span class="k">              call </span><span class="n">ESMF_InfoRemove</span><span class="p">(</span><span class="n">info_out</span><span class="p">,</span><span class="s1">&#39;GridCornerLons:&#39;</span><span class="p">,</span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-161" name="ln-161" href="#ln-161"></a><span class="w">           </span><span class="k">end if</span>
+<a id="ln-162" name="ln-162" href="#ln-162"></a><span class="k">           </span><span class="n">isPresent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ESMF_InfoIsPresent</span><span class="p">(</span><span class="n">info_out</span><span class="p">,</span><span class="s1">&#39;GridCornerLats:&#39;</span><span class="p">,</span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-163" name="ln-163" href="#ln-163"></a><span class="w">           </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">isPresent</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-164" name="ln-164" href="#ln-164"></a><span class="k">              call </span><span class="n">ESMF_InfoRemove</span><span class="p">(</span><span class="n">info_out</span><span class="p">,</span><span class="s1">&#39;GridCornerLats:&#39;</span><span class="p">,</span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-165" name="ln-165" href="#ln-165"></a><span class="w">           </span><span class="k">endif</span>
+<a id="ln-166" name="ln-166" href="#ln-166"></a><span class="k">        end do</span>
+<a id="ln-167" name="ln-167" href="#ln-167"></a>
+<a id="ln-168" name="ln-168" href="#ln-168"></a><span class="w">        </span><span class="c">! get center lons/lats from original grid</span>
+<a id="ln-169" name="ln-169" href="#ln-169"></a><span class="w">        </span><span class="k">call </span><span class="n">GridGetCoordinates</span><span class="p">(</span><span class="n">primary_grid</span><span class="p">,</span><span class="w"> </span><span class="n">longitudes</span><span class="o">=</span><span class="n">lons</span><span class="p">,</span><span class="w"> </span><span class="n">latitudes</span><span class="o">=</span><span class="n">lats</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-170" name="ln-170" href="#ln-170"></a>
+<a id="ln-171" name="ln-171" href="#ln-171"></a><span class="w">        </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
+<a id="ln-172" name="ln-172" href="#ln-172"></a><span class="w">           </span><span class="k">call </span><span class="n">ESMF_GridGetCoord</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="n">subgrids</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">coordDim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">localDE</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-173" name="ln-173" href="#ln-173"></a><span class="w">                </span><span class="n">staggerloc</span><span class="o">=</span><span class="n">ESMF_STAGGERLOC_CENTER</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-174" name="ln-174" href="#ln-174"></a><span class="w">                </span><span class="n">farrayPtr</span><span class="o">=</span><span class="n">new_lons</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-175" name="ln-175" href="#ln-175"></a><span class="w">           </span><span class="n">new_lons</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">subset_array</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span><span class="w"> </span><span class="n">bounds</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<a id="ln-176" name="ln-176" href="#ln-176"></a>
+<a id="ln-177" name="ln-177" href="#ln-177"></a><span class="w">           </span><span class="k">call </span><span class="n">ESMF_GridGetCoord</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="n">subgrids</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">coordDim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">localDE</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-178" name="ln-178" href="#ln-178"></a><span class="w">                </span><span class="n">staggerloc</span><span class="o">=</span><span class="n">ESMF_STAGGERLOC_CENTER</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-179" name="ln-179" href="#ln-179"></a><span class="w">                </span><span class="n">farrayPtr</span><span class="o">=</span><span class="n">new_lats</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-180" name="ln-180" href="#ln-180"></a><span class="w">           </span><span class="n">new_lats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">subset_array</span><span class="p">(</span><span class="n">lats</span><span class="p">,</span><span class="w"> </span><span class="n">bounds</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<a id="ln-181" name="ln-181" href="#ln-181"></a>
+<a id="ln-182" name="ln-182" href="#ln-182"></a><span class="w">           </span><span class="k">allocate</span><span class="p">(</span><span class="n">new_corner_lons</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">new_lons</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">new_lons</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+<a id="ln-183" name="ln-183" href="#ln-183"></a><span class="w">           </span><span class="k">allocate</span><span class="p">(</span><span class="n">new_corner_lats</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">new_lats</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">new_lats</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+<a id="ln-184" name="ln-184" href="#ln-184"></a>
+<a id="ln-185" name="ln-185" href="#ln-185"></a><span class="w">           </span><span class="n">new_corner_lons</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">corners</span><span class="p">(:,</span><span class="n">bounds</span><span class="p">(</span><span class="n">i</span><span class="p">)%</span><span class="nb">min</span><span class="p">:</span><span class="n">bounds</span><span class="p">(</span><span class="n">i</span><span class="p">)%</span><span class="nb">max</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<a id="ln-186" name="ln-186" href="#ln-186"></a><span class="w">           </span><span class="n">new_corner_lats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">corners</span><span class="p">(:,</span><span class="n">bounds</span><span class="p">(</span><span class="n">i</span><span class="p">)%</span><span class="nb">min</span><span class="p">:</span><span class="n">bounds</span><span class="p">(</span><span class="n">i</span><span class="p">)%</span><span class="nb">max</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<a id="ln-187" name="ln-187" href="#ln-187"></a>
+<a id="ln-188" name="ln-188" href="#ln-188"></a><span class="w">           </span><span class="c">! translate the 2d arrays into 1D arrays</span>
+<a id="ln-189" name="ln-189" href="#ln-189"></a><span class="w">           </span><span class="n">size_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">new_corner_lons</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">new_corner_lons</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+<a id="ln-190" name="ln-190" href="#ln-190"></a><span class="w">           </span><span class="k">allocate</span><span class="p">(</span><span class="n">lons1d</span><span class="p">(</span><span class="n">size_</span><span class="p">))</span>
+<a id="ln-191" name="ln-191" href="#ln-191"></a><span class="w">           </span><span class="k">allocate</span><span class="p">(</span><span class="n">lats1d</span><span class="p">(</span><span class="n">size_</span><span class="p">))</span>
+<a id="ln-192" name="ln-192" href="#ln-192"></a><span class="w">           </span><span class="nb">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<a id="ln-193" name="ln-193" href="#ln-193"></a><span class="w">           </span><span class="k">do </span><span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">new_corner_lons</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<a id="ln-194" name="ln-194" href="#ln-194"></a><span class="w">              </span><span class="k">do </span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">new_corner_lons</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<a id="ln-195" name="ln-195" href="#ln-195"></a><span class="w">                 </span><span class="nb">count</span><span class="o">=</span><span class="nb">count</span><span class="o">+</span><span class="mi">1</span>
+<a id="ln-196" name="ln-196" href="#ln-196"></a><span class="w">                 </span><span class="n">lons1d</span><span class="p">(</span><span class="nb">count</span><span class="p">)</span><span class="o">=</span><span class="n">new_corner_lons</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span>
+<a id="ln-197" name="ln-197" href="#ln-197"></a><span class="w">                 </span><span class="n">lats1d</span><span class="p">(</span><span class="nb">count</span><span class="p">)</span><span class="o">=</span><span class="n">new_corner_lats</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span>
+<a id="ln-198" name="ln-198" href="#ln-198"></a><span class="w">              </span><span class="k">end do</span>
+<a id="ln-199" name="ln-199" href="#ln-199"></a><span class="k">           end do</span>
+<a id="ln-200" name="ln-200" href="#ln-200"></a>
+<a id="ln-201" name="ln-201" href="#ln-201"></a><span class="k">           call </span><span class="n">ESMF_InfoGetFromHost</span><span class="p">(</span><span class="n">subgrids</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">infoh</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-202" name="ln-202" href="#ln-202"></a><span class="w">           </span><span class="c">! add these arrays as attributes in the subgrids</span>
+<a id="ln-203" name="ln-203" href="#ln-203"></a><span class="w">           </span><span class="k">call </span><span class="n">ESMF_InfoSet</span><span class="p">(</span><span class="n">infoh</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;GridCornerLons:&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-204" name="ln-204" href="#ln-204"></a><span class="w">               </span><span class="n">values</span><span class="o">=</span><span class="n">lons1d</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-205" name="ln-205" href="#ln-205"></a><span class="w">           </span><span class="k">call </span><span class="n">ESMF_InfoSet</span><span class="p">(</span><span class="n">infoh</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;GridCornerLats:&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-206" name="ln-206" href="#ln-206"></a><span class="w">               </span><span class="n">values</span><span class="o">=</span><span class="n">lats1d</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-207" name="ln-207" href="#ln-207"></a><span class="w">           </span><span class="k">block</span>
+<a id="ln-208" name="ln-208" href="#ln-208"></a><span class="k">              </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">global_grid_info</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>
+<a id="ln-209" name="ln-209" href="#ln-209"></a><span class="w">              </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">j1</span><span class="p">,</span><span class="w"> </span><span class="n">j2</span>
+<a id="ln-210" name="ln-210" href="#ln-210"></a><span class="w">              </span><span class="n">i1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">interior</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="ln-211" name="ln-211" href="#ln-211"></a><span class="w">              </span><span class="n">i2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">interior</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a id="ln-212" name="ln-212" href="#ln-212"></a><span class="w">              </span><span class="n">j1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">interior</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a id="ln-213" name="ln-213" href="#ln-213"></a><span class="w">              </span><span class="n">j2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">interior</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<a id="ln-214" name="ln-214" href="#ln-214"></a><span class="w">              </span><span class="n">global_grid_info</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">global_count</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span>
+<a id="ln-215" name="ln-215" href="#ln-215"></a><span class="w">              </span><span class="n">global_grid_info</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">global_count</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a id="ln-216" name="ln-216" href="#ln-216"></a><span class="w">              </span><span class="n">global_grid_info</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">new_lons</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<a id="ln-217" name="ln-217" href="#ln-217"></a><span class="w">              </span><span class="n">global_grid_info</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">new_lons</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<a id="ln-218" name="ln-218" href="#ln-218"></a><span class="w">              </span><span class="n">global_grid_info</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">global_count</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a id="ln-219" name="ln-219" href="#ln-219"></a><span class="w">              </span><span class="n">global_grid_info</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">i1</span>
+<a id="ln-220" name="ln-220" href="#ln-220"></a><span class="w">              </span><span class="n">global_grid_info</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">i2</span>
+<a id="ln-221" name="ln-221" href="#ln-221"></a><span class="w">              </span><span class="n">global_grid_info</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">j1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">bounds</span><span class="p">(</span><span class="n">i</span><span class="p">)%</span><span class="nb">min</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-222" name="ln-222" href="#ln-222"></a><span class="w">              </span><span class="n">global_grid_info</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">j1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">bounds</span><span class="p">(</span><span class="n">i</span><span class="p">)%</span><span class="nb">max</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-223" name="ln-223" href="#ln-223"></a><span class="w">              </span><span class="n">global_grid_info</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">bounds</span><span class="p">(</span><span class="n">i</span><span class="p">)%</span><span class="nb">min</span>
+<a id="ln-224" name="ln-224" href="#ln-224"></a><span class="nb">              </span><span class="k">call </span><span class="n">ESMF_InfoSet</span><span class="p">(</span><span class="n">infoh</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;GLOBAL_GRID_INFO&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">values</span><span class="o">=</span><span class="n">global_grid_info</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-225" name="ln-225" href="#ln-225"></a><span class="w">           </span><span class="k">end block</span>
+<a id="ln-226" name="ln-226" href="#ln-226"></a>
+<a id="ln-227" name="ln-227" href="#ln-227"></a><span class="k">           deallocate</span><span class="p">(</span><span class="n">lons1d</span><span class="p">,</span><span class="w"> </span><span class="n">lats1d</span><span class="p">)</span>
+<a id="ln-228" name="ln-228" href="#ln-228"></a><span class="w">           </span><span class="k">deallocate</span><span class="p">(</span><span class="n">new_corner_lons</span><span class="p">,</span><span class="w"> </span><span class="n">new_corner_lats</span><span class="p">)</span>
+<a id="ln-229" name="ln-229" href="#ln-229"></a><span class="w">        </span><span class="k">end do</span>
+<a id="ln-230" name="ln-230" href="#ln-230"></a><span class="k">        </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="n">ESMF_SUCCESS</span><span class="p">)</span>
+<a id="ln-231" name="ln-231" href="#ln-231"></a><span class="w">        </span><span class="err">_</span><span class="n">UNUSED_DUMMY</span><span class="p">(</span><span class="n">unusable</span><span class="p">)</span>
+<a id="ln-232" name="ln-232" href="#ln-232"></a><span class="w">    </span><span class="k">end function </span><span class="n">make_subgrids_from_bounds</span>
+<a id="ln-233" name="ln-233" href="#ln-233"></a>
+<a id="ln-234" name="ln-234" href="#ln-234"></a><span class="k">end module </span><span class="n">mapl3g_Subgrid</span>
+</pre></div>
+
+      </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              MAPL
+ was developed by The MAPL Developers<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-05-19T17:50:43.891780+0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
