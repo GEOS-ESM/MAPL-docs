@@ -1,68 +1,60 @@
 #include "MAPL.h"
-submodule (mapl_LatLonGeomFactory) create_basic_grid_smod
-   use mapl_GeomSpec
-   use mapl_LonAxis
-   use mapl_LatAxis
-   use mapl_LatLonDecomposition
-   use mapl_LatLonGeomSpec
-   use mapl_MinMaxMod
-   use mapl_ErrorHandlingMod
-   use mapl_Constants
-   use pFIO
-   use gFTL2_StringVector
-   use esmf
-   use mapl_KeywordEnforcer, only: KE => KeywordEnforcer
-   implicit none (type, external)
 
+submodule (mapl_XYGeomFactory) create_basic_grid_smod
+   use mapl_ErrorHandlingMod
+   use mapl_InternalConstants
+   use esmf
+   implicit none
 
 contains
 
-   module function create_basic_grid(spec, unusable, name, rc) result(grid)
+   module function create_basic_grid(spec, unusable, rc) result(grid)
       type(ESMF_Grid) :: grid
-      type(LatLonGeomSpec), intent(in) :: spec
+      type(XYGeomSpec), intent(in) :: spec
       class(KE), optional, intent(in) :: unusable
-      character(len=*), optional, intent(in) :: name
       integer, optional, intent(out) :: rc
 
       integer :: status
-      type(LonAxis) :: lon_axis
-      type(LatAxis) :: lat_axis
-      type(LatLonDecomposition) :: decomp
+      type(ESMF_Info) :: infoh
 
-      lon_axis = spec%get_lon_axis()
-      lat_axis = spec%get_lat_axis()
-      decomp = spec%get_decomposition()
-
-      if (lon_axis%is_periodic()) then
-         grid = ESMF_GridCreate1PeriDim( &
-              & countsPerDEDim1=decomp%get_lon_distribution(), &
-              & countsPerDEDim2=decomp%get_lat_distribution(), &
-              & indexFlag=ESMF_INDEX_DELOCAL, &
-              & gridEdgeLWidth=[0,0], &
-              & gridEdgeUWidth=[0,1], &
-              & coordDep1=[1,2], &
-              & coordDep2=[1,2], &
-              & coordSys=ESMF_COORDSYS_SPH_RAD, &
-              & name=name, &
-              & _RC)
-       else
+      if (spec%get_n_peri_dim() == 0) then
          grid = ESMF_GridCreateNoPeriDim( &
-              & countsPerDEDim1=decomp%get_lon_distribution(), &
-              & countsPerDEDim2=decomp%get_lat_distribution(), &
-              & indexFlag=ESMF_INDEX_DELOCAL, &
-              & gridEdgeLWidth=[0,0], &
-              & gridEdgeUWidth=[1,1], &
-              & coordDep1=[1,2], &
-              & coordDep2=[1,2], &
-              & coordSys=ESMF_COORDSYS_SPH_RAD, &
-              & name=name, &
-              & _RC)
+              countsPerDEDim1=spec%get_ims(), &
+              countsPerDEDim2=spec%get_jms(), &
+              indexFlag=ESMF_INDEX_DELOCAL, &
+              gridEdgeLWidth=[0,0], &
+              gridEdgeUWidth=[0,1], &
+              coordDep1=[1,2], &
+              coordDep2=[1,2], &
+              coordSys=ESMF_COORDSYS_SPH_RAD, _RC)
+      else
+         grid = ESMF_GridCreate1PeriDim( &
+              countsPerDEDim1=spec%get_ims(), &
+              countsPerDEDim2=spec%get_jms(), &
+              poleKindFlag=[ESMF_POLEKIND_MONOPOLE, ESMF_POLEKIND_BIPOLE], &
+              indexFlag=ESMF_INDEX_DELOCAL, &
+              gridEdgeLWidth=[0,0], &
+              gridEdgeUWidth=[0,1], &
+              coordDep1=[1,2], &
+              coordDep2=[1,2], &
+              coordSys=ESMF_COORDSYS_SPH_RAD, _RC)
       end if
 
-      ! Allocate coords at default stagger location
+      ! Allocate centre coordinates
       call ESMF_GridAddCoord(grid, _RC)
-      call ESMF_GridAddCoord(grid, staggerloc=ESMF_STAGGERLOC_CORNER, _RC)
-      
+
+      ! Optionally allocate corner coordinates
+      if (spec%get_has_corners()) then
+         call ESMF_GridAddCoord(grid, staggerloc=ESMF_STAGGERLOC_CORNER, _RC)
+      end if
+
+      ! Tag the grid with type metadata for restart identification
+      call ESMF_InfoGetFromHost(grid, infoh, _RC)
+      if (spec%get_lm() /= MAPL_UNDEFINED_INTEGER) then
+         call ESMF_InfoSet(infoh, 'GRID_LM', spec%get_lm(), _RC)
+      end if
+      call ESMF_InfoSet(infoh, 'GridType', 'XY', _RC)
+
       _RETURN(_SUCCESS)
       _UNUSED_DUMMY(unusable)
    end function create_basic_grid
