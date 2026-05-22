@@ -1,0 +1,1408 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="MAPL is a foundation layer of the GEOS architecture, whose original purpose is to supplement the Earth System Modeling Framework (ESMF)">
+    <meta name="author" content="The MAPL Developers" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>SharedIO.F90 &ndash; MAPL</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">MAPL </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>SharedIO.F90
+      <small>Source File</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.2% of total for source files.">343 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/SharedIO.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+            <li class="breadcrumb-item active" aria-current="page">SharedIO.F90</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#mods-0"
+         aria-expanded="false" aria-controls="mods-0">
+         <h4 class="card-header bg-primary text-white">Modules</h4>
+      </a>
+      <div id="mods-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/mapl_sharedio.html">mapl_SharedIO</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/sharedio.f90.html#src">SharedIO.F90</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">This file depends on</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~sharedio.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilesharediof90EfferentGraph" width="274pt" height="410pt"
+ viewBox="0.00 0.00 274.00 410.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~sharedio.f90~~EfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 406)">
+<title>sourcefile~~sharedio.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-406 270,-406 270,4 -4,4"/>
+<!-- sourcefile~sharedio.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~sharedio.f90</title>
+<polygon fill="none" stroke="black" points="266,-213 183,-213 183,-189 266,-189 266,-213"/>
+<text text-anchor="middle" x="224.5" y="-198.6" font-family="Helvetica,sans-Serif" font-size="10.50">SharedIO.F90</text>
+</g>
+<!-- sourcefile~api.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~api.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~EfferentGraph_node2"><a xlink:href="../sourcefile/api.f90.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="100.5,-402 46.5,-402 46.5,-378 100.5,-378 100.5,-402"/>
+<text text-anchor="middle" x="73.5" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~sharedio.f90&#45;&gt;sourcefile~api.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~sharedio.f90&#45;&gt;sourcefile~api.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M221.52,-213.23C215.86,-244.15 196.71,-326.04 147,-369 136.83,-377.79 123.17,-382.91 110.45,-385.88"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="109.67,-382.47 100.53,-387.84 111.02,-389.34 109.67,-382.47"/>
+</g>
+<!-- sourcefile~api.f90~4 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~api.f90~4</title>
+<g id="a_sourcefile~~sharedio.f90~~EfferentGraph_node3"><a xlink:href="../sourcefile/api.f90~4.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="100.5,-360 46.5,-360 46.5,-336 100.5,-336 100.5,-360"/>
+<text text-anchor="middle" x="73.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~sharedio.f90&#45;&gt;sourcefile~api.f90~4 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~sharedio.f90&#45;&gt;sourcefile~api.f90~4</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M219.56,-213.11C210.75,-238.26 187.03,-296.35 147,-327 136.6,-334.97 123.26,-339.91 110.86,-342.99"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="109.81,-339.63 100.76,-345.15 111.27,-346.48 109.81,-339.63"/>
+</g>
+<!-- sourcefile~api.f90~6 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~api.f90~6</title>
+<g id="a_sourcefile~~sharedio.f90~~EfferentGraph_node4"><a xlink:href="../sourcefile/api.f90~6.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="100.5,-318 46.5,-318 46.5,-294 100.5,-294 100.5,-318"/>
+<text text-anchor="middle" x="73.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~sharedio.f90&#45;&gt;sourcefile~api.f90~6 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~sharedio.f90&#45;&gt;sourcefile~api.f90~6</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M215.66,-213.24C203.28,-231.57 177.47,-266.02 147,-285 136.05,-291.82 122.8,-296.5 110.64,-299.68"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="109.69,-296.31 100.76,-302.01 111.29,-303.12 109.69,-296.31"/>
+</g>
+<!-- sourcefile~compressionsettings.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~compressionsettings.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~EfferentGraph_node5"><a xlink:href="../sourcefile/compressionsettings.f90.html" xlink:title="CompressionSettings.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="147,-276 0,-276 0,-252 147,-252 147,-276"/>
+<text text-anchor="middle" x="73.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">CompressionSettings.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~sharedio.f90&#45;&gt;sourcefile~compressionsettings.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~sharedio.f90&#45;&gt;sourcefile~compressionsettings.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M204.28,-213.11C189.15,-222.25 167.3,-234.61 147,-243 142,-245.07 136.74,-247.01 131.41,-248.82"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="130.25,-245.52 121.82,-251.93 132.41,-252.18 130.25,-245.52"/>
+</g>
+<!-- sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_node6" class="node">
+<title>sourcefile~errorhandling.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~EfferentGraph_node6"><a xlink:href="../sourcefile/errorhandling.f90.html" xlink:title="ErrorHandling.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="128,-234 19,-234 19,-210 128,-210 128,-234"/>
+<text text-anchor="middle" x="73.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ErrorHandling.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~sharedio.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~sharedio.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M182.79,-206.74C169.06,-208.67 153.4,-210.88 138.33,-213"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="137.44,-209.59 128.03,-214.46 138.42,-216.53 137.44,-209.59"/>
+</g>
+<!-- sourcefile~pfio.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_node7" class="node">
+<title>sourcefile~pfio.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~EfferentGraph_node7"><a xlink:href="../sourcefile/pfio.f90.html" xlink:title="pFIO.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="102.5,-192 44.5,-192 44.5,-168 102.5,-168 102.5,-192"/>
+<text text-anchor="middle" x="73.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pFIO.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~sharedio.f90&#45;&gt;sourcefile~pfio.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~sharedio.f90&#45;&gt;sourcefile~pfio.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M182.79,-195.26C161.02,-192.19 134.36,-188.44 112.95,-185.42"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="113.29,-181.93 102.9,-184 112.31,-188.86 113.29,-181.93"/>
+</g>
+<!-- sourcefile~stringdictionary.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_node8" class="node">
+<title>sourcefile~stringdictionary.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~EfferentGraph_node8"><a xlink:href="../sourcefile/stringdictionary.f90.html" xlink:title="StringDictionary.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="133.5,-150 13.5,-150 13.5,-126 133.5,-126 133.5,-150"/>
+<text text-anchor="middle" x="73.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StringDictionary.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~sharedio.f90&#45;&gt;sourcefile~stringdictionary.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~sharedio.f90&#45;&gt;sourcefile~stringdictionary.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M204.28,-188.89C189.15,-179.75 167.3,-167.39 147,-159 142,-156.93 136.74,-154.99 131.41,-153.18"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="132.41,-149.82 121.82,-150.07 130.25,-156.48 132.41,-149.82"/>
+</g>
+<!-- sourcefile~ungriddeddim.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_node9" class="node">
+<title>sourcefile~ungriddeddim.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~EfferentGraph_node9"><a xlink:href="../sourcefile/ungriddeddim.f90.html" xlink:title="UngriddedDim.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="129.5,-108 17.5,-108 17.5,-84 129.5,-84 129.5,-108"/>
+<text text-anchor="middle" x="73.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">UngriddedDim.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~sharedio.f90&#45;&gt;sourcefile~ungriddeddim.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~sharedio.f90&#45;&gt;sourcefile~ungriddeddim.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M215.66,-188.76C203.28,-170.43 177.47,-135.98 147,-117 144.07,-115.18 140.99,-113.51 137.8,-111.98"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="139.17,-108.76 128.6,-108.03 136.41,-115.19 139.17,-108.76"/>
+</g>
+<!-- sourcefile~ungriddeddims.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_node10" class="node">
+<title>sourcefile~ungriddeddims.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~EfferentGraph_node10"><a xlink:href="../sourcefile/ungriddeddims.f90.html" xlink:title="UngriddedDims.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="132.5,-66 14.5,-66 14.5,-42 132.5,-42 132.5,-66"/>
+<text text-anchor="middle" x="73.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">UngriddedDims.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~sharedio.f90&#45;&gt;sourcefile~ungriddeddims.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~sharedio.f90&#45;&gt;sourcefile~ungriddeddims.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M219.56,-188.89C210.75,-163.74 187.03,-105.65 147,-75 145.14,-73.58 143.19,-72.25 141.16,-71.01"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="142.37,-67.69 131.89,-66.14 139.12,-73.89 142.37,-67.69"/>
+</g>
+<!-- sourcefile~verticalstaggerloc.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_node11" class="node">
+<title>sourcefile~verticalstaggerloc.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~EfferentGraph_node11"><a xlink:href="../sourcefile/verticalstaggerloc.f90.html" xlink:title="VerticalStaggerLoc.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="141.5,-24 5.5,-24 5.5,0 141.5,0 141.5,-24"/>
+<text text-anchor="middle" x="73.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VerticalStaggerLoc.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~sharedio.f90&#45;&gt;sourcefile~verticalstaggerloc.f90 -->
+<g id="sourcefile~~sharedio.f90~~EfferentGraph_edge10" class="edge">
+<title>sourcefile~sharedio.f90&#45;&gt;sourcefile~verticalstaggerloc.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M221.52,-188.77C215.86,-157.85 196.71,-75.96 147,-33 145.48,-31.68 143.87,-30.45 142.21,-29.29"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="143.81,-26.17 133.42,-24.12 140.26,-32.21 143.81,-26.17"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#EfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="EfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Files dependent on this one</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~sharedio.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilesharediof90AfferentGraph" width="641pt" height="215pt"
+ viewBox="0.00 0.00 641.00 215.27" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~sharedio.f90~~AfferentGraph" class="graph" transform="scale(0.41 0.41) rotate(0) translate(4 525.94)">
+<title>sourcefile~~sharedio.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-525.94 1574,-525.94 1574,4 -4,4"/>
+<!-- sourcefile~sharedio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~sharedio.f90</title>
+<polygon fill="none" stroke="black" points="83,-356 0,-356 0,-332 83,-332 83,-356"/>
+<text text-anchor="middle" x="41.5" y="-341.6" font-family="Helvetica,sans-Serif" font-size="10.50">SharedIO.F90</text>
+</g>
+<!-- sourcefile~fieldbundlewrite.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~fieldbundlewrite.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node2"><a xlink:href="../sourcefile/fieldbundlewrite.f90.html" xlink:title="FieldBundleWrite.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="660,-374 535,-374 535,-350 660,-350 660,-374"/>
+<text text-anchor="middle" x="597.5" y="-359.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBundleWrite.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundlewrite.f90&#45;&gt;sourcefile~sharedio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~fieldbundlewrite.f90&#45;&gt;sourcefile~sharedio.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M291.5,-364C236.61,-359.09 222.45,-368.22 167.5,-364"/>
+</g>
+<!-- sourcefile~geom_pfio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~geom_pfio.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node3"><a xlink:href="../sourcefile/geom_pfio.f90.html" xlink:title="Geom_PFIO.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="214,-336 119,-336 119,-312 214,-312 214,-336"/>
+<text text-anchor="middle" x="166.5" y="-321.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Geom_PFIO.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundlewrite.f90&#45;&gt;sourcefile~geom_pfio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~fieldbundlewrite.f90&#45;&gt;sourcefile~geom_pfio.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M534.88,-365.48C473.57,-368.21 376.88,-370.58 293.5,-364"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M291.5,-364C260.61,-361.24 227.24,-349.96 202.9,-340.08"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="203.97,-336.73 193.39,-336.1 201.27,-343.19 203.97,-336.73"/>
+</g>
+<!-- sourcefile~geomcatagorizer.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node14" class="node">
+<title>sourcefile~geomcatagorizer.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node14"><a xlink:href="../sourcefile/geomcatagorizer.f90.html" xlink:title="GeomCatagorizer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="499,-334 371,-334 371,-310 499,-310 499,-334"/>
+<text text-anchor="middle" x="435" y="-319.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomCatagorizer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fieldbundlewrite.f90&#45;&gt;sourcefile~geomcatagorizer.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge43" class="edge">
+<title>sourcefile~fieldbundlewrite.f90&#45;&gt;sourcefile~geomcatagorizer.f90</title>
+<path fill="none" stroke="#5c00ff" stroke-dasharray="5,2" d="M548.34,-350C531.44,-345.79 512.26,-341.01 494.6,-336.6"/>
+<polygon fill="#5c00ff" stroke="#5c00ff" points="494.95,-333.08 484.4,-334.06 493.26,-339.88 494.95,-333.08"/>
+</g>
+<!-- sourcefile~geom_pfio.f90&#45;&gt;sourcefile~sharedio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~geom_pfio.f90&#45;&gt;sourcefile~sharedio.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M119,-331.56C110.49,-332.94 101.58,-334.39 92.96,-335.8"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="92.33,-332.35 83.02,-337.41 93.45,-339.26 92.33,-332.35"/>
+</g>
+<!-- sourcefile~geomio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~geomio.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node4"><a xlink:href="../sourcefile/geomio.f90.html" xlink:title="GeomIO.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="774,-334 696,-334 696,-310 774,-310 774,-334"/>
+<text text-anchor="middle" x="735" y="-319.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GeomIO.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geomio.f90&#45;&gt;sourcefile~sharedio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~geomio.f90&#45;&gt;sourcefile~sharedio.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M724.26,-334.01C711.37,-348.83 687.11,-373.27 660,-383 607.71,-401.77 590.55,-383.34 535,-383 408.32,-382.23 376.1,-390.2 250,-378 212.98,-374.42 204.58,-366.85 167.5,-364"/>
+</g>
+<!-- sourcefile~geomio.f90&#45;&gt;sourcefile~fieldbundlewrite.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~geomio.f90&#45;&gt;sourcefile~fieldbundlewrite.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M695.9,-333.25C681.38,-337.53 664.61,-342.48 649.12,-347.06"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="647.76,-343.81 639.16,-350 649.74,-350.52 647.76,-343.81"/>
+</g>
+<!-- sourcefile~geomio.f90&#45;&gt;sourcefile~geom_pfio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~geomio.f90&#45;&gt;sourcefile~geom_pfio.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M724.26,-309.99C711.37,-295.17 687.11,-270.73 660,-261 565.89,-227.21 535.8,-275.88 436,-282"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M434,-282C371.61,-284.59 355.69,-276.32 293.5,-282"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M291.5,-282C259.73,-284.9 225.52,-297.25 201.1,-307.81"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="199.63,-304.63 191.92,-311.9 202.48,-311.03 199.63,-304.63"/>
+</g>
+<!-- sourcefile~fieldbundleread.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~fieldbundleread.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node12"><a xlink:href="../sourcefile/fieldbundleread.f90.html" xlink:title="FieldBundleRead.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="659.5,-294 535.5,-294 535.5,-270 659.5,-270 659.5,-294"/>
+<text text-anchor="middle" x="597.5" y="-279.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">FieldBundleRead.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~geomio.f90&#45;&gt;sourcefile~fieldbundleread.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge35" class="edge">
+<title>sourcefile~geomio.f90&#45;&gt;sourcefile~fieldbundleread.f90</title>
+<path fill="none" stroke="#00b9ff" stroke-dasharray="5,2" d="M695.9,-310.75C681.38,-306.47 664.61,-301.52 649.12,-296.94"/>
+<polygon fill="#00b9ff" stroke="#00b9ff" points="649.74,-293.48 639.16,-294 647.76,-300.19 649.74,-293.48"/>
+</g>
+<!-- sourcefile~geomio.f90&#45;&gt;sourcefile~geomcatagorizer.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge44" class="edge">
+<title>sourcefile~geomio.f90&#45;&gt;sourcefile~geomcatagorizer.f90</title>
+<path fill="none" stroke="#5c00ff" stroke-dasharray="5,2" d="M695.96,-322C649.01,-322 568.16,-322 509.07,-322"/>
+<polygon fill="#5c00ff" stroke="#5c00ff" points="509.04,-318.5 499.04,-322 509.04,-325.5 509.04,-318.5"/>
+</g>
+<!-- sourcefile~grid_pfio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~grid_pfio.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node5"><a xlink:href="../sourcefile/grid_pfio.f90.html" xlink:title="Grid_PFIO.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="335,-336 250,-336 250,-312 335,-312 335,-336"/>
+<text text-anchor="middle" x="292.5" y="-321.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Grid_PFIO.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~grid_pfio.f90&#45;&gt;sourcefile~sharedio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~grid_pfio.f90&#45;&gt;sourcefile~sharedio.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M270.62,-336.19C246.46,-348.99 205.16,-366.89 167.5,-364"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M165.5,-364C141.46,-362.15 115.05,-358.12 92.88,-354.16"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="93.48,-350.72 83.01,-352.36 92.22,-357.6 93.48,-350.72"/>
+</g>
+<!-- sourcefile~grid_pfio.f90&#45;&gt;sourcefile~geom_pfio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~grid_pfio.f90&#45;&gt;sourcefile~geom_pfio.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M249.86,-324C241.76,-324 233.14,-324 224.63,-324"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="224.37,-320.5 214.37,-324 224.37,-327.5 224.37,-320.5"/>
+</g>
+<!-- sourcefile~abstractdatasetfileselector.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~abstractdatasetfileselector.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node6"><a xlink:href="../sourcefile/abstractdatasetfileselector.f90.html" xlink:title="AbstractDataSetFileSelector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="993,-394 810,-394 810,-370 993,-370 993,-394"/>
+<text text-anchor="middle" x="901.5" y="-379.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">AbstractDataSetFileSelector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~abstractdatasetfileselector.f90&#45;&gt;sourcefile~geomio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~abstractdatasetfileselector.f90&#45;&gt;sourcefile~geomio.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M853.56,-369.97C839.41,-365.95 823.95,-361.17 810,-356 796.37,-350.95 781.76,-344.47 769.15,-338.52"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="770.47,-335.28 759.94,-334.12 767.45,-341.59 770.47,-335.28"/>
+</g>
+<!-- sourcefile~climdatasetfileselector.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~climdatasetfileselector.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node7"><a xlink:href="../sourcefile/climdatasetfileselector.f90.html" xlink:title="ClimDataSetFileSelector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1202.5,-314 1039.5,-314 1039.5,-290 1202.5,-290 1202.5,-314"/>
+<text text-anchor="middle" x="1121" y="-299.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ClimDataSetFileSelector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~climdatasetfileselector.f90&#45;&gt;sourcefile~geomio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~climdatasetfileselector.f90&#45;&gt;sourcefile~geomio.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1070.05,-314.06C1016.32,-326.52 934.31,-343.9 902.5,-342"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M900.5,-342C861.24,-339.65 817,-334.11 784.3,-329.45"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="784.5,-325.94 774.1,-327.98 783.5,-332.87 784.5,-325.94"/>
+</g>
+<!-- sourcefile~climdatasetfileselector.f90&#45;&gt;sourcefile~abstractdatasetfileselector.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge21" class="edge">
+<title>sourcefile~climdatasetfileselector.f90&#45;&gt;sourcefile~abstractdatasetfileselector.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1064.81,-314.1C1052.68,-317.76 1040.14,-322.35 1029,-328 1010.93,-337.17 1011.07,-346.81 993,-356 984.87,-360.14 975.98,-363.7 967.05,-366.75"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="965.83,-363.47 957.38,-369.87 967.97,-370.13 965.83,-363.47"/>
+</g>
+<!-- sourcefile~datasetnode.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~datasetnode.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node8"><a xlink:href="../sourcefile/datasetnode.f90.html" xlink:title="DataSetNode.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="954.5,-314 848.5,-314 848.5,-290 954.5,-290 954.5,-314"/>
+<text text-anchor="middle" x="901.5" y="-299.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">DataSetNode.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~climdatasetfileselector.f90&#45;&gt;sourcefile~datasetnode.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge28" class="edge">
+<title>sourcefile~climdatasetfileselector.f90&#45;&gt;sourcefile~datasetnode.f90</title>
+<path fill="none" stroke="#e7ff00" stroke-dasharray="5,2" d="M1039.32,-302C1014.68,-302 987.97,-302 964.75,-302"/>
+<polygon fill="#e7ff00" stroke="#e7ff00" points="964.69,-298.5 954.69,-302 964.69,-305.5 964.69,-298.5"/>
+</g>
+<!-- sourcefile~datasetnode.f90&#45;&gt;sourcefile~geomio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~datasetnode.f90&#45;&gt;sourcefile~geomio.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M848.45,-308.33C827.93,-310.82 804.5,-313.67 784.35,-316.12"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="783.66,-312.68 774.15,-317.36 784.5,-319.63 783.66,-312.68"/>
+</g>
+<!-- sourcefile~extdataconfig.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~extdataconfig.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node9"><a xlink:href="../sourcefile/extdataconfig.f90.html" xlink:title="ExtDataConfig.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1382,-474 1270,-474 1270,-450 1382,-450 1382,-474"/>
+<text text-anchor="middle" x="1326" y="-459.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ExtDataConfig.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extdataconfig.f90&#45;&gt;sourcefile~geomio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~extdataconfig.f90&#45;&gt;sourcefile~geomio.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1120,-464C1023.7,-455.56 991.68,-501.31 902.5,-464"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M900.5,-464C835.96,-437 778.61,-374.61 751.9,-342.27"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="754.5,-339.92 745.49,-334.36 749.07,-344.33 754.5,-339.92"/>
+</g>
+<!-- sourcefile~extdataconfig.f90&#45;&gt;sourcefile~abstractdatasetfileselector.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge23" class="edge">
+<title>sourcefile~extdataconfig.f90&#45;&gt;sourcefile~abstractdatasetfileselector.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1269.75,-465.44C1228.86,-467.28 1171.86,-468.37 1122,-464"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1120,-464C1048.95,-457.77 972.34,-421.06 931.71,-398.92"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="933.33,-395.82 922.89,-394.04 929.94,-401.95 933.33,-395.82"/>
+</g>
+<!-- sourcefile~nonclimdatasetfileselector.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node15" class="node">
+<title>sourcefile~nonclimdatasetfileselector.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node15"><a xlink:href="../sourcefile/nonclimdatasetfileselector.f90.html" xlink:title="NonClimDataSetFileSelector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1213,-394 1029,-394 1029,-370 1213,-370 1213,-394"/>
+<text text-anchor="middle" x="1121" y="-379.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">NonClimDataSetFileSelector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extdataconfig.f90&#45;&gt;sourcefile~nonclimdatasetfileselector.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge46" class="edge">
+<title>sourcefile~extdataconfig.f90&#45;&gt;sourcefile~nonclimdatasetfileselector.f90</title>
+<path fill="none" stroke="#e700ff" stroke-dasharray="5,2" d="M1302.76,-449.88C1280.51,-438.09 1245.08,-420.21 1213,-408 1202.43,-403.98 1190.96,-400.24 1179.85,-396.92"/>
+<polygon fill="#e700ff" stroke="#e700ff" points="1180.78,-393.54 1170.2,-394.11 1178.83,-400.27 1180.78,-393.54"/>
+</g>
+<!-- sourcefile~extdatafilereader.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~extdatafilereader.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node10"><a xlink:href="../sourcefile/extdatafilereader.f90.html" xlink:title="ExtDataFileReader.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1187,-192 1055,-192 1055,-168 1187,-168 1187,-192"/>
+<text text-anchor="middle" x="1121" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ExtDataFileReader.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extdatafilereader.f90&#45;&gt;sourcefile~geomio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~extdatafilereader.f90&#45;&gt;sourcefile~geomio.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1061.22,-167.95C1016,-161.48 952.91,-158.64 902.5,-180"/>
+</g>
+<!-- sourcefile~extdatagridcomp.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~extdatagridcomp.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node11"><a xlink:href="../sourcefile/extdatagridcomp.f90.html" xlink:title="ExtDataGridComp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1570,-454 1439,-454 1439,-430 1570,-430 1570,-454"/>
+<text text-anchor="middle" x="1504.5" y="-439.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ExtDataGridComp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~geomio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~geomio.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1481.13,-454.07C1461.27,-464.07 1431.11,-477.49 1403,-483 1184.56,-525.84 1107.86,-549.92 902.5,-464"/>
+</g>
+<!-- sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~abstractdatasetfileselector.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge24" class="edge">
+<title>sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~abstractdatasetfileselector.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1438.72,-438.17C1362.84,-433.79 1233.33,-426.62 1122,-422"/>
+</g>
+<!-- sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~extdataconfig.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge32" class="edge">
+<title>sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~extdataconfig.f90</title>
+<path fill="none" stroke="#5cff00" stroke-dasharray="5,2" d="M1438.78,-449.33C1423.67,-451.05 1407.57,-452.87 1392.43,-454.59"/>
+<polygon fill="#5cff00" stroke="#5cff00" points="1391.67,-451.15 1382.13,-455.75 1392.46,-458.1 1391.67,-451.15"/>
+</g>
+<!-- sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~extdatafilereader.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge33" class="edge">
+<title>sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~extdatafilereader.f90</title>
+<path fill="none" stroke="#00ff2e" stroke-dasharray="5,2" d="M1325,-200C1304.21,-186.78 1246.08,-182.03 1197.32,-180.44"/>
+<polygon fill="#00ff2e" stroke="#00ff2e" points="1197.17,-176.93 1187.08,-180.14 1196.97,-183.93 1197.17,-176.93"/>
+</g>
+<!-- sourcefile~generic3g.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~generic3g.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node13"><a xlink:href="../sourcefile/generic3g.f90.html" xlink:title="Generic3g.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1166.5,-150 1075.5,-150 1075.5,-126 1166.5,-126 1166.5,-150"/>
+<text text-anchor="middle" x="1121" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Generic3g.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~generic3g.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge37" class="edge">
+<title>sourcefile~extdatagridcomp.f90&#45;&gt;sourcefile~generic3g.f90</title>
+<path fill="none" stroke="#002eff" stroke-dasharray="5,2" d="M1500.37,-429.99C1491,-396.13 1460.22,-298.54 1403,-240 1376.32,-212.7 1359.21,-220.48 1327,-200"/>
+<path fill="none" stroke="#002eff" stroke-dasharray="5,2" d="M1325,-200C1295.62,-181.32 1281.11,-194.45 1249,-181 1231.71,-173.75 1230.36,-166.09 1213,-159 1201.62,-154.36 1189.01,-150.62 1176.89,-147.66"/>
+<polygon fill="#002eff" stroke="#002eff" points="1177.39,-144.19 1166.86,-145.36 1175.82,-151.01 1177.39,-144.19"/>
+</g>
+<!-- sourcefile~fieldbundleread.f90&#45;&gt;sourcefile~geom_pfio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~fieldbundleread.f90&#45;&gt;sourcefile~geom_pfio.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M535.47,-280.25C505.48,-279.83 468.82,-279.99 436,-282"/>
+</g>
+<!-- sourcefile~fieldbundleread.f90&#45;&gt;sourcefile~geomcatagorizer.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge42" class="edge">
+<title>sourcefile~fieldbundleread.f90&#45;&gt;sourcefile~geomcatagorizer.f90</title>
+<path fill="none" stroke="#5c00ff" stroke-dasharray="5,2" d="M548.34,-294C531.44,-298.21 512.26,-302.99 494.6,-307.4"/>
+<polygon fill="#5c00ff" stroke="#5c00ff" points="493.26,-304.12 484.4,-309.94 494.95,-310.92 493.26,-304.12"/>
+</g>
+<!-- sourcefile~generic3g.f90&#45;&gt;sourcefile~geomio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~generic3g.f90&#45;&gt;sourcefile~geomio.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1075.08,-141.16C1029.95,-145.59 959.16,-155.99 902.5,-180"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M900.5,-180C836.08,-207.29 778.68,-269.55 751.92,-301.8"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="749.11,-299.72 745.5,-309.68 754.53,-304.14 749.11,-299.72"/>
+</g>
+<!-- sourcefile~geomcatagorizer.f90&#45;&gt;sourcefile~geom_pfio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~geomcatagorizer.f90&#45;&gt;sourcefile~geom_pfio.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M401.89,-309.93C367.32,-297.47 314.46,-280.08 293.5,-282"/>
+</g>
+<!-- sourcefile~geomcatagorizer.f90&#45;&gt;sourcefile~grid_pfio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge20" class="edge">
+<title>sourcefile~geomcatagorizer.f90&#45;&gt;sourcefile~grid_pfio.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M370.74,-322.9C362.24,-323.02 353.6,-323.14 345.32,-323.26"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="345.03,-319.77 335.08,-323.41 345.13,-326.77 345.03,-319.77"/>
+</g>
+<!-- sourcefile~nonclimdatasetfileselector.f90&#45;&gt;sourcefile~geomio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~nonclimdatasetfileselector.f90&#45;&gt;sourcefile~geomio.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1073.31,-370C1029.54,-359.56 962.1,-345.57 902.5,-342"/>
+</g>
+<!-- sourcefile~nonclimdatasetfileselector.f90&#45;&gt;sourcefile~abstractdatasetfileselector.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge25" class="edge">
+<title>sourcefile~nonclimdatasetfileselector.f90&#45;&gt;sourcefile~abstractdatasetfileselector.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1028.71,-382C1020.36,-382 1011.87,-382 1003.44,-382"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1003.21,-378.5 993.21,-382 1003.21,-385.5 1003.21,-378.5"/>
+</g>
+<!-- sourcefile~nonclimdatasetfileselector.f90&#45;&gt;sourcefile~datasetnode.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge30" class="edge">
+<title>sourcefile~nonclimdatasetfileselector.f90&#45;&gt;sourcefile~datasetnode.f90</title>
+<path fill="none" stroke="#e7ff00" stroke-dasharray="5,2" d="M1094.1,-369.88C1068.69,-358.26 1028.68,-340.66 993,-328 981.81,-324.03 969.68,-320.22 958.04,-316.8"/>
+<polygon fill="#e7ff00" stroke="#e7ff00" points="959,-313.43 948.42,-314.02 957.06,-320.15 959,-313.43"/>
+</g>
+<!-- sourcefile~restarthandler.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node16" class="node">
+<title>sourcefile~restarthandler.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node16"><a xlink:href="../sourcefile/restarthandler.f90.html" xlink:title="RestartHandler.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="958.5,-87 844.5,-87 844.5,-63 958.5,-63 958.5,-87"/>
+<text text-anchor="middle" x="901.5" y="-72.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RestartHandler.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~restarthandler.f90&#45;&gt;sourcefile~geomio.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~restarthandler.f90&#45;&gt;sourcefile~geomio.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M885.46,-87.27C866.09,-103.64 832.3,-134.28 810,-166 779.02,-210.06 755.07,-269.13 743.55,-300.42"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="740.23,-299.32 740.12,-309.91 746.81,-301.69 740.23,-299.32"/>
+</g>
+<!-- sourcefile~capgridcomp.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node17" class="node">
+<title>sourcefile~capgridcomp.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node17"><a xlink:href="../sourcefile/capgridcomp.f90.html" xlink:title="CapGridComp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1381,-172 1271,-172 1271,-148 1381,-148 1381,-172"/>
+<text text-anchor="middle" x="1326" y="-157.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">CapGridComp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~capgridcomp.f90&#45;&gt;sourcefile~generic3g.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge36" class="edge">
+<title>sourcefile~capgridcomp.f90&#45;&gt;sourcefile~generic3g.f90</title>
+<path fill="none" stroke="#002eff" stroke-dasharray="5,2" d="M1270.87,-154.13C1241.76,-150.98 1205.96,-147.1 1176.76,-143.94"/>
+<polygon fill="#002eff" stroke="#002eff" points="1177.05,-140.45 1166.73,-142.85 1176.3,-147.41 1177.05,-140.45"/>
+</g>
+<!-- sourcefile~datasetbracket.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node18" class="node">
+<title>sourcefile~datasetbracket.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node18"><a xlink:href="../sourcefile/datasetbracket.f90.html" xlink:title="DataSetBracket.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1180.5,-272 1061.5,-272 1061.5,-248 1180.5,-248 1180.5,-272"/>
+<text text-anchor="middle" x="1121" y="-257.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">DataSetBracket.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~datasetbracket.f90&#45;&gt;sourcefile~datasetnode.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge29" class="edge">
+<title>sourcefile~datasetbracket.f90&#45;&gt;sourcefile~datasetnode.f90</title>
+<path fill="none" stroke="#e7ff00" stroke-dasharray="5,2" d="M1061.43,-271.31C1031.58,-277.07 995.28,-284.08 964.91,-289.95"/>
+<polygon fill="#e7ff00" stroke="#e7ff00" points="964.02,-286.56 954.86,-291.89 965.34,-293.43 964.02,-286.56"/>
+</g>
+<!-- sourcefile~extdatacollection.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node19" class="node">
+<title>sourcefile~extdatacollection.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node19"><a xlink:href="../sourcefile/extdatacollection.f90.html" xlink:title="ExtDataCollection.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1391,-394 1261,-394 1261,-370 1391,-370 1391,-394"/>
+<text text-anchor="middle" x="1326" y="-379.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ExtDataCollection.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extdatacollection.f90&#45;&gt;sourcefile~abstractdatasetfileselector.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge22" class="edge">
+<title>sourcefile~extdatacollection.f90&#45;&gt;sourcefile~abstractdatasetfileselector.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1290.19,-394.04C1250.06,-406.71 1181.94,-424.49 1122,-422"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1120,-422C1063.95,-419.67 1001.02,-406.97 957.33,-396.5"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="958.03,-393.06 947.49,-394.09 956.37,-399.86 958.03,-393.06"/>
+</g>
+<!-- sourcefile~extdatacollection.f90&#45;&gt;sourcefile~nonclimdatasetfileselector.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge45" class="edge">
+<title>sourcefile~extdatacollection.f90&#45;&gt;sourcefile~nonclimdatasetfileselector.f90</title>
+<path fill="none" stroke="#e700ff" stroke-dasharray="5,2" d="M1260.77,-382C1248.85,-382 1236.14,-382 1223.43,-382"/>
+<polygon fill="#e700ff" stroke="#e700ff" points="1223.26,-378.5 1213.26,-382 1223.26,-385.5 1223.26,-378.5"/>
+</g>
+<!-- sourcefile~initialize_read_restart.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node20" class="node">
+<title>sourcefile~initialize_read_restart.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node20"><a xlink:href="../sourcefile/initialize_read_restart.f90.html" xlink:title="initialize_read_restart.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1195,-108 1047,-108 1047,-84 1195,-84 1195,-108"/>
+<text text-anchor="middle" x="1121" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">initialize_read_restart.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~initialize_read_restart.f90&#45;&gt;sourcefile~restarthandler.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge48" class="edge">
+<title>sourcefile~initialize_read_restart.f90&#45;&gt;sourcefile~restarthandler.f90</title>
+<path fill="none" stroke="#ff008b" stroke-dasharray="5,2" d="M1046.97,-88.95C1021.7,-86.51 993.53,-83.79 968.83,-81.4"/>
+<polygon fill="#ff008b" stroke="#ff008b" points="969.12,-77.92 958.83,-80.44 968.45,-84.88 969.12,-77.92"/>
+</g>
+<!-- sourcefile~mapl.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node21" class="node">
+<title>sourcefile~mapl.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node21"><a xlink:href="../sourcefile/mapl.f90.html" xlink:title="MAPL.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1358,-130 1294,-130 1294,-106 1358,-106 1358,-130"/>
+<text text-anchor="middle" x="1326" y="-115.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~generic3g.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge38" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~generic3g.f90</title>
+<path fill="none" stroke="#002eff" stroke-dasharray="5,2" d="M1293.73,-121.08C1262.62,-124.15 1214.25,-128.91 1176.76,-132.6"/>
+<polygon fill="#002eff" stroke="#002eff" points="1176.11,-129.15 1166.5,-133.62 1176.8,-136.12 1176.11,-129.15"/>
+</g>
+<!-- sourcefile~primaryexport.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node22" class="node">
+<title>sourcefile~primaryexport.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node22"><a xlink:href="../sourcefile/primaryexport.f90.html" xlink:title="PrimaryExport.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1381.5,-273 1270.5,-273 1270.5,-249 1381.5,-249 1381.5,-273"/>
+<text text-anchor="middle" x="1326" y="-258.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">PrimaryExport.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~primaryexport.f90&#45;&gt;sourcefile~abstractdatasetfileselector.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge26" class="edge">
+<title>sourcefile~primaryexport.f90&#45;&gt;sourcefile~abstractdatasetfileselector.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1307.23,-273.19C1285.82,-287.31 1248.33,-310.24 1213,-323 1191.53,-330.76 1066.77,-353.36 982.08,-368.23"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="981.46,-364.78 972.21,-369.96 982.67,-371.68 981.46,-364.78"/>
+</g>
+<!-- sourcefile~primaryexport.f90&#45;&gt;sourcefile~climdatasetfileselector.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge27" class="edge">
+<title>sourcefile~primaryexport.f90&#45;&gt;sourcefile~climdatasetfileselector.f90</title>
+<path fill="none" stroke="#ff8b00" stroke-dasharray="5,2" d="M1270.33,-272.04C1246.18,-276.92 1217.49,-282.71 1191.81,-287.9"/>
+<polygon fill="#ff8b00" stroke="#ff8b00" points="1190.87,-284.52 1181.76,-289.93 1192.26,-291.38 1190.87,-284.52"/>
+</g>
+<!-- sourcefile~primaryexport.f90&#45;&gt;sourcefile~datasetnode.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge31" class="edge">
+<title>sourcefile~primaryexport.f90&#45;&gt;sourcefile~datasetnode.f90</title>
+<path fill="none" stroke="#e7ff00" stroke-dasharray="5,2" d="M1278.43,-248.95C1219.54,-235.66 1115.4,-218.68 1029,-239 991.99,-247.71 953.43,-268.96 928.76,-284.38"/>
+<polygon fill="#e7ff00" stroke="#e7ff00" points="926.88,-281.43 920.33,-289.76 930.64,-287.33 926.88,-281.43"/>
+</g>
+<!-- sourcefile~primaryexport.f90&#45;&gt;sourcefile~extdatafilereader.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge34" class="edge">
+<title>sourcefile~primaryexport.f90&#45;&gt;sourcefile~extdatafilereader.f90</title>
+<path fill="none" stroke="#00ff2e" stroke-dasharray="5,2" d="M1303.21,-248.85C1281.01,-236.82 1245.35,-218.45 1213,-206 1202.44,-201.94 1190.99,-198.18 1179.87,-194.86"/>
+<polygon fill="#00ff2e" stroke="#00ff2e" points="1180.81,-191.48 1170.23,-192.05 1178.85,-198.21 1180.81,-191.48"/>
+</g>
+<!-- sourcefile~primaryexport.f90&#45;&gt;sourcefile~generic3g.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge39" class="edge">
+<title>sourcefile~primaryexport.f90&#45;&gt;sourcefile~generic3g.f90</title>
+<path fill="none" stroke="#002eff" stroke-dasharray="5,2" d="M1299.46,-248.85C1283.71,-240.52 1263.78,-228.4 1249,-214 1228.08,-193.61 1236.96,-175.71 1213,-159 1202.4,-151.61 1189.58,-146.78 1176.95,-143.64"/>
+<polygon fill="#002eff" stroke="#002eff" points="1177.43,-140.16 1166.91,-141.47 1175.94,-147.01 1177.43,-140.16"/>
+</g>
+<!-- sourcefile~primaryexport.f90&#45;&gt;sourcefile~nonclimdatasetfileselector.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge47" class="edge">
+<title>sourcefile~primaryexport.f90&#45;&gt;sourcefile~nonclimdatasetfileselector.f90</title>
+<path fill="none" stroke="#e700ff" stroke-dasharray="5,2" d="M1314.14,-273.09C1295.43,-293.19 1255.05,-333.52 1213,-356 1205.21,-360.16 1196.68,-363.73 1188.06,-366.76"/>
+<polygon fill="#e700ff" stroke="#e700ff" points="1186.73,-363.51 1178.33,-369.95 1188.92,-370.16 1186.73,-363.51"/>
+</g>
+<!-- sourcefile~python_fortran_bridge.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node23" class="node">
+<title>sourcefile~python_fortran_bridge.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node23"><a xlink:href="../sourcefile/python_fortran_bridge.f90.html" xlink:title="python_fortran_bridge.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1403,-88 1249,-88 1249,-64 1403,-64 1403,-88"/>
+<text text-anchor="middle" x="1326" y="-73.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">python_fortran_bridge.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~python_fortran_bridge.f90&#45;&gt;sourcefile~generic3g.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge40" class="edge">
+<title>sourcefile~python_fortran_bridge.f90&#45;&gt;sourcefile~generic3g.f90</title>
+<path fill="none" stroke="#002eff" stroke-dasharray="5,2" d="M1274.56,-88.12C1265.91,-90.71 1257.11,-93.68 1249,-97 1232.06,-103.93 1230.08,-110.43 1213,-117 1201.53,-121.41 1188.88,-125.05 1176.75,-127.99"/>
+<polygon fill="#002eff" stroke="#002eff" points="1175.68,-124.64 1166.72,-130.29 1177.25,-131.46 1175.68,-124.64"/>
+</g>
+<!-- sourcefile~pythonbridge.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node24" class="node">
+<title>sourcefile~pythonbridge.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node24"><a xlink:href="../sourcefile/pythonbridge.f90.html" xlink:title="PythonBridge.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1379,-46 1273,-46 1273,-22 1379,-22 1379,-46"/>
+<text text-anchor="middle" x="1326" y="-31.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">PythonBridge.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~pythonbridge.f90&#45;&gt;sourcefile~generic3g.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge41" class="edge">
+<title>sourcefile~pythonbridge.f90&#45;&gt;sourcefile~generic3g.f90</title>
+<path fill="none" stroke="#002eff" stroke-dasharray="5,2" d="M1272.98,-42.55C1264.41,-45.54 1256.04,-49.56 1249,-55 1223.77,-74.46 1238.64,-98.08 1213,-117 1202.5,-124.75 1189.61,-129.7 1176.86,-132.85"/>
+<polygon fill="#002eff" stroke="#002eff" points="1175.78,-129.5 1166.73,-135.01 1177.24,-136.35 1175.78,-129.5"/>
+</g>
+<!-- sourcefile~statisticsgridcomp.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node25" class="node">
+<title>sourcefile~statisticsgridcomp.f90</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node25"><a xlink:href="../sourcefile/statisticsgridcomp.f90.html" xlink:title="StatisticsGridComp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1189,-66 1053,-66 1053,-42 1189,-42 1189,-66"/>
+<text text-anchor="middle" x="1121" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StatisticsGridComp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~statisticsgridcomp.f90&#45;&gt;sourcefile~restarthandler.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge49" class="edge">
+<title>sourcefile~statisticsgridcomp.f90&#45;&gt;sourcefile~restarthandler.f90</title>
+<path fill="none" stroke="#ff008b" stroke-dasharray="5,2" d="M1052.97,-60.47C1026.18,-63.06 995.42,-66.03 968.72,-68.61"/>
+<polygon fill="#ff008b" stroke="#ff008b" points="968.32,-65.13 958.7,-69.57 968.99,-72.1 968.32,-65.13"/>
+</g>
+<!-- sourcefile~write_restart.f90~2 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_node26" class="node">
+<title>sourcefile~write_restart.f90~2</title>
+<g id="a_sourcefile~~sharedio.f90~~AfferentGraph_node26"><a xlink:href="../sourcefile/write_restart.f90~2.html" xlink:title="write_restart.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1171.5,-24 1070.5,-24 1070.5,0 1171.5,0 1171.5,-24"/>
+<text text-anchor="middle" x="1121" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">write_restart.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~write_restart.f90~2&#45;&gt;sourcefile~restarthandler.f90 -->
+<g id="sourcefile~~sharedio.f90~~AfferentGraph_edge50" class="edge">
+<title>sourcefile~write_restart.f90~2&#45;&gt;sourcefile~restarthandler.f90</title>
+<path fill="none" stroke="#ff008b" stroke-dasharray="5,2" d="M1070.2,-22.61C1056.76,-25.71 1042.27,-29.28 1029,-33 1000.9,-40.89 969.78,-51.2 945.44,-59.63"/>
+<polygon fill="#ff008b" stroke="#ff008b" points="944.08,-56.4 935.79,-63 946.39,-63.01 944.08,-56.4"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefilesharediof90AfferentGraph = svgPanZoom('#sourcefilesharediof90AfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#AfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="AfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+<br>
+      <section>
+        <h2><span class="anchor" id="src"></span>Source Code</h2>
+        <div class="hl codehilite"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="cp">#include &quot;MAPL.h&quot;</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a>
+<a id="ln-3" name="ln-3" href="#ln-3"></a><span class="k">module </span><span class="n">mapl_SharedIO</span>
+<a id="ln-4" name="ln-4" href="#ln-4"></a>
+<a id="ln-5" name="ln-5" href="#ln-5"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_ErrorHandlingMod</span>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_FieldBundle_API</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_Field_API</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_VerticalStaggerLoc</span>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="w">   </span><span class="k">use </span><span class="n">pfio</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">FileMetaData</span><span class="p">,</span><span class="w"> </span><span class="n">Variable</span><span class="p">,</span><span class="w"> </span><span class="n">UnlimitedEntity</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="w">   </span><span class="k">use </span><span class="n">pfio</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">PFIO_UNLIMITED</span><span class="p">,</span><span class="w"> </span><span class="n">PFIO_REAL32</span><span class="p">,</span><span class="w"> </span><span class="n">PFIO_REAL64</span><span class="p">,</span><span class="w"> </span><span class="n">PFIO_INT32</span><span class="p">,</span><span class="w"> </span><span class="n">PFIO_INT64</span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a><span class="w">   </span><span class="k">use </span><span class="n">gFTL2_StringVector</span>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_StringDictionary</span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a><span class="w">   </span><span class="k">use </span><span class="n">gFTL2_StringSet</span>
+<a id="ln-14" name="ln-14" href="#ln-14"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_Geom_API</span>
+<a id="ln-15" name="ln-15" href="#ln-15"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_UngriddedDims</span>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="w">   </span><span class="k">use</span><span class="p">,</span><span class="w"> </span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iso_fortran_env</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">REAL64</span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_UngriddedDim</span>
+<a id="ln-18" name="ln-18" href="#ln-18"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_CompressionSettings</span>
+<a id="ln-19" name="ln-19" href="#ln-19"></a><span class="w">   </span><span class="k">use </span><span class="n">esmf</span>
+<a id="ln-20" name="ln-20" href="#ln-20"></a>
+<a id="ln-21" name="ln-21" href="#ln-21"></a><span class="w">   </span><span class="k">implicit none</span><span class="p">(</span><span class="k">type</span><span class="p">,</span><span class="k">external</span><span class="p">)</span>
+<a id="ln-22" name="ln-22" href="#ln-22"></a><span class="w">   </span><span class="k">private</span>
+<a id="ln-23" name="ln-23" href="#ln-23"></a>
+<a id="ln-24" name="ln-24" href="#ln-24"></a><span class="k">   public </span><span class="n">add_variables</span>
+<a id="ln-25" name="ln-25" href="#ln-25"></a><span class="w">   </span><span class="k">public </span><span class="n">add_variable</span>
+<a id="ln-26" name="ln-26" href="#ln-26"></a><span class="w">   </span><span class="k">public </span><span class="n">create_time_variable</span>
+<a id="ln-27" name="ln-27" href="#ln-27"></a><span class="w">   </span><span class="k">public </span><span class="n">bundle_to_metadata</span>
+<a id="ln-28" name="ln-28" href="#ln-28"></a><span class="w">   </span><span class="k">public </span><span class="n">esmf_to_pfio_type</span>
+<a id="ln-29" name="ln-29" href="#ln-29"></a>
+<a id="ln-30" name="ln-30" href="#ln-30"></a><span class="w">   </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">add_vertical_dimensions</span>
+<a id="ln-31" name="ln-31" href="#ln-31"></a><span class="w">   </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_vertical_dimension_name_from_field</span>
+<a id="ln-32" name="ln-32" href="#ln-32"></a><span class="w">   </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">add_ungridded_dimensions</span>
+<a id="ln-33" name="ln-33" href="#ln-33"></a><span class="w">   </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ungridded_dim_names</span>
+<a id="ln-34" name="ln-34" href="#ln-34"></a>
+<a id="ln-35" name="ln-35" href="#ln-35"></a><span class="w">   </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">EMPTY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<a id="ln-36" name="ln-36" href="#ln-36"></a>
+<a id="ln-37" name="ln-37" href="#ln-37"></a><span class="k">contains</span>
+<a id="ln-38" name="ln-38" href="#ln-38"></a>
+<a id="ln-39" name="ln-39" href="#ln-39"></a><span class="k">   function </span><span class="n">bundle_to_metadata</span><span class="p">(</span><span class="n">bundle</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+<a id="ln-40" name="ln-40" href="#ln-40"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">FileMetaData</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">metadata</span>
+<a id="ln-41" name="ln-41" href="#ln-41"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_FieldBundle</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle</span>
+<a id="ln-42" name="ln-42" href="#ln-42"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Geom</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">geom</span>
+<a id="ln-43" name="ln-43" href="#ln-43"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-44" name="ln-44" href="#ln-44"></a>
+<a id="ln-45" name="ln-45" href="#ln-45"></a><span class="w">      </span><span class="kt">integer</span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">MaplGeom</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mapl_geom</span>
+<a id="ln-47" name="ln-47" href="#ln-47"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">Variable</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">time_var</span>
+<a id="ln-48" name="ln-48" href="#ln-48"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Time</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fake_time</span>
+<a id="ln-49" name="ln-49" href="#ln-49"></a>
+<a id="ln-50" name="ln-50" href="#ln-50"></a><span class="w">      </span><span class="n">mapl_geom</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">get_mapl_geom</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-51" name="ln-51" href="#ln-51"></a><span class="w">      </span><span class="n">metadata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapl_geom</span><span class="p">%</span><span class="n">get_file_metadata</span><span class="p">()</span>
+<a id="ln-52" name="ln-52" href="#ln-52"></a>
+<a id="ln-53" name="ln-53" href="#ln-53"></a><span class="w">      </span><span class="c">! Add metadata for vertical geom, note could be both center and edge</span>
+<a id="ln-54" name="ln-54" href="#ln-54"></a><span class="w">      </span><span class="k">call </span><span class="n">add_vertical_dimensions</span><span class="p">(</span><span class="n">bundle</span><span class="p">,</span><span class="w"> </span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-55" name="ln-55" href="#ln-55"></a>
+<a id="ln-56" name="ln-56" href="#ln-56"></a><span class="w">      </span><span class="c">! Add metadata for all unique ungridded dimensions the set of fields has</span>
+<a id="ln-57" name="ln-57" href="#ln-57"></a><span class="w">      </span><span class="k">call </span><span class="n">add_ungridded_dimensions</span><span class="p">(</span><span class="n">bundle</span><span class="p">,</span><span class="w"> </span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-58" name="ln-58" href="#ln-58"></a>
+<a id="ln-59" name="ln-59" href="#ln-59"></a><span class="w">      </span><span class="c">! Add time metadata</span>
+<a id="ln-60" name="ln-60" href="#ln-60"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_TimeSet</span><span class="p">(</span><span class="n">fake_time</span><span class="p">,</span><span class="w"> </span><span class="n">timeString</span><span class="o">=</span><span class="s2">&quot;1900-04-03T21:00:00&quot;</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-61" name="ln-61" href="#ln-61"></a><span class="w">      </span><span class="k">call </span><span class="n">metadata</span><span class="p">%</span><span class="n">add_dimension</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">PFIO_UNLIMITED</span><span class="p">)</span>
+<a id="ln-62" name="ln-62" href="#ln-62"></a>
+<a id="ln-63" name="ln-63" href="#ln-63"></a><span class="w">      </span><span class="n">time_var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">create_time_variable</span><span class="p">(</span><span class="n">fake_time</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-64" name="ln-64" href="#ln-64"></a><span class="w">      </span><span class="k">call </span><span class="n">metadata</span><span class="p">%</span><span class="n">add_variable</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">time_var</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-65" name="ln-65" href="#ln-65"></a>
+<a id="ln-66" name="ln-66" href="#ln-66"></a><span class="w">      </span><span class="c">! Variables</span>
+<a id="ln-67" name="ln-67" href="#ln-67"></a><span class="w">      </span><span class="k">call </span><span class="n">add_variables</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">bundle</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-68" name="ln-68" href="#ln-68"></a>
+<a id="ln-69" name="ln-69" href="#ln-69"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-70" name="ln-70" href="#ln-70"></a>
+<a id="ln-71" name="ln-71" href="#ln-71"></a><span class="w">   </span><span class="k">end function </span><span class="n">bundle_to_metadata</span>
+<a id="ln-72" name="ln-72" href="#ln-72"></a>
+<a id="ln-73" name="ln-73" href="#ln-73"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">add_variables</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">bundle</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_FieldBundle</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle</span>
+<a id="ln-75" name="ln-75" href="#ln-75"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">FileMetaData</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">metadata</span>
+<a id="ln-76" name="ln-76" href="#ln-76"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-77" name="ln-77" href="#ln-77"></a>
+<a id="ln-78" name="ln-78" href="#ln-78"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">i</span>
+<a id="ln-79" name="ln-79" href="#ln-79"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fieldList</span><span class="p">(:)</span>
+<a id="ln-80" name="ln-80" href="#ln-80"></a><span class="w"> </span>
+<a id="ln-81" name="ln-81" href="#ln-81"></a><span class="w">      </span><span class="k">call </span><span class="n">MAPL_FieldBundleGet</span><span class="p">(</span><span class="n">bundle</span><span class="p">,</span><span class="w"> </span><span class="n">fieldList</span><span class="o">=</span><span class="n">fieldList</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-82" name="ln-82" href="#ln-82"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">fieldList</span><span class="p">)</span>
+<a id="ln-83" name="ln-83" href="#ln-83"></a><span class="w">         </span><span class="k">call </span><span class="n">add_variable</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">fieldList</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">      </span><span class="k">enddo</span>
+<a id="ln-85" name="ln-85" href="#ln-85"></a>
+<a id="ln-86" name="ln-86" href="#ln-86"></a><span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-87" name="ln-87" href="#ln-87"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">add_variables</span>
+<a id="ln-88" name="ln-88" href="#ln-88"></a>
+<a id="ln-89" name="ln-89" href="#ln-89"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">add_variable</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">field</span><span class="p">,</span><span class="w">  </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-90" name="ln-90" href="#ln-90"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">field</span>
+<a id="ln-91" name="ln-91" href="#ln-91"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">FileMetaData</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">metadata</span>
+<a id="ln-92" name="ln-92" href="#ln-92"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-93" name="ln-93" href="#ln-93"></a>
+<a id="ln-94" name="ln-94" href="#ln-94"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-95" name="ln-95" href="#ln-95"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">Variable</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">v</span>
+<a id="ln-96" name="ln-96" href="#ln-96"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">variable_dim_names</span>
+<a id="ln-97" name="ln-97" href="#ln-97"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_TYPEKIND_FLAG</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">typekind</span>
+<a id="ln-98" name="ln-98" href="#ln-98"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">short_name</span>
+<a id="ln-99" name="ln-99" href="#ln-99"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">units</span>
+<a id="ln-100" name="ln-100" href="#ln-100"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">long_name</span>
+<a id="ln-101" name="ln-101" href="#ln-101"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">standard_name</span>
+<a id="ln-102" name="ln-102" href="#ln-102"></a>
+<a id="ln-103" name="ln-103" href="#ln-103"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Geom</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">esmfgeom</span>
+<a id="ln-104" name="ln-104" href="#ln-104"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">pfio_type</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">deflate_level</span><span class="p">,</span><span class="w"> </span><span class="n">quantize_level</span><span class="p">,</span><span class="w"> </span><span class="n">quantize_algorithm</span><span class="p">,</span><span class="w"> </span><span class="n">zstandard_level</span>
+<a id="ln-105" name="ln-105" href="#ln-105"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">MAPLGeom</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mapl_geom</span>
+<a id="ln-106" name="ln-106" href="#ln-106"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StringDictionary</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">extra_attributes</span>
+<a id="ln-107" name="ln-107" href="#ln-107"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">attr_name</span>
+<a id="ln-108" name="ln-108" href="#ln-108"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">attr_val</span>
+<a id="ln-109" name="ln-109" href="#ln-109"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StringVector</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">extra_keys</span>
+<a id="ln-110" name="ln-110" href="#ln-110"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Info</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">infoh</span>
+<a id="ln-111" name="ln-111" href="#ln-111"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">CompressionSettings</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">compression_settings</span>
+<a id="ln-112" name="ln-112" href="#ln-112"></a>
+<a id="ln-113" name="ln-113" href="#ln-113"></a><span class="w">      </span><span class="n">variable_dim_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_variable_dim_names</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-114" name="ln-114" href="#ln-114"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_FieldGet</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="o">=</span><span class="n">esmfgeom</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-115" name="ln-115" href="#ln-115"></a><span class="w">      </span><span class="n">mapl_geom</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">get_mapl_geom</span><span class="p">(</span><span class="n">esmfgeom</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-116" name="ln-116" href="#ln-116"></a><span class="w">      </span><span class="k">call </span><span class="n">MAPL_FieldGet</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="n">short_name</span><span class="o">=</span><span class="n">short_name</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-117" name="ln-117" href="#ln-117"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_FieldGet</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="n">typekind</span><span class="o">=</span><span class="n">typekind</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-118" name="ln-118" href="#ln-118"></a><span class="w">      </span><span class="n">pfio_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">esmf_to_pfio_type</span><span class="p">(</span><span class="n">typekind</span><span class="w"> </span><span class="p">,</span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-119" name="ln-119" href="#ln-119"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_InfoGetFromHost</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="n">infoh</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-120" name="ln-120" href="#ln-120"></a><span class="w">      </span><span class="k">call </span><span class="n">compression_settings</span><span class="p">%</span><span class="n">update_from_info</span><span class="p">(</span><span class="n">infoh</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-121" name="ln-121" href="#ln-121"></a><span class="w">      </span><span class="n">deflate_level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">compression_settings</span><span class="p">%</span><span class="n">get_deflate_level</span><span class="p">()</span>
+<a id="ln-122" name="ln-122" href="#ln-122"></a><span class="w">      </span><span class="n">zstandard_level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">compression_settings</span><span class="p">%</span><span class="n">get_zstandard_level</span><span class="p">()</span>
+<a id="ln-123" name="ln-123" href="#ln-123"></a><span class="w">      </span><span class="n">quantize_level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">compression_settings</span><span class="p">%</span><span class="n">get_quantize_level</span><span class="p">()</span>
+<a id="ln-124" name="ln-124" href="#ln-124"></a><span class="w">      </span><span class="n">quantize_algorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">compression_settings</span><span class="p">%</span><span class="n">get_quantize_algorithm</span><span class="p">()</span>
+<a id="ln-125" name="ln-125" href="#ln-125"></a>
+<a id="ln-126" name="ln-126" href="#ln-126"></a><span class="w">      </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Variable</span><span class="p">(</span><span class="k">type</span><span class="o">=</span><span class="n">pfio_type</span><span class="p">,</span><span class="w"> </span><span class="n">dimensions</span><span class="o">=</span><span class="n">variable_dim_names</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-127" name="ln-127" href="#ln-127"></a><span class="w">                   </span><span class="n">deflation</span><span class="o">=</span><span class="n">deflate_level</span><span class="p">,</span><span class="w"> </span><span class="n">zstandard_level</span><span class="o">=</span><span class="n">zstandard_level</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-128" name="ln-128" href="#ln-128"></a><span class="w">                   </span><span class="n">quantize_level</span><span class="o">=</span><span class="n">quantize_level</span><span class="p">,</span><span class="w"> </span><span class="n">quantize_algorithm</span><span class="o">=</span><span class="n">quantize_algorithm</span><span class="p">)</span>
+<a id="ln-129" name="ln-129" href="#ln-129"></a>
+<a id="ln-130" name="ln-130" href="#ln-130"></a><span class="w">      </span><span class="c">! Attributes</span>
+<a id="ln-131" name="ln-131" href="#ln-131"></a><span class="w">      </span><span class="k">call </span><span class="n">MAPL_FieldGet</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">,</span><span class="w"> </span><span class="n">long_name</span><span class="o">=</span><span class="n">long_name</span><span class="p">,</span><span class="w"> </span><span class="n">standard_name</span><span class="o">=</span><span class="n">standard_name</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-132" name="ln-132" href="#ln-132"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">units</span><span class="p">))</span><span class="k">then</span>
+<a id="ln-133" name="ln-133" href="#ln-133"></a><span class="k">         call </span><span class="n">v</span><span class="p">%</span><span class="n">add_attribute</span><span class="p">(</span><span class="s1">&#39;units&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">units</span><span class="p">)</span>
+<a id="ln-134" name="ln-134" href="#ln-134"></a><span class="w">      </span><span class="k">end if</span>
+<a id="ln-135" name="ln-135" href="#ln-135"></a><span class="k">      if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">long_name</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-136" name="ln-136" href="#ln-136"></a><span class="k">         call </span><span class="n">v</span><span class="p">%</span><span class="n">add_attribute</span><span class="p">(</span><span class="s1">&#39;long_name&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">long_name</span><span class="p">)</span>
+<a id="ln-137" name="ln-137" href="#ln-137"></a><span class="w">      </span><span class="k">end if</span>
+<a id="ln-138" name="ln-138" href="#ln-138"></a><span class="k">      if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">standard_name</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-139" name="ln-139" href="#ln-139"></a><span class="k">         call </span><span class="n">v</span><span class="p">%</span><span class="n">add_attribute</span><span class="p">(</span><span class="s1">&#39;standard_name&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">standard_name</span><span class="p">)</span>
+<a id="ln-140" name="ln-140" href="#ln-140"></a><span class="w">      </span><span class="k">end if</span>
+<a id="ln-141" name="ln-141" href="#ln-141"></a>
+<a id="ln-142" name="ln-142" href="#ln-142"></a><span class="k">      </span><span class="n">extra_attributes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapl_geom</span><span class="p">%</span><span class="n">get_variable_attributes</span><span class="p">()</span>
+<a id="ln-143" name="ln-143" href="#ln-143"></a><span class="w">      </span><span class="n">extra_keys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">extra_attributes</span><span class="p">%</span><span class="n">get_keys</span><span class="p">()</span>
+<a id="ln-144" name="ln-144" href="#ln-144"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">extra_keys</span><span class="p">%</span><span class="n">size</span><span class="p">()</span>
+<a id="ln-145" name="ln-145" href="#ln-145"></a><span class="w">         </span><span class="n">attr_name</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">extra_keys</span><span class="p">%</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<a id="ln-146" name="ln-146" href="#ln-146"></a><span class="w">         </span><span class="n">attr_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">extra_attributes</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">attr_name</span><span class="p">)</span>
+<a id="ln-147" name="ln-147" href="#ln-147"></a><span class="w">         </span><span class="k">call </span><span class="n">v</span><span class="p">%</span><span class="n">add_attribute</span><span class="p">(</span><span class="n">attr_name</span><span class="p">,</span><span class="w"> </span><span class="n">attr_val</span><span class="p">)</span>
+<a id="ln-148" name="ln-148" href="#ln-148"></a><span class="w">      </span><span class="k">enddo</span>
+<a id="ln-149" name="ln-149" href="#ln-149"></a>
+<a id="ln-150" name="ln-150" href="#ln-150"></a><span class="k">      call </span><span class="n">metadata</span><span class="p">%</span><span class="n">add_variable</span><span class="p">(</span><span class="n">short_name</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-151" name="ln-151" href="#ln-151"></a>
+<a id="ln-152" name="ln-152" href="#ln-152"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-153" name="ln-153" href="#ln-153"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">add_variable</span>
+<a id="ln-154" name="ln-154" href="#ln-154"></a>
+<a id="ln-155" name="ln-155" href="#ln-155"></a><span class="w">   </span><span class="k">function </span><span class="n">get_variable_dim_names</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">dim_names</span><span class="p">)</span>
+<a id="ln-156" name="ln-156" href="#ln-156"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">dim_names</span>
+<a id="ln-157" name="ln-157" href="#ln-157"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">field</span>
+<a id="ln-158" name="ln-158" href="#ln-158"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-159" name="ln-159" href="#ln-159"></a>
+<a id="ln-160" name="ln-160" href="#ln-160"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">MAPLGeom</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mapl_geom</span>
+<a id="ln-161" name="ln-161" href="#ln-161"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StringVector</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">grid_variables</span>
+<a id="ln-162" name="ln-162" href="#ln-162"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Geom</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">esmfgeom</span>
+<a id="ln-163" name="ln-163" href="#ln-163"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">vert_dim_name</span><span class="p">,</span><span class="w"> </span><span class="n">ungridded_names</span>
+<a id="ln-164" name="ln-164" href="#ln-164"></a><span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">vert_only</span>
+<a id="ln-165" name="ln-165" href="#ln-165"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">grid_to_field_map</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-166" name="ln-166" href="#ln-166"></a>
+<a id="ln-167" name="ln-167" href="#ln-167"></a><span class="w">      </span><span class="c">! horizontal dimension</span>
+<a id="ln-168" name="ln-168" href="#ln-168"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_FieldGet</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="o">=</span><span class="n">esmfgeom</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-169" name="ln-169" href="#ln-169"></a><span class="w">      </span><span class="n">mapl_geom</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">get_mapl_geom</span><span class="p">(</span><span class="n">esmfgeom</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-170" name="ln-170" href="#ln-170"></a><span class="w">      </span><span class="n">grid_variables</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapl_geom</span><span class="p">%</span><span class="n">get_gridded_dims</span><span class="p">()</span>
+<a id="ln-171" name="ln-171" href="#ln-171"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_FieldGet</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="n">gridToFieldMap</span><span class="o">=</span><span class="n">grid_to_field_map</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-172" name="ln-172" href="#ln-172"></a><span class="w">      </span><span class="n">vert_only</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">all</span><span class="p">(</span><span class="n">grid_to_field_map</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+<a id="ln-173" name="ln-173" href="#ln-173"></a><span class="w">      </span><span class="n">dim_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EMPTY</span>
+<a id="ln-174" name="ln-174" href="#ln-174"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="n">vert_only</span><span class="p">)</span><span class="w"> </span><span class="n">dim_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">string_vec_to_comma_sep</span><span class="p">(</span><span class="n">grid_variables</span><span class="p">)</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="s2">&quot;,&quot;</span>
+<a id="ln-175" name="ln-175" href="#ln-175"></a>
+<a id="ln-176" name="ln-176" href="#ln-176"></a><span class="w">      </span><span class="c">! add vertical dimension</span>
+<a id="ln-177" name="ln-177" href="#ln-177"></a><span class="w">      </span><span class="n">vert_dim_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_vertical_dimension_name_from_field</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-178" name="ln-178" href="#ln-178"></a><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">vert_dim_name</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">EMPTY</span><span class="p">)</span><span class="w"> </span><span class="n">dim_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dim_names</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">vert_dim_name</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="s2">&quot;,&quot;</span>
+<a id="ln-179" name="ln-179" href="#ln-179"></a><span class="w">      </span><span class="c">! add any ungridded dimensions</span>
+<a id="ln-180" name="ln-180" href="#ln-180"></a><span class="w">      </span><span class="n">ungridded_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ungridded_dim_names</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-181" name="ln-181" href="#ln-181"></a><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">ungridded_names</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">EMPTY</span><span class="p">)</span><span class="w"> </span><span class="n">dim_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dim_names</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">ungridded_names</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="s2">&quot;,&quot;</span>
+<a id="ln-182" name="ln-182" href="#ln-182"></a><span class="w">      </span><span class="c">! add time dimension</span>
+<a id="ln-183" name="ln-183" href="#ln-183"></a><span class="w">      </span><span class="n">dim_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dim_names</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="s2">&quot;time&quot;</span>
+<a id="ln-184" name="ln-184" href="#ln-184"></a>
+<a id="ln-185" name="ln-185" href="#ln-185"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-186" name="ln-186" href="#ln-186"></a><span class="w">   </span><span class="k">end function </span><span class="n">get_variable_dim_names</span>
+<a id="ln-187" name="ln-187" href="#ln-187"></a>
+<a id="ln-188" name="ln-188" href="#ln-188"></a><span class="w">   </span><span class="k">function </span><span class="n">esmf_to_pfio_type</span><span class="p">(</span><span class="n">esmf_type</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">pfio_type</span><span class="p">)</span>
+<a id="ln-189" name="ln-189" href="#ln-189"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">pfio_type</span>
+<a id="ln-190" name="ln-190" href="#ln-190"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_TYPEKIND_FLAG</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">esmf_type</span>
+<a id="ln-191" name="ln-191" href="#ln-191"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-192" name="ln-192" href="#ln-192"></a>
+<a id="ln-193" name="ln-193" href="#ln-193"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">esmf_type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_TYPEKIND_R4</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-194" name="ln-194" href="#ln-194"></a><span class="k">         </span><span class="n">pfio_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PFIO_REAL32</span>
+<a id="ln-195" name="ln-195" href="#ln-195"></a><span class="w">      </span><span class="k">else if</span><span class="w"> </span><span class="p">(</span><span class="n">esmf_type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_TYPEKIND_R8</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-196" name="ln-196" href="#ln-196"></a><span class="k">         </span><span class="n">pfio_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PFIO_REAL64</span>
+<a id="ln-197" name="ln-197" href="#ln-197"></a><span class="w">      </span><span class="k">else if</span><span class="w"> </span><span class="p">(</span><span class="n">esmf_type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_TYPEKIND_I4</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-198" name="ln-198" href="#ln-198"></a><span class="k">         </span><span class="n">pfio_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PFIO_INT32</span>
+<a id="ln-199" name="ln-199" href="#ln-199"></a><span class="w">      </span><span class="k">else if</span><span class="w"> </span><span class="p">(</span><span class="n">esmf_type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ESMF_TYPEKIND_I8</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-200" name="ln-200" href="#ln-200"></a><span class="k">         </span><span class="n">pfio_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PFIO_INT64</span>
+<a id="ln-201" name="ln-201" href="#ln-201"></a><span class="w">      </span><span class="k">else</span>
+<a id="ln-202" name="ln-202" href="#ln-202"></a><span class="k">         </span><span class="err">_</span><span class="n">FAIL</span><span class="p">(</span><span class="s2">&quot;Unsupported ESMF field typekind for output&quot;</span><span class="p">)</span>
+<a id="ln-203" name="ln-203" href="#ln-203"></a><span class="w">      </span><span class="k">end if</span>
+<a id="ln-204" name="ln-204" href="#ln-204"></a>
+<a id="ln-205" name="ln-205" href="#ln-205"></a><span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-206" name="ln-206" href="#ln-206"></a><span class="w">   </span><span class="k">end function </span><span class="n">esmf_to_pfio_type</span>
+<a id="ln-207" name="ln-207" href="#ln-207"></a>
+<a id="ln-208" name="ln-208" href="#ln-208"></a><span class="w">   </span><span class="k">function </span><span class="n">string_vec_to_comma_sep</span><span class="p">(</span><span class="n">string_vec</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">comma_sep</span><span class="p">)</span>
+<a id="ln-209" name="ln-209" href="#ln-209"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">comma_sep</span>
+<a id="ln-210" name="ln-210" href="#ln-210"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StringVector</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">string_vec</span>
+<a id="ln-211" name="ln-211" href="#ln-211"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">stringVectorIterator</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iter</span>
+<a id="ln-212" name="ln-212" href="#ln-212"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">var</span>
+<a id="ln-213" name="ln-213" href="#ln-213"></a>
+<a id="ln-214" name="ln-214" href="#ln-214"></a><span class="w">      </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">string_vec</span><span class="p">%</span><span class="n">begin</span><span class="p">()</span>
+<a id="ln-215" name="ln-215" href="#ln-215"></a><span class="w">      </span><span class="n">var</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">iter</span><span class="p">%</span><span class="n">of</span><span class="p">()</span>
+<a id="ln-216" name="ln-216" href="#ln-216"></a><span class="w">      </span><span class="n">comma_sep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">var</span>
+<a id="ln-217" name="ln-217" href="#ln-217"></a><span class="w">      </span><span class="k">call </span><span class="n">iter</span><span class="p">%</span><span class="n">next</span><span class="p">()</span>
+<a id="ln-218" name="ln-218" href="#ln-218"></a><span class="w">      </span><span class="k">do while</span><span class="w"> </span><span class="p">(</span><span class="n">iter</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">string_vec</span><span class="p">%</span><span class="k">end</span><span class="p">())</span>
+<a id="ln-219" name="ln-219" href="#ln-219"></a><span class="w">         </span><span class="n">var</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">iter</span><span class="p">%</span><span class="n">of</span><span class="p">()</span>
+<a id="ln-220" name="ln-220" href="#ln-220"></a><span class="w">         </span><span class="n">comma_sep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">comma_sep</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="s2">&quot;,&quot;</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">var</span>
+<a id="ln-221" name="ln-221" href="#ln-221"></a><span class="w">         </span><span class="k">call </span><span class="n">iter</span><span class="p">%</span><span class="n">next</span><span class="p">()</span>
+<a id="ln-222" name="ln-222" href="#ln-222"></a><span class="w">      </span><span class="k">enddo</span>
+<a id="ln-223" name="ln-223" href="#ln-223"></a><span class="k">   end function </span><span class="n">string_vec_to_comma_sep</span>
+<a id="ln-224" name="ln-224" href="#ln-224"></a>
+<a id="ln-225" name="ln-225" href="#ln-225"></a><span class="w">   </span><span class="k">function </span><span class="n">create_time_variable</span><span class="p">(</span><span class="n">current_time</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">time_var</span><span class="p">)</span>
+<a id="ln-226" name="ln-226" href="#ln-226"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">Variable</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">time_var</span>
+<a id="ln-227" name="ln-227" href="#ln-227"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Time</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">current_time</span>
+<a id="ln-228" name="ln-228" href="#ln-228"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-229" name="ln-229" href="#ln-229"></a>
+<a id="ln-230" name="ln-230" href="#ln-230"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-231" name="ln-231" href="#ln-231"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="n">ESMF_MAXSTR</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iso_time_string</span>
+<a id="ln-232" name="ln-232" href="#ln-232"></a>
+<a id="ln-233" name="ln-233" href="#ln-233"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_TimeGet</span><span class="p">(</span><span class="n">current_time</span><span class="p">,</span><span class="w"> </span><span class="n">timeString</span><span class="o">=</span><span class="n">iso_time_string</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-234" name="ln-234" href="#ln-234"></a><span class="w">      </span><span class="n">iso_time_string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;minutes since &quot;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">iso_time_string</span><span class="p">)</span>
+<a id="ln-235" name="ln-235" href="#ln-235"></a><span class="w">      </span><span class="n">time_var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Variable</span><span class="p">(</span><span class="k">type</span><span class="o">=</span><span class="n">PFIO_REAL32</span><span class="p">,</span><span class="w"> </span><span class="n">dimensions</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+<a id="ln-236" name="ln-236" href="#ln-236"></a><span class="w">      </span><span class="k">call </span><span class="n">time_var</span><span class="p">%</span><span class="n">add_attribute</span><span class="p">(</span><span class="s1">&#39;long_name&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+<a id="ln-237" name="ln-237" href="#ln-237"></a><span class="w">      </span><span class="k">call </span><span class="n">time_var</span><span class="p">%</span><span class="n">add_attribute</span><span class="p">(</span><span class="s1">&#39;units&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">iso_time_string</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-238" name="ln-238" href="#ln-238"></a>
+<a id="ln-239" name="ln-239" href="#ln-239"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-240" name="ln-240" href="#ln-240"></a><span class="w">   </span><span class="k">end function </span><span class="n">create_time_variable</span>
+<a id="ln-241" name="ln-241" href="#ln-241"></a>
+<a id="ln-242" name="ln-242" href="#ln-242"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">add_vertical_dimensions</span><span class="p">(</span><span class="n">bundle</span><span class="p">,</span><span class="w"> </span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-243" name="ln-243" href="#ln-243"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_FieldBundle</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle</span>
+<a id="ln-244" name="ln-244" href="#ln-244"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">FileMetaData</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">metadata</span>
+<a id="ln-245" name="ln-245" href="#ln-245"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-246" name="ln-246" href="#ln-246"></a>
+<a id="ln-247" name="ln-247" href="#ln-247"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">dim_name</span>
+<a id="ln-248" name="ln-248" href="#ln-248"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">VerticalStaggerLoc</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">vertical_stagger</span>
+<a id="ln-249" name="ln-249" href="#ln-249"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fieldList</span><span class="p">(:)</span>
+<a id="ln-250" name="ln-250" href="#ln-250"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">num_field_levels</span><span class="p">,</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-251" name="ln-251" href="#ln-251"></a><span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">lev_added</span><span class="p">,</span><span class="w"> </span><span class="n">edge_added</span>
+<a id="ln-252" name="ln-252" href="#ln-252"></a>
+<a id="ln-253" name="ln-253" href="#ln-253"></a><span class="w">      </span><span class="k">call </span><span class="n">MAPL_FieldBundleGet</span><span class="p">(</span><span class="n">bundle</span><span class="p">,</span><span class="w"> </span><span class="n">fieldList</span><span class="o">=</span><span class="n">fieldList</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-254" name="ln-254" href="#ln-254"></a><span class="w">      </span><span class="n">lev_added</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<a id="ln-255" name="ln-255" href="#ln-255"></a><span class="w">      </span><span class="n">edge_added</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<a id="ln-256" name="ln-256" href="#ln-256"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">fieldList</span><span class="p">)</span>
+<a id="ln-257" name="ln-257" href="#ln-257"></a><span class="w">         </span><span class="k">call </span><span class="n">MAPL_FieldGet</span><span class="p">(</span><span class="n">fieldList</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">vert_staggerloc</span><span class="o">=</span><span class="n">vertical_stagger</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-258" name="ln-258" href="#ln-258"></a><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">vertical_stagger</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">VERTICAL_STAGGER_NONE</span><span class="p">)</span><span class="w"> </span><span class="k">cycle</span>
+<a id="ln-259" name="ln-259" href="#ln-259"></a><span class="k">         call </span><span class="n">MAPL_FieldGet</span><span class="p">(</span><span class="n">fieldList</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">num_levels</span><span class="o">=</span><span class="n">num_field_levels</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-260" name="ln-260" href="#ln-260"></a><span class="w">         </span><span class="n">dim_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vertical_stagger</span><span class="p">%</span><span class="n">get_dimension_name</span><span class="p">()</span>
+<a id="ln-261" name="ln-261" href="#ln-261"></a><span class="w">         </span><span class="k">call </span><span class="n">metadata</span><span class="p">%</span><span class="n">add_dimension</span><span class="p">(</span><span class="n">dim_name</span><span class="p">,</span><span class="w"> </span><span class="n">num_field_levels</span><span class="p">)</span>
+<a id="ln-262" name="ln-262" href="#ln-262"></a><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">dim_name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;lev&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="n">lev_added</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-263" name="ln-263" href="#ln-263"></a><span class="k">            call </span><span class="n">add_lev_or_edge_</span><span class="p">(</span><span class="n">dim_name</span><span class="p">,</span><span class="w"> </span><span class="n">num_field_levels</span><span class="p">,</span><span class="w"> </span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-264" name="ln-264" href="#ln-264"></a><span class="w">            </span><span class="n">lev_added</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<a id="ln-265" name="ln-265" href="#ln-265"></a><span class="w">         </span><span class="k">end if</span>
+<a id="ln-266" name="ln-266" href="#ln-266"></a><span class="k">         if</span><span class="w"> </span><span class="p">((</span><span class="n">dim_name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;edge&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="n">edge_added</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-267" name="ln-267" href="#ln-267"></a><span class="k">            call </span><span class="n">add_lev_or_edge_</span><span class="p">(</span><span class="n">dim_name</span><span class="p">,</span><span class="w"> </span><span class="n">num_field_levels</span><span class="p">,</span><span class="w"> </span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-268" name="ln-268" href="#ln-268"></a><span class="w">            </span><span class="n">edge_added</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<a id="ln-269" name="ln-269" href="#ln-269"></a><span class="w">         </span><span class="k">end if</span>
+<a id="ln-270" name="ln-270" href="#ln-270"></a><span class="k">      end do</span>
+<a id="ln-271" name="ln-271" href="#ln-271"></a>
+<a id="ln-272" name="ln-272" href="#ln-272"></a><span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-273" name="ln-273" href="#ln-273"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">add_vertical_dimensions</span>
+<a id="ln-274" name="ln-274" href="#ln-274"></a>
+<a id="ln-275" name="ln-275" href="#ln-275"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">add_lev_or_edge_</span><span class="p">(</span><span class="n">dim_name</span><span class="p">,</span><span class="w"> </span><span class="n">num_levels</span><span class="p">,</span><span class="w"> </span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-276" name="ln-276" href="#ln-276"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">dim_name</span>
+<a id="ln-277" name="ln-277" href="#ln-277"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">num_levels</span>
+<a id="ln-278" name="ln-278" href="#ln-278"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">FileMetaData</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">metadata</span>
+<a id="ln-279" name="ln-279" href="#ln-279"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-280" name="ln-280" href="#ln-280"></a>
+<a id="ln-281" name="ln-281" href="#ln-281"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">Variable</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">level_var</span>
+<a id="ln-282" name="ln-282" href="#ln-282"></a><span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">REAL64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">temp_coords</span><span class="p">(:)</span>
+<a id="ln-283" name="ln-283" href="#ln-283"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-284" name="ln-284" href="#ln-284"></a>
+<a id="ln-285" name="ln-285" href="#ln-285"></a><span class="w">      </span><span class="n">level_var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Variable</span><span class="p">(</span><span class="k">type</span><span class="o">=</span><span class="n">PFIO_REAL64</span><span class="p">,</span><span class="w"> </span><span class="n">dimensions</span><span class="o">=</span><span class="n">dim_name</span><span class="p">)</span>
+<a id="ln-286" name="ln-286" href="#ln-286"></a><span class="w">      </span><span class="k">call </span><span class="n">level_var</span><span class="p">%</span><span class="n">add_attribute</span><span class="p">(</span><span class="s1">&#39;long_name&#39;</span><span class="p">,</span><span class="s1">&#39;vertical level&#39;</span><span class="p">)</span>
+<a id="ln-287" name="ln-287" href="#ln-287"></a><span class="w">      </span><span class="k">call </span><span class="n">level_var</span><span class="p">%</span><span class="n">add_attribute</span><span class="p">(</span><span class="s1">&#39;units&#39;</span><span class="p">,</span><span class="s1">&#39;layer&#39;</span><span class="p">)</span>
+<a id="ln-288" name="ln-288" href="#ln-288"></a><span class="w">      </span><span class="k">call </span><span class="n">level_var</span><span class="p">%</span><span class="n">add_attribute</span><span class="p">(</span><span class="s1">&#39;positive&#39;</span><span class="p">,</span><span class="s1">&#39;down&#39;</span><span class="p">)</span>
+<a id="ln-289" name="ln-289" href="#ln-289"></a><span class="w">      </span><span class="k">call </span><span class="n">level_var</span><span class="p">%</span><span class="n">add_attribute</span><span class="p">(</span><span class="s1">&#39;coordinate&#39;</span><span class="p">,</span><span class="s1">&#39;eta&#39;</span><span class="p">)</span>
+<a id="ln-290" name="ln-290" href="#ln-290"></a><span class="w">      </span><span class="k">call </span><span class="n">level_var</span><span class="p">%</span><span class="n">add_attribute</span><span class="p">(</span><span class="s1">&#39;standard_name&#39;</span><span class="p">,</span><span class="s1">&#39;model_layers&#39;</span><span class="p">)</span>
+<a id="ln-291" name="ln-291" href="#ln-291"></a><span class="w">      </span><span class="k">allocate</span><span class="p">(</span><span class="n">temp_coords</span><span class="p">(</span><span class="n">num_levels</span><span class="p">),</span><span class="w"> </span><span class="err">_</span><span class="n">STAT</span><span class="p">)</span>
+<a id="ln-292" name="ln-292" href="#ln-292"></a><span class="w">      </span><span class="n">temp_coords</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[(</span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">num_levels</span><span class="p">)]</span>
+<a id="ln-293" name="ln-293" href="#ln-293"></a><span class="w">      </span><span class="k">call </span><span class="n">level_var</span><span class="p">%</span><span class="n">add_const_value</span><span class="p">(</span><span class="n">UnlimitedEntity</span><span class="p">(</span><span class="n">temp_coords</span><span class="p">))</span>
+<a id="ln-294" name="ln-294" href="#ln-294"></a><span class="w">      </span><span class="k">call </span><span class="n">metadata</span><span class="p">%</span><span class="n">add_variable</span><span class="p">(</span><span class="n">dim_name</span><span class="p">,</span><span class="w"> </span><span class="n">level_var</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-295" name="ln-295" href="#ln-295"></a>
+<a id="ln-296" name="ln-296" href="#ln-296"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-297" name="ln-297" href="#ln-297"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">add_lev_or_edge_</span>
+<a id="ln-298" name="ln-298" href="#ln-298"></a>
+<a id="ln-299" name="ln-299" href="#ln-299"></a><span class="w">   </span><span class="k">function </span><span class="n">get_vertical_dimension_name_from_field</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">dim_name</span><span class="p">)</span>
+<a id="ln-300" name="ln-300" href="#ln-300"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">dim_name</span>
+<a id="ln-301" name="ln-301" href="#ln-301"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">field</span>
+<a id="ln-302" name="ln-302" href="#ln-302"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-303" name="ln-303" href="#ln-303"></a>
+<a id="ln-304" name="ln-304" href="#ln-304"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-305" name="ln-305" href="#ln-305"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">VerticalStaggerLoc</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">vert_staggerloc</span>
+<a id="ln-306" name="ln-306" href="#ln-306"></a>
+<a id="ln-307" name="ln-307" href="#ln-307"></a><span class="w">      </span><span class="k">call </span><span class="n">MAPL_FieldGet</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="n">vert_staggerLoc</span><span class="o">=</span><span class="n">vert_staggerLoc</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-308" name="ln-308" href="#ln-308"></a><span class="w">      </span><span class="n">dim_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vert_staggerLoc</span><span class="p">%</span><span class="n">get_dimension_name</span><span class="p">()</span>
+<a id="ln-309" name="ln-309" href="#ln-309"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-310" name="ln-310" href="#ln-310"></a><span class="w">   </span><span class="k">end function </span><span class="n">get_vertical_dimension_name_from_field</span>
+<a id="ln-311" name="ln-311" href="#ln-311"></a>
+<a id="ln-312" name="ln-312" href="#ln-312"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">add_ungridded_dimensions</span><span class="p">(</span><span class="n">bundle</span><span class="p">,</span><span class="w"> </span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-313" name="ln-313" href="#ln-313"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_FieldBundle</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bundle</span>
+<a id="ln-314" name="ln-314" href="#ln-314"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">FileMetaData</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">metadata</span>
+<a id="ln-315" name="ln-315" href="#ln-315"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-316" name="ln-316" href="#ln-316"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-317" name="ln-317" href="#ln-317"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">UngriddedDims</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">field_ungridded_dims</span>
+<a id="ln-318" name="ln-318" href="#ln-318"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">UngriddedDim</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">u</span>
+<a id="ln-319" name="ln-319" href="#ln-319"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ifield</span><span class="p">,</span><span class="w"> </span><span class="n">jdim</span>
+<a id="ln-320" name="ln-320" href="#ln-320"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fieldList</span><span class="p">(:)</span>
+<a id="ln-321" name="ln-321" href="#ln-321"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StringSet</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">dim_names</span>
+<a id="ln-322" name="ln-322" href="#ln-322"></a><span class="w">      </span><span class="kt">character</span><span class="p">(:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">dim_name</span>
+<a id="ln-323" name="ln-323" href="#ln-323"></a><span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">is_new</span>
+<a id="ln-324" name="ln-324" href="#ln-324"></a>
+<a id="ln-325" name="ln-325" href="#ln-325"></a><span class="w">      </span><span class="k">call </span><span class="n">MAPL_FieldBundleGet</span><span class="p">(</span><span class="n">bundle</span><span class="p">,</span><span class="w"> </span><span class="n">fieldList</span><span class="o">=</span><span class="n">fieldList</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-326" name="ln-326" href="#ln-326"></a><span class="w">      </span><span class="k">do </span><span class="n">ifield</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">fieldList</span><span class="p">)</span>
+<a id="ln-327" name="ln-327" href="#ln-327"></a><span class="w">         </span><span class="k">call </span><span class="n">MAPL_FieldGet</span><span class="p">(</span><span class="n">fieldList</span><span class="p">(</span><span class="n">ifield</span><span class="p">),</span><span class="w"> </span><span class="n">ungridded_dims</span><span class="o">=</span><span class="n">field_ungridded_dims</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-328" name="ln-328" href="#ln-328"></a>
+<a id="ln-329" name="ln-329" href="#ln-329"></a><span class="w">         </span><span class="k">do </span><span class="n">jdim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">field_ungridded_dims</span><span class="p">%</span><span class="n">get_num_ungridded</span><span class="p">()</span>
+<a id="ln-330" name="ln-330" href="#ln-330"></a><span class="w">            </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">field_ungridded_dims</span><span class="p">%</span><span class="n">get_ith_dim_spec</span><span class="p">(</span><span class="n">jdim</span><span class="p">)</span>
+<a id="ln-331" name="ln-331" href="#ln-331"></a><span class="w">            </span><span class="n">dim_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="p">%</span><span class="n">get_name</span><span class="p">()</span>
+<a id="ln-332" name="ln-332" href="#ln-332"></a><span class="w">            </span><span class="k">call </span><span class="n">dim_names</span><span class="p">%</span><span class="n">insert</span><span class="p">(</span><span class="n">dim_name</span><span class="p">,</span><span class="w"> </span><span class="n">is_new</span><span class="o">=</span><span class="n">is_new</span><span class="p">)</span>
+<a id="ln-333" name="ln-333" href="#ln-333"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">is_new</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-334" name="ln-334" href="#ln-334"></a><span class="k">               call </span><span class="n">metadata</span><span class="p">%</span><span class="n">add_dimension</span><span class="p">(</span><span class="n">u</span><span class="p">%</span><span class="n">get_name</span><span class="p">(),</span><span class="w"> </span><span class="n">u</span><span class="p">%</span><span class="n">get_extent</span><span class="p">())</span>
+<a id="ln-335" name="ln-335" href="#ln-335"></a><span class="w">            </span><span class="k">end if</span>
+<a id="ln-336" name="ln-336" href="#ln-336"></a><span class="k">         end do</span>
+<a id="ln-337" name="ln-337" href="#ln-337"></a><span class="k">      end do</span>
+<a id="ln-338" name="ln-338" href="#ln-338"></a>
+<a id="ln-339" name="ln-339" href="#ln-339"></a><span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-340" name="ln-340" href="#ln-340"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">add_ungridded_dimensions</span>
+<a id="ln-341" name="ln-341" href="#ln-341"></a>
+<a id="ln-342" name="ln-342" href="#ln-342"></a><span class="w">   </span><span class="k">function </span><span class="n">ungridded_dim_names</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">dim_names</span><span class="p">)</span>
+<a id="ln-343" name="ln-343" href="#ln-343"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">dim_names</span>
+<a id="ln-344" name="ln-344" href="#ln-344"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">field</span>
+<a id="ln-345" name="ln-345" href="#ln-345"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-346" name="ln-346" href="#ln-346"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-347" name="ln-347" href="#ln-347"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">UngriddedDims</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ungridded_dims</span>
+<a id="ln-348" name="ln-348" href="#ln-348"></a>
+<a id="ln-349" name="ln-349" href="#ln-349"></a><span class="w">      </span><span class="k">call </span><span class="n">MAPL_FieldGet</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="n">ungridded_dims</span><span class="o">=</span><span class="n">ungridded_dims</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-350" name="ln-350" href="#ln-350"></a><span class="w">      </span><span class="n">dim_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cat_ungridded_dim_names</span><span class="p">(</span><span class="n">ungridded_dims</span><span class="p">)</span>
+<a id="ln-351" name="ln-351" href="#ln-351"></a>
+<a id="ln-352" name="ln-352" href="#ln-352"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-353" name="ln-353" href="#ln-353"></a><span class="w">   </span><span class="k">end function </span><span class="n">ungridded_dim_names</span>
+<a id="ln-354" name="ln-354" href="#ln-354"></a>
+<a id="ln-355" name="ln-355" href="#ln-355"></a><span class="w">   </span><span class="k">function </span><span class="n">cat_ungridded_dim_names</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">dim_names</span><span class="p">)</span>
+<a id="ln-356" name="ln-356" href="#ln-356"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">dim_names</span>
+<a id="ln-357" name="ln-357" href="#ln-357"></a><span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">UngriddedDims</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">dims</span>
+<a id="ln-358" name="ln-358" href="#ln-358"></a>
+<a id="ln-359" name="ln-359" href="#ln-359"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span>
+<a id="ln-360" name="ln-360" href="#ln-360"></a>
+<a id="ln-361" name="ln-361" href="#ln-361"></a><span class="cp">#define JOIN(a,b) a // &#39;,&#39; // b</span>
+<a id="ln-362" name="ln-362" href="#ln-362"></a><span class="w">      </span><span class="n">dim_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EMPTY</span>
+<a id="ln-363" name="ln-363" href="#ln-363"></a><span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">dims</span><span class="p">%</span><span class="n">get_num_ungridded</span><span class="p">()</span>
+<a id="ln-364" name="ln-364" href="#ln-364"></a><span class="w">         </span><span class="k">associate</span><span class="w"> </span><span class="p">(</span><span class="n">u</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">dims</span><span class="p">%</span><span class="n">get_ith_dim_spec</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<a id="ln-365" name="ln-365" href="#ln-365"></a><span class="w">           </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dim_names</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">EMPTY</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-366" name="ln-366" href="#ln-366"></a><span class="k">              </span><span class="n">dim_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JOIN</span><span class="p">(</span><span class="n">dim_names</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">%</span><span class="n">get_name</span><span class="p">())</span>
+<a id="ln-367" name="ln-367" href="#ln-367"></a><span class="w">           </span><span class="k">else</span>
+<a id="ln-368" name="ln-368" href="#ln-368"></a><span class="k">              </span><span class="n">dim_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="p">%</span><span class="n">get_name</span><span class="p">()</span>
+<a id="ln-369" name="ln-369" href="#ln-369"></a><span class="w">           </span><span class="k">end if</span>
+<a id="ln-370" name="ln-370" href="#ln-370"></a><span class="k">         end associate</span>
+<a id="ln-371" name="ln-371" href="#ln-371"></a><span class="k">      end do</span>
+<a id="ln-372" name="ln-372" href="#ln-372"></a><span class="cp">#undef JOIN</span>
+<a id="ln-373" name="ln-373" href="#ln-373"></a><span class="w">   </span><span class="k">end function </span><span class="n">cat_ungridded_dim_names</span>
+<a id="ln-374" name="ln-374" href="#ln-374"></a>
+<a id="ln-375" name="ln-375" href="#ln-375"></a><span class="k">end module </span><span class="n">mapl_SharedIO</span>
+</pre></div>
+
+      </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              MAPL
+ was developed by The MAPL Developers<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-05-22T14:24:54.868000+0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
