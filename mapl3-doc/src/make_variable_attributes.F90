@@ -1,27 +1,15 @@
 #include "MAPL.h"
 
-submodule (mapl_LatLonGeomFactory) make_variable_attributes_smod
-
-   use mapl_GeomSpec
-   use mapl_LonAxis
-   use mapl_LatAxis
-   use mapl_LatLonDecomposition
-   use mapl_LatLonGeomSpec
-   use mapl_MinMaxMod
+submodule (mapl_XYGeomFactory) make_variable_attributes_smod
    use mapl_ErrorHandlingMod
-   use mapl_Constants
-   use pFIO
    use mapl_StringDictionary
-   use esmf
-   use mapl_KeywordEnforcer, only: KE => KeywordEnforcer
-
-   implicit none (type, external)
+   implicit none
 
 contains
 
    module function make_variable_attributes(this, geom_spec, rc) result(variable_attributes)
       type(StringDictionary) :: variable_attributes
-      class(LatLonGeomFactory), intent(in) :: this
+      class(XYGeomFactory), intent(in) :: this
       class(GeomSpec), intent(in) :: geom_spec
       integer, optional, intent(out) :: rc
 
