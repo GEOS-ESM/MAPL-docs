@@ -1,3 +1,11 @@
-module mapl_VM_API_mod
-   use mapl_vm_mod
-end module mapl_VM_API_mod
+module mapl_Generic_API_mod
+   use mapl_UserSetServices_mod, only: user_setservices, AbstractUserSetServices, DSOSetServices
+
+   implicit none(type,external)
+   private
+
+   public :: user_setservices
+   public :: AbstractUserSetServices
+   public :: DSOSetServices
+
+end module mapl_Generic_API_mod
