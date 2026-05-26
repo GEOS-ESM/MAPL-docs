@@ -1,24 +1,20 @@
 #include "MAPL.h"
 
-submodule (mapl_XYGeomSpec_mod) equal_to_smod
-   use mapl_ErrorHandling_mod
-   implicit none
+submodule (mapl_EASEGeomSpec_mod) equal_to_smod
+   use mapl_GeomSpec_mod
+   use mapl_EASEDecomposition_mod
+   implicit none (type, external)
 
 contains
 
    pure logical module function equal_to(a, b)
-      class(XYGeomSpec), intent(in) :: a
-      class(GeomSpec),   intent(in) :: b
+      class(EASEGeomSpec), intent(in) :: a
+      class(GeomSpec),     intent(in) :: b
 
       select type (b)
-      type is (XYGeomSpec)
-         equal_to = (a%im_world    == b%im_world)    .and. &
-                    (a%jm_world    == b%jm_world)    .and. &
-                    (a%lm          == b%lm)          .and. &
-                    (a%n_peri_dim  == b%n_peri_dim)  .and. &
-                    (a%coord_mode  == b%coord_mode)  .and. &
-                    (a%thin_factor == b%thin_factor) .and. &
-                    (a%grid_file_name == b%grid_file_name)
+      type is (EASEGeomSpec)
+         equal_to = (a%grid_name == b%grid_name) .and. &
+                    (a%decomposition == b%decomposition)
       class default
          equal_to = .false.
       end select
