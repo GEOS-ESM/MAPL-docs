@@ -1,215 +1,125 @@
-#include "MAPL.h"
-module mapl_ExtDataCollection_mod
-   use ESMF
-   use MAPL
-   use pfio_FileMetadataMod
-   use mapl_AbstractDataSetFileSelector_mod
-   use mapl_NonClimDataSetFileSelector_mod
-   implicit none
-   private
+#include "MAPL_ErrLog.h"
 
-   type, public :: ExtDataCollection
-      character(len=:), allocatable :: file_template
-      type(ESMF_TimeInterval) :: frequency
-      type(ESMF_Time), allocatable :: reff_time
-      integer :: collection_id
-      type(ESMF_Time), allocatable :: valid_range(:)
-      contains
-         procedure :: get_file_template
-         procedure :: get_frequency
-         procedure :: get_reff_time
-         procedure :: get_collection_id
-         procedure :: get_valid_range
-         procedure :: is_reff_time_allocated
-         procedure :: is_valid_range_allocated
-   end type
+module pFIO_ExtDataCollectionMod
+  use gFTL_StringIntegerMap
+  use pFIO_NetCDF4_FileFormatterMod
+  use pFIO_FormatterPtrVectorMod
+  use pFIO_ConstantsMod
+  use mapl_ExceptionHandling_mod
+  implicit none
+  private
 
-    interface ExtDataCollection
-       module procedure new_ExtDataCollection
-    end interface ExtDataCollection
+  public :: ExtDataCollection
+  public :: new_ExtDataCollection
+
+  type :: ExtDataCollection
+    character(len=:), allocatable :: template
+    type (FormatterPtrVector) :: formatters
+    type (StringIntegerMap) :: file_ids
+
+    type (NetCDF4_FileFormatter), pointer :: formatter => null()
+  contains
+    procedure :: find
+    procedure :: unfind
+  end type ExtDataCollection
+
+  interface ExtDataCollection
+    module procedure new_ExtDataCollection
+  end interface ExtDataCollection
+
+
+  integer, parameter :: MAX_FORMATTERS = 2
+
 contains
 
-   function new_ExtDataCollection(config,current_time, unusable,rc) result(data_set)
-      type(ESMF_HConfig), intent(in) :: config
-      type(ESMF_Time), intent(in) :: current_time
-      class(KeywordEnforcer), optional, intent(in) :: unusable
-      integer, optional, intent(out) :: rc
 
-      type(ExtDataCollection) :: data_set
-      integer :: status
-      integer :: last_token
-      integer :: iyy,imm,idd,ihh,imn,isc
-      character(len=2) :: token
-      character(len=:), allocatable :: file_frequency, file_reff_time,range_str
-      logical :: is_present
+  function new_ExtDataCollection(template) result(collection)
+    type (ExtDataCollection) :: collection
+    character(len=*), intent(in) :: template
 
-      is_present = ESMF_HConfigIsDefined(config,keyString="template",_RC)
-      _ASSERT(is_present,"no file template in the collection")
+    collection%template = template
 
-      data_set%file_template = ESMF_HConfigAsString(config,keyString="template",_RC)
-      file_frequency = get_string_with_default(config,"freq")
-      file_reff_time = get_string_with_default(config,"ref_time")
-      range_str = get_string_with_default(config,"valid_range")
+  end function new_ExtDataCollection
 
-      if (file_frequency /= '') then
-         data_set%frequency = mapl_HConfigAsTimeInterval(config, keyString="freq", _RC)
-      else
-         last_token = index(data_set%file_template,'%',back=.true.)
-         if (last_token.gt.0) then
-            token = data_set%file_template(last_token+1:last_token+2)
-            select case(token)
-            case("y4")
-               call ESMF_TimeIntervalSet(data_set%frequency,yy=1,_RC)
-            case("m2")
-               call ESMF_TimeIntervalSet(data_set%frequency,mm=1,_RC)
-            case("d2")
-               call ESMF_TimeIntervalSet(data_set%frequency,d=1,_RC)
-            case("h2")
-               call ESMF_TimeIntervalSet(data_set%frequency,h=1,_RC)
-            case("n2")
-               call ESMF_TimeIntervalSet(data_set%frequency,m=1,_RC)
-            case default
-               _FAIL("Unsupported token")
-            end select
-         else
-            ! couldn't find any tokens so all the data must be on one file
-            call ESMF_TimeIntervalSet(data_set%frequency,_RC)
-         end if
-      end if
 
-      if (file_reff_time /= '') then
-         allocate(data_set%reff_time)
-         call ESMF_TimeSet(data_set%reff_time, timeString=file_reff_time, _RC)
-      else
-         last_token = index(data_set%file_template,'%',back=.true.)
-         allocate(data_set%reff_time)
-         if (last_token.gt.0) then
-            call ESMF_TimeGet(current_time, yy=iyy, mm=imm, dd=idd,h=ihh, m=imn, s=isc  ,_RC)
-            token = data_set%file_template(last_token+1:last_token+2)
-            select case(token)
-            case("y4")
-               call ESMF_TimeSet(data_set%reff_time,yy=iyy,mm=1,dd=1,h=0,m=0,s=0,_RC)
-            case("m2")
-               call ESMF_TimeSet(data_set%reff_time,yy=iyy,mm=imm,dd=1,h=0,m=0,s=0,_RC)
-            case("d2")
-               call ESMF_TimeSet(data_set%reff_time,yy=iyy,mm=imm,dd=idd,h=0,m=0,s=0,_RC)
-            case("h2")
-               call ESMF_TimeSet(data_set%reff_time,yy=iyy,mm=imm,dd=idd,h=ihh,m=0,s=0,_RC)
-            case("n2")
-               call ESMF_TimeSet(data_set%reff_time,yy=iyy,mm=imm,dd=idd,h=ihh,m=imn,s=0,_RC)
-            case default
-               _FAIL("Unsupported token")
-            end select
-         else
-            data_set%reff_time = current_time
-         end if
-      end if
 
-      if (range_str /= '') then
-         if (allocated(data_set%valid_range)) deallocate(data_set%valid_range)
-         data_set%valid_range = mapl_HConfigAsTimeRange(config, keyString="valid_range", _RC)
+  function find(this, file_name, rc) result(formatter)
+    type (NetCDF4_FileFormatter), pointer :: formatter
+    class (ExtDataCollection), target, intent(inout) :: this
+    character(len=*), intent(in) :: file_name
+    integer, optional, intent(out) :: rc
 
-         last_token = index(data_set%file_template,'%',back=.true.)
-         if (last_token.gt.0) then
-            call ESMF_TimeGet(data_set%valid_range(1), yy=iyy, mm=imm, dd=idd,h=ihh, m=imn, s=isc  ,_RC)
-            token = data_set%file_template(last_token+1:last_token+2)
-            select case(token)
-            case("y4")
-               call ESMF_TimeSet(data_set%reff_time,yy=iyy,mm=1,dd=1,h=0,m=0,s=0,_RC)
-            case("m2")
-               call ESMF_TimeSet(data_set%reff_time,yy=iyy,mm=imm,dd=1,h=0,m=0,s=0,_RC)
-            case("d2")
-               call ESMF_TimeSet(data_set%reff_time,yy=iyy,mm=imm,dd=idd,h=0,m=0,s=0,_RC)
-            case("h2")
-               call ESMF_TimeSet(data_set%reff_time,yy=iyy,mm=imm,dd=idd,h=ihh,m=0,s=0,_RC)
-            case("n2")
-               call ESMF_TimeSet(data_set%reff_time,yy=iyy,mm=imm,dd=idd,h=ihh,m=imn,s=0,_RC)
-            case default
-               _FAIL("Unsupported token")
-            end select
-         end if
+    integer, pointer :: file_id
+    type (StringIntegerMapIterator) :: iter
+    integer :: status
 
-      end if
 
-      _UNUSED_DUMMY(unusable)
-      _RETURN(_SUCCESS)
+    file_id => this%file_ids%at(file_name)
+    if (associated(file_id)) then
+       formatter => this%formatters%at(file_id)
+    else
+       if (this%formatters%size() >= MAX_FORMATTERS) then
+          formatter => this%formatters%front()
+          call formatter%close(rc=status)
+          _VERIFY(status)
+          call this%formatters%erase(this%formatters%begin())
+          !deallocate(formatter)
+          nullify(formatter)
 
-      contains
+          iter = this%file_ids%begin()
+          do while (iter /= this%file_ids%end())
+             file_id => iter%value()
+             if (file_id == 1) then
+                call this%file_ids%erase(iter)
+                exit
+             end if
+             call iter%next()
+          end do
 
-         function get_string_with_default(config,selector) result(string)
-            type(ESMF_HConfig), intent(in) :: config
-            character(len=*), intent(In) :: selector
-            character(len=:), allocatable :: string
+          ! Fix the old file_id's accordingly
+          iter = this%file_ids%begin()
+          do while (iter /= this%file_ids%end())
+             file_id => iter%value()
+             file_id = file_id -1
+             call iter%next()
+          end do
 
-           string=''
-           if (ESMF_HConfigIsDefined(config,keyString=selector)) then
-               string = ESMF_HConfigAsString(config,keyString=selector,_RC)
-           end if
-         end function
+       end if
 
-   end function new_ExtDataCollection
+       allocate(formatter)
 
-   ! file_template accessors
-   function get_file_template(this) result(template)
-      class(ExtDataCollection), intent(in) :: this
-      character(len=:), allocatable :: template
+       call formatter%open(file_name, pFIO_READ, _RC)
+       call this%formatters%push_back(formatter)
+       deallocate(formatter)
+       formatter => this%formatters%back()
+       ! size() returns 64-bit integer;  cast to 32 bit for this usage.
+       call this%file_ids%insert(file_name, int(this%formatters%size()))
+    end if
+    _RETURN(_SUCCESS)
+  end function find
 
-      template = ''
-      if (allocated(this%file_template)) then
-         template = this%file_template
-      end if
-   end function get_file_template
+  subroutine unfind(this)
+    class (ExtDataCollection), intent(inout) :: this
 
-   ! frequency accessors
-   function get_frequency(this) result(freq)
-      class(ExtDataCollection), intent(in) :: this
-      type(ESMF_TimeInterval) :: freq
+    call this%formatter%close()
+    deallocate(this%formatter)
+    nullify(this%formatter)
 
-      freq = this%frequency
-   end function get_frequency
+  end subroutine unfind
 
-   ! reff_time accessors
-   subroutine get_reff_time(this, time)
-      class(ExtDataCollection), intent(in) :: this
-      type(ESMF_Time), intent(out), allocatable :: time
+end module pFIO_ExtDataCollectionMod
 
-      if (allocated(this%reff_time)) then
-         time = this%reff_time
-      end if
-   end subroutine get_reff_time
 
-   ! collection_id accessors
-   function get_collection_id(this) result(id)
-      class(ExtDataCollection), intent(in) :: this
-      integer :: id
+module pFIO_ExtCollectionVectorMod
+   use pFIO_ExtDataCollectionMod
 
-      id = this%collection_id
-   end function get_collection_id
+   ! Create a map (associative array) between names and pFIO_Attributes.
 
-   ! valid_range accessors
-   subroutine get_valid_range(this, valid_range)
-      class(ExtDataCollection), intent(in) :: this
-      type(ESMF_Time), intent(out), allocatable :: valid_range(:)
+#define _type type (ExtDataCollection)
+#define _vector ExtCollectionVector
+#define _iterator ExtCollectionVectorIterator
 
-      if (allocated(this%valid_range)) then
-         valid_range = this%valid_range
-      end if
-   end subroutine get_valid_range
+#include "templates/vector.inc"
 
-   ! Check if reff_time is allocated
-   function is_reff_time_allocated(this) result(is_allocated)
-      class(ExtDataCollection), intent(in) :: this
-      logical :: is_allocated
+end module pFIO_ExtCollectionVectorMod
 
-      is_allocated = allocated(this%reff_time)
-   end function is_reff_time_allocated
-
-   ! Check if valid_range is allocated
-   function is_valid_range_allocated(this) result(is_allocated)
-      class(ExtDataCollection), intent(in) :: this
-      logical :: is_allocated
-
-      is_allocated = allocated(this%valid_range)
-   end function is_valid_range_allocated
-
-end module mapl_ExtDataCollection_mod
