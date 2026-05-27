@@ -1,50 +1,56 @@
-module mapl_RegridderMgr_API_mod
-   use mapl_Regridder_mod, only: Regridder
-   use mapl_RegridderManager_mod, only: RegridderManager, regridder_manager, get_regridder_manager
-   use mapl_RegridderSpec_mod, only: RegridderSpec
-   use mapl_RegridderMethods_mod, only: &
-        REGRID_HINT_LOCAL, &
-        REGRID_HINT_FILE_WEIGHTS, &
-        REGRID_HINT_COMPUTE_TRANSPOSE, &
-        REGRID_METHOD_BILINEAR, &
-        REGRID_METHOD_BILINEAR_MONOTONIC, &
-        REGRID_METHOD_BILINEAR_ROTATE, &
-        REGRID_METHOD_CONSERVE, &
-        REGRID_METHOD_CONSERVE_MONOTONIC, &
-        REGRID_METHOD_VOTE, &
-        REGRID_METHOD_FRACTION, &
-        REGRID_METHOD_CONSERVE_2ND, &
-        REGRID_METHOD_PATCH, &
-        REGRID_METHOD_NEAREST_STOD, &
-        REGRID_METHOD_CONSERVE_HFLUX, &
-        UNSPECIFIED_REGRID_METHOD, &
-        regrid_method_string_to_int, &
-        regrid_method_int_to_string, &
-        generate_esmf_regrid_param
+module mapl_FieldBundle_API_mod
 
-   implicit none(type,external)
+   use ESMF, only: MAPL_FieldBundleAdd => ESMF_FieldBundleAdd
+   use mapl_FieldBundleType_Flag_mod
+   use mapl_VectorBasisKind_mod
+   use mapl_FieldBundleCreateImpl_mod, only: MAPL_FieldBundleCreate => FieldBundleCreate
+   use mapl_FieldBundleCreateImpl_mod, only: MAPL_FieldBundlesAreAliased => FieldBundlesAreAliased
+   use mapl_FieldBundleDestroyImpl_mod, only: MAPL_FieldBundleDestroy
+   use mapl_FieldBundleGetImpl_mod, only: MAPL_FieldBundleGet => FieldBundleGet
+   use mapl_FieldBundleGetByIndexImpl_mod, only: MAPL_FieldBundleGetByIndex => FieldBundleGetByIndex
+   use mapl_FieldBundleSetImpl_mod, only: MAPL_FieldBundleSet => FieldBundleSet
+   use mapl_FieldBundleInfo_mod, only: MAPL_FieldBundleInfoGetInternal => FieldBundleInfoGetInternal
+   use mapl_FieldBundleInfo_mod, only: MAPL_FieldBundleInfoSetInternal => FieldBundleInfoSetInternal
+   use mapl_FieldBundleGetPointerImpl_mod, only: MAPL_FieldBundleGetPointer => FieldBundleGetPointerToData
+   use mapl_FieldBundleCopyImpl_mod, only: MAPL_FieldBundleCopy => FieldBundleCopy
+   use mapl_FieldBundleMatch_mod, only: MAPL_FieldBundleSameData => FieldBundleSameData
+
+   implicit none
+
    private
 
-   public :: Regridder
-   public :: RegridderManager, regridder_manager, get_regridder_manager
-   public :: RegridderSpec
-   public :: REGRID_HINT_LOCAL
-   public :: REGRID_HINT_FILE_WEIGHTS
-   public :: REGRID_HINT_COMPUTE_TRANSPOSE
-   public :: REGRID_METHOD_BILINEAR
-   public :: REGRID_METHOD_BILINEAR_MONOTONIC
-   public :: REGRID_METHOD_BILINEAR_ROTATE
-   public :: REGRID_METHOD_CONSERVE
-   public :: REGRID_METHOD_CONSERVE_MONOTONIC
-   public :: REGRID_METHOD_VOTE
-   public :: REGRID_METHOD_FRACTION
-   public :: REGRID_METHOD_CONSERVE_2ND
-   public :: REGRID_METHOD_PATCH
-   public :: REGRID_METHOD_NEAREST_STOD
-   public :: REGRID_METHOD_CONSERVE_HFLUX
-   public :: UNSPECIFIED_REGRID_METHOD
-   public :: regrid_method_string_to_int
-   public :: regrid_method_int_to_string
-   public :: generate_esmf_regrid_param
+   ! Available to users
+   public :: MAPL_FieldBundleCreate
+   public :: MAPL_FieldBundlesAreAliased
+   public :: MAPL_FieldBundleDestroy
+   public :: MAPL_FieldBundleGet
+   public :: MAPL_FieldBundleGetByIndex
+   public :: MAPL_FieldBundleSet
+   public :: MAPL_FieldBundleAdd
+   public :: MAPL_FieldBundleGetPointer
+   public :: MAPL_FieldBundleCopy
+   public :: MAPL_FieldBundleSameData
+   ! Maybe these should be private?
+   public :: MAPL_FieldBundleInfoGetInternal
+   public :: MAPL_FieldBundleInfoSetInternal
 
-end module mapl_RegridderMgr_API_mod
+   public :: FieldBundleType_Flag
+   public :: FIELDBUNDLETYPE_INVALID
+   public :: FIELDBUNDLETYPE_BASIC
+   public :: FIELDBUNDLETYPE_VECTOR
+   public :: FIELDBUNDLETYPE_BRACKET
+   public :: FIELDBUNDLETYPE_VECTORBRACKET
+
+   public :: operator(==)
+   public :: operator(/=)
+
+   ! VectorBasisKind
+   public :: VectorBasisKind
+   public :: VECTOR_BASIS_KIND_INVALID
+   public :: VECTOR_BASIS_KIND_GRID
+   public :: VECTOR_BASIS_KIND_NS
+
+   ! Used internally by MAPL
+   ! Users shouldn't need these
+
+end module mapl_FieldBundle_API_mod
