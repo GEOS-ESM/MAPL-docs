@@ -1,20 +1,20 @@
 #include "MAPL.h"
 
-submodule (mapl_MaplGeom_mod) get_geom_smod
-   use mapl_GeomSpec_mod
-   use mapl_GeomUtilities_mod
+submodule (mapl_OuterMetaComponent_mod) get_geom_smod
+
    use mapl_ErrorHandling_mod
-   use pfio_FileMetadataMod, only: FileMetadata
-   use ESMF, only: ESMF_Info
-   use ESMF, only: ESMF_InfoGetFromHost
-   use ESMF, only: ESMF_InfoSet
+   implicit none(type,external)
 
 contains
-   
-   module function get_geom(this) result(geom)
+
+   module function get_geom(this, rc) result(geom)
       type(ESMF_Geom) :: geom
-      class(MaplGeom), intent(in) :: this
+      class(OuterMetaComponent), intent(inout) :: this
+      integer, intent(out), optional :: rc
+
       geom = this%geom
+
+      _RETURN(_SUCCESS)
    end function get_geom
 
 end submodule get_geom_smod
