@@ -1,18 +1,19 @@
 #include "MAPL.h"
 
-submodule (mapl_CubedSphereGeomSpec_mod) CubedSphereGeomSpec_get_horz_ij_index_smod
+submodule (mapl_LatLonGeomSpec_mod) get_horz_ij_index_smod
 
-   use MAPL_Constants, only: MAPL_PI_R8
+   use MAPL_Constants, only: MAPL_RADIANS_TO_DEGREES, MAPL_DEGREES_TO_RADIANS_R8
    use mapl_ErrorHandling_mod
    use ESMF, only: ESMF_GeomGet, ESMF_GeomType_Flag, ESMF_GEOMTYPE_GRID, ESMF_Grid
    use mapl_Geom_API_mod, only: mapl_GridGet
 
-   implicit none(type, external)
+   implicit none (type, external)
 
 contains
 
    module subroutine get_horz_ij_index_r4(this, lon, lat, ii, jj, geom, rc)
-      class(CubedSphereGeomSpec), intent(in) :: this
+
+      class(LatLonGeomSpec), intent(in) :: this
       real(kind=R4), intent(in) :: lon(:)
       real(kind=R4), intent(in) :: lat(:)
       integer, allocatable, intent(out) :: ii(:)
@@ -21,19 +22,31 @@ contains
       integer, optional, intent(out) :: rc
 
       integer :: status
-      real(kind=R8), allocatable :: tmp_lons(:), tmp_lats(:)
+      real(kind=R8), allocatable :: lon_r8(:), lat_r8(:)
+      real(kind=R8), allocatable :: lon_corners(:), lat_corners(:)
 
       _ASSERT(size(lat) == size(lon), 'lon/lat size mismatch')
-      tmp_lons = real(lon, kind=R8)
-      tmp_lats = real(lat, kind=R8)
+      lon_r8 = real(lon, kind=R8)
+      lat_r8 = real(lat, kind=R8)
 
-      call get_horz_ij_index_impl_(this, tmp_lons, tmp_lats, ii, jj, geom=geom, _RC)
+      ! Clamp to the axis domain to absorb R4->R8 rounding near boundaries.
+      ! A cell-centre coordinate at exactly +/-90 degrees in R4 may round to
+      ! a value slightly outside the R8 corner after promotion, causing a
+      ! false out-of-bounds result.  Corners are stored in degrees; convert
+      ! to radians before clamping to match the units of lon_r8/lat_r8.
+      lon_corners = this%lon_axis%get_corners() * MAPL_DEGREES_TO_RADIANS_R8
+      lat_corners = this%lat_axis%get_corners() * MAPL_DEGREES_TO_RADIANS_R8
+      lon_r8 = max(lon_corners(1), min(lon_corners(size(lon_corners)), lon_r8))
+      lat_r8 = max(lat_corners(1), min(lat_corners(size(lat_corners)), lat_r8))
+
+      call get_horz_ij_index_impl_(this, lon_r8, lat_r8, ii, jj, geom=geom, _RC)
 
       _RETURN(_SUCCESS)
    end subroutine get_horz_ij_index_r4
 
    module subroutine get_horz_ij_index_r8(this, lon, lat, ii, jj, geom, rc)
-      class(CubedSphereGeomSpec), intent(in) :: this
+
+      class(LatLonGeomSpec), intent(in) :: this
       real(kind=R8), intent(in) :: lon(:)
       real(kind=R8), intent(in) :: lat(:)
       integer, allocatable, intent(out) :: ii(:)
@@ -45,13 +58,14 @@ contains
 
       _ASSERT(size(lat) == size(lon), 'lon/lat size mismatch')
 
-      call get_horz_ij_index_impl_(this, lon, lat, ii, jj, geom=geom, _RC)
+       call get_horz_ij_index_impl_(this, lon, lat, ii, jj, geom=geom, _RC)
 
       _RETURN(_SUCCESS)
    end subroutine get_horz_ij_index_r8
 
    subroutine get_horz_ij_index_impl_(this, lon, lat, ii, jj, geom, rc)
-      class(CubedSphereGeomSpec), intent(in) :: this
+
+      class(LatLonGeomSpec), intent(in) :: this
       real(kind=R8), intent(in) :: lon(:)
       real(kind=R8), intent(in) :: lat(:)
       integer, allocatable, intent(out) :: ii(:)
@@ -59,40 +73,30 @@ contains
       type(ESMF_Geom), optional, intent(in) :: geom
       integer, optional, intent(out) :: rc
 
-      integer :: npts, status
-      real(kind=R8), allocatable :: xyz(:, :), max_abs(:), tmp_lons(:), tmp_lats(:)
-      real(kind=R8) :: shift0
-      logical :: stretched
-      real(kind=R8), parameter :: shift = 0.174532925199433d0
+      integer :: i, npts, status
+      real(kind=R8), allocatable :: lon_corners(:), lat_corners(:)
+      real(kind=R8) :: lon_value, lat_value
       type(ESMF_GeomType_Flag) :: geomtype
       type(ESMF_Grid) :: grid
       integer, allocatable :: interior(:)
 
       npts = size(lon)
       _ASSERT(size(lat) == npts, 'lon/lat size mismatch')
-      tmp_lons = lon
-      tmp_lats = lat
-      _RETURN_UNLESS(npts > 0)
 
       allocate(ii(npts), jj(npts))
 
-      call inverse_schmidt_(this%schmidt_parameters, npts, tmp_lons, tmp_lats, stretched)
+      lon_corners = this%lon_axis%get_corners()
+      lat_corners = this%lat_axis%get_corners()
 
-      shift0 = shift
-      if (stretched) shift0 = 0.0d0
-      tmp_lons = tmp_lons + shift0
+      do i = 1, npts
+         lon_value = lon(i) * MAPL_RADIANS_TO_DEGREES
+         lat_value = lat(i) * MAPL_RADIANS_TO_DEGREES
 
-      allocate(xyz(3, npts), max_abs(npts))
-      xyz(1, :) = cos(tmp_lats) * cos(tmp_lons)
-      xyz(2, :) = cos(tmp_lats) * sin(tmp_lons)
-      xyz(3, :) = sin(tmp_lats)
+         if (lon_value > 180.0d0) lon_value = lon_value - 360.0d0
 
-      max_abs = maxval(abs(xyz), dim=1)
-      xyz = xyz / spread(max_abs, dim=1, ncopies=3)
-
-      ii = -1
-      jj = -1
-      call calculate_(xyz(1, :), xyz(2, :), xyz(3, :), this%im_world, ii, jj)
+         ii(i) = search_axis_(lon_corners, lon_value, this%lon_axis%is_periodic())
+         jj(i) = search_axis_(lat_corners, lat_value, this%lat_axis%is_periodic())
+      end do
 
       if (present(geom)) then
          call ESMF_GeomGet(geom, geomtype=geomtype, rc=status)
@@ -111,109 +115,96 @@ contains
       end if
 
       _RETURN(_SUCCESS)
+
    end subroutine get_horz_ij_index_impl_
 
-   elemental subroutine calculate_(x, y, z, im_world, i, j)
-      real(kind=R8), intent(in) :: x
-      real(kind=R8), intent(in) :: y
-      real(kind=R8), intent(in) :: z
-      integer, intent(in) :: im_world
-      integer, intent(out) :: i
-      integer, intent(out) :: j
+   pure integer function search_axis_(corners, value_in, periodic) result(idx)
+      real(kind=R8), intent(in) :: corners(:)
+      real(kind=R8), intent(in) :: value_in
+      logical, intent(in) :: periodic
 
-      real(kind=R8) :: tolerance
-      real(kind=R8) :: dalpha
-      real(kind=R8), parameter :: sqr2 = 1.41421356237310d0
-      real(kind=R8), parameter :: alpha = 0.615479708670387d0
+      integer :: ncells
+      logical :: ascending, ok
+      real(kind=R8) :: value
 
-      dalpha = 2.0d0 * alpha / im_world
-      tolerance = epsilon(1.0d0)
-      if (abs(x - 1.0d0) <= tolerance) then
-         call angle_to_index_(y, z, i, j, im_world, dalpha, alpha, sqr2)
-      elseif (abs(y - 1.0d0) <= tolerance) then
-         call angle_to_index_(-x, z, i, j, im_world, dalpha, alpha, sqr2)
-         j = j + im_world
-      elseif (abs(z - 1.0d0) <= tolerance) then
-         call angle_to_index_(-x, -y, i, j, im_world, dalpha, alpha, sqr2)
-         j = j + im_world * 2
-      elseif (abs(x + 1.0d0) <= tolerance) then
-         call angle_to_index_(-z, -y, i, j, im_world, dalpha, alpha, sqr2)
-         j = j + im_world * 3
-      elseif (abs(y + 1.0d0) <= tolerance) then
-         call angle_to_index_(-z, x, i, j, im_world, dalpha, alpha, sqr2)
-         j = j + im_world * 4
-      elseif (abs(z + 1.0d0) <= tolerance) then
-         call angle_to_index_(y, x, i, j, im_world, dalpha, alpha, sqr2)
-         j = j + im_world * 5
+      idx = -1
+      ncells = size(corners) - 1
+      if (ncells <= 0) return
+
+      ascending = corners(ncells + 1) >= corners(1)
+      value = value_in
+
+      if (periodic) then
+         call normalize_periodic_(corners, value, ok)
+         if (.not. ok) return
+      else if (.not. in_bounds_(corners, value, ascending)) then
+         return
+      else if (value == corners(ncells + 1)) then
+         idx = ncells
+         return
       end if
 
-      if (i == 0) i = 1
-      if (i == im_world + 1) i = im_world
-   end subroutine calculate_
+      idx = binary_search_(corners, value, ascending)
+   end function search_axis_
 
-   elemental subroutine angle_to_index_(xval, yval, i, j, im_world, dalpha, alpha, sqr2)
-      real(kind=R8), intent(in) :: xval
-      real(kind=R8), intent(in) :: yval
-      integer, intent(out) :: i
-      integer, intent(out) :: j
-      integer, intent(in) :: im_world
-      real(kind=R8), intent(in) :: dalpha
-      real(kind=R8), intent(in) :: alpha
-      real(kind=R8), intent(in) :: sqr2
+   pure subroutine normalize_periodic_(corners, value, ok)
+      real(kind=R8), intent(in) :: corners(:)
+      real(kind=R8), intent(inout) :: value
+      logical, intent(out) :: ok
 
-      i = ceiling((atan(xval / sqr2) + alpha) / dalpha)
-      j = ceiling((atan(yval / sqr2) + alpha) / dalpha)
-      if (j == 0) j = 1
-      if (j == im_world + 1) j = im_world
-   end subroutine angle_to_index_
+      real(kind=R8) :: span
 
-   subroutine inverse_schmidt_(schmidt_parameters, npoints, lon_values, lat_values, is_stretched)
-      type(ESMF_CubedSphereTransform_Args), intent(in) :: schmidt_parameters
-      integer, intent(in) :: npoints
-      real(kind=R8), intent(inout) :: lon_values(npoints)
-      real(kind=R8), intent(inout) :: lat_values(npoints)
-      logical, intent(out) :: is_stretched
+      span = corners(size(corners)) - corners(1)
+      ok = span > 0.0d0
+      if (.not. ok) return
 
-      real(kind=R8) :: c2p1, c2m1, half_pi, two_pi
-      real(kind=R8), dimension(npoints) :: x, y, z, xx, yy, zz
-      logical, dimension(npoints) :: n_s
+      do while (value < corners(1))
+         value = value + span
+      end do
+      do while (value >= corners(size(corners)))
+         value = value - span
+      end do
+   end subroutine normalize_periodic_
 
-      is_stretched = (schmidt_parameters%target_lat /= undef_schmidt) .and. &
-           (schmidt_parameters%target_lon /= undef_schmidt) .and. &
-           (schmidt_parameters%stretch_factor /= undef_schmidt)
-      if (.not. is_stretched) return
+   pure logical function in_bounds_(corners, value, ascending) result(is_in_bounds)
+      real(kind=R8), intent(in) :: corners(:)
+      real(kind=R8), intent(in) :: value
+      logical, intent(in) :: ascending
 
-      c2p1 = 1.0d0 + schmidt_parameters%stretch_factor * schmidt_parameters%stretch_factor
-      c2m1 = 1.0d0 - schmidt_parameters%stretch_factor * schmidt_parameters%stretch_factor
-      half_pi = MAPL_PI_R8 / 2.0d0
-      two_pi = MAPL_PI_R8 * 2.0d0
-
-      x = cos(lat_values) * cos(lon_values - schmidt_parameters%target_lon)
-      y = cos(lat_values) * sin(lon_values - schmidt_parameters%target_lon)
-      z = sin(lat_values)
-
-      xx = sin(schmidt_parameters%target_lat) * x - cos(schmidt_parameters%target_lat) * z
-      yy = -y
-      zz = -cos(schmidt_parameters%target_lat) * x - sin(schmidt_parameters%target_lat) * z
-
-      n_s = (1.0d0 - abs(zz)) < 10.0d0**(-7)
-      where (n_s)
-         lon_values = 0.0d0
-         lat_values = half_pi * sign(1.0d0, zz)
-      elsewhere
-         lon_values = atan2(yy, xx)
-         lat_values = asin(zz)
-      end where
-
-      if (abs(c2m1) > 10.0d0**(-7)) then
-         lat_values = asin((c2m1 - c2p1 * sin(lat_values)) / (c2m1 * sin(lat_values) - c2p1))
+      if (ascending) then
+         is_in_bounds = value >= corners(1) .and. value <= corners(size(corners))
+      else
+         is_in_bounds = value <= corners(1) .and. value >= corners(size(corners))
       end if
+   end function in_bounds_
 
-      where (lon_values < 0.0d0)
-         lon_values = lon_values + two_pi
-      elsewhere (lon_values >= two_pi)
-         lon_values = lon_values - two_pi
-      end where
-   end subroutine inverse_schmidt_
+   pure integer function binary_search_(corners, value, ascending) result(idx)
+      real(kind=R8), intent(in) :: corners(:)
+      real(kind=R8), intent(in) :: value
+      logical, intent(in) :: ascending
 
-end submodule CubedSphereGeomSpec_get_horz_ij_index_smod
+      integer :: lower, upper, middle
+
+      lower = 1
+      upper = size(corners)
+      do while (upper - lower > 1)
+         middle = (lower + upper) / 2
+         if (ascending) then
+            if (value < corners(middle)) then
+               upper = middle
+            else
+               lower = middle
+            end if
+         else
+            if (value > corners(middle)) then
+               upper = middle
+            else
+               lower = middle
+            end if
+         end if
+      end do
+
+      idx = lower
+   end function binary_search_
+
+end submodule get_horz_ij_index_smod
