@@ -1,48 +1,25 @@
-module mapl_Geom_API_mod
-
-   use mapl_KeywordEnforcer_mod
-   use mapl_MaplGeom_mod, only: MaplGeom
-   use mapl_GeomSpec_mod, only: GeomSpec
-   use mapl_GeomManager_mod, only: GeomManager, geom_manager, get_geom_manager, get_mapl_geom
-   use mapl_GeomUtilities_mod, only: mapl_SameGeom, mapl_GeomGetId
-   use mapl_GeomAccessors_mod, only: mapl_GeomGet => GeomGet, &
-        mapl_GeomGetHorzIJIndex => GeomGetHorzIJIndex, &
-        mapl_GridGetHorzIJIndex => GridGetHorzIJIndex
-   use mapl_GridAccessors_mod, only: mapl_GridGet => GridGet, mapl_GridGetCoordinates => GridGetCoordinates, &
-        mapl_GridHasDE => grid_has_DE
-   use mapl_GridGetGlobal_mod, only: mapl_GridGetGlobalCellCountPerDim => GridGetGlobalCellCountPerDim
-   use mapl_GridComms_mod, only: MAPL_CollectiveGather3D => mapl_CollectiveGather3D, &
-                                  MAPL_CollectiveScatter3D => mapl_CollectiveScatter3D
-   use mapl_Subgrid_mod, only: mapl_Interval => Interval, mapl_make_subgrids => make_subgrids
-   use mapl_XYGeomSpec_mod,    only: XYGeomSpec, make_XYGeomSpec, XY_COORD_STANDARD, XY_COORD_ABI
-   use mapl_XYGeomFactory_mod, only: XYGeomFactory
-   use mapl_CubedSphereGeomSpec_mod, only: CubedSphereGeomSpec, make_CubedSphereGeomSpec
-   use mapl_CubedSphereDecomposition_mod, only: CubedSphereDecomposition, make_CubedSphereDecomposition
-   use esmf, only: ESMF_Grid, ESMF_Geom, ESMF_KIND_R4
-
-   implicit none(type,external)
-
+module mapl_State_API_mod
+   use mapl_StateGetImpl_mod, only: MAPL_StateGet => StateGet
+   use mapl_StateGetPointerImpl_mod, only: MAPL_StateGetPointer => StateGetPointer
+   use mapl_StateArithmeticParser_mod, only: MAPL_ParserVariablesInExpression => parser_variables_in_expression
+   use mapl_StateAddMethodImpl_mod, only: mapl_StateAddMethod
+   use mapl_StateAddMethodImpl_mod, only: CallbackMap
+   use mapl_StateAddMethodImpl_mod, only: CallbackMapIterator
+   use mapl_StateAddMethodImpl_mod, only: CallbackMethodWrapper
+   use mapl_StateAddMethodImpl_mod, only: get_callbacks
+   use mapl_StateGetGeomImpl_mod, only: MAPL_StateGetGeom => StateGetGeom
+   implicit none
    private
 
    ! Available to users
-   public :: mapl_GeomGet
-   public :: mapl_GridGet
-   public :: mapl_GridGetCoordinates
-   public :: mapl_GridGetHorzIJIndex, mapl_GeomGetHorzIJIndex
-   public :: mapl_GridGetGlobalCellCountPerDim
-   public :: MAPL_CollectiveGather3D, MAPL_CollectiveScatter3D
-   public :: mapl_GridHasDE
+   public :: MAPL_StateGet
+   public :: MAPL_StateGetPointer
+   public :: MAPL_ParserVariablesInExpression
+   public :: mapl_StateAddMethod
+   public :: CallbackMap
+   public :: CallbackMapIterator
+   public :: CallbackMethodWrapper
+   public :: get_callbacks
+   public :: MAPL_StateGetGeom
 
-   ! Used internally by MAPL
-   ! Users shouldn't need these
-   public :: MaplGeom
-   public :: mapl_SameGeom, mapl_GeomGetId
-   public :: GeomManager, geom_manager, get_geom_manager, get_mapl_geom
-   public :: GeomSpec
-   public :: mapl_Interval, mapl_make_subgrids
-   public :: XYGeomSpec, make_XYGeomSpec, XY_COORD_STANDARD, XY_COORD_ABI
-   public :: XYGeomFactory
-   public :: CubedSphereGeomSpec, make_CubedSphereGeomSpec
-   public :: CubedSphereDecomposition, make_CubedSphereDecomposition
-
-end module mapl_Geom_API_mod
+end module mapl_State_API_mod
