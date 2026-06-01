@@ -1,50 +1,76 @@
-module mapl_RegridderMgr_API_mod
-   use mapl_Regridder_mod, only: Regridder
-   use mapl_RegridderManager_mod, only: RegridderManager, regridder_manager, get_regridder_manager
-   use mapl_RegridderSpec_mod, only: RegridderSpec
-   use mapl_RegridderMethods_mod, only: &
-        REGRID_HINT_LOCAL, &
-        REGRID_HINT_FILE_WEIGHTS, &
-        REGRID_HINT_COMPUTE_TRANSPOSE, &
-        REGRID_METHOD_BILINEAR, &
-        REGRID_METHOD_BILINEAR_MONOTONIC, &
-        REGRID_METHOD_BILINEAR_ROTATE, &
-        REGRID_METHOD_CONSERVE, &
-        REGRID_METHOD_CONSERVE_MONOTONIC, &
-        REGRID_METHOD_VOTE, &
-        REGRID_METHOD_FRACTION, &
-        REGRID_METHOD_CONSERVE_2ND, &
-        REGRID_METHOD_PATCH, &
-        REGRID_METHOD_NEAREST_STOD, &
-        REGRID_METHOD_CONSERVE_HFLUX, &
-        UNSPECIFIED_REGRID_METHOD, &
-        regrid_method_string_to_int, &
-        regrid_method_int_to_string, &
-        generate_esmf_regrid_param
-
+module mapl_base_mod
+   use mapl_FileMetadataUtils_mod
+   use mapl_FileMetadataUtilsVector_mod
+   ! PackedTime moved to mp_utils/ - should be exported from mapl_mp_utils_export
+   ! Only export used entities from SimulationTime, StringTemplate, LocalDisplacementEnsemble (#4999)
+   ! Unused: set_reference_clock, fill_time_dict, fill_grads_template,
+   !         fill_grads_template_esmf, LocalDisplacementEnsemble
+   use mapl_Comms_mod, only: mapl_CommsScatterV => comms_scatterv, &
+                             mapl_CommsGatherV => comms_gatherv, &
+                             mapl_CommsAllGather => comms_allgather, &
+                             mapl_CommsAllGatherV => comms_allgatherv, &
+                             mapl_CommsAllReduceMin => comms_allreduce_min, &
+                             mapl_CommsAllReduceMax => comms_allreduce_max, &
+                             mapl_CommsAllReduceSum => comms_allreduce_sum, &
+                             mapl_CommsSend => comms_send, &
+                             mapl_CommsRecv => comms_recv, &
+                             mapl_CommsSendRecv => comms_sendrecv, &
+                             mapl_AM_I_ROOT => am_i_root, &
+                             mapl_AM_I_RANK => am_i_rank, &
+                             mapl_NPES => num_pes, &
+                             ArrayGather => array_gather, &
+                             ArrayScatter => array_scatter, &
+                             MAPL_ArrayGather => array_gather, &
+                             MAPL_ArrayScatter => array_scatter, &
+                             MAPL_ROOT => ROOT_PROCESS_ID
+   use mapl_ShmemComms_mod, only: mapl_CommsBcast, mapl_RoundRobinPEList, mapl_BcastShared
+   use mapl_SatVapor_mod, only: MAPL_EQsatSET, MAPL_EQsat
+   ! StringTemplate is in mp_utils/ - should be exported from mapl_mp_utils_export
+   use mapl_MemUtils_mod, only: MAPL_MemUtilsInit, MAPL_MemUtilsDisable, &
+         MAPL_MemUtilsWrite, MAPL_MemUtilsIsDisabled, MAPL_MemUtilsFree, &
+         MAPL_MemCommited, MAPL_MemUsed, MAPL_MemReport
+   use mapl_Sun_mod, only: MAPL_SunOrbitCreate, MAPL_SunOrbitCreateFromConfig, &
+         MAPL_SunOrbitCreated, MAPL_SunOrbitDestroy, MAPL_SunOrbitQuery, &
+         MAPL_SunGetInsolation, MAPL_SunGetSolarConstant, &
+          MAPL_SunGetDaylightDuration, MAPL_SunGetDaylightDurationMax, &
+          MAPL_SunGetLocalSolarHourAngle, MAPL_SunOrbit
+   use mapl_TimeInterpolation_mod, only: MAPL_Interp_Fac, MAPL_ClimInterpFac
+   use mapl_FileIO_mod, only: WRITE_PARALLEL
+   use mapl_SimpleBundleMod_impl_mod, only: MAPL_SimpleBundleCreate, MAPL_SimpleBundlePrint, &
+        MAPL_SimpleBundleGetIndex, MAPL_SimpleBundleDestroy, MAPL_SimpleBundle
+   use mapl_FileIOShared_mod, only: ArrDescr, ArrDescrInit, ArrDescrSet
+   use mapl_NCIO_mod, only: MAPL_VarRead, MAPL_VarWrite, MAPL_NCIOGetFileType, &
+                        MAPL_IOGetNonDimVars, MAPL_IOCountNonDimVars, &
+                        MAPL_IOChangeRes, MAPL_IOCountLevels
    implicit none(type,external)
    private
 
-   public :: Regridder
-   public :: RegridderManager, regridder_manager, get_regridder_manager
-   public :: RegridderSpec
-   public :: REGRID_HINT_LOCAL
-   public :: REGRID_HINT_FILE_WEIGHTS
-   public :: REGRID_HINT_COMPUTE_TRANSPOSE
-   public :: REGRID_METHOD_BILINEAR
-   public :: REGRID_METHOD_BILINEAR_MONOTONIC
-   public :: REGRID_METHOD_BILINEAR_ROTATE
-   public :: REGRID_METHOD_CONSERVE
-   public :: REGRID_METHOD_CONSERVE_MONOTONIC
-   public :: REGRID_METHOD_VOTE
-   public :: REGRID_METHOD_FRACTION
-   public :: REGRID_METHOD_CONSERVE_2ND
-   public :: REGRID_METHOD_PATCH
-   public :: REGRID_METHOD_NEAREST_STOD
-   public :: REGRID_METHOD_CONSERVE_HFLUX
-   public :: UNSPECIFIED_REGRID_METHOD
-   public :: regrid_method_string_to_int
-   public :: regrid_method_int_to_string
-   public :: generate_esmf_regrid_param
+   ! PackedTime exports moved to mapl_mp_utils_export (proper home)
+   public :: mapl_CommsBcast, mapl_CommsScatterV, mapl_CommsGatherV
+   public :: mapl_CommsAllGather, mapl_CommsAllGatherV
+   public :: mapl_CommsAllReduceMin, mapl_CommsAllReduceMax, mapl_CommsAllReduceSum
+   public :: mapl_CommsSend, mapl_CommsRecv, mapl_CommsSendRecv
+   public :: mapl_AM_I_ROOT, mapl_AM_I_RANK, mapl_NPES
+   public :: ArrayGather, ArrayScatter, MAPL_ROOT
+   public :: MAPL_ArrayGather, MAPL_ArrayScatter
+   public :: mapl_RoundRobinPEList, mapl_BcastShared
+   public :: MAPL_EQsatSET, MAPL_EQsat
+   ! StrTemplate moved to mapl_mp_utils_export
+   public :: MAPL_MemUtilsInit, MAPL_MemUtilsDisable
+   public :: MAPL_MemUtilsWrite, MAPL_MemUtilsIsDisabled, MAPL_MemUtilsFree
+   public :: MAPL_MemCommited, MAPL_MemUsed, MAPL_MemReport
+   public :: MAPL_SunOrbitCreate, MAPL_SunOrbitCreateFromConfig
+   public :: MAPL_SunOrbitCreated, MAPL_SunOrbitDestroy, MAPL_SunOrbitQuery
+   public :: MAPL_SunGetInsolation, MAPL_SunGetSolarConstant
+   public :: MAPL_SunGetDaylightDuration, MAPL_SunGetDaylightDurationMax
+   public :: MAPL_SunGetLocalSolarHourAngle, MAPL_SunOrbit
+   public :: MAPL_Interp_Fac, MAPL_ClimInterpFac
+   public :: WRITE_PARALLEL
+   public :: MAPL_SimpleBundleCreate, MAPL_SimpleBundlePrint
+   public :: MAPL_SimpleBundleGetIndex, MAPL_SimpleBundleDestroy, MAPL_SimpleBundle
+   public :: ArrDescr, ArrDescrInit, ArrDescrSet
+   public :: MAPL_VarRead, MAPL_VarWrite, MAPL_NCIOGetFileType
+   public :: MAPL_IOGetNonDimVars, MAPL_IOCountNonDimVars
+   public :: MAPL_IOChangeRes, MAPL_IOCountLevels
 
-end module mapl_RegridderMgr_API_mod
+end module mapl_base_mod
