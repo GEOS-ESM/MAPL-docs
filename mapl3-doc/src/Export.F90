@@ -1,21 +1,52 @@
-! Export umbrella for the MAPL.state library.
-module mapl_state_export
-
-   use mapl_StateArithmeticParser_mod, only: MAPL_ParserVariablesInExpression => parser_variables_in_expression
-   use mapl_StateAddMethodImpl_mod, only: mapl_StateAddMethod
-   use mapl_StateDestroyImpl_mod, only: MAPL_StateDestroy
-   use mapl_StateGetImpl_mod, only: MAPL_StateGet => StateGet
-   use mapl_StateGetGeomImpl_mod, only: MAPL_StateGetGeom => StateGetGeom
-   use mapl_StateGetPointerImpl_mod, only: MAPL_StateGetPointer => StateGetPointer
-
+! Public Export umbrella for the MAPL.mp_utils layer.
+! Re-exports only the symbols that are part of MAPL's public API
+! (i.e., entities carrying the MAPL_ prefix).
+! This is what mapl/MAPL.F90 imports from.
+! For internal MAPL use, see mapl_mp_utils_internal.
+module mapl_mp_utils_export
+   use mapl_mp_utils_internal
    implicit none
    private
 
-   public :: MAPL_ParserVariablesInExpression
-   public :: mapl_StateAddMethod
-   public :: MAPL_StateDestroy
-   public :: MAPL_StateGet
-   public :: MAPL_StateGetGeom
-   public :: MAPL_StateGetPointer
+   ! Statistics
+   public :: MAPL_MaxMin
+   public :: MAPL_AreaMean
 
-end module mapl_state_export
+   ! Memory info
+   public :: MAPL_MemInfoWrite
+
+   ! Time packing
+   public :: MAPL_PackTime
+   public :: MAPL_UnpackTime
+   public :: MAPL_UnpackDate
+   public :: MAPL_UnpackDateTime
+
+   ! Checkpoint
+   public :: MAPL_GetCheckpointSubdir
+
+   ! PackedTime functions with MAPL_ prefix
+   public :: MAPL_PackedDateCreate
+   public :: MAPL_PackedTimeCreate
+   public :: MAPL_PackedDateTimeCreate
+   public :: MAPL_ESMFTimeFromPacked
+
+   ! Backward compatibility: Unprefixed names (TODO: remove after client repos migrated)
+   ! See issue #5011 - these should be removed once GEOSgcm and other clients updated
+   public :: PackedDateCreate
+   public :: PackedTimeCreate
+   public :: PackedDateTimeCreate
+   public :: ESMFTimeFromPacked
+   public :: UnpackDate
+   public :: UnpackTime
+   public :: UnpackDateTime
+   public :: StrTemplate
+
+   public :: fill_grads_template
+   public :: fill_grads_template_esmf
+   
+   public :: mapl_SyncSharedMemory
+   public :: mapl_GetNodeInfo
+   public :: mapl_InitializeShmem
+   public :: mapl_FinalizeShmem
+
+end module mapl_mp_utils_export
