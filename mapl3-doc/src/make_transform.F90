@@ -1,159 +1,136 @@
 #include "MAPL.h"
 
-submodule (mapl_GeomAspect_mod) make_transform_smod
+submodule (mapl_VerticalGridAspect_mod) make_transform_smod
 
-   use mapl_VerticalGridAspect_mod
-   use mapl_VerticalStaggerLoc_mod
-   use mapl_Enums_internal, only: MAPL_NORMALIZE_NONE, operator(==)
    use mapl_ModelVerticalGrid_mod, only: ModelVerticalGrid
+   use mapl_ComponentDriver_mod
 
    implicit none(type,external)
+
 contains
 
    module function make_transform(src, dst, other_aspects, rc) result(transform)
       class(ExtensionTransform), allocatable :: transform
-      class(GeomAspect), intent(in) :: src
-      class(StateItemAspect), intent(in)  :: dst
-      type(AspectMap), target, intent(in)  :: other_aspects
+      class(VerticalGridAspect), intent(in) :: src
+      class(StateItemAspect), intent(in) :: dst
+      type(AspectMap), target, intent(in) :: other_aspects
       integer, optional, intent(out) :: rc
 
+      class(ComponentDriver), pointer :: v_in_coupler
+      class(ComponentDriver), pointer :: v_out_coupler
+      type(ESMF_Field) :: v_in_field, v_out_field
+      type(VerticalGridAspect) :: dst_
+      type(NormalizationAspect) :: norm_aspect
+      type(MAPL_NormalizationType) :: norm_type
+      type(AspectMap) :: coord_aspects
+      character(:), allocatable :: units
+      character(:), allocatable :: physical_dimension
+      type(VerticalCoordinateDirection) :: src_alignment, dst_alignment
+      logical :: grids_match
+      logical :: needs_normalization
+      type(VerticalRegridParam) :: regrid_param
       integer :: status
-      type(GeomAspect) :: dst_
-      type(EsmfRegridderParam) :: regridder_param
-      type(NormalizationMetadata) :: norm_metadata
-      logical :: use_normalization
 
-      allocate(transform,source=NullTransform()) ! just in case
-      dst_ = to_GeomAspect(dst, _RC)
-      deallocate(transform)
-
-      ! Handle mirror case - needs geometry extension
       if (src%is_mirror()) then
          allocate(transform, source=ExtendTransform())
          _RETURN(_SUCCESS)
       end if
 
-      ! Standard or normalized regridding case
-      regridder_param = get_regridder_param(src, dst_, _RC)
-      
-      ! Check if normalization should be used (error handling first)
-      use_normalization = should_use_normalization(regridder_param, other_aspects, &
-                                                     norm_metadata, status)
-      _VERIFY(status)
-      
-      ! Build appropriate transform based on normalization decision
-      if (use_normalization) then
-         transform = build_normalized_regrid_transform(src%geom, dst_%geom, &
-                                                        regridder_param, other_aspects, &
-                                                        norm_metadata, _RC)
-      else
-         allocate(transform, source=RegridTransform(src%geom, dst_%geom, regridder_param))
+      allocate(transform, source=NullTransform()) ! just in case
+      dst_ = to_VerticalGridAspect(dst, _RC)
+
+      ! Query NormalizationAspect to determine if normalization is needed
+      ! for conservative vertical regridding. If NormalizationAspect is not present,
+      ! default to no normalization (status will be non-zero).
+      needs_normalization = .false.
+      if (dst_%regrid_method == VERTICAL_REGRID_CONSERVATIVE) then
+         norm_aspect = to_NormalizationAspect(other_aspects, rc=status)
+         if (status == _SUCCESS) then
+            norm_type = norm_aspect%get_normalization_type(_RC)
+            needs_normalization = (norm_type /= MAPL_NORMALIZE_NONE)
+         end if
       end if
+
+      physical_dimension = find_common_physical_dimension(src, dst_, _RC)
+      units = dst_%vertical_grid%get_units(physical_dimension, _RC)
+
+      ! Build aspect map for coordinate field creation
+      coord_aspects = other_aspects
+      call coord_aspects%insert(UNITS_ASPECT_ID, UnitsAspect(units))
+
+      v_in_field = src%vertical_grid%get_coordinate_field(physical_dimension, coord_aspects, _RC)
+      select type (vg => src%vertical_grid)
+      type is (ModelVerticalGrid)
+         v_in_field = vg%get_coordinate_field_with_coupler(physical_dimension, &
+              coord_aspects, coupler=v_in_coupler, _RC)
+      class default
+         v_in_coupler => null()
+      end select
+
+      v_out_field = dst_%vertical_grid%get_coordinate_field(physical_dimension, coord_aspects, _RC)
+      select type (vg => dst_%vertical_grid)
+      type is (ModelVerticalGrid)
+         v_out_field = vg%get_coordinate_field_with_coupler(physical_dimension, &
+              coord_aspects, coupler=v_out_coupler, _RC)
+      class default
+         v_out_coupler => null()
+      end select
+
+      ! Get resolved alignments
+      src_alignment = src%get_resolved_alignment()
+      dst_alignment = dst_%get_resolved_alignment()
+
+      ! Check if grids are the same (degenerate case)
+      grids_match = dst_%vertical_grid%get_id() == src%vertical_grid%get_id()
+      if (.not. grids_match) then
+         grids_match = src%vertical_grid%matches(dst_%vertical_grid)
+      end if
+
+      ! If grids match AND alignments match, no transform needed
+      if (grids_match .and. (src_alignment == dst_alignment)) then
+         deallocate(transform)
+         allocate(transform, source=NullTransform())
+         _RETURN(_SUCCESS)
+      end if
+
+      ! Build regrid parameters
+      regrid_param%stagger_in = src%vertical_stagger
+      regrid_param%stagger_out = dst_%vertical_stagger
+      regrid_param%method = dst_%regrid_method
+      regrid_param%src_alignment = src_alignment
+      regrid_param%dst_alignment = dst_alignment
+      regrid_param%is_degenerate_case = grids_match
+      regrid_param%needs_normalization = needs_normalization
+
+      deallocate(transform)
+      transform = VerticalRegridTransform(v_in_field, v_in_coupler, v_out_field, v_out_coupler, regrid_param)
 
       _RETURN(_SUCCESS)
    end function make_transform
 
-   !---------------------------------------------------------------------------
-   ! Helper: Determine if normalization should be applied
-   !---------------------------------------------------------------------------
-   function should_use_normalization(regridder_param, other_aspects, norm_metadata, rc) result(use_it)
-      logical :: use_it
-      type(EsmfRegridderParam), intent(in) :: regridder_param
-      type(AspectMap), target, intent(in) :: other_aspects
-      type(NormalizationMetadata), intent(out) :: norm_metadata
-      integer, optional, intent(out) :: rc
-
-      integer :: status
-      type(NormalizationAspect) :: norm_aspect
-      type(MAPL_NormalizationType) :: norm_type
-      real :: scale_factor
-
-      use_it = .false.
-
-      ! Only conservative regridding can use integrated normalization
-      _RETURN_UNLESS(regridder_param%is_conservative())
-
-      ! Try to get normalization aspect (may not exist - that's OK)
-      norm_aspect = to_NormalizationAspect(other_aspects, rc=status)
-      _RETURN_UNLESS(status == _SUCCESS)
-
-      ! Check if normalization is actually requested
-      norm_type = norm_aspect%get_normalization_type(_RC)
-      _RETURN_IF(norm_type == MAPL_NORMALIZE_NONE)
-
-      ! Get scale factor and verify it succeeded
-      scale_factor = norm_aspect%get_scale_factor(rc=status)
-      _VERIFY(status)
-
-      ! Build normalization metadata (now safe - all inputs validated)
-      norm_metadata = NormalizationMetadata( &
-           normalization_type=norm_type, &
-           normalization_scale=scale_factor)
-
-      use_it = .true.
-      _RETURN(_SUCCESS)
-   end function should_use_normalization
-
-   !---------------------------------------------------------------------------
-   ! Helper: Build a regrid transform with integrated normalization
-   !---------------------------------------------------------------------------
-   function build_normalized_regrid_transform(src_geom, dst_geom, regridder_param, &
-                                                other_aspects, norm_metadata, rc) result(transform)
-      class(ExtensionTransform), allocatable :: transform
-      type(ESMF_Geom), intent(in) :: src_geom, dst_geom
-      type(EsmfRegridderParam), intent(in) :: regridder_param
-      type(AspectMap), target, intent(in) :: other_aspects
-      type(NormalizationMetadata), intent(in) :: norm_metadata
-      integer, optional, intent(out) :: rc
-
-      type(VerticalGridAspect) :: vert_aspect
-      class(VerticalGrid), pointer :: vert_grid
-      type(ESMF_Field) :: vcoord_field
-      class(ComponentDriver), pointer :: vcoord_coupler
+   module function find_common_physical_dimension(src, dst, rc) result(physical_dimension)
       character(:), allocatable :: physical_dimension
-      type(AspectMap) :: coord_aspects
-      type(MAPL_NormalizationType) :: norm_type
+      class(VerticalGridAspect), intent(in) :: src
+      class(VerticalGridAspect), intent(in) :: dst
+      integer, optional, intent(out) :: rc
+
+      type(StringVector) :: vec_in
+      type(StringVector) :: vec_out
+      integer :: i
       integer :: status
-      type(VerticalStaggerLoc) :: vertical_stagger
-      logical :: has_layers
 
-       ! Get vertical grid from aspect map
-       vert_aspect = to_VerticalGridAspect(other_aspects, _RC)
-       vert_grid => vert_aspect%get_vertical_grid(_RC)
+      physical_dimension = 'not found'
+      vec_in = src%vertical_grid%get_supported_physical_dimensions()
+      vec_out = dst%vertical_grid%get_supported_physical_dimensions()
 
-       ! Only build a normalized transform if the field has vertical layers.
-       ! This is determined by the vertical stagger: any stagger other than
-       ! VERTICAL_STAGGER_NONE implies the presence of layers.
-       vertical_stagger = vert_aspect%get_vertical_stagger(_RC)
-       has_layers = (vertical_stagger /= VERTICAL_STAGGER_NONE)
-       if (.not. has_layers) then
-          allocate(transform, source=RegridTransform(src_geom, dst_geom, regridder_param))
-          _RETURN(_SUCCESS)
-       end if
+      do i = 1, vec_in%size()
+         if (find(vec_out%begin(), vec_out%end(), vec_in%of(i)) /= vec_out%end()) then
+            physical_dimension = vec_in%of(i)
+            _RETURN(_SUCCESS)
+         end if
+      end do
 
-      ! Determine physical dimension from normalization type
-      norm_type = norm_metadata%get_normalization_type()
-      physical_dimension = norm_type%get_physical_dimension()
-
-      ! Get coordinate field, with coupler for ModelVerticalGrid case
-      coord_aspects = other_aspects
-      vcoord_field = vert_grid%get_coordinate_field(physical_dimension, coord_aspects, _RC)
-      select type (vert_grid)
-      type is (ModelVerticalGrid)
-         vcoord_field = vert_grid%get_coordinate_field_with_coupler(physical_dimension, &
-                                                                    coord_aspects, &
-                                                                    coupler=vcoord_coupler, _RC)
-      class default
-         vcoord_coupler => null()
-      end select
-
-      ! Create transform with integrated normalization support
-      allocate(transform, source=RegridTransform(src_geom, dst_geom, regridder_param, &
-                                                 vcoord_field=vcoord_field, &
-                                                 vcoord_coupler=vcoord_coupler, &
-                                                 norm_metadata=norm_metadata))
-
-      _RETURN(_SUCCESS)
-   end function build_normalized_regrid_transform
+      _FAIL('No common physical dimension found between source and destination VerticalGridAspect')
+   end function find_common_physical_dimension
 
 end submodule make_transform_smod

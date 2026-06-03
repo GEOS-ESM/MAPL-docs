@@ -1,52 +1,99 @@
-! Public Export umbrella for the MAPL.mp_utils layer.
-! Re-exports only the symbols that are part of MAPL's public API
-! (i.e., entities carrying the MAPL_ prefix).
-! This is what mapl/MAPL.F90 imports from.
-! For internal MAPL use, see mapl_mp_utils_internal.
-module mapl_mp_utils_export
-   use mapl_mp_utils_internal
+! Export umbrella for the MAPL utils layer.
+! Defines the public API of utils/ for external consumers.
+! Uses mapl_utils_internal and re-exports only the intended public symbols.
+module mapl_utils_export
+
+   use mapl_utils_internal
+
    implicit none
    private
 
-   ! Statistics
-   public :: MAPL_MaxMin
-   public :: MAPL_AreaMean
+   ! Error handling
+   public :: MAPL_Assert
+   public :: MAPL_Verify
+   public :: MAPL_Return
+   public :: MAPL_Deprecated
+   public :: MAPL_SetFailOnDeprecated
+   public :: MAPL_RTRN
+   public :: MAPL_Vrfy
+   public :: MAPL_ASRT
+   public :: MAPL_abort
+   public :: MAPL_set_abort_handler
+   public :: MAPL_SUCCESS
+   public :: MAPL_UNKNOWN_ERROR
+   public :: MAPL_NO_SUCH_PROPERTY
+   public :: MAPL_NO_SUCH_VARIABLE
+   public :: MAPL_TYPE_MISMATCH
+   public :: MAPL_UNSUPPORTED_TYPE
+   public :: MAPL_VALUE_NOT_SUPPORTED
+   public :: MAPL_NO_DEFAULT_VALUE
+   public :: MAPL_DUPLICATE_KEY
+   public :: MAPL_STRING_TOO_SHORT
+
+   ! Keyword enforcer
+   public :: KeywordEnforcer
+
+   ! String types and utilities
+   public :: String
+   public :: split
+   public :: to_lower
+   public :: to_upper
+   public :: capitalize
+   public :: is_alpha
+   public :: is_alpha_only
+   public :: is_numeric
+   public :: is_alphanumeric
+   public :: to_string
+   public :: to_character_array
+   public :: lowercase
+   public :: uppercase
+   public :: is_digit
+   public :: get_ascii_interval
+   public :: is_alphanum_character
+   public :: is_lower_character
+   public :: is_upper_character
+
+   ! OS / filesystem
+   public :: mapl_GetCurrentWorkingDirectory
+   public :: mapl_ChangeDirectory
+   public :: mapl_MakeDirectory
+   public :: mapl_DirectoryExists
+   public :: mapl_RemoveDirectory
+   public :: mapl_RemoveFile
+   public :: mapl_PushDirectory
+   public :: mapl_PopDirectory
+   public :: mapl_ClearDirectoryStack
+   public :: mapl_PathJoin
+   public :: mapl_MakeSymbolicLink
+   public :: get_checkpoint_subdir
+   public :: get_file_extension
+   public :: get_file_basename
 
    ! Memory info
-   public :: MAPL_MemInfoWrite
+   public :: MemInfo
+   public :: MemInfoWrite
 
-   ! Time packing
-   public :: MAPL_PackTime
-   public :: MAPL_UnpackTime
-   public :: MAPL_UnpackDate
-   public :: MAPL_UnpackDateTime
-
-   ! Checkpoint
-   public :: MAPL_GetCheckpointSubdir
-
-   ! PackedTime functions with MAPL_ prefix
-   public :: MAPL_PackedDateCreate
-   public :: MAPL_PackedTimeCreate
-   public :: MAPL_PackedDateTimeCreate
-   public :: MAPL_ESMFTimeFromPacked
-
-   ! Backward compatibility: Unprefixed names (TODO: remove after client repos migrated)
-   ! See issue #5011 - these should be removed once GEOSgcm and other clients updated
-   public :: PackedDateCreate
-   public :: PackedTimeCreate
-   public :: PackedDateTimeCreate
-   public :: ESMFTimeFromPacked
+   ! Time utilities
+   public :: PackDate
+   public :: PackDateTime
    public :: UnpackDate
-   public :: UnpackTime
-   public :: UnpackDateTime
-   public :: StrTemplate
+   ! UnpackDateTime removed - conflicts with mp_utils version, see issue #5011
+   ! public :: UnpackDateTime
 
-   public :: fill_grads_template
-   public :: fill_grads_template_esmf
-   
-   public :: mapl_SyncSharedMemory
-   public :: mapl_GetNodeInfo
-   public :: mapl_InitializeShmem
-   public :: mapl_FinalizeShmem
+   ! ISO8601 date/time conversion
+   public :: convert_ISO8601_to_integer_time
+   public :: convert_ISO8601_to_integer_date
+   public :: ISO8601Date
+   public :: ISO8601Time
+   public :: ISO8601DateTime
+   public :: ISO8601Duration
+   public :: ISO8601Interval
 
-end module mapl_mp_utils_export
+   ! ESMF info keys
+   ! KEY_UNITS and KEY_TYPEKIND excluded: values differ from mapl_HistoryConstants_mod
+   ! homonyms; consumers needing them should use mapl_esmf_info_keys_mod directly.
+
+   ! Validation
+   public :: is_valid_name
+
+end module mapl_utils_export

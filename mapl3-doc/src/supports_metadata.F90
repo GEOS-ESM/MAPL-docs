@@ -1,30 +1,38 @@
 #include "MAPL.h"
 
-submodule (mapl_XYGeomSpec_mod) supports_metadata_smod
+submodule (mapl_EASEGeomSpec_mod) supports_metadata_smod
+   use mapl_GeomSpec_mod
+   use mapl_EASEConversion_mod
+   use pfio
    use mapl_ErrorHandling_mod
-   use pfio, only: FileMetadata, Attribute
-   implicit none
+   implicit none (type, external)
 
 contains
 
-   ! A file metadata object represents an XY grid if it has a
-   ! 'grid_type' global attribute equal to 'XY' (set by the MAPL2
-   ! XYGridFactory via append_metadata).
+   ! A FileMetadata object is an EASE grid if its 'lon' (or 'longitude')
+   ! dimension count matches one of the known EASE grid column counts.
    logical module function supports_metadata_(this, file_metadata, rc) result(supports)
-      class(XYGeomSpec), intent(in) :: this
-      type(FileMetadata), intent(in) :: file_metadata
-      integer, optional, intent(out) :: rc
+      class(EASEGeomSpec), intent(in) :: this
+      type(FileMetadata),  intent(in) :: file_metadata
+      integer, optional,   intent(out) :: rc
 
-      integer :: status
-      character(len=:), allocatable :: grid_type
-      type(Attribute), pointer :: attr
+      integer :: status, im
+      character(:), allocatable :: grid_name
 
-      supports = file_metadata%has_attribute('grid_type')
-      _RETURN_UNLESS(supports)
+      supports = .false.
 
-      attr => file_metadata%get_attribute('grid_type', _RC)
-      grid_type = attr%get_string(_RC)
-      supports = (grid_type == 'XY')
+      ! Try 'lon' first, then 'longitude'
+      if (file_metadata%has_dimension('lon')) then
+         im = file_metadata%get_dimension('lon', _RC)
+      else if (file_metadata%has_dimension('longitude')) then
+         im = file_metadata%get_dimension('longitude', _RC)
+      else
+         _RETURN(_SUCCESS)
+      end if
+
+      ! If get_ease_gridname_by_cols succeeds, this is a recognized EASE grid
+      grid_name = get_ease_gridname_by_cols(im, rc=status)
+      supports = (status == _SUCCESS)
 
       _RETURN(_SUCCESS)
       _UNUSED_DUMMY(this)
