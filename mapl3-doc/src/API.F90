@@ -1,32 +1,88 @@
-! Export umbrella for the MAPL.field library.
-module mapl_field_api
+! Export umbrella for the MAPL superstructure/generic layer.
+! Public API exposed to external consumers.
+module mapl_generic_api
 
-   use ESMF, only: MAPL_FieldBundleAdd => ESMF_FieldBundleAdd
-   use mapl_FieldPointerUtilities_mod, only: MAPL_FieldClone => FieldClone
-   use mapl_FieldCreateImpl_mod, only: MAPL_FieldCreate
-   use mapl_FieldCreateImpl_mod, only: MAPL_FieldEmptyComplete
-   use mapl_FieldCreateImpl_mod, only: MAPL_FieldsAreAliased
-   use mapl_FieldGetImpl_mod, only: MAPL_FieldGet => FieldGet
-   use mapl_FieldSetImpl_mod, only: MAPL_FieldSet => FieldSet
-   use mapl_FieldFillImpl_mod, only: MAPL_FieldFill => FieldFill
-   use mapl_FieldPointerUtilities_mod, only: MAPL_AssignFptr => assign_fptr
-   use mapl_FieldPointerUtilities_mod, only: FieldGetLocalElementCount
-   use mapl_RestartModes_mod, only: MAPL_RESTART_REQUIRED, MAPL_RESTART_SKIP
+   use mapl_UserSetServices_mod, only: user_setservices, AbstractUserSetServices, DSOSetServices
+
+   use mapl_OpenMP_Support_mod, only: mapl_find_bounds => find_bounds
+   use mapl_OpenMP_Support_mod, only: mapl_get_num_threads => get_num_threads
+   use mapl_OpenMP_Support_mod, only: mapl_get_current_thread => get_current_thread
+
+   use mapl_Generic_mod
+   use mapl_GenericGridComp_mod
+   use mapl_VariableSpec_mod
+
+   use mapl_ComponentSpec_mod
+   use mapl_ChildSpec_mod
+   use mapl_RestartHandler_mod
 
    implicit none
    private
 
-   public :: MAPL_FieldBundleAdd
-   public :: MAPL_FieldClone
-   public :: MAPL_FieldCreate
-   public :: MAPL_FieldEmptyComplete
-   public :: MAPL_FieldsAreAliased
-   public :: MAPL_FieldGet
-   public :: MAPL_FieldSet
-   public :: MAPL_FieldFill
-   public :: MAPL_AssignFptr
-   public :: FieldGetLocalElementCount
-   public :: MAPL_RESTART_REQUIRED
-   public :: MAPL_RESTART_SKIP
+   ! These should be available to users
+   public :: mapl_GridCompAddVarSpec
+   public :: mapl_GridCompAddSpec
+   public :: mapl_GridCompAdvertiseVariable
+   public :: mapl_GridCompIsGeneric
+   public :: mapl_GridCompIsUser
 
-end module mapl_field_api
+   public :: mapl_GridCompGet
+   public :: mapl_GridCompSet
+   public :: mapl_GridCompSetEntryPoint
+
+   public :: mapl_GridCompAddChild
+   public :: mapl_GridCompGetChildName
+   public :: mapl_GridCompRunChild
+   public :: mapl_GridCompRunChildren
+
+   public :: mapl_GridCompGetInternalState
+
+   public :: mapl_GridCompSetGeometry
+
+   public :: mapl_GridcompGetResource
+
+   public :: mapl_ClockGet
+
+   ! Accessors
+!!$   public :: mapl_GetOrbit
+!!$   public :: mapl_GetCoordinates
+!!$   public :: mapl_GetLayout
+
+   public :: mapl_GridCompSetGeom
+   public :: mapl_GridCompSetVerticalGrid
+
+   ! Connections
+   public :: mapl_GridCompAddConnection
+   public :: mapl_GridCompAddConnectivity  ! Legacy name - temporary backward compatibility
+   public :: mapl_GridCompReexport
+   public :: mapl_GridCompConnectAll
+
+   ! Timers
+   public :: mapl_GridCompTimerStart
+   public :: mapl_GridCompTimerStop
+
+   ! Spec types
+   public :: mapl_STATEITEM_STATE, mapl_STATEITEM_FIELDBUNDLE
+   public :: mapl_STATEITEM_SERVICE, mapl_STATEITEM_VECTOR
+
+   public :: mapl_UserCompGetInternalState, MAPL_UserCompSetInternalState
+
+   public :: user_setservices
+   public :: AbstractUserSetServices
+   public :: DSOSetServices
+
+   public :: mapl_find_bounds
+   public :: mapl_get_num_threads
+   public :: mapl_get_current_thread
+
+   public :: mapl_GridCompCreate
+   public :: mapl_GenericSetServices
+
+   public :: VariableSpec
+   public :: make_VariableSpec
+
+   public :: ChildSpec
+   
+   public :: CheckpointControls
+   public :: RestartHandler
+end module mapl_generic_api
