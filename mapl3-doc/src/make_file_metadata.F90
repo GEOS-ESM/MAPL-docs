@@ -1,31 +1,21 @@
 #include "MAPL.h"
 
-submodule (mapl_LatLonGeomFactory_mod) make_file_metadata_smod
-
-   use mapl_GeomSpec_mod
-   use mapl_LonAxis_mod
-   use mapl_LatAxis_mod
-   use mapl_LatLonDecomposition_mod
-   use mapl_LatLonGeomSpec_mod
-   use mapl_MinMax_mod
+submodule (mapl_XYGeomFactory_mod) make_file_metadata_smod
    use mapl_ErrorHandling_mod
-   use MAPL_Constants
-   use pFIO
-   use gFTL2_StringVector
-   use esmf
    use mapl_KeywordEnforcer_mod, only: KE => KeywordEnforcer
-
-   implicit none (type, external)
+   use pfio
+   use esmf
+   implicit none
 
 contains
 
    module function make_file_metadata(this, geom_spec, unusable, chunksizes, rc) result(file_metadata)
       use mapl_KeywordEnforcer_mod
       type(FileMetadata) :: file_metadata
-      class(LatLonGeomFactory), intent(in) :: this
+      class(XYGeomFactory), intent(in) :: this
+      class(GeomSpec), intent(in) :: geom_spec
       class(KE), optional, intent(in) :: unusable
       integer, optional, intent(in) :: chunksizes(:)
-      class(GeomSpec), intent(in) :: geom_spec
       integer, optional, intent(out) :: rc
 
       integer :: status
@@ -33,10 +23,10 @@ contains
       file_metadata = FileMetadata()
 
       select type (geom_spec)
-      type is (LatLonGeomSpec)
+      type is (XYGeomSpec)
          file_metadata = typesafe_make_file_metadata(geom_spec, chunksizes=chunksizes, _RC)
       class default
-         _FAIL('geom_spec is not of dynamic type LatLonGeomSpec.')
+         _FAIL('geom_spec is not of dynamic type XYGeomSpec.')
       end select
 
       _RETURN(_SUCCESS)
