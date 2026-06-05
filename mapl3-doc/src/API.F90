@@ -1,44 +1,89 @@
-module mapl_base_api
-   use mapl_FileMetadataUtils_mod
-   use mapl_FileMetadataUtilsVector_mod
-   use mapl_SatVapor_mod, only: MAPL_EQsatSET, MAPL_EQsat
-   ! StringTemplate is in mp_utils/ - should be exported from mapl_mp_utils_export
-   use mapl_MemUtils_mod, only: MAPL_MemUtilsInit, MAPL_MemUtilsDisable, &
-         MAPL_MemUtilsWrite, MAPL_MemUtilsIsDisabled, MAPL_MemUtilsFree, &
-         MAPL_MemCommited, MAPL_MemUsed, MAPL_MemReport
-   use mapl_Sun_mod, only: MAPL_SunOrbitCreate, MAPL_SunOrbitCreateFromConfig, &
-         MAPL_SunOrbitCreated, MAPL_SunOrbitDestroy, MAPL_SunOrbitQuery, &
-         MAPL_SunGetInsolation, MAPL_SunGetSolarConstant, &
-          MAPL_SunGetDaylightDuration, MAPL_SunGetDaylightDurationMax, &
-          MAPL_SunGetLocalSolarHourAngle, MAPL_SunOrbit
-   use mapl_FileIO_mod, only: WRITE_PARALLEL
-   use mapl_SimpleBundleMod_impl_mod, only: MAPL_SimpleBundleCreate, MAPL_SimpleBundlePrint, &
-        MAPL_SimpleBundleGetIndex, MAPL_SimpleBundleDestroy, MAPL_SimpleBundle
-   use mapl_FileIOShared_mod, only: ArrDescr, ArrDescrInit, ArrDescrSet
-   use mapl_NCIO_mod, only: MAPL_VarRead, MAPL_VarWrite, MAPL_NCIOGetFileType, &
-                        MAPL_IOGetNonDimVars, MAPL_IOCountNonDimVars, &
-                        MAPL_IOChangeRes, MAPL_IOCountLevels
-   implicit none(type,external)
+! Export umbrella for the MAPL superstructure/generic layer.
+! Public API exposed to external consumers.
+module mapl_generic_api
+
+   use mapl_UserSetServices_mod, only: user_setservices, AbstractUserSetServices, DSOSetServices
+
+   use mapl_OpenMP_Support_mod, only: mapl_find_bounds => find_bounds
+   use mapl_OpenMP_Support_mod, only: mapl_get_num_threads => get_num_threads
+   use mapl_OpenMP_Support_mod, only: mapl_get_current_thread => get_current_thread
+
+   use mapl_Generic_mod
+   use mapl_GenericGridComp_mod
+   use mapl_VariableSpec_mod
+
+   use mapl_ComponentSpec_mod
+   use mapl_ChildSpec_mod
+   use mapl_RestartHandler_mod
+
+   implicit none
    private
 
-   public :: MAPL_EQsatSET, MAPL_EQsat
-   ! StrTemplate moved to mapl_mp_utils_export
-   public :: MAPL_MemUtilsInit, MAPL_MemUtilsDisable
-   public :: MAPL_MemUtilsWrite, MAPL_MemUtilsIsDisabled, MAPL_MemUtilsFree
-   public :: MAPL_MemCommited, MAPL_MemUsed, MAPL_MemReport
-   public :: MAPL_SunOrbitCreate, MAPL_SunOrbitCreateFromConfig
-   public :: MAPL_SunOrbitCreated, MAPL_SunOrbitDestroy, MAPL_SunOrbitQuery
-   public :: MAPL_SunGetInsolation, MAPL_SunGetSolarConstant
-   public :: MAPL_SunGetDaylightDuration, MAPL_SunGetDaylightDurationMax
-   public :: MAPL_SunGetLocalSolarHourAngle, MAPL_SunOrbit
-   public :: WRITE_PARALLEL
-   public :: MAPL_SimpleBundleCreate, MAPL_SimpleBundlePrint
-   public :: MAPL_SimpleBundleGetIndex, MAPL_SimpleBundleDestroy, MAPL_SimpleBundle
-   public :: ArrDescr, ArrDescrInit, ArrDescrSet
-   public :: MAPL_VarRead, MAPL_VarWrite, MAPL_NCIOGetFileType
-   public :: MAPL_IOGetNonDimVars, MAPL_IOCountNonDimVars
-   public :: MAPL_IOChangeRes, MAPL_IOCountLevels
+   ! These should be available to users
+   public :: mapl_GridCompAddVarSpec
+   public :: mapl_GridCompAddSpec
+   public :: mapl_GridCompAdvertiseVariable
 
-   public :: FileMetaDataUtils
+   public :: mapl_GridCompGet
+   public :: mapl_GridCompSet
+   public :: mapl_GridCompSetEntryPoint
 
-end module mapl_base_api
+   public :: mapl_GridCompAddChild
+   public :: mapl_GridCompGetChildName
+   public :: mapl_GridCompRunChild
+   public :: mapl_GridCompRunChildren
+
+   public :: mapl_GridCompGetInternalState
+
+   public :: mapl_GridCompSetGeometry
+
+   public :: mapl_GridcompGetResource
+
+   public :: mapl_ClockGet
+
+   ! Accessors
+!!$   public :: mapl_GetOrbit
+!!$   public :: mapl_GetCoordinates
+!!$   public :: mapl_GetLayout
+
+   public :: mapl_GridCompSetGeom
+   public :: mapl_GridCompSetVerticalGrid
+
+   ! Connections
+   public :: mapl_GridCompAddConnection
+   public :: mapl_GridCompAddConnectivity  ! Legacy name - temporary backward compatibility
+   public :: mapl_GridCompReexport
+   public :: mapl_GridCompConnectAll
+
+   ! Timers
+   public :: mapl_GridCompTimerStart
+   public :: mapl_GridCompTimerStop
+
+   ! Checkpoint directory
+   public :: mapl_GridCompGetCheckpointDir
+
+   ! Spec types
+   public :: mapl_STATEITEM_STATE, mapl_STATEITEM_FIELDBUNDLE
+   public :: mapl_STATEITEM_SERVICE, mapl_STATEITEM_VECTOR
+
+   public :: mapl_UserCompGetInternalState, MAPL_UserCompSetInternalState
+
+   public :: user_setservices
+   public :: AbstractUserSetServices
+   public :: DSOSetServices
+
+   public :: mapl_find_bounds
+   public :: mapl_get_num_threads
+   public :: mapl_get_current_thread
+
+   public :: mapl_GridCompCreate
+   public :: mapl_GenericSetServices
+
+   public :: VariableSpec
+   public :: make_VariableSpec
+
+   public :: ChildSpec
+
+   public :: CheckpointControls
+   public :: RestartHandler
+end module mapl_generic_api
