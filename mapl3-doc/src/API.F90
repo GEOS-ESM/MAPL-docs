@@ -1,70 +1,44 @@
-! Export umbrella for the MAPL infrastructure/geom layer.
-! Public API exposed to external consumers.
-module mapl_geom_api
-
-   use ESMF, only: ESMF_Grid, ESMF_Geom, ESMF_KIND_R4
-   use mapl_KeywordEnforcer_mod
-   use mapl_MaplGeom_mod, only: MaplGeom
-   use mapl_GeomSpec_mod, only: GeomSpec
-   use mapl_GeomManager_mod, only: GeomManager, geom_manager, get_geom_manager, get_mapl_geom
-   use mapl_GeomUtilities_mod, only: mapl_SameGeom, mapl_GeomGetId
-   use mapl_GeomAccessors_mod, only: mapl_GeomGet => GeomGet
-   use mapl_GeomAccessors_mod, only: mapl_GeomGetHorzIJIndex => GeomGetHorzIJIndex
-   use mapl_GeomAccessors_mod, only: mapl_GridGetHorzIJIndex => GridGetHorzIJIndex
-   use mapl_GridAccessors_mod, only: mapl_GridGet => GridGet
-   use mapl_GridAccessors_mod, only: mapl_GridGetCoordinates => GridGetCoordinates
-   use mapl_GridAccessors_mod, only: mapl_GridHasDE => grid_has_DE
-   use mapl_GridGetGlobal_mod, only: mapl_GridGetGlobalCellCountPerDim => GridGetGlobalCellCountPerDim
-   use mapl_GridComms_mod, only: MAPL_CollectiveGather3D => mapl_CollectiveGather3D
-   use mapl_GridComms_mod, only: MAPL_CollectiveScatter3D => mapl_CollectiveScatter3D
-   use mapl_Subgrid_mod, only: mapl_Interval => Interval
-   use mapl_Subgrid_mod, only: mapl_make_subgrids => make_subgrids
-   use mapl_Subgrid_mod, only: mapl_find_bounds => find_bounds
-   use mapl_CubedSphereGeomSpec_mod, only: CubedSphereGeomSpec, make_CubedSphereGeomSpec
-   use mapl_CubedSphereDecomposition_mod, only: CubedSphereDecomposition, make_CubedSphereDecomposition
-
-   ! need to delete
-   use mapl_Subgrid_mod, only: Interval
-   use mapl_Subgrid_mod, only: find_bounds
-
-   implicit none
+module mapl_base_api
+   use mapl_FileMetadataUtils_mod
+   use mapl_FileMetadataUtilsVector_mod
+   use mapl_SatVapor_mod, only: MAPL_EQsatSET, MAPL_EQsat
+   ! StringTemplate is in mp_utils/ - should be exported from mapl_mp_utils_export
+   use mapl_MemUtils_mod, only: MAPL_MemUtilsInit, MAPL_MemUtilsDisable, &
+         MAPL_MemUtilsWrite, MAPL_MemUtilsIsDisabled, MAPL_MemUtilsFree, &
+         MAPL_MemCommited, MAPL_MemUsed, MAPL_MemReport
+   use mapl_Sun_mod, only: MAPL_SunOrbitCreate, MAPL_SunOrbitCreateFromConfig, &
+         MAPL_SunOrbitCreated, MAPL_SunOrbitDestroy, MAPL_SunOrbitQuery, &
+         MAPL_SunGetInsolation, MAPL_SunGetSolarConstant, &
+          MAPL_SunGetDaylightDuration, MAPL_SunGetDaylightDurationMax, &
+          MAPL_SunGetLocalSolarHourAngle, MAPL_SunOrbit
+   use mapl_FileIO_mod, only: WRITE_PARALLEL
+   use mapl_SimpleBundleMod_impl_mod, only: MAPL_SimpleBundleCreate, MAPL_SimpleBundlePrint, &
+        MAPL_SimpleBundleGetIndex, MAPL_SimpleBundleDestroy, MAPL_SimpleBundle
+   use mapl_FileIOShared_mod, only: ArrDescr, ArrDescrInit, ArrDescrSet
+   use mapl_NCIO_mod, only: MAPL_VarRead, MAPL_VarWrite, MAPL_NCIOGetFileType, &
+                        MAPL_IOGetNonDimVars, MAPL_IOCountNonDimVars, &
+                        MAPL_IOChangeRes, MAPL_IOCountLevels
+   implicit none(type,external)
    private
 
-   ! Geom types and manager
-   public :: MaplGeom
-   public :: GeomSpec
-   public :: GeomManager
-   public :: geom_manager
-   public :: get_geom_manager
-   public :: get_mapl_geom
+   public :: MAPL_EQsatSET, MAPL_EQsat
+   ! StrTemplate moved to mapl_mp_utils_export
+   public :: MAPL_MemUtilsInit, MAPL_MemUtilsDisable
+   public :: MAPL_MemUtilsWrite, MAPL_MemUtilsIsDisabled, MAPL_MemUtilsFree
+   public :: MAPL_MemCommited, MAPL_MemUsed, MAPL_MemReport
+   public :: MAPL_SunOrbitCreate, MAPL_SunOrbitCreateFromConfig
+   public :: MAPL_SunOrbitCreated, MAPL_SunOrbitDestroy, MAPL_SunOrbitQuery
+   public :: MAPL_SunGetInsolation, MAPL_SunGetSolarConstant
+   public :: MAPL_SunGetDaylightDuration, MAPL_SunGetDaylightDurationMax
+   public :: MAPL_SunGetLocalSolarHourAngle, MAPL_SunOrbit
+   public :: WRITE_PARALLEL
+   public :: MAPL_SimpleBundleCreate, MAPL_SimpleBundlePrint
+   public :: MAPL_SimpleBundleGetIndex, MAPL_SimpleBundleDestroy, MAPL_SimpleBundle
+   public :: ArrDescr, ArrDescrInit, ArrDescrSet
+   public :: MAPL_VarRead, MAPL_VarWrite, MAPL_NCIOGetFileType
+   public :: MAPL_IOGetNonDimVars, MAPL_IOCountNonDimVars
+   public :: MAPL_IOChangeRes, MAPL_IOCountLevels
 
-   ! Geom utilities
-   public :: mapl_SameGeom
-   public :: mapl_GeomGetId
-   public :: mapl_GeomGet
-   public :: mapl_GeomGetHorzIJIndex
-   public :: mapl_GridGetHorzIJIndex
-   public :: mapl_GridGet
-   public :: mapl_GridGetCoordinates
-   public :: mapl_GridHasDE
-   public :: mapl_GridGetGlobalCellCountPerDim
+   public :: FileMetaDataUtils
 
-   ! Collective comms
-   public :: MAPL_CollectiveGather3D
-   public :: MAPL_CollectiveScatter3D
-
-   ! Subgrid
-   public :: mapl_Interval
-   public :: mapl_make_subgrids
-
-   ! CubedSphere geom specs
-   public :: CubedSphereGeomSpec
-   public :: make_CubedSphereGeomSpec
-   public :: CubedSphereDecomposition
-   public :: make_CubedSphereDecomposition
-
-
-   ! Delete later
-   public :: Interval
-   public :: find_bounds
-end module mapl_geom_api
+end module mapl_base_api
