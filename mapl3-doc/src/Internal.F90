@@ -1,60 +1,73 @@
-! Internal umbrella for the MAPL infrastructure/geom layer.
-! Aggregates leaf modules from geom/ and its subdirectories for use by other MAPL subdirectories.
-module mapl_geom_internal
+! Internal umbrella for the MAPL utils layer.
+! Aggregates all leaf modules compiled into MAPL.utils for use by
+! other MAPL subdirectories. Constants/, udunits2f/, and regex/ are
+! separate CMake targets and are NOT included here.
+!
+! Sibling consumers should: use mapl_utils_internal
+! (migration tracked in GitHub issue #5005)
+module mapl_utils_internal
 
-   ! Core geom modules
-   use mapl_GeomUtilities_mod
-   use mapl_GeomSpec_mod
-   use mapl_NullGeomSpec_mod
-   use mapl_MaplGeom_mod
-   use mapl_GeomFactory_mod
-   use mapl_CoordinateAxis_mod
-   use mapl_GeomManager_mod
-   use mapl_GeomAccessors_mod
-   use mapl_GridAccessors_mod
-   use mapl_GridGetGlobal_mod
-   use mapl_GridComms_mod
-   use mapl_Subgrid_mod
-   use mapl_VectorBasis_mod
+   ! Error handling
+   use mapl_ErrorHandling_mod
+   use mapl_ExceptionHandling_mod
+   use mapl_Throw_mod
 
-   ! gFTL containers
-   use mapl_GeomFactoryVector_mod
-   use mapl_GeomSpecVector_mod
-   use mapl_IntegerMaplGeomMap_mod
+   ! Keyword enforcer (abstract sentinel type)
+   use mapl_KeywordEnforcer_mod
 
-   ! XY
-   use mapl_XYGeomSpec_mod
-   use mapl_XYGeomFactory_mod
+   ! String types and utilities
+   use mapl_String_mod
+   use mapl_StringUtilities_mod
+   use mapl_StringDictionary_mod
 
-   ! CubedSphere
-   use mapl_CubedSphereGeomSpec_mod
-   use mapl_CubedSphereGeomFactory_mod
-   use mapl_CubedSphereDecomposition_mod
+   ! OS / filesystem
+   use mapl_os_mod
+   use mapl_DirPath_mod
+   use mapl_FileSystemUtilities_mod
+   use mapl_DSO_Utilities_mod
 
-   ! LatLon
-   use mapl_LatLonGeomSpec_mod
-   use mapl_LatLonGeomFactory_mod
-   use mapl_LatLonDecomposition_mod
-   use mapl_LatAxis_mod
-   use mapl_LonAxis_mod
+   ! Numeric utilities
+   use mapl_Hash_mod
+   use mapl_MinMax_mod
+   use mapl_Range_mod
+   use mapl_Sort_mod
+   use mapl_Interp_mod
 
-   ! EASE
-   use mapl_EASEGeomSpec_mod
-   use mapl_EASEGeomFactory_mod
-   use mapl_EASEDecomposition_mod
-   use mapl_EASECoords_mod
-   use mapl_EASEConversion_mod
+   ! Time utilities
+   use mapl_TimeUtilities_mod
+   ! Use only the intended public API from ISO8601 to avoid conflicts
+   ! with is_valid_date/is_valid_time already exported by mapl_TimeUtils_mod
+   use mapl_ISO8601_DateTime_mod, only: convert_ISO8601_to_integer_time, &
+        convert_ISO8601_to_integer_date, &
+        ISO8601Date, ISO8601Time, ISO8601DateTime, ISO8601Duration, ISO8601Interval
+   ! mapl_DateTime_Parsing_mod excluded: its is_valid_date/is_valid_time/is_digit
+   ! conflict with mapl_TimeUtils_mod. Consumers needing it should use it directly.
+   use mapl_DateTime_Parsing_mod
+   use mapl_Sleep_mod
+   use mapl_CF_Time_mod
 
-   ! LocStream
-   use mapl_LocStreamGeomSpec_mod
-   use mapl_LocStreamGeomFactory_mod
-   use mapl_LocStreamDecomposition_mod
+   ! ESMF info keys — KEY_UNITS and KEY_TYPEKIND excluded: their values
+   ! differ from the same-named constants in mapl_HistoryConstants_mod,
+   ! causing conflicts for files that use both. Use mapl_esmf_info_keys_mod
+   ! directly when the /units and /typekind ESMF-path variants are needed.
+   use mapl_esmf_info_keys_mod, only: &
+        INFO_SHARED_NAMESPACE, INFO_PRIVATE_NAMESPACE, INFO_INTERNAL_NAMESPACE, &
+        KEY_UNGRIDDED_DIMS, KEY_VERT_DIM, KEY_VERT_GRID, &
+        KEY_INTERPOLATION_WEIGHTS, KEY_FIELD_PROTOTYPE, &
+        KEY_FIELDBUNDLETYPE, KEY_LONG_NAME, &
+        KEY_STANDARD_NAME, KEY_NUM_LEVELS, &
+        KEY_VLOC, KEY_NUM_UNGRIDDED_DIMS, KEYSTUB_DIM, &
+        KEY_UNGRIDDED_NAME, KEY_UNGRIDDED_UNITS, KEY_UNGRIDDED_COORD, &
+        KEY_DIM_STRINGS, KEY_VERT_STAGGERLOC, &
+        KEY_BRACKET_UPDATED, KEY_VECTOR_BASIS_KIND, &
+        make_dim_key
 
-   ! Mesh (core modules only; raster_to_mesh is optional)
-   use mapl_MeshGeomSpec_mod
-   use mapl_MeshGeomFactory_mod
-   use mapl_MeshDecomposition_mod
+   ! Memory info
+   use mapl_MemInfo_mod
+
+   ! Validation
+   use mapl_Validation_mod
 
    implicit none
 
-end module mapl_geom_internal
+end module mapl_utils_internal
