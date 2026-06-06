@@ -1,89 +1,93 @@
-! Export umbrella for the MAPL superstructure/generic layer.
-! Public API exposed to external consumers.
-module mapl_generic_api
+! Export umbrella for the MAPL infrastructure/esmf layer.
+! Public API of esmf/ leaf modules exposed to external consumers.
+module mapl_esmf_api
 
-   use mapl_UserSetServices_mod, only: user_setservices, AbstractUserSetServices, DSOSetServices
+   use mapl_esmf_internal
 
-   use mapl_OpenMP_Support_mod, only: mapl_find_bounds => find_bounds
-   use mapl_OpenMP_Support_mod, only: mapl_get_num_threads => get_num_threads
-   use mapl_OpenMP_Support_mod, only: mapl_get_current_thread => get_current_thread
+   use mapl_Comms_mod, only: arraygather => array_gather
+   use mapl_Comms_mod, only: arrayscatter => array_scatter
+   use mapl_FieldPointerUtilities_mod, only: MAPL_AssignFptr => assign_fptr
+   use mapl_FieldPointerUtilities_mod, only: FieldGetLocalElementCount
+   use mapl_FieldPointerUtilities_mod, only: mapl_FieldClone => FieldClone
 
-   use mapl_Generic_mod
-   use mapl_GenericGridComp_mod
-   use mapl_VariableSpec_mod
-
-   use mapl_ComponentSpec_mod
-   use mapl_ChildSpec_mod
-   use mapl_RestartHandler_mod
 
    implicit none
    private
 
-   ! These should be available to users
-   public :: mapl_GridCompAddVarSpec
-   public :: mapl_GridCompAddSpec
-   public :: mapl_GridCompAdvertiseVariable
+   ! VM / comm utilities
+   public :: MAPL_ROOT
+   public :: mapl_AmIPet
+   public :: mapl_AmIRoot
+   public :: mapl_Barrier
+   public :: mapl_RoundRobinPEList
+   public :: mapl_BcastShared
+   public :: mapl_CommsBcast
+   public :: MAPL_Am_I_Root
+   public :: MAPL_Am_I_Rank
+   public :: MAPL_NPES
+   public :: ROOT_PROCESS_ID
+   public :: MAPL_CommsSend
+   public :: MAPL_CommsRecv
+   public :: MAPL_CommsSendRecv
+   public :: MAPL_CommsGatherV
+   public :: MAPL_CommsScatterV
+   public :: MAPL_CommsAllGather
+   public :: MAPL_CommsAllGatherV
+   public :: MAPL_ArrayGather
+   public :: MAPL_ArrayScatter
+   public :: ArrayGather
+   public :: ArrayScatter
+   public :: MAPL_CommsAllReduceMin
+   public :: MAPL_CommsAllReduceMax
+   public :: MAPL_CommsAllReduceSum
 
-   public :: mapl_GridCompGet
-   public :: mapl_GridCompSet
-   public :: mapl_GridCompSetEntryPoint
+   ! User comp internal state
 
-   public :: mapl_GridCompAddChild
-   public :: mapl_GridCompGetChildName
-   public :: mapl_GridCompRunChild
-   public :: mapl_GridCompRunChildren
+   ! HConfig
+   public :: MAPL_HConfigGet
+   public :: MAPL_HConfigMatch
+   public :: mapl_HConfigAsItemType
+   public :: mapl_HConfigAsStateIntent
+   public :: mapl_HConfigAsTime
+   public :: mapl_HConfigAsTimeInterval
+   public :: mapl_HConfigAsTimeRange
+   public :: mapl_HConfigAsStringVector
 
-   public :: mapl_GridCompGetInternalState
+   ! Info / metadata
 
-   public :: mapl_GridCompSetGeometry
+   ! Field utilities
 
-   public :: mapl_GridcompGetResource
+   ! Ungridded dims
+   public :: UngriddedDim
+   public :: make_UngriddedDim
+   public :: UngriddedDims
 
-   public :: mapl_ClockGet
+   ! State item constants
 
-   ! Accessors
-!!$   public :: mapl_GetOrbit
-!!$   public :: mapl_GetCoordinates
-!!$   public :: mapl_GetLayout
+   ! TYPEKIND
 
-   public :: mapl_GridCompSetGeom
-   public :: mapl_GridCompSetVerticalGrid
 
-   ! Connections
-   public :: mapl_GridCompAddConnection
-   public :: mapl_GridCompAddConnectivity  ! Legacy name - temporary backward compatibility
-   public :: mapl_GridCompReexport
-   public :: mapl_GridCompConnectAll
+   public :: SimpleAlarm
 
-   ! Timers
-   public :: mapl_GridCompTimerStart
-   public :: mapl_GridCompTimerStop
+   public :: sub_time_in_datetime
+   public :: FieldGetCPtr
+   public :: FieldCopy
 
-   ! Checkpoint directory
-   public :: mapl_GridCompGetCheckpointDir
+   public :: MAPL_STATEITEM_UNKNOWN
+   public :: MAPL_STATEITEM_FIELD
+   public :: MAPL_STATEITEM_FIELDBUNDLE
+   public :: MAPL_STATEITEM_STATE
+   public :: MAPL_STATEITEM_SERVICE
+   public :: MAPL_STATEITEM_SERVICE_PROVIDER
+   public :: MAPL_STATEITEM_SERVICE_SUBSCRIBER
+   public :: MAPL_STATEITEM_WILDCARD
+   public :: MAPL_STATEITEM_BRACKET
+   public :: MAPL_STATEITEM_VECTOR
+   public :: MAPL_STATEITEM_VECTORBRACKET
+   public :: MAPL_STATEITEM_EXPRESSION
 
-   ! Spec types
-   public :: mapl_STATEITEM_STATE, mapl_STATEITEM_FIELDBUNDLE
-   public :: mapl_STATEITEM_SERVICE, mapl_STATEITEM_VECTOR
+   public :: mapl_AssignFptr
+   public :: FieldGetLocalElementCount
+   public :: mapl_FieldClone
 
-   public :: mapl_UserCompGetInternalState, MAPL_UserCompSetInternalState
-
-   public :: user_setservices
-   public :: AbstractUserSetServices
-   public :: DSOSetServices
-
-   public :: mapl_find_bounds
-   public :: mapl_get_num_threads
-   public :: mapl_get_current_thread
-
-   public :: mapl_GridCompCreate
-   public :: mapl_GenericSetServices
-
-   public :: VariableSpec
-   public :: make_VariableSpec
-
-   public :: ChildSpec
-
-   public :: CheckpointControls
-   public :: RestartHandler
-end module mapl_generic_api
+end module mapl_esmf_api
