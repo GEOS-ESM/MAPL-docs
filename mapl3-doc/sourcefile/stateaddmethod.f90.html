@@ -1,0 +1,831 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="MAPL is a foundation layer of the GEOS architecture, whose original purpose is to supplement the Earth System Modeling Framework (ESMF)">
+    <meta name="author" content="The MAPL Developers" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>StateAddMethod.F90 &ndash; MAPL</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">MAPL </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>StateAddMethod.F90
+      <small>Source File</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.8% of total for source files.">1847 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/StateAddMethod.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+            <li class="breadcrumb-item active" aria-current="page">StateAddMethod.F90</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#mods-0"
+         aria-expanded="false" aria-controls="mods-0">
+         <h4 class="card-header bg-primary text-white">Modules</h4>
+      </a>
+      <div id="mods-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/mapl_callbackmap_private_mod.html">mapl_CallbackMap_private_mod</a>
+            <a class="list-group-item" href="../module/mapl_callbackmap_mod.html">mapl_CallbackMap_mod</a>
+            <a class="list-group-item" href="../module/mapl_stateaddmethod_mod.html">mapl_StateAddMethod_mod</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/stateaddmethod.f90.html#src">StateAddMethod.F90</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">This file depends on</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~stateaddmethod.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilestateaddmethodf90EfferentGraph" width="425pt" height="74pt"
+ viewBox="0.00 0.00 425.00 74.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~stateaddmethod.f90~~EfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 70)">
+<title>sourcefile~~stateaddmethod.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-70 421,-70 421,4 -4,4"/>
+<!-- sourcefile~stateaddmethod.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~stateaddmethod.f90</title>
+<polygon fill="none" stroke="black" points="417,-45 294,-45 294,-21 417,-21 417,-45"/>
+<text text-anchor="middle" x="355.5" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50">StateAddMethod.F90</text>
+</g>
+<!-- sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~errorhandling.f90</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~EfferentGraph_node2"><a xlink:href="../sourcefile/errorhandling.f90.html" xlink:title="ErrorHandling.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="251.5,-66 142.5,-66 142.5,-42 251.5,-42 251.5,-66"/>
+<text text-anchor="middle" x="197" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ErrorHandling.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~stateaddmethod.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~stateaddmethod.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M293.99,-41.12C283.43,-42.54 272.42,-44.01 261.77,-45.44"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="261.16,-41.99 251.71,-46.79 262.09,-48.93 261.16,-41.99"/>
+</g>
+<!-- sourcefile~esmf_interfaces.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~esmf_interfaces.f90</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~EfferentGraph_node3"><a xlink:href="../sourcefile/esmf_interfaces.f90.html" xlink:title="ESMF_Interfaces.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="258,-24 136,-24 136,0 258,0 258,-24"/>
+<text text-anchor="middle" x="197" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ESMF_Interfaces.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~stateaddmethod.f90&#45;&gt;sourcefile~esmf_interfaces.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~stateaddmethod.f90&#45;&gt;sourcefile~esmf_interfaces.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M293.99,-24.88C285.52,-23.74 276.76,-22.57 268.13,-21.41"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="268.46,-17.92 258.09,-20.06 267.53,-24.86 268.46,-17.92"/>
+</g>
+<!-- sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~mapl_throw.f90</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~EfferentGraph_node4"><a xlink:href="../sourcefile/mapl_throw.f90.html" xlink:title="MAPL_Throw.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="100,-66 0,-66 0,-42 100,-42 100,-66"/>
+<text text-anchor="middle" x="50" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Throw.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M142.42,-54C131.9,-54 120.82,-54 110.13,-54"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="110.04,-50.5 100.04,-54 110.04,-57.5 110.04,-50.5"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#EfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="EfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Files dependent on this one</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~stateaddmethod.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilestateaddmethodf90AfferentGraph" width="641pt" height="218pt"
+ viewBox="0.00 0.00 641.00 218.03" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph" class="graph" transform="scale(0.69 0.69) rotate(0) translate(4 310.98)">
+<title>sourcefile~~stateaddmethod.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-310.98 922,-310.98 922,4 -4,4"/>
+<!-- sourcefile~stateaddmethod.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~stateaddmethod.f90</title>
+<polygon fill="none" stroke="black" points="123,-168 0,-168 0,-144 123,-144 123,-168"/>
+<text text-anchor="middle" x="61.5" y="-153.6" font-family="Helvetica,sans-Serif" font-size="10.50">StateAddMethod.F90</text>
+</g>
+<!-- sourcefile~api.f90~6 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~api.f90~6</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node2"><a xlink:href="../sourcefile/api.f90~6.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="241.5,-231 187.5,-231 187.5,-207 241.5,-207 241.5,-231"/>
+<text text-anchor="middle" x="214.5" y="-216.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~6&#45;&gt;sourcefile~stateaddmethod.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~api.f90~6&#45;&gt;sourcefile~stateaddmethod.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M187.35,-209.18C178.34,-205.73 168.19,-201.77 159,-198 139.03,-189.81 116.94,-180.24 98.95,-172.3"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="99.97,-168.92 89.41,-168.08 97.13,-175.33 99.97,-168.92"/>
+</g>
+<!-- sourcefile~internal.f90~9 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~internal.f90~9</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node3"><a xlink:href="../sourcefile/internal.f90~9.html" xlink:title="Internal.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="252.5,-189 176.5,-189 176.5,-165 252.5,-165 252.5,-189"/>
+<text text-anchor="middle" x="214.5" y="-174.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Internal.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~internal.f90~9&#45;&gt;sourcefile~stateaddmethod.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~internal.f90~9&#45;&gt;sourcefile~stateaddmethod.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M176.17,-171.81C163.19,-170 148.16,-167.91 133.37,-165.86"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="133.58,-162.35 123.19,-164.44 132.61,-169.28 133.58,-162.35"/>
+</g>
+<!-- sourcefile~mapl_generic.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~mapl_generic.f90</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node4"><a xlink:href="../sourcefile/mapl_generic.f90.html" xlink:title="MAPL_Generic.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="270,-147 159,-147 159,-123 270,-123 270,-147"/>
+<text text-anchor="middle" x="214.5" y="-132.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Generic.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl_generic.f90&#45;&gt;sourcefile~stateaddmethod.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~mapl_generic.f90&#45;&gt;sourcefile~stateaddmethod.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M158.99,-142.58C150.61,-143.75 141.85,-144.96 133.18,-146.17"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="132.5,-142.73 123.07,-147.58 133.46,-149.66 132.5,-142.73"/>
+</g>
+<!-- sourcefile~openmp_support.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~openmp_support.f90</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node5"><a xlink:href="../sourcefile/openmp_support.f90.html" xlink:title="OpenMP_Support.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="438,-24 312,-24 312,0 438,0 438,-24"/>
+<text text-anchor="middle" x="375" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">OpenMP_Support.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~openmp_support.f90&#45;&gt;sourcefile~stateaddmethod.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~openmp_support.f90&#45;&gt;sourcefile~stateaddmethod.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M331.17,-24.02C322.74,-26.73 314.02,-29.76 306,-33 226.46,-65.11 137.58,-113.35 92.4,-138.83"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="90.41,-135.93 83.44,-143.9 93.86,-142.02 90.41,-135.93"/>
+</g>
+<!-- sourcefile~acg3.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~acg3.f90</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node6"><a xlink:href="../sourcefile/acg3.f90.html" xlink:title="ACG3.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="407,-188 343,-188 343,-164 407,-164 407,-188"/>
+<text text-anchor="middle" x="375" y="-173.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ACG3.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~acg3.f90&#45;&gt;sourcefile~api.f90~6 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~acg3.f90&#45;&gt;sourcefile~api.f90~6</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M342.69,-184.5C316.45,-191.61 278.98,-201.78 251.5,-209.23"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="250.24,-205.95 241.51,-211.94 252.07,-212.7 250.24,-205.95"/>
+</g>
+<!-- sourcefile~acg3.f90&#45;&gt;sourcefile~mapl_generic.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~acg3.f90&#45;&gt;sourcefile~mapl_generic.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M342.69,-167.9C322.56,-162.69 295.82,-155.78 272.05,-149.63"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="272.63,-146.16 262.08,-147.05 270.88,-152.94 272.63,-146.16"/>
+</g>
+<!-- sourcefile~api.f90~10 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~api.f90~10</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node7"><a xlink:href="../sourcefile/api.f90~10.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="768,-251 714,-251 714,-227 768,-227 768,-251"/>
+<text text-anchor="middle" x="741" y="-236.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~10&#45;&gt;sourcefile~api.f90~6 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~api.f90~10&#45;&gt;sourcefile~api.f90~6</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M715.38,-251.17C693.16,-261.44 659.26,-275.33 628,-281 487.19,-306.53 442.71,-323.34 306,-281 278.95,-272.62 252.8,-253.07 235.62,-238.14"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="237.73,-235.33 227.95,-231.25 233.05,-240.54 237.73,-235.33"/>
+</g>
+<!-- sourcefile~api.f90~5 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~api.f90~5</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node8"><a xlink:href="../sourcefile/api.f90~5.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="581,-148 527,-148 527,-124 581,-124 581,-148"/>
+<text text-anchor="middle" x="554" y="-133.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~10&#45;&gt;sourcefile~api.f90~5 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~api.f90~10&#45;&gt;sourcefile~api.f90~5</title>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M718.42,-226.98C685.64,-208.74 623.18,-173.96 585.69,-153.09"/>
+<polygon fill="#aaff00" stroke="#aaff00" points="587.17,-149.91 576.73,-148.1 583.77,-156.02 587.17,-149.91"/>
+</g>
+<!-- sourcefile~api.f90~5&#45;&gt;sourcefile~mapl_generic.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~api.f90~5&#45;&gt;sourcefile~mapl_generic.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M526.85,-134.65C492.27,-133.18 429.44,-131.57 376,-136"/>
+</g>
+<!-- sourcefile~api.f90~5&#45;&gt;sourcefile~openmp_support.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~api.f90~5&#45;&gt;sourcefile~openmp_support.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M526.79,-125.46C511.79,-118.47 493.35,-108.16 480,-95 457.31,-72.63 468.93,-52.84 444,-33 442.19,-31.56 440.29,-30.22 438.31,-28.97"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="439.69,-25.74 429.22,-24.07 436.36,-31.9 439.69,-25.74"/>
+</g>
+<!-- sourcefile~restarthandler.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node14" class="node">
+<title>sourcefile~restarthandler.f90</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node14"><a xlink:href="../sourcefile/restarthandler.f90.html" xlink:title="RestartHandler.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="432,-272 318,-272 318,-248 432,-248 432,-272"/>
+<text text-anchor="middle" x="375" y="-257.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">RestartHandler.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~5&#45;&gt;sourcefile~restarthandler.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge23" class="edge">
+<title>sourcefile~api.f90~5&#45;&gt;sourcefile~restarthandler.f90</title>
+<path fill="none" stroke="#ff00aa" stroke-dasharray="5,2" d="M536.97,-148.14C521.73,-159.97 498.45,-178.78 480,-197 462.51,-214.28 464.55,-225.51 444,-239 441.4,-240.71 438.65,-242.28 435.81,-243.73"/>
+<polygon fill="#ff00aa" stroke="#ff00aa" points="434.15,-240.64 426.49,-247.96 437.04,-247.02 434.15,-240.64"/>
+</g>
+<!-- sourcefile~generic.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~generic.f90</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node9"><a xlink:href="../sourcefile/generic.f90.html" xlink:title="Generic.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="592.5,-24 515.5,-24 515.5,0 592.5,0 592.5,-24"/>
+<text text-anchor="middle" x="554" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Generic.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~generic.f90&#45;&gt;sourcefile~openmp_support.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~generic.f90&#45;&gt;sourcefile~openmp_support.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M515.46,-12C495.93,-12 471.37,-12 448.32,-12"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="448.21,-8.5 438.21,-12 448.21,-15.5 448.21,-8.5"/>
+</g>
+<!-- sourcefile~internal.f90~6 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~internal.f90~6</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node10"><a xlink:href="../sourcefile/internal.f90~6.html" xlink:title="Internal.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="592,-86 516,-86 516,-62 592,-62 592,-86"/>
+<text text-anchor="middle" x="554" y="-71.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Internal.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~internal.f90~6&#45;&gt;sourcefile~mapl_generic.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~internal.f90~6&#45;&gt;sourcefile~mapl_generic.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M530.63,-86.01C497.83,-102.64 434.25,-131.18 376,-136"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M374,-136C343.35,-138.54 309.25,-138.67 280.55,-138.01"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="280.33,-134.5 270.24,-137.74 280.14,-141.5 280.33,-134.5"/>
+</g>
+<!-- sourcefile~internal.f90~6&#45;&gt;sourcefile~openmp_support.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~internal.f90~6&#45;&gt;sourcefile~openmp_support.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M522.17,-61.84C500.44,-53.4 470.59,-42.1 444,-33 438.31,-31.05 432.32,-29.09 426.36,-27.18"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="426.99,-23.71 416.4,-24.04 424.89,-30.38 426.99,-23.71"/>
+</g>
+<!-- sourcefile~mapl3_deprecated.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~mapl3_deprecated.f90</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node11"><a xlink:href="../sourcefile/mapl3_deprecated.f90.html" xlink:title="MAPL3_Deprecated.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="444,-66 306,-66 306,-42 444,-42 444,-66"/>
+<text text-anchor="middle" x="375" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL3_Deprecated.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~internal.f90~6&#45;&gt;sourcefile~mapl3_deprecated.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge22" class="edge">
+<title>sourcefile~internal.f90~6&#45;&gt;sourcefile~mapl3_deprecated.f90</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M515.89,-69.81C497.96,-67.78 475.7,-65.27 454.26,-62.84"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="454.49,-59.35 444.16,-61.7 453.7,-66.3 454.49,-59.35"/>
+</g>
+<!-- sourcefile~internal.f90~6&#45;&gt;sourcefile~restarthandler.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge25" class="edge">
+<title>sourcefile~internal.f90~6&#45;&gt;sourcefile~restarthandler.f90</title>
+<path fill="none" stroke="#ff00aa" stroke-dasharray="5,2" d="M519.67,-86.04C505.63,-92.64 490.21,-102.13 480,-115 444.33,-159.95 484.23,-198.08 444,-239 442.92,-240.1 441.78,-241.15 440.59,-242.13"/>
+<polygon fill="#ff00aa" stroke="#ff00aa" points="438.42,-239.38 432.14,-247.9 442.37,-245.16 438.42,-239.38"/>
+</g>
+<!-- sourcefile~mapl3_deprecated.f90&#45;&gt;sourcefile~mapl_generic.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~mapl3_deprecated.f90&#45;&gt;sourcefile~mapl_generic.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M328.68,-66C320.97,-68.61 313.15,-71.61 306,-75 281.7,-86.52 256.38,-103.83 238.72,-116.9"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="236.59,-114.12 230.71,-122.94 240.8,-119.72 236.59,-114.12"/>
+</g>
+<!-- sourcefile~protoextdatagc.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~protoextdatagc.f90</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node12"><a xlink:href="../sourcefile/protoextdatagc.f90.html" xlink:title="ProtoExtDataGC.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="435,-108 315,-108 315,-84 435,-84 435,-108"/>
+<text text-anchor="middle" x="375" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ProtoExtDataGC.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~protoextdatagc.f90&#45;&gt;sourcefile~mapl_generic.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~protoextdatagc.f90&#45;&gt;sourcefile~mapl_generic.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M325.15,-108.02C309.18,-111.95 291.27,-116.36 274.63,-120.45"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="273.33,-117.17 264.46,-122.95 275.01,-123.96 273.33,-117.17"/>
+</g>
+<!-- sourcefile~protostatgridcomp.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~protostatgridcomp.f90</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node13"><a xlink:href="../sourcefile/protostatgridcomp.f90.html" xlink:title="ProtoStatGridComp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="443.5,-230 306.5,-230 306.5,-206 443.5,-206 443.5,-230"/>
+<text text-anchor="middle" x="375" y="-215.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ProtoStatGridComp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~protostatgridcomp.f90&#45;&gt;sourcefile~api.f90~6 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~protostatgridcomp.f90&#45;&gt;sourcefile~api.f90~6</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M306.32,-218.43C287.55,-218.55 267.89,-218.67 251.68,-218.77"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="251.55,-215.27 241.57,-218.84 251.6,-222.27 251.55,-215.27"/>
+</g>
+<!-- sourcefile~protostatgridcomp.f90&#45;&gt;sourcefile~mapl_generic.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~protostatgridcomp.f90&#45;&gt;sourcefile~mapl_generic.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M323.55,-205.9C317.4,-203.43 311.39,-200.49 306,-197 285.65,-183.81 289.89,-169.87 270,-156 267.78,-154.45 265.42,-152.99 262.99,-151.63"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="264.44,-148.44 253.93,-147.09 261.3,-154.7 264.44,-148.44"/>
+</g>
+<!-- sourcefile~restarthandler.f90&#45;&gt;sourcefile~api.f90~6 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~restarthandler.f90&#45;&gt;sourcefile~api.f90~6</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M327.3,-247.92C303.07,-241.65 273.92,-234.11 251.47,-228.3"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="252.22,-224.88 241.66,-225.77 250.47,-231.66 252.22,-224.88"/>
+</g>
+<!-- sourcefile~initialize_read_restart.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node15" class="node">
+<title>sourcefile~initialize_read_restart.f90</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node15"><a xlink:href="../sourcefile/initialize_read_restart.f90.html" xlink:title="initialize_read_restart.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="628,-272 480,-272 480,-248 628,-248 628,-272"/>
+<text text-anchor="middle" x="554" y="-257.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">initialize_read_restart.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~initialize_read_restart.f90&#45;&gt;sourcefile~restarthandler.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge24" class="edge">
+<title>sourcefile~initialize_read_restart.f90&#45;&gt;sourcefile~restarthandler.f90</title>
+<path fill="none" stroke="#ff00aa" stroke-dasharray="5,2" d="M479.99,-260C467.49,-260 454.56,-260 442.25,-260"/>
+<polygon fill="#ff00aa" stroke="#ff00aa" points="442.08,-256.5 432.08,-260 442.08,-263.5 442.08,-256.5"/>
+</g>
+<!-- sourcefile~mapl.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node16" class="node">
+<title>sourcefile~mapl.f90</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node16"><a xlink:href="../sourcefile/mapl.f90.html" xlink:title="MAPL.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="918,-251 854,-251 854,-227 918,-227 918,-251"/>
+<text text-anchor="middle" x="886" y="-236.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~10 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~mapl.f90&#45;&gt;sourcefile~api.f90~10</title>
+<path fill="none" stroke="#ffaa00" stroke-dasharray="5,2" d="M853.97,-239C831.75,-239 801.74,-239 778.39,-239"/>
+<polygon fill="#ffaa00" stroke="#ffaa00" points="778.18,-235.5 768.18,-239 778.18,-242.5 778.18,-235.5"/>
+</g>
+<!-- sourcefile~python_fortran_bridge.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node17" class="node">
+<title>sourcefile~python_fortran_bridge.f90</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node17"><a xlink:href="../sourcefile/python_fortran_bridge.f90.html" xlink:title="python_fortran_bridge.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="818,-24 664,-24 664,0 818,0 818,-24"/>
+<text text-anchor="middle" x="741" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">python_fortran_bridge.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~python_fortran_bridge.f90&#45;&gt;sourcefile~generic.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge21" class="edge">
+<title>sourcefile~python_fortran_bridge.f90&#45;&gt;sourcefile~generic.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M663.95,-12C643.18,-12 621.27,-12 602.59,-12"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="602.57,-8.5 592.57,-12 602.57,-15.5 602.57,-8.5"/>
+</g>
+<!-- sourcefile~pythonbridge.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node18" class="node">
+<title>sourcefile~pythonbridge.f90</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node18"><a xlink:href="../sourcefile/pythonbridge.f90.html" xlink:title="PythonBridge.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="794,-148 688,-148 688,-124 794,-124 794,-148"/>
+<text text-anchor="middle" x="741" y="-133.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">PythonBridge.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~pythonbridge.f90&#45;&gt;sourcefile~api.f90~5 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge20" class="edge">
+<title>sourcefile~pythonbridge.f90&#45;&gt;sourcefile~api.f90~5</title>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M687.97,-136C657.08,-136 618.68,-136 591.11,-136"/>
+<polygon fill="#aaff00" stroke="#aaff00" points="591.1,-132.5 581.1,-136 591.1,-139.5 591.1,-132.5"/>
+</g>
+<!-- sourcefile~write_restart.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_node19" class="node">
+<title>sourcefile~write_restart.f90</title>
+<g id="a_sourcefile~~stateaddmethod.f90~~AfferentGraph_node19"><a xlink:href="../sourcefile/write_restart.f90.html" xlink:title="write_restart.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="604.5,-230 503.5,-230 503.5,-206 604.5,-206 604.5,-230"/>
+<text text-anchor="middle" x="554" y="-215.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">write_restart.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~write_restart.f90&#45;&gt;sourcefile~restarthandler.f90 -->
+<g id="sourcefile~~stateaddmethod.f90~~AfferentGraph_edge26" class="edge">
+<title>sourcefile~write_restart.f90&#45;&gt;sourcefile~restarthandler.f90</title>
+<path fill="none" stroke="#ff00aa" stroke-dasharray="5,2" d="M503.22,-229.81C482.48,-234.73 458.19,-240.5 436.43,-245.66"/>
+<polygon fill="#ff00aa" stroke="#ff00aa" points="435.55,-242.27 426.63,-247.99 437.17,-249.08 435.55,-242.27"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefilestateaddmethodf90AfferentGraph = svgPanZoom('#sourcefilestateaddmethodf90AfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#AfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="AfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+<br>
+      <section>
+        <h2><span class="anchor" id="src"></span>Source Code</h2>
+        <div class="hl codehilite"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="cp">#include &quot;MAPL.h&quot;</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a>
+<a id="ln-3" name="ln-3" href="#ln-3"></a><span class="k">module </span><span class="n">mapl_CallbackMap_private_mod</span>
+<a id="ln-4" name="ln-4" href="#ln-4"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_ESMF_Interfaces_mod</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">I_CallBackMethod</span>
+<a id="ln-5" name="ln-5" href="#ln-5"></a><span class="w">   </span><span class="k">implicit none</span><span class="p">(</span><span class="k">type</span><span class="p">,</span><span class="k">external</span><span class="p">)</span>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="w">   </span><span class="k">private</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a>
+<a id="ln-8" name="ln-8" href="#ln-8"></a><span class="k">   public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">CallbackMethodWrapper</span>
+<a id="ln-9" name="ln-9" href="#ln-9"></a>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="w">   </span><span class="k">type</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">CallbackMethodWrapper</span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a><span class="w">      </span><span class="k">procedure</span><span class="p">(</span><span class="n">I_CallBackMethod</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="p">,</span><span class="w"> </span><span class="k">nopass</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">userRoutine</span>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="w">   </span><span class="k">end type </span><span class="n">CallbackMethodWrapper</span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a>
+<a id="ln-14" name="ln-14" href="#ln-14"></a><span class="k">end module </span><span class="n">mapl_CallbackMap_private_mod</span>
+<a id="ln-15" name="ln-15" href="#ln-15"></a>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="k">module </span><span class="n">mapl_CallbackMap_mod</span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_CallbackMap_private_mod</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">CallbackMethodWrapper</span>
+<a id="ln-18" name="ln-18" href="#ln-18"></a>
+<a id="ln-19" name="ln-19" href="#ln-19"></a><span class="cp">#define Key __CHARACTER_DEFERRED</span>
+<a id="ln-20" name="ln-20" href="#ln-20"></a><span class="cp">#define T CallbackMethodWrapper</span>
+<a id="ln-21" name="ln-21" href="#ln-21"></a><span class="cp">#define Map CallbackMap</span>
+<a id="ln-22" name="ln-22" href="#ln-22"></a><span class="cp">#define Pair CallbackPair</span>
+<a id="ln-23" name="ln-23" href="#ln-23"></a><span class="cp">#define MapIterator CallbackMapIterator</span>
+<a id="ln-24" name="ln-24" href="#ln-24"></a>
+<a id="ln-25" name="ln-25" href="#ln-25"></a><span class="cp">#include &quot;map/template.inc&quot;</span>
+<a id="ln-26" name="ln-26" href="#ln-26"></a>
+<a id="ln-27" name="ln-27" href="#ln-27"></a><span class="cp">#undef MapIterator</span>
+<a id="ln-28" name="ln-28" href="#ln-28"></a><span class="cp">#undef Pair</span>
+<a id="ln-29" name="ln-29" href="#ln-29"></a><span class="cp">#undef Map</span>
+<a id="ln-30" name="ln-30" href="#ln-30"></a><span class="cp">#undef T</span>
+<a id="ln-31" name="ln-31" href="#ln-31"></a><span class="cp">#undef Key</span>
+<a id="ln-32" name="ln-32" href="#ln-32"></a>
+<a id="ln-33" name="ln-33" href="#ln-33"></a><span class="k">end module </span><span class="n">mapl_CallbackMap_mod</span>
+<a id="ln-34" name="ln-34" href="#ln-34"></a>
+<a id="ln-35" name="ln-35" href="#ln-35"></a><span class="k">module </span><span class="n">mapl_StateAddMethod_mod</span>
+<a id="ln-36" name="ln-36" href="#ln-36"></a><span class="w">   </span><span class="k">use </span><span class="n">ESMF</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">ESMF_State</span><span class="p">,</span><span class="w"> </span><span class="n">ESMF_MethodAdd</span>
+<a id="ln-37" name="ln-37" href="#ln-37"></a><span class="w">   </span><span class="k">use </span><span class="n">ESMF</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">ESMF_Info</span><span class="p">,</span><span class="w"> </span><span class="n">ESMF_InfoGetFromHost</span><span class="p">,</span><span class="w"> </span><span class="n">ESMF_InfoIsPresent</span><span class="p">,</span><span class="w"> </span><span class="n">ESMF_InfoSet</span><span class="p">,</span><span class="w"> </span><span class="n">ESMF_InfoGet</span>
+<a id="ln-38" name="ln-38" href="#ln-38"></a><span class="w">   </span><span class="k">use </span><span class="n">ESMF</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">ESMF_KIND_I4</span>
+<a id="ln-39" name="ln-39" href="#ln-39"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_CallbackMap_mod</span>
+<a id="ln-40" name="ln-40" href="#ln-40"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_ESMF_Interfaces_mod</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">I_CallBackMethod</span>
+<a id="ln-41" name="ln-41" href="#ln-41"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_CallbackMap_private_mod</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">CallbackMethodWrapper</span>
+<a id="ln-42" name="ln-42" href="#ln-42"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_ErrorHandling_mod</span>
+<a id="ln-43" name="ln-43" href="#ln-43"></a><span class="w">   </span><span class="k">implicit none</span><span class="p">(</span><span class="k">type</span><span class="p">,</span><span class="k">external</span><span class="p">)</span>
+<a id="ln-44" name="ln-44" href="#ln-44"></a><span class="w">   </span><span class="k">private</span>
+<a id="ln-45" name="ln-45" href="#ln-45"></a>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="k">   public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mapl_StateAddMethod</span>
+<a id="ln-47" name="ln-47" href="#ln-47"></a><span class="w">   </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">CallbackMap</span>
+<a id="ln-48" name="ln-48" href="#ln-48"></a><span class="w">   </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">CallbackMapIterator</span>
+<a id="ln-49" name="ln-49" href="#ln-49"></a><span class="w">   </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">CallbackMethodWrapper</span>
+<a id="ln-50" name="ln-50" href="#ln-50"></a><span class="w">   </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_callbacks</span>
+<a id="ln-51" name="ln-51" href="#ln-51"></a><span class="w">   </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">operator</span><span class="p">(</span><span class="o">/=</span><span class="p">)</span>
+<a id="ln-52" name="ln-52" href="#ln-52"></a>
+<a id="ln-53" name="ln-53" href="#ln-53"></a><span class="w">   </span><span class="k">interface </span><span class="n">mapl_StateAddMethod</span>
+<a id="ln-54" name="ln-54" href="#ln-54"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">state_add_method</span>
+<a id="ln-55" name="ln-55" href="#ln-55"></a><span class="w">   </span><span class="k">end interface </span><span class="n">mapl_StateAddMethod</span>
+<a id="ln-56" name="ln-56" href="#ln-56"></a>
+<a id="ln-57" name="ln-57" href="#ln-57"></a><span class="k">contains</span>
+<a id="ln-58" name="ln-58" href="#ln-58"></a>
+<a id="ln-59" name="ln-59" href="#ln-59"></a><span class="k">   subroutine </span><span class="n">state_add_method</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="p">,</span><span class="w"> </span><span class="n">userRoutine</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-60" name="ln-60" href="#ln-60"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_State</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">state</span>
+<a id="ln-61" name="ln-61" href="#ln-61"></a><span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">label</span>
+<a id="ln-62" name="ln-62" href="#ln-62"></a><span class="w">      </span><span class="k">procedure</span><span class="p">(</span><span class="n">I_CallBackMethod</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">userRoutine</span>
+<a id="ln-63" name="ln-63" href="#ln-63"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-64" name="ln-64" href="#ln-64"></a>
+<a id="ln-65" name="ln-65" href="#ln-65"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-66" name="ln-66" href="#ln-66"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">CallbackMap</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">callbacks</span>
+<a id="ln-67" name="ln-67" href="#ln-67"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">CallbackMethodWrapper</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">wrapper</span>
+<a id="ln-68" name="ln-68" href="#ln-68"></a>
+<a id="ln-69" name="ln-69" href="#ln-69"></a><span class="w">      </span><span class="k">call </span><span class="n">get_callbacks</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">callbacks</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">      </span><span class="n">wrapper</span><span class="p">%</span><span class="n">userRoutine</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">userRoutine</span>
+<a id="ln-71" name="ln-71" href="#ln-71"></a><span class="w">      </span><span class="k">call </span><span class="n">callbacks</span><span class="p">%</span><span class="n">insert</span><span class="p">(</span><span class="n">label</span><span class="p">,</span><span class="w"> </span><span class="n">wrapper</span><span class="p">)</span>
+<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_MethodAdd</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span><span class="w"> </span><span class="n">userRoutine</span><span class="o">=</span><span class="n">userRoutine</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-73" name="ln-73" href="#ln-73"></a>
+<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-75" name="ln-75" href="#ln-75"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">state_add_method</span>
+<a id="ln-76" name="ln-76" href="#ln-76"></a>
+<a id="ln-77" name="ln-77" href="#ln-77"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">get_callbacks</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">callbacks</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-78" name="ln-78" href="#ln-78"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_State</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">state</span>
+<a id="ln-79" name="ln-79" href="#ln-79"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">CallbackMap</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">callbacks</span>
+<a id="ln-80" name="ln-80" href="#ln-80"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-81" name="ln-81" href="#ln-81"></a>
+<a id="ln-82" name="ln-82" href="#ln-82"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-83" name="ln-83" href="#ln-83"></a><span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">ESMF_KIND_I4</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">valueList</span><span class="p">(:)</span>
+<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">isPresent</span>
+<a id="ln-85" name="ln-85" href="#ln-85"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Info</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">infoh</span>
+<a id="ln-86" name="ln-86" href="#ln-86"></a>
+<a id="ln-87" name="ln-87" href="#ln-87"></a><span class="w">      </span><span class="k">type</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">CallbackMapWrapper</span>
+<a id="ln-88" name="ln-88" href="#ln-88"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">CallbackMap</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">map</span>
+<a id="ln-89" name="ln-89" href="#ln-89"></a><span class="w">      </span><span class="k">end type </span><span class="n">CallbackMapWrapper</span>
+<a id="ln-90" name="ln-90" href="#ln-90"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">CallbackMapWrapper</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">wrapper</span>
+<a id="ln-91" name="ln-91" href="#ln-91"></a>
+<a id="ln-92" name="ln-92" href="#ln-92"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_InfoGetFromHost</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">infoh</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-93" name="ln-93" href="#ln-93"></a><span class="w">      </span><span class="n">isPresent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ESMF_InfoIsPresent</span><span class="p">(</span><span class="n">infoh</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;MAPL_CALLBACK_MAP&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-94" name="ln-94" href="#ln-94"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="n">isPresent</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! create callback map for this state</span>
+<a id="ln-95" name="ln-95" href="#ln-95"></a><span class="w">         </span><span class="k">allocate</span><span class="p">(</span><span class="n">callbacks</span><span class="p">)</span>
+<a id="ln-96" name="ln-96" href="#ln-96"></a><span class="w">         </span><span class="n">wrapper</span><span class="p">%</span><span class="n">map</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">callbacks</span>
+<a id="ln-97" name="ln-97" href="#ln-97"></a><span class="w">         </span><span class="n">valueList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">transfer</span><span class="p">(</span><span class="n">wrapper</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<a id="ln-98" name="ln-98" href="#ln-98"></a><span class="w">         </span><span class="k">call </span><span class="n">ESMF_InfoSet</span><span class="p">(</span><span class="n">infoh</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;MAPL_CALLBACK_MAP&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">values</span><span class="o">=</span><span class="n">valueList</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-99" name="ln-99" href="#ln-99"></a><span class="w">      </span><span class="k">end if</span>
+<a id="ln-100" name="ln-100" href="#ln-100"></a>
+<a id="ln-101" name="ln-101" href="#ln-101"></a><span class="w">      </span><span class="c">! Ugly hack to decode ESMF attribute as a gFTL map</span>
+<a id="ln-102" name="ln-102" href="#ln-102"></a><span class="w">      </span><span class="n">valueList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">transfer</span><span class="p">(</span><span class="n">wrapper</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<a id="ln-103" name="ln-103" href="#ln-103"></a><span class="w">      </span><span class="k">call </span><span class="n">ESMF_InfoGet</span><span class="p">(</span><span class="n">infoh</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;MAPL_CALLBACK_MAP&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">values</span><span class="o">=</span><span class="n">valueList</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<a id="ln-104" name="ln-104" href="#ln-104"></a><span class="w">      </span><span class="n">wrapper</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">transfer</span><span class="p">(</span><span class="n">valueList</span><span class="p">,</span><span class="w"> </span><span class="n">wrapper</span><span class="p">)</span>
+<a id="ln-105" name="ln-105" href="#ln-105"></a><span class="w">      </span><span class="n">callbacks</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">wrapper</span><span class="p">%</span><span class="n">map</span>
+<a id="ln-106" name="ln-106" href="#ln-106"></a>
+<a id="ln-107" name="ln-107" href="#ln-107"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-108" name="ln-108" href="#ln-108"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">get_callbacks</span>
+<a id="ln-109" name="ln-109" href="#ln-109"></a>
+<a id="ln-110" name="ln-110" href="#ln-110"></a><span class="k">end module </span><span class="n">mapl_StateAddMethod_mod</span>
+</pre></div>
+
+      </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              MAPL
+ was developed by The MAPL Developers<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-06-08T17:30:50.741592+0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
