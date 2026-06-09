@@ -1,29 +1,41 @@
 #include "MAPL.h"
 
-submodule (mapl_LatAxis_mod) supports_metadata_smod
-   use mapl_Range_mod
-!   use hconfig3g
-   use esmf
+submodule (mapl_EASEGeomSpec_mod) supports_metadata_smod
+   use mapl_GeomSpec_mod
+   use mapl_EASEConversion_mod
+   use pfio
    use mapl_ErrorHandling_mod
    implicit none (type, external)
 
-   integer, parameter :: R8 = ESMF_KIND_R8
-
 contains
 
-   logical module function supports_metadata(file_metadata, rc) result(supports)
-      type(FileMetadata), intent(in) :: file_metadata
-      integer, optional, intent(out) :: rc
+   ! A FileMetadata object is an EASE grid if its 'lon' (or 'longitude')
+   ! dimension count matches one of the known EASE grid column counts.
+   logical module function supports_metadata_(this, file_metadata, rc) result(supports)
+      class(EASEGeomSpec), intent(in) :: this
+      type(FileMetadata),  intent(in) :: file_metadata
+      integer, optional,   intent(out) :: rc
 
-      integer :: status
-      character(:), allocatable :: dim_name
+      integer :: status, im
+      character(:), allocatable :: grid_name
 
-      supports = .true.
-      dim_name = get_dim_name(file_metadata, units='degrees_north', _RC)
+      supports = .false.
 
-      supports = (dim_name /= '')
+      ! Try 'lon' first, then 'longitude'
+      if (file_metadata%has_dimension('lon')) then
+         im = file_metadata%get_dimension('lon', _RC)
+      else if (file_metadata%has_dimension('longitude')) then
+         im = file_metadata%get_dimension('longitude', _RC)
+      else
+         _RETURN(_SUCCESS)
+      end if
+
+      ! If get_ease_gridname_by_cols succeeds, this is a recognized EASE grid
+      grid_name = get_ease_gridname_by_cols(im, rc=status)
+      supports = (status == _SUCCESS)
+
       _RETURN(_SUCCESS)
-   end function supports_metadata
+      _UNUSED_DUMMY(this)
+   end function supports_metadata_
 
 end submodule supports_metadata_smod
-
