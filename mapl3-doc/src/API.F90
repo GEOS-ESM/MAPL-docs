@@ -1,35 +1,42 @@
-! Export umbrella for the MAPL.field_bundle library.
-module mapl_field_bundle_api
-
-   use ESMF, only: MAPL_FieldBundleAdd => ESMF_FieldBundleAdd
-   use mapl_FieldBundleCopy_mod, only: MAPL_FieldBundleCopy => FieldBundleCopy
-   use mapl_FieldBundleCreate_mod, only: MAPL_FieldBundleCreate => FieldBundleCreate
-   use mapl_FieldBundleCreate_mod, only: MAPL_FieldBundlesAreAliased => FieldBundlesAreAliased
-   use mapl_FieldBundleDestroy_mod, only: MAPL_FieldBundleDestroy
-   use mapl_FieldBundleGet_mod, only: MAPL_FieldBundleGet => FieldBundleGet
-   use mapl_FieldBundleGetByIndex_mod, only: MAPL_FieldBundleGetByIndex => FieldBundleGetByIndex
-   use mapl_FieldBundleGetPointer_mod, only: MAPL_FieldBundleGetPointer => FieldBundleGetPointerToData
-   use mapl_FieldBundleInfo_mod, only: MAPL_FieldBundleInfoGetInternal => FieldBundleInfoGetInternal
-   use mapl_FieldBundleInfo_mod, only: MAPL_FieldBundleInfoSetInternal => FieldBundleInfoSetInternal
-   use mapl_FieldBundleMatch_mod, only: MAPL_FieldBundleSameData => FieldBundleSameData
-   use mapl_FieldBundleSet_mod, only: MAPL_FieldBundleSet => FieldBundleSet
-   use mapl_FieldBundleFilter_mod, only: MAPL_FieldBundleFilter => FieldBundleFilter
-
-   implicit none
+module mapl_base_api
+   use mapl_FileMetadataUtils_mod
+   use mapl_FileMetadataUtilsVector_mod
+   ! StringTemplate is in mp_utils/ - should be exported from mapl_mp_utils_export
+   use mapl_MemUtils_mod, only: MAPL_MemUtilsInit, MAPL_MemUtilsDisable, &
+         MAPL_MemUtilsWrite, MAPL_MemUtilsIsDisabled, MAPL_MemUtilsFree, &
+         MAPL_MemCommited, MAPL_MemUsed, MAPL_MemReport
+   use mapl_Sun_mod, only: MAPL_SunOrbitCreate, MAPL_SunOrbitCreateFromConfig, &
+         MAPL_SunOrbitCreated, MAPL_SunOrbitDestroy, MAPL_SunOrbitQuery, &
+         MAPL_SunGetInsolation, MAPL_SunGetSolarConstant, &
+          MAPL_SunGetDaylightDuration, MAPL_SunGetDaylightDurationMax, &
+          MAPL_SunGetLocalSolarHourAngle, MAPL_SunOrbit
+   use mapl_FileIO_mod, only: WRITE_PARALLEL
+   use mapl_SimpleBundleMod_impl_mod, only: MAPL_SimpleBundleCreate, MAPL_SimpleBundlePrint, &
+        MAPL_SimpleBundleGetIndex, MAPL_SimpleBundleDestroy, MAPL_SimpleBundle
+   use mapl_FileIOShared_mod, only: ArrDescr, ArrDescrInit, ArrDescrSet
+   use mapl_NCIO_mod, only: MAPL_VarRead, MAPL_VarWrite, MAPL_NCIOGetFileType, &
+                        MAPL_IOGetNonDimVars, MAPL_IOCountNonDimVars, &
+                        MAPL_IOChangeRes, MAPL_IOCountLevels
+   implicit none(type,external)
    private
 
-   public :: MAPL_FieldBundleAdd
-   public :: MAPL_FieldBundleCopy
-   public :: MAPL_FieldBundleCreate
-   public :: MAPL_FieldBundleDestroy
-   public :: MAPL_FieldBundleGet
-   public :: MAPL_FieldBundleGetByIndex
-   public :: MAPL_FieldBundleGetPointer
-   public :: MAPL_FieldBundleInfoGetInternal
-   public :: MAPL_FieldBundleInfoSetInternal
-   public :: MAPL_FieldBundleSameData
-   public :: MAPL_FieldBundlesAreAliased
-   public :: MAPL_FieldBundleSet
-   public :: MAPL_FieldBundleFilter
+   ! StrTemplate moved to mapl_mp_utils_export
+   public :: MAPL_MemUtilsInit, MAPL_MemUtilsDisable
+   public :: MAPL_MemUtilsWrite, MAPL_MemUtilsIsDisabled, MAPL_MemUtilsFree
+   public :: MAPL_MemCommited, MAPL_MemUsed, MAPL_MemReport
+   public :: MAPL_SunOrbitCreate, MAPL_SunOrbitCreateFromConfig
+   public :: MAPL_SunOrbitCreated, MAPL_SunOrbitDestroy, MAPL_SunOrbitQuery
+   public :: MAPL_SunGetInsolation, MAPL_SunGetSolarConstant
+   public :: MAPL_SunGetDaylightDuration, MAPL_SunGetDaylightDurationMax
+   public :: MAPL_SunGetLocalSolarHourAngle, MAPL_SunOrbit
+   public :: WRITE_PARALLEL
+   public :: MAPL_SimpleBundleCreate, MAPL_SimpleBundlePrint
+   public :: MAPL_SimpleBundleGetIndex, MAPL_SimpleBundleDestroy, MAPL_SimpleBundle
+   public :: ArrDescr, ArrDescrInit, ArrDescrSet
+   public :: MAPL_VarRead, MAPL_VarWrite, MAPL_NCIOGetFileType
+   public :: MAPL_IOGetNonDimVars, MAPL_IOCountNonDimVars
+   public :: MAPL_IOChangeRes, MAPL_IOCountLevels
 
-end module mapl_field_bundle_api
+   public :: FileMetaDataUtils
+
+end module mapl_base_api
