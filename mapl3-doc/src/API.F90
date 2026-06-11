@@ -1,61 +1,68 @@
-! Export umbrella for the MAPL infrastructure/regridder_mgr layer.
+! Export umbrella for the MAPL infrastructure/geom layer.
 ! Public API exposed to external consumers.
-module mapl_regridder_mgr_api
+module mapl_geom_api
 
-   use mapl_Regridder_mod, only: Regridder
-   use mapl_RegridderManager_mod, only: RegridderManager, regridder_manager, get_regridder_manager
-   use mapl_RegridderSpec_mod, only: RegridderSpec
-   use mapl_RegridderMethods_mod, only: &
-        REGRID_HINT_LOCAL, &
-        REGRID_HINT_FILE_WEIGHTS, &
-        REGRID_HINT_COMPUTE_TRANSPOSE, &
-        REGRID_METHOD_BILINEAR, &
-        REGRID_METHOD_BILINEAR_MONOTONIC, &
-        REGRID_METHOD_BILINEAR_ROTATE, &
-        REGRID_METHOD_CONSERVE, &
-        REGRID_METHOD_CONSERVE_MONOTONIC, &
-        REGRID_METHOD_VOTE, &
-        REGRID_METHOD_FRACTION, &
-        REGRID_METHOD_CONSERVE_2ND, &
-        REGRID_METHOD_PATCH, &
-        REGRID_METHOD_NEAREST_STOD, &
-        REGRID_METHOD_CONSERVE_HFLUX, &
-        UNSPECIFIED_REGRID_METHOD, &
-        regrid_method_string_to_int, &
-        regrid_method_int_to_string, &
-        generate_esmf_regrid_param
+   use mapl_MaplGeom_mod, only: MaplGeom
+   use mapl_GeomSpec_mod, only: GeomSpec
+   use mapl_GeomManager_mod, only: GeomManager, geom_manager, get_geom_manager, get_mapl_geom
+   use mapl_GeomUtilities_mod, only: mapl_SameGeom => SameGeom, mapl_GeomGetId => GeomGetId
+   use mapl_GeomAccessors_mod, only: mapl_GeomGet => GeomGet
+   use mapl_GeomAccessors_mod, only: mapl_GeomGetHorzIJIndex => GeomGetHorzIJIndex
+   use mapl_GeomAccessors_mod, only: mapl_GridGetHorzIJIndex => GridGetHorzIJIndex
+   use mapl_GridAccessors_mod, only: mapl_GridGet => GridGet
+   use mapl_GridAccessors_mod, only: mapl_GridGetCoordinates => GridGetCoordinates
+   use mapl_GridAccessors_mod, only: mapl_GridHasDE => grid_has_DE
+   use mapl_GridGetGlobal_mod, only: mapl_GridGetGlobalCellCountPerDim => GridGetGlobalCellCountPerDim
+   use mapl_GridComms_mod, only: MAPL_CollectiveGather3D => mapl_CollectiveGather3D
+   use mapl_GridComms_mod, only: MAPL_CollectiveScatter3D => mapl_CollectiveScatter3D
+   use mapl_Subgrid_mod, only: mapl_Interval => Interval
+   use mapl_Subgrid_mod, only: mapl_make_subgrids => make_subgrids
+   use mapl_Subgrid_mod, only: mapl_find_bounds => find_bounds
+   use mapl_CubedSphereGeomSpec_mod, only: CubedSphereGeomSpec, make_CubedSphereGeomSpec
+   use mapl_CubedSphereDecomposition_mod, only: CubedSphereDecomposition, make_CubedSphereDecomposition
 
-   use mapl_EsmfRegridder_mod
+   ! need to delete
+   use mapl_Subgrid_mod, only: Interval
+   use mapl_Subgrid_mod, only: find_bounds
+
    implicit none
    private
 
-   ! Regridder types
-   public :: Regridder
-   public :: RegridderManager
-   public :: regridder_manager
-   public :: get_regridder_manager
-   public :: RegridderSpec
-   public :: esmfRegridderParam
+   ! Geom types and manager
+   public :: MaplGeom
+   public :: GeomSpec
+   public :: GeomManager
+   public :: geom_manager
+   public :: get_geom_manager
+   public :: get_mapl_geom
 
-   ! Regrid methods and hints
-   public :: REGRID_HINT_LOCAL
-   public :: REGRID_HINT_FILE_WEIGHTS
-   public :: REGRID_HINT_COMPUTE_TRANSPOSE
-   public :: REGRID_METHOD_BILINEAR
-   public :: REGRID_METHOD_BILINEAR_MONOTONIC
-   public :: REGRID_METHOD_BILINEAR_ROTATE
-   public :: REGRID_METHOD_CONSERVE
-   public :: REGRID_METHOD_CONSERVE_MONOTONIC
-   public :: REGRID_METHOD_VOTE
-   public :: REGRID_METHOD_FRACTION
-   public :: REGRID_METHOD_CONSERVE_2ND
-   public :: REGRID_METHOD_PATCH
-   public :: REGRID_METHOD_NEAREST_STOD
-   public :: REGRID_METHOD_CONSERVE_HFLUX
-   public :: UNSPECIFIED_REGRID_METHOD
-   public :: regrid_method_string_to_int
-   public :: regrid_method_int_to_string
-   public :: generate_esmf_regrid_param
+   ! Geom utilities
+   public :: mapl_SameGeom
+   public :: mapl_GeomGetId
+   public :: mapl_GeomGet
+   public :: mapl_GeomGetHorzIJIndex
+   public :: mapl_GridGetHorzIJIndex
+   public :: mapl_GridGet
+   public :: mapl_GridGetCoordinates
+   public :: mapl_GridHasDE
+   public :: mapl_GridGetGlobalCellCountPerDim
+
+   ! Collective comms
+   public :: MAPL_CollectiveGather3D
+   public :: MAPL_CollectiveScatter3D
+
+   ! Subgrid
+   public :: mapl_Interval
+   public :: mapl_make_subgrids
+
+   ! CubedSphere geom specs
+   public :: CubedSphereGeomSpec
+   public :: make_CubedSphereGeomSpec
+   public :: CubedSphereDecomposition
+   public :: make_CubedSphereDecomposition
 
 
-end module mapl_regridder_mgr_api
+   ! Delete later
+   public :: Interval
+   public :: find_bounds
+end module mapl_geom_api
