@@ -1,37 +1,61 @@
-module mapl_geomio_api
+! Export umbrella for the MAPL infrastructure/regridder_mgr layer.
+! Public API exposed to external consumers.
+module mapl_regridder_mgr_api
 
-   use mapl_CompressionSettings_mod, only: CompressionSettings
-   use mapl_SharedIO_mod, only: bundle_to_metadata, esmf_to_pfio_type
-   use mapl_GeomPFIO_mod, only: GeomPFIO
-   use mapl_GeomCategorizer_mod, only: make_geom_pfio
-   use mapl_pFIOServerBounds_mod, only: pFIOServerBounds, PFIO_BOUNDS_READ
-   use mapl_DataCollection_mod, only: DataCollection
-   use mapl_DataCollectionManager_mod, only: MAPL_AddDataCollection => AddDataCollection
-   use mapl_DataCollectionManager_mod, only: DataCollections
+   use mapl_Regridder_mod, only: Regridder
+   use mapl_RegridderManager_mod, only: RegridderManager, regridder_manager, get_regridder_manager
+   use mapl_RegridderSpec_mod, only: RegridderSpec
+   use mapl_RegridderMethods_mod, only: &
+        REGRID_HINT_LOCAL, &
+        REGRID_HINT_FILE_WEIGHTS, &
+        REGRID_HINT_COMPUTE_TRANSPOSE, &
+        REGRID_METHOD_BILINEAR, &
+        REGRID_METHOD_BILINEAR_MONOTONIC, &
+        REGRID_METHOD_BILINEAR_ROTATE, &
+        REGRID_METHOD_CONSERVE, &
+        REGRID_METHOD_CONSERVE_MONOTONIC, &
+        REGRID_METHOD_VOTE, &
+        REGRID_METHOD_FRACTION, &
+        REGRID_METHOD_CONSERVE_2ND, &
+        REGRID_METHOD_PATCH, &
+        REGRID_METHOD_NEAREST_STOD, &
+        REGRID_METHOD_CONSERVE_HFLUX, &
+        UNSPECIFIED_REGRID_METHOD, &
+        regrid_method_string_to_int, &
+        regrid_method_int_to_string, &
+        generate_esmf_regrid_param
 
-   use mapl_GeomPFIO_mod
-   use mapl_GeomCategorizer_mod
-   use mapl_DataCollectionVector_mod
-   use mapl_FieldBundleWrite_mod, only: FieldBundleWriter
-   use mapl_FieldBundleWrite_mod, only: write_bundle
-   use mapl_FieldBundleRead_mod, only: mapl_read_bundle => read_bundle
-   use mapl_FieldBundleRead_mod, only: FieldBundlePopulate
+   use mapl_EsmfRegridder_mod
    implicit none
    private
 
+   ! Regridder types
+   public :: Regridder
+   public :: RegridderManager
+   public :: regridder_manager
+   public :: get_regridder_manager
+   public :: RegridderSpec
+   public :: esmfRegridderParam
 
-   public :: CompressionSettings
-   public :: GeomPFIO
-   public :: pFIOServerBounds
-   public :: PFIO_BOUNDS_READ
-   public :: DataCollection
-   public :: DataCollections
-   public :: mapl_AddDataCollection
-   public :: FieldBundleWriter
+   ! Regrid methods and hints
+   public :: REGRID_HINT_LOCAL
+   public :: REGRID_HINT_FILE_WEIGHTS
+   public :: REGRID_HINT_COMPUTE_TRANSPOSE
+   public :: REGRID_METHOD_BILINEAR
+   public :: REGRID_METHOD_BILINEAR_MONOTONIC
+   public :: REGRID_METHOD_BILINEAR_ROTATE
+   public :: REGRID_METHOD_CONSERVE
+   public :: REGRID_METHOD_CONSERVE_MONOTONIC
+   public :: REGRID_METHOD_VOTE
+   public :: REGRID_METHOD_FRACTION
+   public :: REGRID_METHOD_CONSERVE_2ND
+   public :: REGRID_METHOD_PATCH
+   public :: REGRID_METHOD_NEAREST_STOD
+   public :: REGRID_METHOD_CONSERVE_HFLUX
+   public :: UNSPECIFIED_REGRID_METHOD
+   public :: regrid_method_string_to_int
+   public :: regrid_method_int_to_string
+   public :: generate_esmf_regrid_param
 
-   public :: make_geom_pfio
-   public :: bundle_to_metadata
-   public :: esmf_to_pfio_type
-   public :: mapl_read_bundle
-   
-end module mapl_geomio_api
+
+end module mapl_regridder_mgr_api
