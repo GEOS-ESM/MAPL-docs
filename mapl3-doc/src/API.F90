@@ -1,28 +1,31 @@
-! Export umbrella for the MAPL.state library.
-module mapl_state_api
+module mapl_pfio_api
+  use pfio, only: FileMetadata
+  use pfio, only: i_clients
+  use pfio, only: o_clients
+  use pfio, only: NetCDF4_FileFormatter
+  use pfio, only: pfio_read
+  use pfio, only: ArrayReference
+  use pfio, only: string_in_stringvector
 
-   use mapl_StateArithmeticParser_mod, only: MAPL_ParserVariablesInExpression => parser_variables_in_expression
-   use mapl_StateArithmeticParser_mod, only: mapl_StateEval => StateEval
-   use mapl_StateAddMethod_mod, only: mapl_StateAddMethod => StateAddMethod
-   use mapl_StateDestroy_mod, only: MAPL_StateDestroy => StateDestroy
-   use mapl_StateGet_mod, only: MAPL_StateGet => StateGet
-   use mapl_StateSet_mod, only: MAPL_StateSet => StateSet
-   use mapl_StateGetGeom_mod, only: MAPL_StateGetGeom => StateGetGeom
-   use mapl_StateGetPointer_mod, only: MAPL_StateGetPointer => StateGetPointer
-   use mapl_StateMask_mod, only: MAPL_StateMask => StateMask
-   
+  use pfio, only: Variable
+  use pfio, only: StringVariableMap
+  use pfio, only: StringVariableMapIterator
+  use pfio, only: operator(==), operator(/=)
 
-   implicit none
-   private
+  implicit none
+  private
 
-   public :: MAPL_ParserVariablesInExpression
-   public :: mapl_StateAddMethod
-   public :: MAPL_StateDestroy
-   public :: MAPL_StateGet
-   public :: MAPL_StateSet
-   public :: MAPL_StateGetGeom
-   public :: MAPL_StateGetPointer
-   public :: mapl_StateEval
+  public :: FileMetadata
+  public :: i_clients
+  public :: o_clients
+  public :: NetCDF4_FileFormatter
+  public :: pfio_read
+  public :: ArrayReference
+  public :: string_in_stringvector
 
-   public :: MAPL_StateMask
-end module mapl_state_api
+  public :: Variable
+  public :: StringVariableMap
+  public :: StringVariableMapIterator
+  public :: operator(==), operator(/=)
+
+end module mapl_pfio_api
