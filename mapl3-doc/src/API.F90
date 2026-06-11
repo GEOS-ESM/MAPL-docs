@@ -1,37 +1,28 @@
-module mapl_geomio_api
+! Export umbrella for the MAPL.state library.
+module mapl_state_api
 
-   use mapl_CompressionSettings_mod, only: CompressionSettings
-   use mapl_SharedIO_mod, only: bundle_to_metadata, esmf_to_pfio_type
-   use mapl_GeomPFIO_mod, only: GeomPFIO
-   use mapl_GeomCategorizer_mod, only: make_geom_pfio
-   use mapl_pFIOServerBounds_mod, only: pFIOServerBounds, PFIO_BOUNDS_READ
-   use mapl_DataCollection_mod, only: DataCollection
-   use mapl_DataCollectionManager_mod, only: MAPL_AddDataCollection => AddDataCollection
-   use mapl_DataCollectionManager_mod, only: DataCollections
+   use mapl_StateArithmeticParser_mod, only: MAPL_ParserVariablesInExpression => parser_variables_in_expression
+   use mapl_StateArithmeticParser_mod, only: mapl_StateEval => StateEval
+   use mapl_StateAddMethod_mod, only: mapl_StateAddMethod => StateAddMethod
+   use mapl_StateDestroy_mod, only: MAPL_StateDestroy => StateDestroy
+   use mapl_StateGet_mod, only: MAPL_StateGet => StateGet
+   use mapl_StateSet_mod, only: MAPL_StateSet => StateSet
+   use mapl_StateGetGeom_mod, only: MAPL_StateGetGeom => StateGetGeom
+   use mapl_StateGetPointer_mod, only: MAPL_StateGetPointer => StateGetPointer
+   use mapl_StateMask_mod, only: MAPL_StateMask => StateMask
+   
 
-   use mapl_GeomPFIO_mod
-   use mapl_GeomCategorizer_mod
-   use mapl_DataCollectionVector_mod
-   use mapl_FieldBundleWrite_mod, only: FieldBundleWriter
-   use mapl_FieldBundleWrite_mod, only: write_bundle
-   use mapl_FieldBundleRead_mod, only: mapl_read_bundle => read_bundle
-   use mapl_FieldBundleRead_mod, only: FieldBundlePopulate
    implicit none
    private
 
+   public :: MAPL_ParserVariablesInExpression
+   public :: mapl_StateAddMethod
+   public :: MAPL_StateDestroy
+   public :: MAPL_StateGet
+   public :: MAPL_StateSet
+   public :: MAPL_StateGetGeom
+   public :: MAPL_StateGetPointer
+   public :: mapl_StateEval
 
-   public :: CompressionSettings
-   public :: GeomPFIO
-   public :: pFIOServerBounds
-   public :: PFIO_BOUNDS_READ
-   public :: DataCollection
-   public :: DataCollections
-   public :: mapl_AddDataCollection
-   public :: FieldBundleWriter
-
-   public :: make_geom_pfio
-   public :: bundle_to_metadata
-   public :: esmf_to_pfio_type
-   public :: mapl_read_bundle
-   
-end module mapl_geomio_api
+   public :: MAPL_StateMask
+end module mapl_state_api
