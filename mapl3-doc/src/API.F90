@@ -1,134 +1,141 @@
-! Export umbrella for the MAPL superstructure/generic layer.
-! Public API exposed to external consumers.
-module mapl_generic_api
+! Export umbrella for the MAPL utils layer.
+! Defines the public API of utils/ for external consumers.
+! Directly imports from leaf modules and re-exports only the intended public symbols.
+module mapl_utils_api
 
-   use mapl_UserSetServices_mod, only: user_setservices, AbstractUserSetServices, DSOSetServices
+   ! Error handling
+   use mapl_ErrorHandling_mod
+   use mapl_Throw_mod
 
-   use mapl_OpenMP_Support_mod, only: mapl_find_bounds => find_bounds
-   use mapl_OpenMP_Support_mod, only: mapl_get_num_threads => get_num_threads
-   use mapl_OpenMP_Support_mod, only: mapl_get_current_thread => get_current_thread
+   ! Keyword enforcer (abstract sentinel type)
+   use mapl_KeywordEnforcer_mod
 
-   use mapl_Generic_mod, &
-       mapl_GridCompAddVarSpec => GridCompAddVarSpec, &
-       mapl_GridCompAddSpec => GridCompAddSpec, &
-       mapl_GridCompAdvertiseVariable => GridCompAdvertiseVariable, &
-       mapl_GridCompGet => GridCompGet, &
-       mapl_GridCompSet => GridCompSet, &
-       mapl_GridCompSetCheckpointControls => GridCompSetCheckpointControls, &
-       mapl_GridCompSetEntryPoint => GridCompSetEntryPoint, &
-       mapl_GridCompAddChild => GridCompAddChild, &
-       mapl_GridCompGetChildName => GridCompGetChildName, &
-       mapl_GridCompRunChild => GridCompRunChild, &
-       mapl_GridCompRunChildren => GridCompRunChildren, &
-       mapl_GridCompGetInternalState => GridCompGetInternalState, &
-       mapl_GridCompSetGeometry => GridCompSetGeometry, &
-       mapl_GridcompGetResource => GridCompGetResource, &
-       mapl_ClockGet => ClockGet, &
-       mapl_GridCompSetGeom => GridCompSetGeom, &
-       mapl_GridCompSetVerticalGrid => GridCompSetVerticalGrid, &
-       mapl_GridCompAddConnection => GridCompAddConnection, &
-       mapl_GridCompAddConnectivity => GridCompAddConnectivity, &
-       mapl_GridCompReexport => GridCompReexport, &
-       mapl_GridCompConnectAll => GridCompConnectAll, &
-       mapl_GridCompTimerStart => GridCompTimerStart, &
-       mapl_GridCompTimerStop => GridCompTimerStop, &
-       mapl_GridCompGetCheckpointDir => GridCompGetCheckpointDir, &
-       mapl_GridCompSetCheckpointControls => GridCompSetCheckpointControls, &
-   !    mapl_STATEITEM_STATE => STATEITEM_STATE, &
-   !    mapl_STATEITEM_FIELDBUNDLE => STATEITEM_FIELDBUNDLE, &
-   !    mapl_STATEITEM_SERVICE => STATEITEM_SERVICE, &
-   !    mapl_STATEITEM_VECTOR => STATEITEM_VECTOR, &
-   !    mapl_UserCompGetInternalState => UserCompGetInternalState, &
-   !    MAPL_UserCompSetInternalState => UserCompSetInternalState, &
-       MAPL_GridCompGetOuterMeta => GridCompGetOuterMeta, &
-       MAPL_GridCompGetRegistry => GridCompGetRegistry, &
-       MAPL_GridCompIsGeneric => GridCompIsGeneric, &
-       MAPL_GridCompIsUser => GridCompIsUser
+   ! String types and utilities
+   use mapl_String_mod
+   use mapl_StringUtilities_mod
+   use mapl_StringDictionary_mod
 
-   use mapl_GenericGridComp_mod,  &
-       mapl_GridCompCreate => GridCompCreate, &
-       mapl_GenericSetServices => GenericSetServices
+   ! OS / filesystem
+   use mapl_os_mod, only: &
+      & mapl_GetCurrentWorkingDirectory => GetCurrentWorkingDirectory, &
+      & mapl_ChangeDirectory => ChangeDirectory, &
+      & mapl_MakeDirectory => MakeDirectory, &
+      & mapl_DirectoryExists => DirectoryExists, &
+      & mapl_RemoveDirectory => RemoveDirectory, &
+      & mapl_RemoveFile => RemoveFile, &
+      & mapl_PushDirectory => PushDirectory, &
+      & mapl_PopDirectory => PopDirectory, &
+      & mapl_ClearDirectoryStack => ClearDirectoryStack, &
+      & mapl_PathJoin => PathJoin, &
+      & mapl_MakeSymbolicLink => MakeSymbolicLink
+   use mapl_DirPath_mod
+   use mapl_FileSystemUtilities_mod
+   use mapl_DSO_Utilities_mod
 
-    use mapl_VariableSpec_mod
-    use mapl_ComponentSpec_mod
-    use mapl_CheckpointControls_mod
-    use mapl_ChildSpec_mod
-    use mapl_RestartHandler_mod
+   ! Numeric utilities
+   use mapl_Hash_mod
+   use mapl_MinMax_mod
+   use mapl_Range_mod
+   use mapl_Sort_mod
+   use mapl_Interp_mod
+
+   ! Time utilities
+   use mapl_TimeUtilities_mod
+   ! Use only the intended public API from ISO8601 to avoid conflicts
+   ! with is_valid_date/is_valid_time already exported by mapl_TimeUtils_mod
+   use mapl_ISO8601_DateTime_mod, only: convert_ISO8601_to_integer_time, &
+        convert_ISO8601_to_integer_date, &
+        ISO8601Date, ISO8601Time, ISO8601DateTime, ISO8601Duration, ISO8601Interval
+   use mapl_DateTime_Parsing_mod
+   use mapl_Sleep_mod
+   use mapl_CF_Time_mod
+
+   ! ESMF info keys — KEY_UNITS and KEY_TYPEKIND excluded: their values
+   ! differ from the same-named constants in mapl_HistoryConstants_mod,
+   ! causing conflicts for files that use both. Use mapl_esmf_info_keys_mod
+   ! directly when the /units and /typekind ESMF-path variants are needed.
+   use mapl_esmf_info_keys_mod, only: &
+        INFO_SHARED_NAMESPACE, INFO_PRIVATE_NAMESPACE, INFO_INTERNAL_NAMESPACE, &
+        KEY_UNGRIDDED_DIMS, KEY_VERT_DIM, KEY_VERT_GRID, &
+        KEY_INTERPOLATION_WEIGHTS, KEY_FIELD_PROTOTYPE, &
+        KEY_FIELDBUNDLETYPE, KEY_LONG_NAME, &
+        KEY_STANDARD_NAME, KEY_NUM_LEVELS, &
+        KEY_VLOC, KEY_NUM_UNGRIDDED_DIMS, KEYSTUB_DIM, &
+        KEY_UNGRIDDED_NAME, KEY_UNGRIDDED_UNITS, KEY_UNGRIDDED_COORD, &
+        KEY_DIM_STRINGS, KEY_VERT_STAGGERLOC, &
+        KEY_BRACKET_UPDATED, KEY_VECTOR_BASIS_KIND
+
+   ! Validation
+   use mapl_Validation_mod
+
+   ! Memory info
+   use mapl_MemInfo_mod, only: mapl_MemInfo => MemInfo
+   use mapl_MemInfo_mod, only: mapl_MemInfoWrite => MemInfoWrite
+   use mapl_TimeUtilities_mod
 
    implicit none
    private
 
-   ! These should be available to users
-   public :: mapl_GridCompAddVarSpec
-   public :: mapl_GridCompAddSpec
-   public :: mapl_GridCompAdvertiseVariable
+   ! Error handling
+   public :: MAPL_Assert
+   public :: MAPL_Verify
+   public :: MAPL_Return
+   public :: MAPL_Deprecated
+   public :: MAPL_SetFailOnDeprecated
+   public :: MAPL_abort
+   public :: MAPL_set_abort_handler
+   public :: MAPL_SUCCESS
+   public :: MAPL_UNKNOWN_ERROR
+   public :: MAPL_NO_SUCH_PROPERTY
+   public :: MAPL_NO_SUCH_VARIABLE
+   public :: MAPL_TYPE_MISMATCH
+   public :: MAPL_UNSUPPORTED_TYPE
+   public :: MAPL_VALUE_NOT_SUPPORTED
+   public :: MAPL_NO_DEFAULT_VALUE
+   public :: MAPL_DUPLICATE_KEY
+   public :: MAPL_STRING_TOO_SHORT
 
-   public :: mapl_GridCompGet
-   public :: mapl_GridCompGetRegistry
-   public :: mapl_GridCompSet
-   public :: mapl_GridCompSetCheckpointControls
-   public :: mapl_GridCompSetEntryPoint
+   ! Keyword enforcer
+   public :: KeywordEnforcer
 
-   public :: MAPL_GridCompIsGeneric
-   public :: MAPL_GridCompIsUser
-   public :: MAPL_GridCompGetOuterMeta
+   ! OS / filesystem
+   public :: mapl_GetCurrentWorkingDirectory
+   public :: mapl_ChangeDirectory
+   public :: mapl_MakeDirectory
+   public :: mapl_DirectoryExists
+   public :: mapl_RemoveDirectory
+   public :: mapl_RemoveFile
+   public :: mapl_PushDirectory
+   public :: mapl_PopDirectory
+   public :: mapl_ClearDirectoryStack
+   public :: mapl_PathJoin
+   public :: mapl_MakeSymbolicLink
+   public :: get_file_extension
+   public :: get_file_basename
 
-   public :: mapl_GridCompAddChild
-   public :: mapl_GridCompGetChildName
-   public :: mapl_GridCompRunChild
-   public :: mapl_GridCompRunChildren
+   ! Memory info
+   public :: mapl_MemInfo
+   public :: mapl_MemInfoWrite
 
-   public :: mapl_GridCompGetInternalState
+   ! Time utilities
+   public :: PackDate
+   public :: PackDateTime
+   public :: UnpackDate
 
-   public :: mapl_GridCompSetGeometry
+   ! ISO8601 date/time conversion
+   public :: convert_ISO8601_to_integer_time
+   public :: convert_ISO8601_to_integer_date
+   public :: ISO8601Date
+   public :: ISO8601Time
+   public :: ISO8601DateTime
+   public :: ISO8601Duration
+   public :: ISO8601Interval
 
-   public :: mapl_GridcompGetResource
+   ! ESMF info keys
+   ! KEY_UNITS and KEY_TYPEKIND excluded: values differ from mapl_HistoryConstants_mod
+   ! homonyms; consumers needing them should use mapl_esmf_info_keys_mod directly.
 
-   public :: mapl_ClockGet
+   ! Validation
+   public :: is_valid_name
 
-   ! Accessors
-!!$   public :: mapl_GetOrbit
-!!$   public :: mapl_GetCoordinates
-!!$   public :: mapl_GetLayout
-
-   public :: mapl_GridCompSetGeom
-   public :: mapl_GridCompSetVerticalGrid
-
-   ! Connections
-   public :: mapl_GridCompAddConnection
-   public :: mapl_GridCompAddConnectivity  ! Legacy name - temporary backward compatibility
-   public :: mapl_GridCompReexport
-   public :: mapl_GridCompConnectAll
-
-   ! Timers
-   public :: mapl_GridCompTimerStart
-   public :: mapl_GridCompTimerStop
-
-   ! Checkpoint directory
-   public :: mapl_GridCompGetCheckpointDir
-
-   ! Spec types
-   public :: mapl_STATEITEM_STATE, mapl_STATEITEM_FIELDBUNDLE
-   public :: mapl_STATEITEM_SERVICE, mapl_STATEITEM_VECTOR
-
-   public :: mapl_UserCompGetInternalState, MAPL_UserCompSetInternalState
-
-   public :: user_setservices
-   public :: AbstractUserSetServices
-   public :: DSOSetServices
-
-   public :: mapl_find_bounds
-   public :: mapl_get_num_threads
-   public :: mapl_get_current_thread
-
-   public :: mapl_GridCompCreate
-   public :: mapl_GenericSetServices
-
-   public :: VariableSpec
-   public :: make_VariableSpec
-
-   public :: ChildSpec
-
-   public :: CheckpointControls
-   public :: RestartHandler
-end module mapl_generic_api
+end module mapl_utils_api
