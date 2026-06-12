@@ -1,0 +1,5 @@
+module mapl_StateUtils
+   use mapl_StateMask_mod
+   use mapl_StateArithmeticParser_mod
+   use mapl_StateFilter_mod, only: MAPL_StateFilterItem => StateFilterItem
+end module
