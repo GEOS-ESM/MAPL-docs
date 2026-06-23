@@ -1,0 +1,1094 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="MAPL is a foundation layer of the GEOS architecture, whose original purpose is to supplement the Earth System Modeling Framework (ESMF)">
+    <meta name="author" content="The MAPL Developers" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>GriddedComponentDriver.F90 &ndash; MAPL</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">MAPL </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>GriddedComponentDriver.F90
+      <small>Source File</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.1% of total for source files.">132 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/GriddedComponentDriver.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+            <li class="breadcrumb-item active" aria-current="page">GriddedComponentDriver.F90</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#mods-0"
+         aria-expanded="false" aria-controls="mods-0">
+         <h4 class="card-header bg-primary text-white">Modules</h4>
+      </a>
+      <div id="mods-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/mapl_griddedcomponentdriver_mod.html">mapl_GriddedComponentDriver_mod</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/griddedcomponentdriver.f90.html#src">GriddedComponentDriver.F90</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">This file depends on</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~griddedcomponentdriver.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilegriddedcomponentdriverf90EfferentGraph" width="641pt" height="60pt"
+ viewBox="0.00 0.00 641.00 60.19" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph" class="graph" transform="scale(0.58 0.58) rotate(0) translate(4 100.14)">
+<title>sourcefile~~griddedcomponentdriver.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-100.14 1105,-100.14 1105,4 -4,4"/>
+<!-- sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~griddedcomponentdriver.f90</title>
+<polygon fill="none" stroke="black" points="1101,-66 929,-66 929,-42 1101,-42 1101,-66"/>
+<text text-anchor="middle" x="1015" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50">GriddedComponentDriver.F90</text>
+</g>
+<!-- sourcefile~componentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~componentdriver.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_node2"><a xlink:href="../sourcefile/componentdriver.f90.html" xlink:title="ComponentDriver.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="694,-66 565,-66 565,-42 694,-42 694,-66"/>
+<text text-anchor="middle" x="629.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ComponentDriver.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~griddedcomponentdriver.f90&#45;&gt;sourcefile~componentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~griddedcomponentdriver.f90&#45;&gt;sourcefile~componentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M810.5,-14C761.82,-11.94 707.41,-26.47 671.28,-38.59"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="669.91,-35.36 661.59,-41.92 672.19,-41.97 669.91,-35.36"/>
+</g>
+<!-- sourcefile~componentdrivervector.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~componentdrivervector.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_node3"><a xlink:href="../sourcefile/componentdrivervector.f90.html" xlink:title="ComponentDriverVector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="893,-66 730,-66 730,-42 893,-42 893,-66"/>
+<text text-anchor="middle" x="811.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ComponentDriverVector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~griddedcomponentdriver.f90&#45;&gt;sourcefile~componentdrivervector.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~griddedcomponentdriver.f90&#45;&gt;sourcefile~componentdrivervector.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M928.84,-54C920.44,-54 911.89,-54 903.44,-54"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="903.18,-50.5 893.18,-54 903.18,-57.5 903.18,-50.5"/>
+</g>
+<!-- sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~errorhandling.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_node4"><a xlink:href="../sourcefile/errorhandling.f90.html" xlink:title="ErrorHandling.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="245,-86 136,-86 136,-62 245,-62 245,-86"/>
+<text text-anchor="middle" x="190.5" y="-71.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ErrorHandling.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~griddedcomponentdriver.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~griddedcomponentdriver.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M953.59,-66.02C934.3,-69.44 912.82,-72.83 893,-75 712.99,-94.74 666.66,-81.56 486,-94"/>
+</g>
+<!-- sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~keywordenforcer.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_node5"><a xlink:href="../sourcefile/keywordenforcer.f90.html" xlink:title="KeywordEnforcer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="405,-24 281,-24 281,0 405,0 405,-24"/>
+<text text-anchor="middle" x="343" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">KeywordEnforcer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~griddedcomponentdriver.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~griddedcomponentdriver.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M972.77,-41.95C932.36,-31.06 868.8,-16.38 812.5,-14"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M810.5,-14C730.57,-10.62 710.31,-8.5 630.5,-14"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M628.5,-14C565.32,-18.35 549.15,-18.8 486,-14"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M484,-14C461.72,-12.31 437.38,-11.57 415.34,-11.33"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="415.09,-7.82 405.06,-11.24 415.03,-14.82 415.09,-7.82"/>
+</g>
+<!-- sourcefile~multistate.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_node6" class="node">
+<title>sourcefile~multistate.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_node6"><a xlink:href="../sourcefile/multistate.f90.html" xlink:title="MultiState.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="529,-66 441,-66 441,-42 529,-42 529,-66"/>
+<text text-anchor="middle" x="485" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MultiState.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~griddedcomponentdriver.f90&#45;&gt;sourcefile~multistate.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~griddedcomponentdriver.f90&#45;&gt;sourcefile~multistate.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M628.5,-14C592.5,-16.48 553.11,-28.28 524.89,-38.42"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="523.56,-35.18 515.39,-41.92 525.99,-41.75 523.56,-35.18"/>
+</g>
+<!-- sourcefile~componentdriver.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~componentdriver.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M599.11,-66.08C570.72,-76.81 526.25,-91.23 486,-94"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M484,-94C421.92,-98.28 406.22,-93.7 344,-94"/>
+</g>
+<!-- sourcefile~componentdriver.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~componentdriver.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M598.83,-41.95C570.43,-31.32 526.1,-17.05 486,-14"/>
+</g>
+<!-- sourcefile~componentdriver.f90&#45;&gt;sourcefile~multistate.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~componentdriver.f90&#45;&gt;sourcefile~multistate.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M564.75,-54C556.31,-54 547.73,-54 539.48,-54"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="539.26,-50.5 529.26,-54 539.26,-57.5 539.26,-50.5"/>
+</g>
+<!-- sourcefile~componentdrivervector.f90&#45;&gt;sourcefile~componentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~componentdrivervector.f90&#45;&gt;sourcefile~componentdriver.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M729.98,-54C721.46,-54 712.83,-54 704.39,-54"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="704.21,-50.5 694.21,-54 704.21,-57.5 704.21,-50.5"/>
+</g>
+<!-- sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_node8" class="node">
+<title>sourcefile~mapl_throw.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_node8"><a xlink:href="../sourcefile/mapl_throw.f90.html" xlink:title="MAPL_Throw.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="100,-86 0,-86 0,-62 100,-62 100,-86"/>
+<text text-anchor="middle" x="50" y="-71.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Throw.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_edge10" class="edge">
+<title>sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M135.95,-74C127.62,-74 118.96,-74 110.51,-74"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="110.33,-70.5 100.33,-74 110.33,-77.5 110.33,-70.5"/>
+</g>
+<!-- sourcefile~multistate.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_edge11" class="edge">
+<title>sourcefile~multistate.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M458.05,-66.03C430.41,-77.74 385.08,-93.8 344,-94"/>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M342,-94C313.37,-94.14 281.94,-90.56 255.24,-86.39"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="255.69,-82.92 245.26,-84.77 254.57,-89.83 255.69,-82.92"/>
+</g>
+<!-- sourcefile~multistate.f90&#45;&gt;sourcefile~keywordenforcer.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_edge13" class="edge">
+<title>sourcefile~multistate.f90&#45;&gt;sourcefile~keywordenforcer.f90</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M443.88,-41.96C428.36,-37.31 410.42,-31.93 394.07,-27.02"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="394.71,-23.56 384.12,-24.04 392.7,-30.26 394.71,-23.56"/>
+</g>
+<!-- sourcefile~esmf_utilities.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_node7" class="node">
+<title>sourcefile~esmf_utilities.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_node7"><a xlink:href="../sourcefile/esmf_utilities.f90.html" xlink:title="ESMF_Utilities.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="397,-66 289,-66 289,-42 397,-42 397,-66"/>
+<text text-anchor="middle" x="343" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ESMF_Utilities.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~multistate.f90&#45;&gt;sourcefile~esmf_utilities.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_edge12" class="edge">
+<title>sourcefile~multistate.f90&#45;&gt;sourcefile~esmf_utilities.f90</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M440.85,-54C430.27,-54 418.73,-54 407.41,-54"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="407.12,-50.5 397.12,-54 407.12,-57.5 407.12,-50.5"/>
+</g>
+<!-- sourcefile~esmf_utilities.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~EfferentGraph_edge14" class="edge">
+<title>sourcefile~esmf_utilities.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M288.94,-61.05C278.05,-62.5 266.49,-64.03 255.27,-65.53"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="254.55,-62.09 245.1,-66.88 255.47,-69.03 254.55,-62.09"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefilegriddedcomponentdriverf90EfferentGraph = svgPanZoom('#sourcefilegriddedcomponentdriverf90EfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#EfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="EfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Files dependent on this one</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~griddedcomponentdriver.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilegriddedcomponentdriverf90AfferentGraph" width="421pt" height="1166pt"
+ viewBox="0.00 0.00 421.00 1166.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 1162)">
+<title>sourcefile~~griddedcomponentdriver.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-1162 417,-1162 417,4 -4,4"/>
+<!-- sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~griddedcomponentdriver.f90</title>
+<polygon fill="none" stroke="black" points="172,-591 0,-591 0,-567 172,-567 172,-591"/>
+<text text-anchor="middle" x="86" y="-576.6" font-family="Helvetica,sans-Serif" font-size="10.50">GriddedComponentDriver.F90</text>
+</g>
+<!-- sourcefile~actualptcomponentdrivermap.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~actualptcomponentdrivermap.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node2"><a xlink:href="../sourcefile/actualptcomponentdrivermap.f90.html" xlink:title="ActualPtComponentDriverMap.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="408.5,-1158 212.5,-1158 212.5,-1134 408.5,-1134 408.5,-1158"/>
+<text text-anchor="middle" x="310.5" y="-1143.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ActualPtComponentDriverMap.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~actualptcomponentdrivermap.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~actualptcomponentdrivermap.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M219.45,-1133.84C215.32,-1131.34 211.46,-1128.41 208,-1125 131.27,-1049.34 96.63,-694.38 88.78,-601.36"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="92.26,-601.03 87.95,-591.35 85.29,-601.61 92.26,-601.03"/>
+</g>
+<!-- sourcefile~add_export_coupler.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~add_export_coupler.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node3"><a xlink:href="../sourcefile/add_export_coupler.f90.html" xlink:title="add_export_coupler.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="380,-1116 241,-1116 241,-1092 380,-1092 380,-1116"/>
+<text text-anchor="middle" x="310.5" y="-1101.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">add_export_coupler.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~add_export_coupler.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~add_export_coupler.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M240.94,-1100.73C228.73,-1097.31 217.05,-1091.77 208,-1083 136.73,-1013.94 98.45,-689.75 89.22,-601.33"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="92.69,-600.9 88.19,-591.31 85.73,-601.62 92.69,-600.9"/>
+</g>
+<!-- sourcefile~add_import_coupler.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~add_import_coupler.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node4"><a xlink:href="../sourcefile/add_import_coupler.f90.html" xlink:title="add_import_coupler.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="380.5,-1074 240.5,-1074 240.5,-1050 380.5,-1050 380.5,-1074"/>
+<text text-anchor="middle" x="310.5" y="-1059.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">add_import_coupler.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~add_import_coupler.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~add_import_coupler.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M240.3,-1058.36C228.36,-1054.93 216.94,-1049.49 208,-1041 142.17,-978.51 100.44,-685 89.73,-601.32"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="93.18,-600.64 88.46,-591.15 86.23,-601.51 93.18,-600.64"/>
+</g>
+<!-- sourcefile~api.f90~16 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~api.f90~16</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node5"><a xlink:href="../sourcefile/api.f90~16.html" xlink:title="API.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="337.5,-1032 283.5,-1032 283.5,-1008 337.5,-1008 337.5,-1032"/>
+<text text-anchor="middle" x="310.5" y="-1017.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">API.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~api.f90~16&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~api.f90~16&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M283.24,-1021.62C260.51,-1021.56 228.2,-1017.71 208,-999 147.64,-943.09 102.72,-680.57 90.39,-601.56"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="93.79,-600.63 88.81,-591.28 86.87,-601.69 93.79,-600.63"/>
+</g>
+<!-- sourcefile~clock_advance.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~clock_advance.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node6"><a xlink:href="../sourcefile/clock_advance.f90.html" xlink:title="clock_advance.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="367.5,-990 253.5,-990 253.5,-966 367.5,-966 367.5,-990"/>
+<text text-anchor="middle" x="310.5" y="-975.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">clock_advance.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~clock_advance.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~clock_advance.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M253.32,-976.87C237.06,-973.96 220.38,-968.13 208,-957 100,-859.86 87.82,-666.39 86.88,-601.1"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="90.38,-601.08 86.82,-591.1 83.38,-601.12 90.38,-601.08"/>
+</g>
+<!-- sourcefile~couplermetacomponent.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~couplermetacomponent.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node7"><a xlink:href="../sourcefile/couplermetacomponent.f90.html" xlink:title="CouplerMetaComponent.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="393.5,-948 227.5,-948 227.5,-924 393.5,-924 393.5,-948"/>
+<text text-anchor="middle" x="310.5" y="-933.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">CouplerMetaComponent.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~couplermetacomponent.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~couplermetacomponent.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M227.27,-926.89C220.28,-923.85 213.71,-919.95 208,-915 110.76,-830.65 91.66,-662.12 87.91,-601.43"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="91.39,-600.89 87.36,-591.09 84.4,-601.26 91.39,-600.89"/>
+</g>
+<!-- sourcefile~finalize.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~finalize.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node8"><a xlink:href="../sourcefile/finalize.f90.html" xlink:title="finalize.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="347,-906 274,-906 274,-882 347,-882 347,-906"/>
+<text text-anchor="middle" x="310.5" y="-891.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">finalize.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~finalize.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~finalize.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M274,-894.66C252.7,-893.27 226.29,-888.16 208,-873 121.14,-800.99 95.84,-656.52 89.18,-601.23"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="92.64,-600.67 88.05,-591.12 85.68,-601.45 92.64,-600.67"/>
+</g>
+<!-- sourcefile~generic.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~generic.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node9"><a xlink:href="../sourcefile/generic.f90.html" xlink:title="Generic.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="349,-864 272,-864 272,-840 349,-840 349,-864"/>
+<text text-anchor="middle" x="310.5" y="-849.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Generic.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~generic.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~generic.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M271.87,-852.1C251.12,-850.35 226,-845.08 208,-831 131.4,-771.11 100.59,-650.62 90.81,-601.06"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="94.22,-600.27 88.94,-591.09 87.34,-601.56 94.22,-600.27"/>
+</g>
+<!-- sourcefile~genericcoupler.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~genericcoupler.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node10"><a xlink:href="../sourcefile/genericcoupler.f90.html" xlink:title="GenericCoupler.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="369.5,-822 251.5,-822 251.5,-798 369.5,-798 369.5,-822"/>
+<text text-anchor="middle" x="310.5" y="-807.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GenericCoupler.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~genericcoupler.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~genericcoupler.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M251.26,-806.51C236.11,-803.41 220.54,-798.07 208,-789 141.52,-740.93 106.12,-644.27 93.02,-600.91"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="96.32,-599.73 90.16,-591.1 89.59,-601.68 96.32,-599.73"/>
+</g>
+<!-- sourcefile~genericgridcomp.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~genericgridcomp.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node11"><a xlink:href="../sourcefile/genericgridcomp.f90.html" xlink:title="GenericGridComp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="376,-780 245,-780 245,-756 376,-756 376,-780"/>
+<text text-anchor="middle" x="310.5" y="-765.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GenericGridComp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~genericgridcomp.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~genericgridcomp.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M244.95,-762.11C232.01,-758.93 219.02,-754.15 208,-747 151.21,-710.17 112.5,-636.63 96,-600.31"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="99.18,-598.84 91.93,-591.11 92.77,-601.67 99.18,-598.84"/>
+</g>
+<!-- sourcefile~get_clock.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~get_clock.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node12"><a xlink:href="../sourcefile/get_clock.f90.html" xlink:title="get_clock.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="353,-738 268,-738 268,-714 353,-714 353,-738"/>
+<text text-anchor="middle" x="310.5" y="-723.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_clock.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~get_clock.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~get_clock.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M267.53,-723.01C248.43,-720.26 226.11,-715.01 208,-705 160.81,-678.93 120.82,-628.31 100.77,-599.81"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="103.54,-597.64 94.99,-591.39 97.77,-601.61 103.54,-597.64"/>
+</g>
+<!-- sourcefile~get_gridcomp.f90~2 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~get_gridcomp.f90~2</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node13"><a xlink:href="../sourcefile/get_gridcomp.f90~2.html" xlink:title="get_gridcomp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="365,-696 256,-696 256,-672 365,-672 365,-696"/>
+<text text-anchor="middle" x="310.5" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_gridcomp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~get_gridcomp.f90~2&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~get_gridcomp.f90~2&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M255.85,-677.07C240.03,-673.93 222.97,-669.42 208,-663 169.7,-646.56 131.12,-617.01 108.15,-597.7"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="110.29,-594.93 100.42,-591.09 105.74,-600.25 110.29,-594.93"/>
+</g>
+<!-- sourcefile~get_name.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node14" class="node">
+<title>sourcefile~get_name.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node14"><a xlink:href="../sourcefile/get_name.f90.html" xlink:title="get_name.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="354.5,-654 266.5,-654 266.5,-630 354.5,-630 354.5,-654"/>
+<text text-anchor="middle" x="310.5" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_name.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~get_name.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~get_name.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M266.24,-634.34C248.12,-630.79 226.91,-626.21 208,-621 180.8,-613.5 150.84,-603.12 127.54,-594.55"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="128.58,-591.21 117.99,-591.01 126.14,-597.77 128.58,-591.21"/>
+</g>
+<!-- sourcefile~get_states.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node15" class="node">
+<title>sourcefile~get_states.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node15"><a xlink:href="../sourcefile/get_states.f90.html" xlink:title="get_states.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="355,-612 266,-612 266,-588 355,-588 355,-612"/>
+<text text-anchor="middle" x="310.5" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_states.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~get_states.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~get_states.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M265.81,-595.88C241.92,-593.62 211.34,-590.74 182.26,-587.99"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="182.33,-584.48 172.05,-587.03 181.67,-591.45 182.33,-584.48"/>
+</g>
+<!-- sourcefile~griddedcomponentdrivermap.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node16" class="node">
+<title>sourcefile~griddedcomponentdrivermap.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node16"><a xlink:href="../sourcefile/griddedcomponentdrivermap.f90.html" xlink:title="GriddedComponentDriverMap.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="408.5,-570 212.5,-570 212.5,-546 408.5,-546 408.5,-570"/>
+<text text-anchor="middle" x="310.5" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GriddedComponentDriverMap.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~griddedcomponentdrivermap.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~griddedcomponentdrivermap.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M212.23,-567.18C202.34,-568.11 192.29,-569.06 182.42,-569.99"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="181.83,-566.53 172.21,-570.96 182.49,-573.5 181.83,-566.53"/>
+</g>
+<!-- sourcefile~griddedcomponentdrivervector.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node17" class="node">
+<title>sourcefile~griddedcomponentdrivervector.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node17"><a xlink:href="../sourcefile/griddedcomponentdrivervector.f90.html" xlink:title="GriddedComponentDriverVector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="413,-528 208,-528 208,-504 413,-504 413,-528"/>
+<text text-anchor="middle" x="310.5" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GriddedComponentDriverVector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~griddedcomponentdrivervector.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~griddedcomponentdrivervector.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M245.04,-528.02C232.67,-530.7 219.88,-533.72 208,-537 180.8,-544.5 150.84,-554.88 127.54,-563.45"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="126.14,-560.23 117.99,-566.99 128.58,-566.79 126.14,-560.23"/>
+</g>
+<!-- sourcefile~initialize.f90~2 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node18" class="node">
+<title>sourcefile~initialize.f90~2</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node18"><a xlink:href="../sourcefile/initialize.f90~2.html" xlink:title="initialize.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="350,-486 271,-486 271,-462 350,-462 350,-486"/>
+<text text-anchor="middle" x="310.5" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">initialize.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~initialize.f90~2&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~initialize.f90~2&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M270.8,-478.27C251.39,-481.34 227.84,-486.48 208,-495 169.7,-511.44 131.12,-540.99 108.15,-560.3"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="105.74,-557.75 100.42,-566.91 110.29,-563.07 105.74,-557.75"/>
+</g>
+<!-- sourcefile~initialize_geom_a.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node19" class="node">
+<title>sourcefile~initialize_geom_a.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node19"><a xlink:href="../sourcefile/initialize_geom_a.f90.html" xlink:title="initialize_geom_a.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="374,-444 247,-444 247,-420 374,-420 374,-444"/>
+<text text-anchor="middle" x="310.5" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">initialize_geom_a.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~initialize_geom_a.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~initialize_geom_a.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M246.75,-438.86C233.42,-441.97 219.81,-446.47 208,-453 160.81,-479.07 120.82,-529.69 100.77,-558.19"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="97.77,-556.39 94.99,-566.61 103.54,-560.36 97.77,-556.39"/>
+</g>
+<!-- sourcefile~outermetacomponent.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node20" class="node">
+<title>sourcefile~outermetacomponent.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node20"><a xlink:href="../sourcefile/outermetacomponent.f90.html" xlink:title="OuterMetaComponent.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="387.5,-402 233.5,-402 233.5,-378 387.5,-378 387.5,-402"/>
+<text text-anchor="middle" x="310.5" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">OuterMetaComponent.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~outermetacomponent.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~outermetacomponent.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M233.29,-399.23C224.36,-402.17 215.7,-406.01 208,-411 151.21,-447.83 112.5,-521.37 96,-557.69"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="92.77,-556.33 91.93,-566.89 99.18,-559.16 92.77,-556.33"/>
+</g>
+<!-- sourcefile~read_restart.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node21" class="node">
+<title>sourcefile~read_restart.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node21"><a xlink:href="../sourcefile/read_restart.f90.html" xlink:title="read_restart.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="360,-360 261,-360 261,-336 360,-336 360,-360"/>
+<text text-anchor="middle" x="310.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">read_restart.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~read_restart.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge20" class="edge">
+<title>sourcefile~read_restart.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M260.94,-349.78C242.95,-352.46 223.24,-357.98 208,-369 141.52,-417.07 106.12,-513.73 93.02,-557.09"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="89.59,-556.32 90.16,-566.9 96.32,-558.27 89.59,-556.32"/>
+</g>
+<!-- sourcefile~run.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node22" class="node">
+<title>sourcefile~run.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node22"><a xlink:href="../sourcefile/run.f90.html" xlink:title="run.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="337.5,-318 283.5,-318 283.5,-294 337.5,-294 337.5,-318"/>
+<text text-anchor="middle" x="310.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">run.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~run.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge21" class="edge">
+<title>sourcefile~run.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M283.08,-305.25C260.87,-305.96 229.41,-310.26 208,-327 131.4,-386.89 100.59,-507.38 90.81,-556.94"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="87.34,-556.44 88.94,-566.91 94.22,-557.73 87.34,-556.44"/>
+</g>
+<!-- sourcefile~run_export_couplers.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node23" class="node">
+<title>sourcefile~run_export_couplers.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node23"><a xlink:href="../sourcefile/run_export_couplers.f90.html" xlink:title="run_export_couplers.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="382,-276 239,-276 239,-252 382,-252 382,-276"/>
+<text text-anchor="middle" x="310.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">run_export_couplers.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~run_export_couplers.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge22" class="edge">
+<title>sourcefile~run_export_couplers.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M238.82,-269.32C227.64,-272.66 216.87,-277.65 208,-285 121.14,-357.01 95.84,-501.48 89.18,-556.77"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="85.68,-556.55 88.05,-566.88 92.64,-557.33 85.68,-556.55"/>
+</g>
+<!-- sourcefile~run_import_couplers.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node24" class="node">
+<title>sourcefile~run_import_couplers.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node24"><a xlink:href="../sourcefile/run_import_couplers.f90.html" xlink:title="run_import_couplers.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="383,-234 238,-234 238,-210 383,-210 383,-234"/>
+<text text-anchor="middle" x="310.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">run_import_couplers.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~run_import_couplers.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge23" class="edge">
+<title>sourcefile~run_import_couplers.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M237.76,-227.22C226.89,-230.61 216.5,-235.63 208,-243 110.76,-327.35 91.66,-495.88 87.91,-556.57"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="84.4,-556.74 87.36,-566.91 91.39,-557.11 84.4,-556.74"/>
+</g>
+<!-- sourcefile~set_clock.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node25" class="node">
+<title>sourcefile~set_clock.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node25"><a xlink:href="../sourcefile/set_clock.f90.html" xlink:title="set_clock.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="352.5,-192 268.5,-192 268.5,-168 352.5,-168 352.5,-192"/>
+<text text-anchor="middle" x="310.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">set_clock.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~set_clock.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge24" class="edge">
+<title>sourcefile~set_clock.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M268.35,-179.19C247.94,-180.91 224.26,-186.38 208,-201 100,-298.14 87.82,-491.61 86.88,-556.9"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="83.38,-556.88 86.82,-566.9 90.38,-556.92 83.38,-556.88"/>
+</g>
+<!-- sourcefile~simpleconnection.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node26" class="node">
+<title>sourcefile~simpleconnection.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node26"><a xlink:href="../sourcefile/simpleconnection.f90.html" xlink:title="SimpleConnection.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="377,-150 244,-150 244,-126 377,-126 377,-150"/>
+<text text-anchor="middle" x="310.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SimpleConnection.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~simpleconnection.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge25" class="edge">
+<title>sourcefile~simpleconnection.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M243.88,-140.89C230.71,-144.23 217.9,-149.83 208,-159 147.64,-214.91 102.72,-477.43 90.39,-556.44"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="86.87,-556.31 88.81,-566.72 93.79,-557.37 86.87,-556.31"/>
+</g>
+<!-- sourcefile~stateitemspec.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node27" class="node">
+<title>sourcefile~stateitemspec.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node27"><a xlink:href="../sourcefile/stateitemspec.f90.html" xlink:title="StateItemSpec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="367,-108 254,-108 254,-84 367,-84 367,-108"/>
+<text text-anchor="middle" x="310.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StateItemSpec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~stateitemspec.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge26" class="edge">
+<title>sourcefile~stateitemspec.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M253.74,-96.6C237.21,-99.43 220.27,-105.36 208,-117 142.17,-179.49 100.44,-473 89.73,-556.68"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="86.23,-556.49 88.46,-566.85 93.18,-557.36 86.23,-556.49"/>
+</g>
+<!-- sourcefile~stateregistry.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node28" class="node">
+<title>sourcefile~stateregistry.f90</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node28"><a xlink:href="../sourcefile/stateregistry.f90.html" xlink:title="StateRegistry.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="362.5,-66 258.5,-66 258.5,-42 362.5,-42 362.5,-66"/>
+<text text-anchor="middle" x="310.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StateRegistry.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~stateregistry.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge27" class="edge">
+<title>sourcefile~stateregistry.f90&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M258.34,-53.72C240.34,-56.18 221.31,-62.1 208,-75 136.73,-144.06 98.45,-468.25 89.22,-556.67"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="85.73,-556.38 88.19,-566.69 92.69,-557.1 85.73,-556.38"/>
+</g>
+<!-- sourcefile~write_restart.f90~2 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node29" class="node">
+<title>sourcefile~write_restart.f90~2</title>
+<g id="a_sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_node29"><a xlink:href="../sourcefile/write_restart.f90~2.html" xlink:title="write_restart.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="361,-24 260,-24 260,0 361,0 361,-24"/>
+<text text-anchor="middle" x="310.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">write_restart.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~write_restart.f90~2&#45;&gt;sourcefile~griddedcomponentdriver.f90 -->
+<g id="sourcefile~~griddedcomponentdriver.f90~~AfferentGraph_edge28" class="edge">
+<title>sourcefile~write_restart.f90~2&#45;&gt;sourcefile~griddedcomponentdriver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M259.78,-11.39C241.32,-13.71 221.58,-19.61 208,-33 131.27,-108.66 96.63,-463.62 88.78,-556.64"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="85.29,-556.39 87.95,-566.65 92.26,-556.97 85.29,-556.39"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#AfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="AfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+<br>
+      <section>
+        <h2><span class="anchor" id="src"></span>Source Code</h2>
+        <div class="hl codehilite"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="cp">#include &quot;MAPL.h&quot;</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a>
+<a id="ln-3" name="ln-3" href="#ln-3"></a><span class="k">module </span><span class="n">mapl_GriddedComponentDriver_mod</span>
+<a id="ln-4" name="ln-4" href="#ln-4"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_MultiState_mod</span>
+<a id="ln-5" name="ln-5" href="#ln-5"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_ComponentDriver_mod</span>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_ComponentDriverVector_mod</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_ErrorHandling_mod</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_KeywordEnforcer_mod</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">KE</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">KeywordEnforcer</span>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="w">   </span><span class="k">use</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">esmf</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="w">   </span><span class="k">implicit none</span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a><span class="k">   private</span>
+<a id="ln-12" name="ln-12" href="#ln-12"></a>
+<a id="ln-13" name="ln-13" href="#ln-13"></a><span class="k">   public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">GriddedComponentDriver</span>
+<a id="ln-14" name="ln-14" href="#ln-14"></a>
+<a id="ln-15" name="ln-15" href="#ln-15"></a><span class="w">   </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">extends</span><span class="p">(</span><span class="n">ComponentDriver</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">GriddedComponentDriver</span>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="w">      </span><span class="k">private</span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a><span class="k">      type</span><span class="p">(</span><span class="n">ESMF_GridComp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">gridcomp</span>
+<a id="ln-18" name="ln-18" href="#ln-18"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">MultiState</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">states</span>
+<a id="ln-19" name="ln-19" href="#ln-19"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Clock</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">clock</span>
+<a id="ln-20" name="ln-20" href="#ln-20"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ComponentDriverVector</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">export_couplers</span>
+<a id="ln-21" name="ln-21" href="#ln-21"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ComponentDriverVector</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">import_couplers</span>
+<a id="ln-22" name="ln-22" href="#ln-22"></a><span class="w">   </span><span class="k">contains</span>
+<a id="ln-23" name="ln-23" href="#ln-23"></a><span class="k">      procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">initialize</span>
+<a id="ln-24" name="ln-24" href="#ln-24"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">run</span>
+<a id="ln-25" name="ln-25" href="#ln-25"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">finalize</span>
+<a id="ln-26" name="ln-26" href="#ln-26"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">write_restart</span>
+<a id="ln-27" name="ln-27" href="#ln-27"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">read_restart</span>
+<a id="ln-28" name="ln-28" href="#ln-28"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">clock_advance</span>
+<a id="ln-29" name="ln-29" href="#ln-29"></a>
+<a id="ln-30" name="ln-30" href="#ln-30"></a><span class="w">      </span><span class="c">! Accessors</span>
+<a id="ln-31" name="ln-31" href="#ln-31"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_clock</span>
+<a id="ln-32" name="ln-32" href="#ln-32"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">set_clock</span>
+<a id="ln-33" name="ln-33" href="#ln-33"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_states</span>
+<a id="ln-34" name="ln-34" href="#ln-34"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_gridcomp</span>
+<a id="ln-35" name="ln-35" href="#ln-35"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_name</span>
+<a id="ln-36" name="ln-36" href="#ln-36"></a>
+<a id="ln-37" name="ln-37" href="#ln-37"></a><span class="w">      </span><span class="c">! Couplers</span>
+<a id="ln-38" name="ln-38" href="#ln-38"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">run_export_couplers</span>
+<a id="ln-39" name="ln-39" href="#ln-39"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">run_import_couplers</span>
+<a id="ln-40" name="ln-40" href="#ln-40"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">add_export_coupler</span>
+<a id="ln-41" name="ln-41" href="#ln-41"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">add_import_coupler</span>
+<a id="ln-42" name="ln-42" href="#ln-42"></a><span class="w">   </span><span class="k">end type </span><span class="n">GriddedComponentDriver</span>
+<a id="ln-43" name="ln-43" href="#ln-43"></a>
+<a id="ln-44" name="ln-44" href="#ln-44"></a><span class="w">   </span><span class="k">interface </span><span class="n">GriddedComponentDriver</span>
+<a id="ln-45" name="ln-45" href="#ln-45"></a><span class="w">      </span><span class="k">module procedure </span><span class="n">new_GriddedComponentDriver_all</span>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="w">   </span><span class="k">end interface </span><span class="n">GriddedComponentDriver</span>
+<a id="ln-47" name="ln-47" href="#ln-47"></a>
+<a id="ln-48" name="ln-48" href="#ln-48"></a><span class="w">   </span><span class="k">interface</span>
+<a id="ln-49" name="ln-49" href="#ln-49"></a>
+<a id="ln-50" name="ln-50" href="#ln-50"></a><span class="k">      module recursive subroutine </span><span class="n">initialize</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">unusable</span><span class="p">,</span><span class="w"> </span><span class="n">phase_idx</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-51" name="ln-51" href="#ln-51"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-52" name="ln-52" href="#ln-52"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">KE</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">unusable</span>
+<a id="ln-53" name="ln-53" href="#ln-53"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">phase_idx</span>
+<a id="ln-54" name="ln-54" href="#ln-54"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-55" name="ln-55" href="#ln-55"></a><span class="w">      </span><span class="k">end subroutine </span><span class="n">initialize</span>
+<a id="ln-56" name="ln-56" href="#ln-56"></a>
+<a id="ln-57" name="ln-57" href="#ln-57"></a><span class="w">      </span><span class="c">! run_self() is implemented in submodule to avoid circular dependency</span>
+<a id="ln-58" name="ln-58" href="#ln-58"></a><span class="w">      </span><span class="c">! on OuterMetaComponent.</span>
+<a id="ln-59" name="ln-59" href="#ln-59"></a><span class="w">      </span><span class="k">module recursive subroutine </span><span class="n">run</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">unusable</span><span class="p">,</span><span class="w"> </span><span class="n">phase_idx</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-60" name="ln-60" href="#ln-60"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-61" name="ln-61" href="#ln-61"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">KE</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">unusable</span>
+<a id="ln-62" name="ln-62" href="#ln-62"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">phase_idx</span>
+<a id="ln-63" name="ln-63" href="#ln-63"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-64" name="ln-64" href="#ln-64"></a><span class="w">      </span><span class="k">end subroutine</span>
+<a id="ln-65" name="ln-65" href="#ln-65"></a>
+<a id="ln-66" name="ln-66" href="#ln-66"></a><span class="k">      module recursive subroutine </span><span class="n">finalize</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">unusable</span><span class="p">,</span><span class="w"> </span><span class="n">phase_idx</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-67" name="ln-67" href="#ln-67"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">KE</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">unusable</span>
+<a id="ln-69" name="ln-69" href="#ln-69"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">phase_idx</span>
+<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-71" name="ln-71" href="#ln-71"></a><span class="w">      </span><span class="k">end subroutine </span><span class="n">finalize</span>
+<a id="ln-72" name="ln-72" href="#ln-72"></a>
+<a id="ln-73" name="ln-73" href="#ln-73"></a><span class="w">      </span><span class="k">module recursive subroutine </span><span class="n">write_restart</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">unusable</span><span class="p">,</span><span class="w"> </span><span class="n">phase_idx</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-75" name="ln-75" href="#ln-75"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">KE</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">unusable</span>
+<a id="ln-76" name="ln-76" href="#ln-76"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">phase_idx</span>
+<a id="ln-77" name="ln-77" href="#ln-77"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-78" name="ln-78" href="#ln-78"></a><span class="w">      </span><span class="k">end subroutine </span><span class="n">write_restart</span>
+<a id="ln-79" name="ln-79" href="#ln-79"></a>
+<a id="ln-80" name="ln-80" href="#ln-80"></a><span class="w">      </span><span class="k">module recursive subroutine </span><span class="n">read_restart</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">unusable</span><span class="p">,</span><span class="w"> </span><span class="n">phase_idx</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-81" name="ln-81" href="#ln-81"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-82" name="ln-82" href="#ln-82"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">KE</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">unusable</span>
+<a id="ln-83" name="ln-83" href="#ln-83"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">phase_idx</span>
+<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-85" name="ln-85" href="#ln-85"></a><span class="w">      </span><span class="k">end subroutine </span><span class="n">read_restart</span>
+<a id="ln-86" name="ln-86" href="#ln-86"></a>
+<a id="ln-87" name="ln-87" href="#ln-87"></a><span class="w">      </span><span class="k">module function </span><span class="n">get_states</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
+<a id="ln-88" name="ln-88" href="#ln-88"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">MultiState</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">states</span>
+<a id="ln-89" name="ln-89" href="#ln-89"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-90" name="ln-90" href="#ln-90"></a><span class="w">      </span><span class="k">end function </span><span class="n">get_states</span>
+<a id="ln-91" name="ln-91" href="#ln-91"></a>
+<a id="ln-92" name="ln-92" href="#ln-92"></a><span class="w">      </span><span class="k">module function </span><span class="n">get_clock</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">clock</span><span class="p">)</span>
+<a id="ln-93" name="ln-93" href="#ln-93"></a><span class="w">         </span><span class="k">use </span><span class="n">esmf</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">ESMF_Clock</span>
+<a id="ln-94" name="ln-94" href="#ln-94"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Clock</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">clock</span>
+<a id="ln-95" name="ln-95" href="#ln-95"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-96" name="ln-96" href="#ln-96"></a><span class="w">      </span><span class="k">end function </span><span class="n">get_clock</span>
+<a id="ln-97" name="ln-97" href="#ln-97"></a>
+<a id="ln-98" name="ln-98" href="#ln-98"></a><span class="w">      </span><span class="k">module subroutine </span><span class="n">set_clock</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">clock</span><span class="p">)</span>
+<a id="ln-99" name="ln-99" href="#ln-99"></a><span class="w">         </span><span class="k">use </span><span class="n">esmf</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">ESMF_Clock</span>
+<a id="ln-100" name="ln-100" href="#ln-100"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-101" name="ln-101" href="#ln-101"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Clock</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">clock</span>
+<a id="ln-102" name="ln-102" href="#ln-102"></a><span class="w">      </span><span class="k">end subroutine </span><span class="n">set_clock</span>
+<a id="ln-103" name="ln-103" href="#ln-103"></a>
+<a id="ln-104" name="ln-104" href="#ln-104"></a><span class="w">      </span><span class="k">recursive module subroutine </span><span class="n">run_export_couplers</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">unusable</span><span class="p">,</span><span class="w"> </span><span class="n">phase_idx</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-105" name="ln-105" href="#ln-105"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-106" name="ln-106" href="#ln-106"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">KE</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">unusable</span>
+<a id="ln-107" name="ln-107" href="#ln-107"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">phase_idx</span>
+<a id="ln-108" name="ln-108" href="#ln-108"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-109" name="ln-109" href="#ln-109"></a><span class="w">      </span><span class="k">end subroutine </span><span class="n">run_export_couplers</span>
+<a id="ln-110" name="ln-110" href="#ln-110"></a>
+<a id="ln-111" name="ln-111" href="#ln-111"></a><span class="w">      </span><span class="k">recursive module subroutine </span><span class="n">run_import_couplers</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-112" name="ln-112" href="#ln-112"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-113" name="ln-113" href="#ln-113"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-114" name="ln-114" href="#ln-114"></a><span class="w">      </span><span class="k">end subroutine </span><span class="n">run_import_couplers</span>
+<a id="ln-115" name="ln-115" href="#ln-115"></a>
+<a id="ln-116" name="ln-116" href="#ln-116"></a><span class="w">      </span><span class="k">module subroutine </span><span class="n">clock_advance</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-117" name="ln-117" href="#ln-117"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-118" name="ln-118" href="#ln-118"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-119" name="ln-119" href="#ln-119"></a><span class="w">      </span><span class="k">end subroutine </span><span class="n">clock_advance</span>
+<a id="ln-120" name="ln-120" href="#ln-120"></a>
+<a id="ln-121" name="ln-121" href="#ln-121"></a><span class="w">      </span><span class="k">module function </span><span class="n">get_gridcomp</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">gridcomp</span><span class="p">)</span>
+<a id="ln-122" name="ln-122" href="#ln-122"></a><span class="w">         </span><span class="k">use </span><span class="n">esmf</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">ESMF_GridComp</span>
+<a id="ln-123" name="ln-123" href="#ln-123"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_GridComp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">gridcomp</span><span class="w"> </span>
+<a id="ln-124" name="ln-124" href="#ln-124"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-125" name="ln-125" href="#ln-125"></a><span class="w">      </span><span class="k">end function </span><span class="n">get_gridcomp</span>
+<a id="ln-126" name="ln-126" href="#ln-126"></a>
+<a id="ln-127" name="ln-127" href="#ln-127"></a><span class="w">      </span><span class="k">module function </span><span class="n">get_name</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<a id="ln-128" name="ln-128" href="#ln-128"></a><span class="w">         </span><span class="kt">character</span><span class="p">(:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">name</span>
+<a id="ln-129" name="ln-129" href="#ln-129"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-130" name="ln-130" href="#ln-130"></a><span class="w">         </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-131" name="ln-131" href="#ln-131"></a><span class="w">      </span><span class="k">end function </span><span class="n">get_name</span>
+<a id="ln-132" name="ln-132" href="#ln-132"></a>
+<a id="ln-133" name="ln-133" href="#ln-133"></a><span class="w">      </span><span class="k">module subroutine </span><span class="n">add_export_coupler</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">driver</span><span class="p">)</span>
+<a id="ln-134" name="ln-134" href="#ln-134"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-135" name="ln-135" href="#ln-135"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">driver</span>
+<a id="ln-136" name="ln-136" href="#ln-136"></a><span class="w">      </span><span class="k">end subroutine </span><span class="n">add_export_coupler</span>
+<a id="ln-137" name="ln-137" href="#ln-137"></a>
+<a id="ln-138" name="ln-138" href="#ln-138"></a><span class="w">      </span><span class="k">module subroutine </span><span class="n">add_import_coupler</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">driver</span><span class="p">)</span>
+<a id="ln-139" name="ln-139" href="#ln-139"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-140" name="ln-140" href="#ln-140"></a><span class="w">         </span><span class="k">type</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">driver</span>
+<a id="ln-141" name="ln-141" href="#ln-141"></a><span class="w">      </span><span class="k">end subroutine </span><span class="n">add_import_coupler</span>
+<a id="ln-142" name="ln-142" href="#ln-142"></a>
+<a id="ln-143" name="ln-143" href="#ln-143"></a><span class="w">   </span><span class="k">end interface</span>
+<a id="ln-144" name="ln-144" href="#ln-144"></a>
+<a id="ln-145" name="ln-145" href="#ln-145"></a><span class="k">contains</span>
+<a id="ln-146" name="ln-146" href="#ln-146"></a>
+<a id="ln-147" name="ln-147" href="#ln-147"></a>
+<a id="ln-148" name="ln-148" href="#ln-148"></a><span class="k">   function </span><span class="n">new_GriddedComponentDriver_all</span><span class="p">(</span><span class="n">gridcomp</span><span class="p">,</span><span class="w"> </span><span class="n">states</span><span class="p">,</span><span class="w"> </span><span class="n">clock</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+<a id="ln-149" name="ln-149" href="#ln-149"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">GriddedComponentDriver</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">driver</span>
+<a id="ln-150" name="ln-150" href="#ln-150"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_GridComp</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">gridcomp</span>
+<a id="ln-151" name="ln-151" href="#ln-151"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">MultiState</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">states</span>
+<a id="ln-152" name="ln-152" href="#ln-152"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Clock</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">clock</span>
+<a id="ln-153" name="ln-153" href="#ln-153"></a>
+<a id="ln-154" name="ln-154" href="#ln-154"></a><span class="w">      </span><span class="n">driver</span><span class="p">%</span><span class="n">gridcomp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gridcomp</span>
+<a id="ln-155" name="ln-155" href="#ln-155"></a>
+<a id="ln-156" name="ln-156" href="#ln-156"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">states</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-157" name="ln-157" href="#ln-157"></a><span class="k">         </span><span class="n">driver</span><span class="p">%</span><span class="n">states</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">states</span>
+<a id="ln-158" name="ln-158" href="#ln-158"></a><span class="w">      </span><span class="k">else</span>
+<a id="ln-159" name="ln-159" href="#ln-159"></a><span class="k">         </span><span class="n">driver</span><span class="p">%</span><span class="n">states</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MultiState</span><span class="p">()</span>
+<a id="ln-160" name="ln-160" href="#ln-160"></a><span class="w">      </span><span class="k">end if</span>
+<a id="ln-161" name="ln-161" href="#ln-161"></a>
+<a id="ln-162" name="ln-162" href="#ln-162"></a><span class="k">      if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">clock</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-163" name="ln-163" href="#ln-163"></a><span class="k">         </span><span class="n">driver</span><span class="p">%</span><span class="n">clock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clock</span>
+<a id="ln-164" name="ln-164" href="#ln-164"></a><span class="w">      </span><span class="k">end if</span>
+<a id="ln-165" name="ln-165" href="#ln-165"></a><span class="k">         </span>
+<a id="ln-166" name="ln-166" href="#ln-166"></a><span class="k">   end function </span><span class="n">new_GriddedComponentDriver_all</span>
+<a id="ln-167" name="ln-167" href="#ln-167"></a>
+<a id="ln-168" name="ln-168" href="#ln-168"></a>
+<a id="ln-169" name="ln-169" href="#ln-169"></a><span class="k">end module </span><span class="n">mapl_GriddedComponentDriver_mod</span>
+</pre></div>
+
+      </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              MAPL
+ was developed by The MAPL Developers<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-06-23T14:05:03.502593+0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
