@@ -1,156 +1,110 @@
 #include "MAPL.h"
-
-! Fill lon/lat centre (and optionally corner) coordinates for a standard
-! XY grid whose coordinate arrays are stored as 2-D variables ('lons',
-! 'lats', 'corner_lons', 'corner_lats') in a NetCDF file.
-!
-! Shmem optimisation is intentionally omitted here (see issue #4685).
-! Root reads the full global arrays, then broadcasts to all PETs via
-! MPI_Bcast (ESMF_VMBroadcast has no R8 or 2-D interface), and each
-! PET copies its local tile into the ESMF coordinate arrays.
-
-submodule (mapl_XYGeomFactory_mod) fill_coordinates_smod
+submodule (mapl_LatLonGeomFactory_mod) fill_coordinates_smod
+   use mapl_GeomSpec_mod
+   use mapl_LonAxis_mod
+   use mapl_LatAxis_mod
+   use mapl_LatLonDecomposition_mod
+   use mapl_LatLonGeomSpec_mod
+   use mapl_MinMax_mod
    use mapl_ErrorHandling_mod
-   use mapl_InternalConstants_mod, only: MAPL_UNDEFINED_REAL64
-   use MAPL_Constants, only: MAPL_DEGREES_TO_RADIANS_R8
-   use mapl_Comms_mod,   only: am_i_root, ROOT_PROCESS_ID
-   use NetCDF
+   use MAPL_Constants
+   use pFIO
+   use gFTL2_StringVector
    use esmf
-   use mpi
-   implicit none
+   use mapl_KeywordEnforcer_mod, only: KE => KeywordEnforcer
+   implicit none (type, external)
+
 
 contains
 
    module subroutine fill_coordinates(spec, grid, unusable, rc)
       use mapl_KeywordEnforcer_mod
-      type(XYGeomSpec), intent(in) :: spec
-      type(ESMF_Grid),  intent(inout) :: grid
+      type(LatLonGeomSpec), intent(in) :: spec
+      type(ESMF_Grid), intent(inout) :: grid
       class(KE), optional, intent(in) :: unusable
       integer, optional, intent(out) :: rc
 
       integer :: status
-      integer :: im_world, jm_world
-      integer :: i1, in, j1, jn, ic1, icn, jc1, jcn
-      integer :: ncid, varid
-      integer :: comm
-      real(ESMF_KIND_R8), pointer     :: fptr(:,:)
-      real(ESMF_KIND_R8), allocatable :: centers(:,:), corners(:,:)
-      type(ESMF_VM) :: vm
+      real(kind=ESMF_KIND_R8), pointer :: centers(:,:)
+      real(kind=ESMF_KIND_R8), pointer :: corners(:,:)
+      integer :: i, j
+      type(LonAxis) :: lon_axis
+      type(LatAxis) :: lat_axis
+      type(LonAxis) :: local_lon_axis
+      type(LatAxis) :: local_lat_axis
+      type(LatLonDecomposition) :: decomp
+      integer :: nx, ny, ix, iy
 
-      im_world = spec%get_im_world()
-      jm_world = spec%get_jm_world()
+      lon_axis = spec%get_lon_axis()
+      lat_axis = spec%get_lat_axis()
+      decomp = spec%get_decomposition()
 
-      call ESMF_VMGetCurrent(vm, _RC)
-      call ESMF_VMGet(vm, mpiCommunicator=comm, _RC)
-
-      ! ---- centres ----
-      allocate(centers(im_world, jm_world))
-
-      call get_interior_bounds(grid, i1, in, j1, jn, _RC)
-      ! corner bounds: last PE row owns the extra corner row
-      ic1 = i1 ;  icn = in
-      jc1 = j1
-      if (jn == jm_world) then
-         jcn = jn + 1
-      else
-         jcn = jn
-      end if
-
-      ! longitudes
-      if (am_i_root()) then
-         status = nf90_open(spec%get_grid_file_name(), NF90_NOWRITE, ncid)
-         _VERIFY(status)
-         status = nf90_inq_varid(ncid, 'lons', varid) ; _VERIFY(status)
-         status = nf90_get_var(ncid, varid, centers)  ; _VERIFY(status)
-         where (centers /= MAPL_UNDEFINED_REAL64) &
-              centers = centers * MAPL_DEGREES_TO_RADIANS_R8
-      end if
-      call MPI_Bcast(centers, im_world*jm_world, MPI_DOUBLE_PRECISION, &
-           ROOT_PROCESS_ID, comm, status)
-      _VERIFY(status)
-
+      nx = size(decomp%get_lon_distribution())
+      ny = size(decomp%get_lat_distribution())
+      call get_ranks(nx, ny, ix, iy, _RC)
+ 
+     ! First we handle longitudes:
       call ESMF_GridGetCoord(grid, coordDim=1, localDE=0, &
-           staggerloc=ESMF_STAGGERLOC_CENTER, farrayPtr=fptr, _RC)
-      fptr = centers(i1:in, j1:jn)
+           staggerloc=ESMF_STAGGERLOC_CENTER, &
+           farrayPtr=centers, _RC)
+      call ESMF_GridGetCoord(grid, coordDim=1, localDE=0, &
+           staggerloc=ESMF_STAGGERLOC_CORNER, &
+           farrayPtr=corners, _RC)
 
-      ! latitudes
-      if (am_i_root()) then
-         status = nf90_inq_varid(ncid, 'lats', varid) ; _VERIFY(status)
-         status = nf90_get_var(ncid, varid, centers)  ; _VERIFY(status)
-         where (centers /= MAPL_UNDEFINED_REAL64) &
-              centers = centers * MAPL_DEGREES_TO_RADIANS_R8
-      end if
-      call MPI_Bcast(centers, im_world*jm_world, MPI_DOUBLE_PRECISION, &
-           ROOT_PROCESS_ID, comm, status)
-      _VERIFY(status)
+      lon_axis = spec%get_lon_axis()
+      local_lon_axis = decomp%get_lon_subset(lon_axis, rank=ix)
+      do j = 1, size(centers,2)
+         centers(:,j) = local_lon_axis%get_centers()
+      end do
+      do j = 1, size(corners,2)
+         corners(:,j) = local_lon_axis%get_corners()
+      end do
+      centers = centers * MAPL_DEGREES_TO_RADIANS_R8
+      corners = corners * MAPL_DEGREES_TO_RADIANS_R8
 
+
+      ! Now latitudes
       call ESMF_GridGetCoord(grid, coordDim=2, localDE=0, &
-           staggerloc=ESMF_STAGGERLOC_CENTER, farrayPtr=fptr, _RC)
-      fptr = centers(i1:in, j1:jn)
+           staggerloc=ESMF_STAGGERLOC_CENTER, &
+           farrayPtr=centers, _RC)
+      call ESMF_GridGetCoord(grid, coordDim=2, localDE=0, &
+           staggerloc=ESMF_STAGGERLOC_CORNER, &
+           farrayPtr=corners, _RC)
 
-      deallocate(centers)
+      local_lat_axis = decomp%get_lat_subset(lat_axis, rank=iy)
+      do i = 1, size(centers,1)
+         centers(i,:) = local_lat_axis%get_centers()
+      end do
+      do i = 1, size(corners,1)
+         corners(i,:) = local_lat_axis%get_corners()
+      end do
 
-      ! ---- corners (optional) ----
-      if (spec%get_has_corners()) then
-         allocate(corners(im_world+1, jm_world+1))
-
-         ! corner longitudes
-         if (am_i_root()) then
-            status = nf90_inq_varid(ncid, 'corner_lons', varid) ; _VERIFY(status)
-            status = nf90_get_var(ncid, varid, corners)         ; _VERIFY(status)
-            where (corners /= MAPL_UNDEFINED_REAL64) &
-                 corners = corners * MAPL_DEGREES_TO_RADIANS_R8
-         end if
-         call MPI_Bcast(corners, (im_world+1)*(jm_world+1), MPI_DOUBLE_PRECISION, &
-              ROOT_PROCESS_ID, comm, status)
-         _VERIFY(status)
-
-         call ESMF_GridGetCoord(grid, coordDim=1, localDE=0, &
-              staggerloc=ESMF_STAGGERLOC_CORNER, farrayPtr=fptr, _RC)
-         fptr = corners(ic1:icn, jc1:jcn)
-
-         ! corner latitudes
-         if (am_i_root()) then
-            status = nf90_inq_varid(ncid, 'corner_lats', varid) ; _VERIFY(status)
-            status = nf90_get_var(ncid, varid, corners)         ; _VERIFY(status)
-            where (corners /= MAPL_UNDEFINED_REAL64) &
-                 corners = corners * MAPL_DEGREES_TO_RADIANS_R8
-         end if
-         call MPI_Bcast(corners, (im_world+1)*(jm_world+1), MPI_DOUBLE_PRECISION, &
-              ROOT_PROCESS_ID, comm, status)
-         _VERIFY(status)
-
-         call ESMF_GridGetCoord(grid, coordDim=2, localDE=0, &
-              staggerloc=ESMF_STAGGERLOC_CORNER, farrayPtr=fptr, _RC)
-         fptr = corners(ic1:icn, jc1:jcn)
-
-         deallocate(corners)
-      end if
-
-      if (am_i_root()) then
-         status = nf90_close(ncid) ; _VERIFY(status)
-      end if
+      centers = centers * MAPL_DEGREES_TO_RADIANS_R8
+      corners = corners * MAPL_DEGREES_TO_RADIANS_R8
 
       _RETURN(_SUCCESS)
       _UNUSED_DUMMY(unusable)
+      
+      CONTAINS
 
-   end subroutine fill_coordinates
-
-   ! Helper: get local interior bounds from the ESMF grid
-   subroutine get_interior_bounds(grid, i1, in, j1, jn, rc)
-      type(ESMF_Grid), intent(in) :: grid
-      integer, intent(out) :: i1, in, j1, jn
+      subroutine get_ranks(nx, ny, ix, iy, rc)
+      integer, intent(in) :: nx, ny
+      integer, intent(out) :: ix, iy
       integer, optional, intent(out) :: rc
 
       integer :: status
-      integer :: cLBound(2), cUBound(2)
+      integer :: petCount, localPet
+      type(ESMF_VM) :: vm
 
-      call ESMF_GridGet(grid, localDE=0, staggerloc=ESMF_STAGGERLOC_CENTER, &
-           exclusiveLBound=cLBound, exclusiveUBound=cUBound, _RC)
-      i1 = cLBound(1) ;  in = cUBound(1)
-      j1 = cLBound(2) ;  jn = cUBound(2)
+      call ESMF_VMGetCurrent(vm, _RC)
+      call ESMF_VMGet(vm, petCount=petCount, localPet=localPet, _RC)
+
+      ix = mod(localPet, nx)
+      iy = localPet / nx
 
       _RETURN(_SUCCESS)
-   end subroutine get_interior_bounds
+      end subroutine get_ranks
+
+   end subroutine fill_coordinates
 
 end submodule fill_coordinates_smod
