@@ -1,35 +1,28 @@
-! Export umbrella for the MAPL.field_bundle library.
-module mapl_field_bundle_api
+! Export umbrella for the MAPL.state library.
+module mapl_state_api
 
-   use ESMF, only: MAPL_FieldBundleAdd => ESMF_FieldBundleAdd
-   use mapl_FieldBundleCopy_mod, only: MAPL_FieldBundleCopy => FieldBundleCopy
-   use mapl_FieldBundleCreate_mod, only: MAPL_FieldBundleCreate => FieldBundleCreate
-   use mapl_FieldBundleCreate_mod, only: MAPL_FieldBundlesAreAliased => FieldBundlesAreAliased
-   use mapl_FieldBundleDestroy_mod, only: MAPL_FieldBundleDestroy
-   use mapl_FieldBundleGet_mod, only: MAPL_FieldBundleGet => FieldBundleGet
-   use mapl_FieldBundleGetByIndex_mod, only: MAPL_FieldBundleGetByIndex => FieldBundleGetByIndex
-   use mapl_FieldBundleGetPointer_mod, only: MAPL_FieldBundleGetPointer => FieldBundleGetPointerToData
-   use mapl_FieldBundleInfo_mod, only: MAPL_FieldBundleInfoGetInternal => FieldBundleInfoGetInternal
-   use mapl_FieldBundleInfo_mod, only: MAPL_FieldBundleInfoSetInternal => FieldBundleInfoSetInternal
-   use mapl_FieldBundleMatch_mod, only: MAPL_FieldBundleSameData => FieldBundleSameData
-   use mapl_FieldBundleSet_mod, only: MAPL_FieldBundleSet => FieldBundleSet
-   use mapl_FieldBundleFilter_mod, only: MAPL_FieldBundleFilter => FieldBundleFilter
+   use mapl_StateArithmeticParser_mod, only: MAPL_ParserVariablesInExpression => parser_variables_in_expression
+   use mapl_StateArithmeticParser_mod, only: mapl_StateEval => StateEval
+   use mapl_StateAddMethod_mod, only: mapl_StateAddMethod => StateAddMethod
+   use mapl_StateDestroy_mod, only: MAPL_StateDestroy => StateDestroy
+   use mapl_StateGet_mod, only: MAPL_StateGet => StateGet
+   use mapl_StateSet_mod, only: MAPL_StateSet => StateSet
+   use mapl_StateGetGeom_mod, only: MAPL_StateGetGeom => StateGetGeom
+   use mapl_StateGetPointer_mod, only: MAPL_StateGetPointer => StateGetPointer
+   use mapl_StateMask_mod, only: MAPL_StateMask => StateMask
+   
 
    implicit none
    private
 
-   public :: MAPL_FieldBundleAdd
-   public :: MAPL_FieldBundleCopy
-   public :: MAPL_FieldBundleCreate
-   public :: MAPL_FieldBundleDestroy
-   public :: MAPL_FieldBundleGet
-   public :: MAPL_FieldBundleGetByIndex
-   public :: MAPL_FieldBundleGetPointer
-   public :: MAPL_FieldBundleInfoGetInternal
-   public :: MAPL_FieldBundleInfoSetInternal
-   public :: MAPL_FieldBundleSameData
-   public :: MAPL_FieldBundlesAreAliased
-   public :: MAPL_FieldBundleSet
-   public :: MAPL_FieldBundleFilter
+   public :: MAPL_ParserVariablesInExpression
+   public :: mapl_StateAddMethod
+   public :: MAPL_StateDestroy
+   public :: MAPL_StateGet
+   public :: MAPL_StateSet
+   public :: MAPL_StateGetGeom
+   public :: MAPL_StateGetPointer
+   public :: mapl_StateEval
 
-end module mapl_field_bundle_api
+   public :: MAPL_StateMask
+end module mapl_state_api
