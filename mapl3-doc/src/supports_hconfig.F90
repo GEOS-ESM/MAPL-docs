@@ -1,35 +1,31 @@
 #include "MAPL.h"
 
-submodule (mapl_LonAxis_mod) supports_hconfig_smod
-   use mapl_Range_mod
+submodule (mapl_XYGeomSpec_mod) supports_hconfig_smod
    use mapl_ErrorHandling_mod
    use esmf
-   implicit none (type, external)
-   integer, parameter :: R8 = ESMF_KIND_R8
+   implicit none
 
 contains
 
-   logical module function supports_hconfig(hconfig, rc) result(supports)
+   ! An hconfig block is an XY grid if it has:
+   !   class: xy
+   !   grid_file_name: <path>
+   logical module function supports_hconfig_(this, hconfig, rc) result(supports)
+      class(XYGeomSpec), intent(in) :: this
       type(ESMF_HConfig), intent(in) :: hconfig
       integer, optional, intent(out) :: rc
 
       integer :: status
-      logical :: has_im_world
-      logical :: has_lon_range
-      logical :: has_dateline
+      character(len=:), allocatable :: geom_class
 
-      supports = .true.
+      supports = ESMF_HConfigIsDefined(hconfig, keystring='class', _RC)
+      _RETURN_UNLESS(supports)
 
-      has_im_world = ESMF_HConfigIsDefined(hconfig, keystring='lon_range', _RC)
-      _RETURN_UNLESS(has_im_world)
-
-      has_lon_range = ESMF_HConfigIsDefined(hconfig, keystring='lon_range', _RC)
-      has_dateline = ESMF_HConfigIsDefined(hconfig, keystring='dateline', _RC)
-      _RETURN_UNLESS(has_lon_range .neqv. has_dateline)
-      supports = .true.
+      geom_class = ESMF_HConfigAsString(hconfig, keyString='class', _RC)
+      supports = (geom_class == 'xy')
 
       _RETURN(_SUCCESS)
-   end function supports_hconfig
+      _UNUSED_DUMMY(this)
+   end function supports_hconfig_
 
 end submodule supports_hconfig_smod
-
