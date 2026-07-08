@@ -1,37 +1,36 @@
 #include "MAPL.h"
 
-submodule (mapl_EASEGeomSpec_mod) supports_hconfig_smod
-   use mapl_GeomSpec_mod
-   use mapl_ErrorHandling_mod
+submodule (mapl_LatAxis_mod) supports_hconfig_smod
+   use mapl_Range_mod
+!   use hconfig3g
    use esmf
+   use mapl_ErrorHandling_mod
    implicit none (type, external)
+
+   integer, parameter :: R8 = ESMF_KIND_R8
 
 contains
 
-   ! An HConfig block is an EASE geom if it contains:
-   !   class: ease
-   ! and a grid name key:
-   !   grid_name: EASEv2_M09   (or similar)
-   logical module function supports_hconfig_(this, hconfig, rc) result(supports)
-      class(EASEGeomSpec), intent(in) :: this
-      type(ESMF_HConfig),  intent(in) :: hconfig
-      integer, optional,   intent(out) :: rc
+   logical module function supports_hconfig(hconfig, rc) result(supports)
+      type(ESMF_HConfig), intent(in) :: hconfig
+      integer, optional, intent(out) :: rc
 
       integer :: status
-      character(:), allocatable :: geom_class
+      logical :: has_jm_world
+      logical :: has_lat_range
+      logical :: has_pole
+      supports = .true.
 
-      supports = ESMF_HConfigIsDefined(hconfig, keystring='class', _RC)
-      _RETURN_UNLESS(supports)
+      has_jm_world = ESMF_HConfigIsDefined(hconfig, keystring='jm_world', _RC)
+      _RETURN_UNLESS(has_jm_world)
 
-      geom_class = ESMF_HConfigAsString(hconfig, keyString='class', _RC)
-      supports = (geom_class == 'ease')
-      _RETURN_UNLESS(supports)
-
-      ! Must also have a grid_name key
-      supports = ESMF_HConfigIsDefined(hconfig, keystring='grid_name', _RC)
+      has_lat_range = ESMF_HConfigIsDefined(hconfig, keystring='lat_range', _RC)
+      has_pole = ESMF_HConfigIsDefined(hconfig, keystring='pole', _RC)
+      _RETURN_UNLESS(has_lat_range .neqv. has_pole)
+      supports = .true.
 
       _RETURN(_SUCCESS)
-      _UNUSED_DUMMY(this)
-   end function supports_hconfig_
+   end function supports_hconfig
 
 end submodule supports_hconfig_smod
+
