@@ -1,34 +1,36 @@
-module mapl_geomio_api
+module mapl_pfio_api
+  use pfio, only: mapl_FileMetadata => FileMetadata
+  use pfio, only: mapl_Variable => Variable
+  use pfio, only: mapl_StringVariableMap => StringVariableMap
+  use pfio, only: mapl_StringVariableMapIterator => StringVariableMapIterator
+  use pfio, only: mapl_NetCDF4_FileFormatter => NetCDF4_FileFormatter
+  use pfio, only: mapl_ArrayReference => ArrayReference
+  use mapl_DefaultServerNames_mod, only: MAPL_DEFAULT_INPUT_SERVER, MAPL_DEFAULT_OUTPUT_SERVER
+  use pfio, only: operator(==), operator(/=)
 
-   use mapl_CompressionSettings_mod, only: mapl_CompressionSettings => CompressionSettings
-   use mapl_SharedIO_mod, only: mapl_bundle_to_metadata => bundle_to_metadata
-   use mapl_SharedIO_mod, only: mapl_esmf_to_pfio_type => esmf_to_pfio_type
-   use mapl_GeomPFIO_mod, only: mapl_GeomPFIO => GeomPFIO
-   use mapl_GeomCategorizer_mod, only: mapl_make_geom_pfio => make_geom_pfio
-   use mapl_pFIOServerBounds_mod, only: mapl_pFIOServerBounds => pFIOServerBounds
-   use mapl_pFIOServerBounds_mod, only: mapl_PFIO_BOUNDS_READ => PFIO_BOUNDS_READ
-   use mapl_DataCollection_mod, only: mapl_DataCollection => DataCollection
-   use mapl_DataCollectionManager_mod, only: MAPL_AddDataCollection => AddDataCollection
-   use mapl_DataCollectionManager_mod, only: mapl_DataCollections => DataCollections
+  use pfio, only: mapl_get_client => get_client
+  use pfio, only: mapl_add_client => add_client
+  use pfio, only: ClientThread
+  use pfio, only: mapl_pfio_read => pfio_read
+  use pfio, only: mapl_string_in_stringvector => string_in_stringvector
 
-   use mapl_FieldBundleWrite_mod, only: mapl_FieldBundleWriter => FieldBundleWriter
-   use mapl_FieldBundleRead_mod, only: mapl_read_bundle => read_bundle
-   implicit none
-   private
+  implicit none
+  private
 
+  public :: mapl_FileMetadata
+  public :: MAPL_Variable
+  public :: mapl_StringVariableMap
+  public :: mapl_StringVariableMapIterator
+  public :: mapl_NetCDF4_FileFormatter
+  public :: MAPL_DEFAULT_INPUT_SERVER
+  public :: MAPL_DEFAULT_OUTPUT_SERVER
 
-   public :: mapl_CompressionSettings
-   public :: mapl_GeomPFIO
-   public :: mapl_pFIOServerBounds
-   public :: MAPL_PFIO_BOUNDS_READ
-   public :: mapl_DataCollection
-   public :: mapl_DataCollections
-   public :: mapl_AddDataCollection
-   public :: mapl_FieldBundleWriter
+  public :: mapl_get_client
+  public :: ClientThread
+  public :: mapl_pfio_read
+  public :: mapl_ArrayReference
+  public :: mapl_string_in_stringvector
 
-   public :: mapl_make_geom_pfio
-   public :: mapl_bundle_to_metadata
-   public :: mapl_esmf_to_pfio_type
-   public :: mapl_read_bundle
-   
-end module mapl_geomio_api
+  public :: operator(==), operator(/=)
+
+end module mapl_pfio_api
