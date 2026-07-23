@@ -174,7 +174,6 @@ module MAPL_ExtDataRuleMap
 #define _value type(ExtDataRule)
 #define _alt
 
-#define _pair ExtDataRulePair
 #define _map ExtDataRuleMap
 #define _iterator ExtDataRuleMapIterator
 
@@ -182,7 +181,6 @@ module MAPL_ExtDataRuleMap
 
 #undef _iterator
 #undef _map
-#undef _pair
 
 #undef _alt
 #undef _value

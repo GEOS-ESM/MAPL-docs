@@ -52,8 +52,6 @@ module MAPLBase_Mod
   use MAPL_VerticalDataMod
   use MAPL_SphericalGeometry
   use MAPL_EASEConversion
-  use mapl_LocalDisplacementEnsemble
-
   logical, save, private :: mapl_is_initialized = .false.
 
 end module MAPLBase_Mod

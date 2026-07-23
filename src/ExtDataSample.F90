@@ -113,7 +113,6 @@ module MAPL_ExtDataTimeSampleMap
 #define _value type(ExtDataTimeSample)
 #define _alt
 
-#define _pair ExtDataTimeSamplePair
 #define _map ExtDataTimeSampleMap
 #define _iterator ExtDataTimeSampleMapIterator
 
@@ -121,7 +120,6 @@ module MAPL_ExtDataTimeSampleMap
 
 #undef _iterator
 #undef _map
-#undef _pair
 
 #undef _alt
 #undef _value

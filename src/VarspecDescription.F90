@@ -1,10 +1,13 @@
-#include "MAPL_Generic.h"
+#define _SUCCESS      0
+#define _FAILURE     1
+#define _VERIFY(A)   if(  A/=0) then; if(present(rc)) rc=A; PRINT *, Iam, __LINE__; return; endif
+#define _ASSERT(A)   if(.not.A) then; if(present(rc)) rc=_FAILURE; PRINT *, Iam, __LINE__; return; endif
+#define _RETURN(A)   if(present(rc)) rc=A; return
 
 module VarspecDescriptionMod
    use MAPL
    use ESMF
    use gFTL_StringVector
-   use MAPL_Constants, only: MAPL_R4, MAPL_R8
    implicit none
    private
 
@@ -30,6 +33,7 @@ contains
       logical :: lcomp
       integer, optional, intent(out) :: rc
 
+      character(len=*), parameter :: Iam = 'new_VarspecDescriptionFromConfig'
       integer :: status
 
       type(StringVector) :: svec
@@ -44,24 +48,12 @@ contains
          call svec%push_back(trim(tmpstring))
       enddo
 
-      lcomp = (svec%size()==6 .or. svec%size()==7)
-      _ASSERT(lcomp, 'Wrong number of columns in state descriptor')
+      lcomp = (svec%size()==5 .or. svec%size()==6)
+      _ASSERT(lcomp)
       VarspecDescr%short_name = svec%at(1)
-      
-      ! Parse and validate precision (column 2)
-      tmpstring = svec%at(2)
-      if (trim(tmpstring) == 'R4') then
-         VarspecDescr%precision = MAPL_R4
-      else if (trim(tmpstring) == 'R8') then
-         VarspecDescr%precision = MAPL_R8
-      else
-        _FAIL('Invalid precision "'// trim(tmpstring) // '": Must be either R4 or R8')
-
-      end if
-      
-      VarspecDescr%long_name = svec%at(3)
-      VarspecDescr%units = svec%at(4)
-      tmpstring = svec%at(5)
+      VarspecDescr%long_name = svec%at(2)
+      VarspecDescr%units = svec%at(3)
+      tmpstring = svec%at(4)
       if (trim(tmpstring) == 'xy') then
          VarspecDescr%dims = MAPL_DimsHorzOnly
       else if (trim(tmpstring) == 'xyz') then
@@ -69,7 +61,7 @@ contains
       else if (trim(tmpstring) == 'tileonly') then
          VarspecDescr%dims = MAPL_DimsTileOnly
       end if
-      tmpstring = svec%at(6)
+      tmpstring = svec%at(5)
       if (trim(tmpstring) == 'none') then
          VarspecDescr%location = MAPL_VLocationNone
       else if (trim(tmpstring) == 'c') then
@@ -77,8 +69,8 @@ contains
       else if (trim(tmpstring) == 'e') then
          VarspecDescr%location = MAPL_VLocationEdge
       end if
-      if (svec%size() == 7) then
-         tmpstring = svec%at(7)
+      if (svec%size() == 6) then
+         tmpstring = svec%at(6)
          allocate(ungrid_ptr(1))
          read(tmpstring,*)ungrid_ptr(1)
          if (ungrid_ptr(1) > 0) VarspecDescr%ungridded_dims => ungrid_ptr
@@ -94,6 +86,7 @@ contains
       integer, optional, intent(out) :: rc
 
       integer :: status
+      character(len=*), parameter :: Iam = "addNewSpec"
 
       if (specType == "IMPORT") then
          call MAPL_AddImportSpec(GC, &
@@ -102,11 +95,10 @@ contains
               UNITS = this%units, &
               DIMS = this%dims, &
               VLOCATION = this%location, &
-              PRECISION = this%precision, &
               !STAGGERING = this%staggering, &
               !ROTATION = this%rotation, &
               UNGRIDDED_DIMS = this%ungridded_dims, &
-              _RC)
+              RC = status)
       else if (specType == "EXPORT") then
          call MAPL_AddExportSpec(GC, &
               SHORT_NAME = this%short_name, &
@@ -114,14 +106,14 @@ contains
               UNITS = this%units, &
               DIMS = this%dims, &
               VLOCATION = this%location, &
-              PRECISION = this%precision, &
               !STAGGERING = this%staggering, &
               !ROTATION = this%rotation, &
               UNGRIDDED_DIMS = this%ungridded_dims, &
-              _RC)
+              RC = status)
       else
          _RETURN(_FAILURE)
       end if
+      _VERIFY(status)
 
    end subroutine AddNewSpec
 

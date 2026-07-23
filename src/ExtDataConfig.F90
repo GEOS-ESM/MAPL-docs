@@ -74,8 +74,7 @@ contains
       inquire(file=trim(config_file),exist=file_found)
       _ASSERT(file_found,"could not find: "//trim(config_file))
 
-      input_config = ESMF_HConfigCreate(filename=trim(config_file),rc=status)
-      _ASSERT(status==ESMF_SUCCESS,'FAILED on ESMF_HConfigCreate for '//trim(config_file))
+      input_config = ESMF_HConfigCreate(filename=trim(config_file),_RC)
 
       if (ESMF_HConfigIsDefined(input_config,keyString="subconfigs")) then
          is_right_type = ESMF_HConfigIsSequence(input_config,keyString='subconfigs',_RC)
@@ -278,7 +277,7 @@ contains
 
       type(ExtDataRuleMapIterator) :: rule_iterator
       character(len=:), pointer :: key
-      character(len=:), allocatable :: found_key, stripped_name
+      character(len=:), allocatable :: found_key
       logical :: found_rule
 
       _UNUSED_DUMMY(unusable)
@@ -288,8 +287,7 @@ contains
       rule_iterator = this%rule_map%begin()
       do while(rule_iterator /= this%rule_map%end())
          key => rule_iterator%key()
-         stripped_name = strip_multi_rule(key)
-         if (trim(stripped_name)==trim(item_name)) then
+         if (index(key,trim(item_name))/=0) then
             found_rule = .true.
             found_key = key
             exit
@@ -317,20 +315,6 @@ contains
          found_rule = .true.
       end if
       _RETURN(_SUCCESS)
-
-   contains
-      function strip_multi_rule(full_name) result(stripped_name)
-         character(len=:), allocatable :: stripped_name
-         character(len=*), intent(in) :: full_name
- 
-         integer :: plus_sign
-         plus_sign = index(full_name,'+')
-         if (plus_sign == 0) then
-            stripped_name=full_name
-         else
-            stripped_name=full_name(:plus_sign-1)
-         end if
-      end function
    end function get_item_type
 
    subroutine add_new_rule(this,key,export_rule,multi_rule,rc)

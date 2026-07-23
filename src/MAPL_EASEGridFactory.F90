@@ -212,17 +212,10 @@ contains
       class (KeywordEnforcer), optional, intent(in) :: unusable
       integer, optional, intent(out) :: rc
 
-      character(len=:), allocatable :: grid_name
       integer :: status
       type(ESMF_PoleKind_Flag) :: polekindflag(2)
 
       _UNUSED_DUMMY(unusable)
-
-      if (this%grid_name == MAPL_GRID_NAME_DEFAULT) then
-         grid_name = this%generate_grid_name()
-      else
-         grid_name = this%grid_name
-      endif
 
       if (this%periodic) then
          if (this%pole == "XY") then
@@ -231,7 +224,7 @@ contains
             polekindflag = ESMF_POLEKIND_MONOPOLE
          end if
          grid = ESMF_GridCreate1PeriDim( &
-              & name = grid_name, &
+              & name = this%grid_name, &
               & countsPerDEDim1=this%ims, &
               & countsPerDEDim2=this%jms, &
               & indexFlag=ESMF_INDEX_DELOCAL, &
@@ -244,7 +237,7 @@ contains
               & _RC)
       else
          grid = ESMF_GridCreateNoPeriDim( &
-              & name = grid_name, &
+              & name = this%grid_name, &
               & countsPerDEDim1=this%ims, &
               & countsPerDEDim2=this%jms, &
               & indexFlag=ESMF_INDEX_DELOCAL, &
