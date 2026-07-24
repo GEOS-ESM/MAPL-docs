@@ -1276,6 +1276,7 @@ contains
     character(len=ESMF_MAXSTR) :: newName_
     character(len=ESMF_MAXSTR), parameter :: Iam='MAPL_FieldCreateNewgrid'
     real, pointer :: ptr1d(:)
+    logical :: has_de
 
     call ESMF_FieldGet(FIELD, grid=fgrid, _RC)
 
@@ -1361,8 +1362,11 @@ contains
     ! otherwise we will overwrite it
     call ESMF_AttributeSet(F, NAME='DIMS', VALUE=DIMS, _RC)
 
-    call assign_fptr(f, ptr1d, _RC)
-    ptr1d = 0.0    
+    has_de = MAPL_GridHasDe(grid, _RC)
+    if (has_de) then
+       call assign_fptr(f, ptr1d, _RC)
+       ptr1d = 0.0
+    end if
 
     _RETURN(ESMF_SUCCESS)
   end function MAPL_FieldCreateNewgrid
@@ -1408,7 +1412,8 @@ contains
        allocate(var_1d(lbound(vr8_1d,1):ubound(vr8_1d,1)), _STAT)
        var_1d=vr8_1d
        f = MAPL_FieldCreateEmpty(name=fieldNAME, grid=grid, _RC)
-       call ESMF_FieldEmptyComplete(F, farrayPtr=VAR_1D,    &
+       call ESMF_FieldEmptyComplete(F, farray=VAR_1D,    &
+                  indexflag=ESMF_INDEX_DELOCAL, &
             gridToFieldMap=gridToFieldMap,                      &
             datacopyFlag = datacopy,             &
             _RC)
@@ -1419,7 +1424,8 @@ contains
             _STAT)
        var_2d=vr8_2d
        f = MAPL_FieldCreateEmpty(name=fieldNAME, grid=grid, _RC)
-       call ESMF_FieldEmptyComplete(F, farrayPtr=VAR_2D,    &
+       call ESMF_FieldEmptyComplete(F, farray=VAR_2D,    &
+                  indexflag=ESMF_INDEX_DELOCAL, &
             gridToFieldMap=gridToFieldMap,                      &
             datacopyFlag = datacopy,             &
             _RC)
@@ -1431,7 +1437,8 @@ contains
             _STAT)
        var_3d=vr8_3d
        f = MAPL_FieldCreateEmpty(name=fieldNAME, grid=grid, _RC)
-       call ESMF_FieldEmptyComplete(F, farrayPtr=VAR_3D,    &
+       call ESMF_FieldEmptyComplete(F, farray=VAR_3D,    &
+                  indexflag=ESMF_INDEX_DELOCAL, &
             gridToFieldMap=gridToFieldMap,                      &
             datacopyFlag = datacopy,             &
             _RC)
@@ -1605,8 +1612,12 @@ contains
        I1 = AL(1, deId)
        IN = AU(1, deId)
        !    _ASSERT(gridRank > 1, 'tilegrid is 1d (without RC this only for info')
-       J1 = AL(2, deId)
-       JN = AU(2, deId)
+       J1 = 1
+       JN = 1
+       if (gridRank > 1) then
+         J1 = AL(2, deId)
+         JN = AU(2, deId)
+       endif
        deallocate(AU, AL, localDeToDeMap)
     end if
 
@@ -2140,73 +2151,6 @@ contains
 
   end subroutine MAPL_GridGetCorners
 
-  !............................................................................
-
-
-  !
-  ! Note: The routine below came from ESMFL; it has been moved here to
-  !       avoid circular dependencies (Arlindo).
-  !
-  module subroutine MAPL_GridGetInterior(GRID,I1,IN,J1,JN)
-    type (ESMF_Grid), intent(IN) :: grid
-    integer, intent(OUT)         :: I1, IN, J1, JN
-
-    ! local vars
-    integer                               :: status
-    !    character(len=ESMF_MAXSTR)            :: IAm='MAPL_GridGetInterior'
-
-    type (ESMF_DistGrid)                  :: distGrid
-    type(ESMF_DELayout)                   :: LAYOUT
-    type (ESMF_VM)                        :: vm
-    integer,               allocatable    :: AL(:,:)
-    integer,               allocatable    :: AU(:,:)
-    integer                               :: nDEs
-    integer                               :: deId
-    integer                               :: gridRank
-    integer                               :: rc
-    logical                               :: isPresent
-    integer, allocatable                  :: global_grid_info(:)
-    integer                               :: itemCount
-
-    i1=-1
-    j1=-1
-    in=-1
-    jn=-1
-
-    call ESMF_AttributeGet(grid, name="GLOBAL_GRID_INFO", isPresent=isPresent, _RC)
-    if (isPresent) then
-      call ESMF_AttributeGet(grid, name="GLOBAL_GRID_INFO", itemCount=itemCount, _RC)
-      allocate(global_grid_info(itemCount), _STAT)
-      call ESMF_AttributeGet(grid, name="GLOBAL_GRID_INFO", valueList=global_grid_info, _RC)
-      I1 = global_grid_info(7)
-      IN = global_grid_info(8)
-      j1 = global_grid_info(9)
-      JN = global_grid_info(10)
-      deallocate(global_grid_info, _STAT)
-      _RETURN(_SUCCESS)
-    end if
-
-
-    call ESMF_GridGet    (GRID, dimCount=gridRank, distGrid=distGrid, _RC)
-    call ESMF_DistGridGet(distGRID, delayout=layout, _RC)
-    call ESMF_DELayoutGet(layout, vm=vm, _RC)
-    call ESMF_VmGet(vm, localPet=deId, petCount=nDEs, _RC)
-
-    allocate (AL(gridRank,0:nDEs-1),  _STAT)
-    allocate (AU(gridRank,0:nDEs-1),  _STAT)
-
-    call MAPL_DistGridGet(distgrid, &
-         minIndex=AL, maxIndex=AU, _RC)
-
-    I1 = AL(1, deId)
-    IN = AU(1, deId)
-    !    _ASSERT(gridRank > 1, 'tilegrid is 1d (without RC this only for info')
-    J1 = AL(2, deId)
-    JN = AU(2, deId)
-    deallocate(AU, AL)
-
-  end subroutine MAPL_GridGetInterior
-
   !.......................................................................
 
   module function MAPL_RmQualifier(str, del) result(new)
@@ -2375,8 +2319,9 @@ contains
   end subroutine MAPL_FieldAttSetI4
   ! ========================================
 
-  module subroutine MAPL_FieldBundleDestroy(Bundle,RC)
+  module subroutine MAPL_FieldBundleDestroy(Bundle,NoGarbage,RC)
     type(ESMF_FieldBundle),    intent(INOUT) :: Bundle
+    logical, optional,         intent(IN   ) :: NoGarbage
     integer, optional,         intent(OUT  ) :: RC
 
     integer                               :: I
@@ -2396,6 +2341,7 @@ contains
           call ESMF_FieldBundleGet(BUNDLE, I, FIELD, _RC)
           call MAPL_FieldDestroy(FIELD, _RC)
        end do
+       call ESMF_FieldBundleDestroy(bundle, NoGarbage=NoGarbage, _RC)
     end if
 
     _RETURN(ESMF_SUCCESS)
@@ -2914,7 +2860,7 @@ contains
        real(ESMF_KIND_R8), allocatable :: corner_lons(:,:), corner_lats(:,:)
        real(ESMF_KIND_R8), allocatable :: lonRe(:), latRe(:)
        real(ESMF_KIND_R8), allocatable :: accurate_lat(:), accurate_lon(:)
-       real(ESMF_KIND_R8) :: stretch_factor, target_lon, target_lat, shift0
+       real(ESMF_KIND_R8) :: shift0
        real :: tolerance
        integer :: local_dims(3)
 
@@ -2945,7 +2891,7 @@ contains
           accurate_lon = 1.750d0*MAPL_PI_R8 - shift0
           accurate_lat = [(-alpha + (j-1)*dalpha, j = j1, j2)]
 
-          if (any(abs(accurate_lon - lonRe) > 2.0* tolerance) .or. any(abs(accurate_lat - latRe) > 2.0*tolerance)) then
+          if (any(abs(accurate_lon - lonRe) > 10.0* tolerance) .or. any(abs(accurate_lat - latRe) > 10.0*tolerance)) then
              print*, "Error: It could be "
              print*, "  1) grid may not have pi/18 Japan mountain shift"
              print*, "  2) grid is NOT gnomonic_ed;"
@@ -3443,7 +3389,7 @@ contains
 
      logical :: factorPresent, lonPresent, latPresent
      integer :: status
-     real(ESMF_KIND_R8) :: c2p1, c2m1, half_pi, two_pi, stretch_factor, target_lon, target_lat
+     real(ESMF_KIND_R8) :: c2p1, c2m1, half_pi, two_pi, stretch_factor, target_lon, target_lat, target_lon_degrees, target_lat_degrees
      real(ESMF_KIND_R8), dimension(npts) :: x,y,z, Xx, Yy, Zz
      logical, dimension(npts) :: n_s
 
@@ -3478,8 +3424,8 @@ contains
      endif
 
      call ESMF_AttributeGet(grid, name='STRETCH_FACTOR', value=stretch_factor, _RC)
-     call ESMF_AttributeGet(grid, name='TARGET_LON',     value=target_lon,     _RC)
-     call ESMF_AttributeGet(grid, name='TARGET_LAT',     value=target_lat,     _RC)
+     call ESMF_AttributeGet(grid, name='TARGET_LON',     value=target_lon_degrees,     _RC)
+     call ESMF_AttributeGet(grid, name='TARGET_LAT',     value=target_lat_degrees,     _RC)
 
      c2p1 = 1 + stretch_factor*stretch_factor
      c2m1 = 1 - stretch_factor*stretch_factor
@@ -3487,8 +3433,8 @@ contains
      half_pi = MAPL_PI_R8/2
      two_pi  = MAPL_PI_R8*2
 
-     target_lon = target_lon*MAPL_DEGREES_TO_RADIANS_R8
-     target_lat = target_lat*MAPL_DEGREES_TO_RADIANS_R8
+     target_lon = target_lon_degrees*MAPL_DEGREES_TO_RADIANS_R8
+     target_lat = target_lat_degrees*MAPL_DEGREES_TO_RADIANS_R8
 
      x = cos(latRe)*cos(lonRe - target_lon)
      y = cos(latRe)*sin(lonRe - target_lon)

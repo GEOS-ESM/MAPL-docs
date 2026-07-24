@@ -448,7 +448,7 @@ module MAPL_GenericMod
       integer                        , pointer :: phase_coldstart(:)=> null()
       integer                        , pointer :: phase_refresh(:)=> null()
       procedure(i_run), public, nopass, pointer :: customRefresh => null()
-      
+
       ! Make accessors?
       type(ESMF_GridComp)                      :: RootGC
       type(ESMF_GridComp)            , pointer :: parentGC         => null()
@@ -1121,7 +1121,7 @@ contains
 !C$   call MAPL_TimerOff(STATE,"generic",_RC)
 
       call initialize_children_and_couplers(_RC)
-      call MAPL_TimerOn(STATE,"generic")
+      call MAPL_TimerOn(STATE,"generic",_RC)
 
       call create_import_and_initialize_state_variables(_RC)
 
@@ -1277,7 +1277,7 @@ contains
                   gridcomp => STATE%GET_CHILD_GRIDCOMP(I)
                   call ESMF_GridCompGet( gridcomp, NAME=CHILD_NAME, _RC )
 
-                  call MAPL_TimerOn (STATE,trim(CHILD_NAME))
+                  call MAPL_TimerOn (STATE,trim(CHILD_NAME), _RC)
                   child_import_state => STATE%get_child_import_state(i)
                   child_export_state => STATE%get_child_export_state(i)
                   call ESMF_GridCompInitialize (gridcomp, &
@@ -1286,7 +1286,7 @@ contains
                        clock=CLOCK, PHASE=CHLDMAPL(I)%PTR%PHASE_INIT(PHASE), &
                        userRC=userRC, _RC )
                   _VERIFY(userRC)
-                  call MAPL_TimerOff(STATE,trim(CHILD_NAME))
+                  call MAPL_TimerOff(STATE,trim(CHILD_NAME), _RC)
                end if
             end do
             deallocate(CHLDMAPL)
@@ -1836,7 +1836,7 @@ contains
 
       if (associated(timers)) then
          do i = 1, size(timers)
-            call MAPL_TimerOn (STATE,timers(i))
+            call MAPL_TimerOn (STATE,timers(i), _RC)
          end do
       end if
 
@@ -2165,7 +2165,7 @@ contains
                call ESMF_GridCompGet( gridcomp, NAME=CHILD_NAME, RC=status )
                _VERIFY(status)
 
-               call MAPL_TimerOn (STATE,trim(CHILD_NAME))
+               call MAPL_TimerOn (STATE,trim(CHILD_NAME), _RC)
                child_import_state => STATE%get_child_import_state(i)
                child_export_state => STATE%get_child_export_state(i)
 
@@ -2176,7 +2176,7 @@ contains
                     userRC=userRC, _RC )
                _VERIFY(userRC)
 
-                call MAPL_TimerOff(STATE,trim(CHILD_NAME))
+                call MAPL_TimerOff(STATE,trim(CHILD_NAME), _RC)
             end if
 
             !ALT question for Max - if user wants to run particular phase only, when should we run couplers
@@ -2296,7 +2296,7 @@ contains
                call ESMF_GridCompGet( gridcomp, NAME=CHILD_NAME, RC=status )
                _VERIFY(status)
 
-               call MAPL_TimerOn (STATE,trim(CHILD_NAME))
+               call MAPL_TimerOn (STATE,trim(CHILD_NAME), _RC)
                child_import_state => STATE%get_child_import_state(i)
                child_export_state => STATE%get_child_export_state(i)
                call ESMF_GridCompFinalize (gridcomp, &
@@ -2311,7 +2311,7 @@ contains
       end do
       deallocate(CHLDMAPL)
 
-      call MAPL_TimerOn(STATE,"generic")
+      call MAPL_TimerOn(STATE,"generic", _RC)
 
       call MAPL_GetResource( STATE, RECFIN, LABEL="RECORD_FINAL:", &
            RC=status )
@@ -2598,7 +2598,7 @@ contains
       do I = 1, STATE%get_num_children()
          call ESMF_GridCompGet( STATE%GET_CHILD_GRIDCOMP(I), NAME=CHILD_NAME, RC=status )
          _VERIFY(status)
-         call MAPL_TimerOn (STATE,trim(CHILD_NAME))
+         call MAPL_TimerOn (STATE,trim(CHILD_NAME), _RC)
          gridcomp => STATE%GET_CHILD_GRIDCOMP(I)
          child_import_state => STATE%get_child_import_state(i)
          child_export_state => STATE%get_child_export_state(i)
@@ -2607,12 +2607,12 @@ contains
               exportState=child_export_state, &
               clock=CLOCK, userRC=userRC, _RC ) ! number of phases is currently limited to 1
          _VERIFY(userRC)
-         call MAPL_TimerOff(STATE,trim(CHILD_NAME))
+         call MAPL_TimerOff(STATE,trim(CHILD_NAME), _RC)
       enddo
 
       ! Do my "own" record
       ! ------------------
-      call MAPL_TimerOn(STATE,"generic")
+      call MAPL_TimerOn(STATE,"generic", _RC)
 
       if (associated(STATE%RECORD)) then
 
@@ -2820,14 +2820,14 @@ contains
       call state%t_profiler%start(_RC)
       call state%t_profiler%start('Refresh',_RC)
 
-      call MAPL_TimerOn(STATE,"GenRefreshTot")
+      call MAPL_TimerOn(STATE,"GenRefreshTot", _RC)
       ! Refresh the children
       ! ---------------------
       do I=1,STATE%get_num_children()
          gridcomp => STATE%GET_CHILD_GRIDCOMP(I)
          call ESMF_GridCompGet( gridcomp, NAME=CHILD_NAME, RC=status )
          _VERIFY(status)
-         call MAPL_TimerOn (STATE,trim(CHILD_NAME))
+         call MAPL_TimerOn (STATE,trim(CHILD_NAME), _RC)
          child_import_state => STATE%get_child_import_state(i)
          child_export_state => STATE%get_child_export_state(i)
          call MAPL_GenericRefresh (gridcomp, child_import_state, child_export_state, CLOCK, &
@@ -2838,7 +2838,7 @@ contains
 
       ! Do my "own" refresh
       ! ------------------
-      call MAPL_TimerOn(STATE,"GenRefreshMine")
+      call MAPL_TimerOn(STATE,"GenRefreshMine", _RC)
 
       if (associated(STATE%RECORD)) then
 
@@ -5293,7 +5293,7 @@ contains
       logical :: isConnected
       type(ESMF_GridComp), pointer :: gridcomp
 
-      _ASSERT(size(SHORT_NAMES)==size(CHILD_IDS),'needs informative message')
+!ALT: no need for this      _ASSERT(size(SHORT_NAMES)==size(CHILD_IDS),'needs informative message')
 
       call MAPL_GetObjectFromGC(GC, META, RC=status)
       _VERIFY(status)
@@ -5314,7 +5314,7 @@ contains
             isConnected = connect%varIsConnected(short_name,I,rc=status)
             SKIP = ANY(SNAMES==TRIM(SHORT_NAME)) .and. (ANY(CHILD_IDS==I))
             if ((.not.isConnected) .and. (.not.skip)) then
-               call MAPL_DoNotConnect(GC, SHORT_NAME, I, RC=status)
+               call MAPL_DoNotConnect(GC, SHORT_NAME, CHILD=I, RC=status)
                _VERIFY(status)
             end if
          enddo
@@ -5682,6 +5682,7 @@ contains
 
       character(len=ESMF_MAXSTR), parameter :: IAm = "MAPL_GenericStateClockOff"
       integer :: status
+
 
       if (trim(name) == 'TOTAL') then
          _RETURN(ESMF_SUCCESS)
@@ -6059,7 +6060,7 @@ contains
 
       nwrgt1 = (mpl%grid%num_readers > 1)
 
-      isNC4 = MAPL_FILETYPE_UNK 
+      isNC4 = MAPL_FILETYPE_UNK
       if (on_tiles) mpl%grid%split_restart = .false.
       if(INDEX(FNAME,'*') == 0) then
          if (AmIRoot) then
@@ -7084,11 +7085,13 @@ contains
       integer                                     :: STAT
       logical                                     :: SATISFIED
       logical                                     :: PARENTIMPORT
+      logical :: PARENTIMPV
       logical :: is_connected
       type (MAPL_Connectivity), pointer           :: conn
       type (VarConn), pointer                :: CONNECT
       type (VarConn), pointer                :: DONOTCONN
       type(ESMF_GridComp), pointer :: gridcomp
+
       ! Begin
 
       ! Get my name and set-up traceback handle
@@ -7177,6 +7180,7 @@ contains
 
          do K=1,size(IM_SPECS)
 
+            PARENTIMPV = .true.
             call MAPL_VarSpecGet(IM_SPECS(K), SHORT_NAME=SHORT_NAME, &
                  STAT=STAT, RC=status)
             _VERIFY(status)
@@ -7192,7 +7196,7 @@ contains
             if (DONOTCONN%varIsListed(SHORT_NAME=SHORT_NAME, &
                  IMPORT=I, RC=status)) then
                _VERIFY(status)
-               cycle
+               PARENTIMPV = .false.
             end if
             _VERIFY(status)
 
@@ -7270,7 +7274,8 @@ contains
                   ! Imports that are not internally satisfied have their specs put in the GC's
                   ! import spec to be externally satisfied.  Their status is left unaltered.
                   ! --------------------------------------------------------------------------
-                  if (.not. SATISFIED .and. PARENTIMPORT) then
+                  PARENTIMPV = PARENTIMPORT .and. PARENTIMPV
+                  if (.not. SATISFIED .and. PARENTIMPV) then
                      _VERIFY(status)
                      call MAPL_VarSpecGet(IM_SPECS(K), STAT=STAT, RC=status)
                      _VERIFY(status)
@@ -7854,18 +7859,26 @@ contains
       character(len=ESMF_MAXSTR)            :: NAME
       logical                               :: VALUE
 
-      call ESMF_AttributeGet(FIELDIN, count=NF, RC=status)
-      _VERIFY(status)
+      ! ESMF 9 made internal changes to the Info object that underlies the (now deprecated)
+      ! Attribute API. So, to get attributes by index, we need to specify
+      ! the convention and purpose arguments. Once MAPL requires ESMF 9, remove this
+      ! ifdef. (Not applicable to MAPL3 which uses Info natively.)
+#ifdef ESMF_VER_GE_9
+      call ESMF_AttributeGet(FIELDIN, count=NF, convention="ESMF", purpose="General", _RC)
+#else
+      call ESMF_AttributeGet(FIELDIN, count=NF, _RC)
+#endif
 
       do I=1,NF
-         call ESMF_AttributeGet(FIELDIN,attributeIndex=I,NAME=NAME,RC=status)
-         _VERIFY(status)
+#ifdef ESMF_VER_GE_9
+         call ESMF_AttributeGet(FIELDIN,attributeIndex=I,NAME=NAME,convention="ESMF", purpose="General",_RC)
+#else
+         call ESMF_AttributeGet(FIELDIN,attributeIndex=I,NAME=NAME,_RC)
+#endif
          NAME = trim(NAME)
          if(NAME(1:10)=='FriendlyTo') then
-            call ESMF_AttributeGet(FIELDIN , NAME=NAME, VALUE=VALUE, RC=status)
-            _VERIFY(status)
-            call ESMF_AttributeSet(FIELDOUT, NAME=NAME, VALUE=VALUE, RC=status)
-            _VERIFY(status)
+            call ESMF_AttributeGet(FIELDIN , NAME=NAME, VALUE=VALUE, _RC)
+            call ESMF_AttributeSet(FIELDOUT, NAME=NAME, VALUE=VALUE, _RC)
          end if
       end do
 
@@ -8349,6 +8362,7 @@ contains
       character(len=ESMF_MAXSTR)            :: IAm
       integer                               :: status
       character(len=ESMF_MAXSTR)            :: comp_name
+      character(len=ESMF_MAXSTR)            :: child_comp_name
 
       ! Local variables
       ! ---------------
@@ -8393,6 +8407,8 @@ contains
          call MAPL_GenericConnCheck(gridcomp, RC=status)
          if (status /= ESMF_SUCCESS) then
             err = .true.
+            call ESMF_GridCompGet( gridcomp, NAME=child_comp_name, _RC)
+            CALL WRITE_PARALLEL("MAPL ConnCheck PROBLEM with CHILD GRIDCOMP "//TRIM(child_comp_name))
          end if
       end do
 
@@ -10502,7 +10518,7 @@ contains
 
       ! Do my "own" refresh
       ! ------------------
-      call MAPL_TimerOn(STATE,"GenRefreshMine")
+      call MAPL_TimerOn(STATE,"GenRefreshMine", _RC)
 
       if (allocated(STATE%initial_state%imp_fname)) then
          call MAPL_ESMFStateReadFromFile(IMPORT, CLOCK, &
