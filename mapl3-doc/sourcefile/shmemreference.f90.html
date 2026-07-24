@@ -1,0 +1,1067 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="MAPL is a foundation layer of the GEOS architecture, whose original purpose is to supplement the Earth System Modeling Framework (ESMF)">
+    <meta name="author" content="The MAPL Developers" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>ShmemReference.F90 &ndash; MAPL</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">MAPL </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>ShmemReference.F90
+      <small>Source File</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.7% of total for source files.">1665 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/ShmemReference.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+            <li class="breadcrumb-item active" aria-current="page">ShmemReference.F90</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#mods-0"
+         aria-expanded="false" aria-controls="mods-0">
+         <h4 class="card-header bg-primary text-white">Modules</h4>
+      </a>
+      <div id="mods-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/pfio_shmemreferencemod.html">pFIO_ShmemReferenceMod</a>
+            <a class="list-group-item" href="../module/pfio_integershmemreferencemapmod.html">pFIO_IntegerShmemReferenceMapMod</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/shmemreference.f90.html#src">ShmemReference.F90</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">This file depends on</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~shmemreference.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefileshmemreferencef90EfferentGraph" width="641pt" height="74pt"
+ viewBox="0.00 0.00 641.00 73.88" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~shmemreference.f90~~EfferentGraph" class="graph" transform="scale(0.84 0.84) rotate(0) translate(4 83.71)">
+<title>sourcefile~~shmemreference.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-83.71 757,-83.71 757,4 -4,4"/>
+<!-- sourcefile~shmemreference.f90 -->
+<g id="sourcefile~~shmemreference.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~shmemreference.f90</title>
+<polygon fill="none" stroke="black" points="753,-63 623,-63 623,-39 753,-39 753,-63"/>
+<text text-anchor="middle" x="688" y="-48.6" font-family="Helvetica,sans-Serif" font-size="10.50">ShmemReference.F90</text>
+</g>
+<!-- sourcefile~abstractdatareference.f90 -->
+<g id="sourcefile~~shmemreference.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~abstractdatareference.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~EfferentGraph_node2"><a xlink:href="../sourcefile/abstractdatareference.f90.html" xlink:title="AbstractDataReference.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="587,-63 428,-63 428,-39 587,-39 587,-63"/>
+<text text-anchor="middle" x="507.5" y="-48.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">AbstractDataReference.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~shmemreference.f90&#45;&gt;sourcefile~abstractdatareference.f90 -->
+<g id="sourcefile~~shmemreference.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~shmemreference.f90&#45;&gt;sourcefile~abstractdatareference.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M622.81,-51C614.48,-51 605.83,-51 597.18,-51"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="597.06,-47.5 587.06,-51 597.06,-54.5 597.06,-47.5"/>
+</g>
+<!-- sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~shmemreference.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~errorhandling.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~EfferentGraph_node3"><a xlink:href="../sourcefile/errorhandling.f90.html" xlink:title="ErrorHandling.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="249,-66 140,-66 140,-42 249,-42 249,-66"/>
+<text text-anchor="middle" x="194.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ErrorHandling.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~shmemreference.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~shmemreference.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~shmemreference.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M639.76,-63.02C623.19,-66.67 604.38,-70.19 587,-72 455.25,-85.68 420.96,-78.52 289,-67 279.43,-66.16 269.33,-65.03 259.46,-63.78"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="259.66,-60.27 249.29,-62.44 258.74,-67.21 259.66,-60.27"/>
+</g>
+<!-- sourcefile~pfio_utilities.f90 -->
+<g id="sourcefile~~shmemreference.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~pfio_utilities.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~EfferentGraph_node4"><a xlink:href="../sourcefile/pfio_utilities.f90.html" xlink:title="pFIO_Utilities.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="392,-24 289,-24 289,0 392,0 392,-24"/>
+<text text-anchor="middle" x="340.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pFIO_Utilities.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~shmemreference.f90&#45;&gt;sourcefile~pfio_utilities.f90 -->
+<g id="sourcefile~~shmemreference.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~shmemreference.f90&#45;&gt;sourcefile~pfio_utilities.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M636.36,-38.99C620.62,-35.63 603.16,-32.28 587,-30 524.38,-21.17 452.13,-16.53 402.3,-14.19"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="402.17,-10.68 392.02,-13.73 401.85,-17.68 402.17,-10.68"/>
+</g>
+<!-- sourcefile~abstractdatareference.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~shmemreference.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~abstractdatareference.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M339.5,-53C313.29,-51.37 284.35,-51.25 259.33,-51.67"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="259.16,-48.17 249.23,-51.87 259.3,-55.17 259.16,-48.17"/>
+</g>
+<!-- sourcefile~abstractdatareference.f90&#45;&gt;sourcefile~pfio_utilities.f90 -->
+<g id="sourcefile~~shmemreference.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~abstractdatareference.f90&#45;&gt;sourcefile~pfio_utilities.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M455.65,-38.98C438.79,-35 419.85,-30.52 402.32,-26.38"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="402.72,-22.87 392.18,-23.98 401.11,-29.69 402.72,-22.87"/>
+</g>
+<!-- sourcefile~pfio_constants.f90 -->
+<g id="sourcefile~~shmemreference.f90~~EfferentGraph_node6" class="node">
+<title>sourcefile~pfio_constants.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~EfferentGraph_node6"><a xlink:href="../sourcefile/pfio_constants.f90.html" xlink:title="pFIO_Constants.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="253,-24 136,-24 136,0 253,0 253,-24"/>
+<text text-anchor="middle" x="194.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pFIO_Constants.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~abstractdatareference.f90&#45;&gt;sourcefile~pfio_constants.f90 -->
+<g id="sourcefile~~shmemreference.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~abstractdatareference.f90&#45;&gt;sourcefile~pfio_constants.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M427.97,-54.33C400.58,-54.86 369.66,-54.75 341.5,-53"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M339.5,-53C320.43,-51.81 275.79,-38.47 241.22,-27.33"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="241.91,-23.87 231.32,-24.1 239.74,-30.53 241.91,-23.87"/>
+</g>
+<!-- sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~shmemreference.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~mapl_throw.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~EfferentGraph_node5"><a xlink:href="../sourcefile/mapl_throw.f90.html" xlink:title="MAPL_Throw.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="100,-66 0,-66 0,-42 100,-42 100,-66"/>
+<text text-anchor="middle" x="50" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Throw.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~shmemreference.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M139.63,-54C130.03,-54 119.99,-54 110.26,-54"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="110.26,-50.5 100.26,-54 110.26,-57.5 110.26,-50.5"/>
+</g>
+<!-- sourcefile~pfio_utilities.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~shmemreference.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~pfio_utilities.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M298.24,-24.04C282.12,-28.74 263.47,-34.18 246.52,-39.12"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="245.39,-35.8 236.77,-41.96 247.35,-42.52 245.39,-35.8"/>
+</g>
+<!-- sourcefile~pfio_utilities.f90&#45;&gt;sourcefile~pfio_constants.f90 -->
+<g id="sourcefile~~shmemreference.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~pfio_utilities.f90&#45;&gt;sourcefile~pfio_constants.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M288.73,-12C280.47,-12 271.79,-12 263.2,-12"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="263.18,-8.5 253.18,-12 263.18,-15.5 263.18,-8.5"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefileshmemreferencef90EfferentGraph = svgPanZoom('#sourcefileshmemreferencef90EfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#EfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="EfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Files dependent on this one</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~shmemreference.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefileshmemreferencef90AfferentGraph" width="641pt" height="327pt"
+ viewBox="0.00 0.00 641.00 326.95" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph" class="graph" transform="scale(0.65 0.65) rotate(0) translate(4 501.47)">
+<title>sourcefile~~shmemreference.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-501.47 987,-501.47 987,4 -4,4"/>
+<!-- sourcefile~shmemreference.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~shmemreference.f90</title>
+<polygon fill="none" stroke="black" points="130,-105.41 0,-105.41 0,-81.41 130,-81.41 130,-105.41"/>
+<text text-anchor="middle" x="65" y="-91.01" font-family="Helvetica,sans-Serif" font-size="10.50">ShmemReference.F90</text>
+</g>
+<!-- sourcefile~abstractserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~abstractserver.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node2"><a xlink:href="../sourcefile/abstractserver.f90.html" xlink:title="AbstractServer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="279,-105.41 166,-105.41 166,-81.41 279,-81.41 279,-105.41"/>
+<text text-anchor="middle" x="222.5" y="-91.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">AbstractServer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~abstractserver.f90&#45;&gt;sourcefile~shmemreference.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~abstractserver.f90&#45;&gt;sourcefile~shmemreference.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M165.8,-93.41C157.47,-93.41 148.77,-93.41 140.13,-93.41"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="140.04,-89.91 130.04,-93.41 140.04,-96.91 140.04,-89.91"/>
+</g>
+<!-- sourcefile~baseserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~baseserver.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node3"><a xlink:href="../sourcefile/baseserver.f90.html" xlink:title="BaseServer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="576.5,-341.41 481.5,-341.41 481.5,-317.41 576.5,-317.41 576.5,-341.41"/>
+<text text-anchor="middle" x="529" y="-327.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">BaseServer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~baseserver.f90&#45;&gt;sourcefile~shmemreference.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~baseserver.f90&#45;&gt;sourcefile~shmemreference.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M515.83,-341.6C473,-383 326.28,-512.02 223.5,-445.41"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M221.5,-445.41C108,-363.05 76.09,-179.11 68.27,-115.53"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="71.73,-114.96 67.11,-105.43 64.77,-115.76 71.73,-114.96"/>
+</g>
+<!-- sourcefile~baseserver.f90&#45;&gt;sourcefile~abstractserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~baseserver.f90&#45;&gt;sourcefile~abstractserver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M481.23,-323.68C448.58,-318.25 404.79,-308.05 370,-289.41"/>
+</g>
+<!-- sourcefile~serverthread.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~serverthread.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node7"><a xlink:href="../sourcefile/serverthread.f90.html" xlink:title="ServerThread.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="423,-105.41 315,-105.41 315,-81.41 423,-81.41 423,-105.41"/>
+<text text-anchor="middle" x="369" y="-91.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ServerThread.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~baseserver.f90&#45;&gt;sourcefile~serverthread.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge33" class="edge">
+<title>sourcefile~baseserver.f90&#45;&gt;sourcefile~serverthread.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M481.18,-317.69C473.09,-314.1 465.28,-309.44 459,-303.41 403.81,-250.41 381.23,-157.77 373.47,-115.53"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="376.89,-114.74 371.74,-105.48 369.99,-115.93 376.89,-114.74"/>
+</g>
+<!-- sourcefile~multicommserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~multicommserver.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node4"><a xlink:href="../sourcefile/multicommserver.f90.html" xlink:title="MultiCommServer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="784,-453.41 654,-453.41 654,-429.41 784,-429.41 784,-453.41"/>
+<text text-anchor="middle" x="719" y="-439.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MultiCommServer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~multicommserver.f90&#45;&gt;sourcefile~shmemreference.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~multicommserver.f90&#45;&gt;sourcefile~shmemreference.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M667.92,-453.49C617,-465.63 543.69,-482.65 530,-483.41"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M528,-483.41C391.82,-490.91 333.88,-525.51 223.5,-445.41"/>
+</g>
+<!-- sourcefile~multicommserver.f90&#45;&gt;sourcefile~abstractserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~multicommserver.f90&#45;&gt;sourcefile~abstractserver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M653.84,-437.51C599,-431.82 519.6,-417.83 459,-383.41 408.97,-355 420.71,-316.58 370,-289.41"/>
+</g>
+<!-- sourcefile~multicommserver.f90&#45;&gt;sourcefile~baseserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge21" class="edge">
+<title>sourcefile~multicommserver.f90&#45;&gt;sourcefile~baseserver.f90</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M660.35,-429.39C651.3,-425.86 642.47,-421.29 635,-415.41 610.57,-396.17 622.88,-375.33 599,-355.41 594.7,-351.82 589.85,-348.7 584.78,-345.99"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="585.98,-342.69 575.45,-341.55 582.97,-349.01 585.98,-342.69"/>
+</g>
+<!-- sourcefile~multicommserver.f90&#45;&gt;sourcefile~serverthread.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge37" class="edge">
+<title>sourcefile~multicommserver.f90&#45;&gt;sourcefile~serverthread.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M672.45,-429.34C660.07,-425.47 646.83,-420.77 635,-415.41 617.93,-407.66 615.95,-401.42 599,-393.41 569.65,-379.53 553.75,-391.55 530,-369.41"/>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M528,-369.41C504.73,-347.72 482.21,-372.16 459,-350.41 441.08,-333.61 393.51,-174.37 376.31,-115.31"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="379.61,-114.14 373.47,-105.51 372.89,-116.08 379.61,-114.14"/>
+</g>
+<!-- sourcefile~multigroupserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~multigroupserver.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node5"><a xlink:href="../sourcefile/multigroupserver.f90.html" xlink:title="MultiGroupServer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="782.5,-495.41 655.5,-495.41 655.5,-471.41 782.5,-471.41 782.5,-495.41"/>
+<text text-anchor="middle" x="719" y="-481.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MultiGroupServer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~multigroupserver.f90&#45;&gt;sourcefile~shmemreference.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~multigroupserver.f90&#45;&gt;sourcefile~shmemreference.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M655.21,-480.61C618.61,-479.68 571.61,-479.68 530,-483.41"/>
+</g>
+<!-- sourcefile~multigroupserver.f90&#45;&gt;sourcefile~abstractserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~multigroupserver.f90&#45;&gt;sourcefile~abstractserver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M655.46,-475.74C601.3,-467.32 521.98,-450.62 459,-419.41 385.37,-382.91 364.85,-368.74 315,-303.41 268.94,-243.04 240.69,-155.9 229.3,-115.51"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="232.67,-114.57 226.65,-105.85 225.92,-116.42 232.67,-114.57"/>
+</g>
+<!-- sourcefile~multigroupserver.f90&#45;&gt;sourcefile~baseserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge22" class="edge">
+<title>sourcefile~multigroupserver.f90&#45;&gt;sourcefile~baseserver.f90</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M655.1,-474.83C647.72,-471.8 640.78,-467.76 635,-462.41 598.19,-428.32 633.84,-391.52 599,-355.41 595.17,-351.43 590.67,-348.06 585.83,-345.2"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="587.34,-342.04 576.85,-340.58 584.14,-348.27 587.34,-342.04"/>
+</g>
+<!-- sourcefile~multigroupserver.f90&#45;&gt;sourcefile~serverthread.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge38" class="edge">
+<title>sourcefile~multigroupserver.f90&#45;&gt;sourcefile~serverthread.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M656.46,-471.39C649.03,-468.92 641.7,-465.95 635,-462.41 631.56,-460.59 532.85,-372.06 530,-369.41"/>
+</g>
+<!-- sourcefile~multilayerserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~multilayerserver.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node6"><a xlink:href="../sourcefile/multilayerserver.f90.html" xlink:title="MultiLayerServer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="781,-83.41 657,-83.41 657,-59.41 781,-59.41 781,-83.41"/>
+<text text-anchor="middle" x="719" y="-69.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MultiLayerServer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~multilayerserver.f90&#45;&gt;sourcefile~shmemreference.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~multilayerserver.f90&#45;&gt;sourcefile~shmemreference.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M656.99,-63.84C587.48,-56.25 470.5,-46.58 370,-53.41"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M368,-53.41C303.91,-57.56 287.62,-49.78 223.5,-53.41"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M221.5,-53.41C181.82,-55.65 138.11,-67.8 107.16,-78.13"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="105.91,-74.86 97.58,-81.4 108.18,-81.48 105.91,-74.86"/>
+</g>
+<!-- sourcefile~multilayerserver.f90&#45;&gt;sourcefile~abstractserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~multilayerserver.f90&#45;&gt;sourcefile~abstractserver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M368,-53.41C331.53,-55.89 291.58,-67.68 262.95,-77.83"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="261.53,-74.62 253.32,-81.33 263.92,-81.2 261.53,-74.62"/>
+</g>
+<!-- sourcefile~multilayerserver.f90&#45;&gt;sourcefile~baseserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge23" class="edge">
+<title>sourcefile~multilayerserver.f90&#45;&gt;sourcefile~baseserver.f90</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M656.77,-78.13C648.57,-81.38 640.95,-85.97 635,-92.41 570.43,-162.28 659.53,-230.02 599,-303.41 595.24,-307.96 590.6,-311.72 585.51,-314.82"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="583.87,-311.73 576.61,-319.44 587.09,-317.94 583.87,-311.73"/>
+</g>
+<!-- sourcefile~multilayerserver.f90&#45;&gt;sourcefile~serverthread.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge39" class="edge">
+<title>sourcefile~multilayerserver.f90&#45;&gt;sourcefile~serverthread.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M660.55,-83.53C651.85,-86.06 643.08,-89.01 635,-92.41 617.72,-99.68 617.05,-109.33 599,-114.41 539.1,-131.26 520.81,-121.6 459,-114.41 446.93,-113 434.11,-110.56 422.09,-107.83"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="422.74,-104.38 412.2,-105.48 421.12,-111.19 422.74,-104.38"/>
+</g>
+<!-- sourcefile~serverthread.f90&#45;&gt;sourcefile~shmemreference.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~serverthread.f90&#45;&gt;sourcefile~shmemreference.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M343.49,-81.38C315.17,-68.72 266.9,-50.95 223.5,-53.41"/>
+</g>
+<!-- sourcefile~serverthread.f90&#45;&gt;sourcefile~abstractserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~serverthread.f90&#45;&gt;sourcefile~abstractserver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M314.6,-93.41C306.37,-93.41 297.79,-93.41 289.33,-93.41"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="289.1,-89.91 279.1,-93.41 289.1,-96.91 289.1,-89.91"/>
+</g>
+<!-- sourcefile~abstractdirectoryservice.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~abstractdirectoryservice.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node8"><a xlink:href="../sourcefile/abstractdirectoryservice.f90.html" xlink:title="AbstractDirectoryService.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="803,-251.41 635,-251.41 635,-227.41 803,-227.41 803,-251.41"/>
+<text text-anchor="middle" x="719" y="-237.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">AbstractDirectoryService.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~abstractdirectoryservice.f90&#45;&gt;sourcefile~baseserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~abstractdirectoryservice.f90&#45;&gt;sourcefile~baseserver.f90</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M665.3,-251.47C654.82,-255.08 644.22,-259.65 635,-265.41 615.26,-277.73 618.38,-290.53 599,-303.41 593.34,-307.17 587.06,-310.49 580.66,-313.38"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="579.13,-310.23 571.26,-317.33 581.84,-316.69 579.13,-310.23"/>
+</g>
+<!-- sourcefile~directoryservice.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~directoryservice.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node9"><a xlink:href="../sourcefile/directoryservice.f90.html" xlink:title="DirectoryService.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="781,-209.41 657,-209.41 657,-185.41 781,-185.41 781,-209.41"/>
+<text text-anchor="middle" x="719" y="-195.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">DirectoryService.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~directoryservice.f90&#45;&gt;sourcefile~abstractserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~directoryservice.f90&#45;&gt;sourcefile~abstractserver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M528,-289.41C457.86,-285.95 431.9,-322.58 370,-289.41"/>
+</g>
+<!-- sourcefile~directoryservice.f90&#45;&gt;sourcefile~baseserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~directoryservice.f90&#45;&gt;sourcefile~baseserver.f90</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M656.75,-205.91C648.84,-208.94 641.32,-212.99 635,-218.41 603.86,-245.12 628.59,-274.99 599,-303.41 595.17,-307.08 590.78,-310.25 586.1,-312.97"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="584.15,-310.04 576.82,-317.69 587.32,-316.28 584.15,-310.04"/>
+</g>
+<!-- sourcefile~directoryservice.f90&#45;&gt;sourcefile~serverthread.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge34" class="edge">
+<title>sourcefile~directoryservice.f90&#45;&gt;sourcefile~serverthread.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M656.61,-207.91C648.99,-210.63 641.58,-214.07 635,-218.41 613.03,-232.88 620.32,-249.99 599,-265.41 572.69,-284.43 562.43,-291.01 530,-289.41"/>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M528,-289.41C495.57,-287.81 483.54,-286.67 459,-265.41 411.79,-224.5 386.23,-152.38 375.76,-115.9"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="379.01,-114.51 372.99,-105.79 372.26,-116.36 379.01,-114.51"/>
+</g>
+<!-- sourcefile~maplframework.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~maplframework.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node10"><a xlink:href="../sourcefile/maplframework.f90.html" xlink:title="MaplFramework.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="971,-455.41 851,-455.41 851,-431.41 971,-431.41 971,-455.41"/>
+<text text-anchor="middle" x="911" y="-441.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MaplFramework.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~maplframework.f90&#45;&gt;sourcefile~baseserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~maplframework.f90&#45;&gt;sourcefile~baseserver.f90</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M854.22,-431.31C807.68,-421.17 745.05,-407.42 720,-401.41"/>
+</g>
+<!-- sourcefile~maplframework.f90&#45;&gt;sourcefile~multigroupserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge29" class="edge">
+<title>sourcefile~maplframework.f90&#45;&gt;sourcefile~multigroupserver.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M852.99,-455.41C832.33,-459.76 808.79,-464.72 787.32,-469.24"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="786.36,-465.86 777.29,-471.35 787.8,-472.71 786.36,-465.86"/>
+</g>
+<!-- sourcefile~mockserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~mockserver.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node11"><a xlink:href="../sourcefile/mockserver.f90.html" xlink:title="MockServer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="767.5,-373.41 670.5,-373.41 670.5,-349.41 767.5,-349.41 767.5,-373.41"/>
+<text text-anchor="middle" x="719" y="-359.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MockServer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mockserver.f90&#45;&gt;sourcefile~baseserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~mockserver.f90&#45;&gt;sourcefile~baseserver.f90</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M670.07,-353.25C644.61,-348.92 613.15,-343.56 586.5,-339.02"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="586.99,-335.56 576.54,-337.33 585.81,-342.46 586.99,-335.56"/>
+</g>
+<!-- sourcefile~mockserverthread.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~mockserverthread.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node12"><a xlink:href="../sourcefile/mockserverthread.f90.html" xlink:title="MockServerThread.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="597,-105.41 461,-105.41 461,-81.41 597,-81.41 597,-105.41"/>
+<text text-anchor="middle" x="529" y="-91.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MockServerThread.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mockserverthread.f90&#45;&gt;sourcefile~serverthread.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge35" class="edge">
+<title>sourcefile~mockserverthread.f90&#45;&gt;sourcefile~serverthread.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M460.99,-93.41C451.83,-93.41 442.44,-93.41 433.34,-93.41"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="433.22,-89.91 423.22,-93.41 433.22,-96.91 433.22,-89.91"/>
+</g>
+<!-- sourcefile~mpiserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~mpiserver.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node13"><a xlink:href="../sourcefile/mpiserver.f90.html" xlink:title="MpiServer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="763,-167.41 675,-167.41 675,-143.41 763,-143.41 763,-167.41"/>
+<text text-anchor="middle" x="719" y="-153.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MpiServer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mpiserver.f90&#45;&gt;sourcefile~abstractserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~mpiserver.f90&#45;&gt;sourcefile~abstractserver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M528,-251.41C491.94,-253.38 401.83,-306.46 370,-289.41"/>
+</g>
+<!-- sourcefile~mpiserver.f90&#45;&gt;sourcefile~baseserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge20" class="edge">
+<title>sourcefile~mpiserver.f90&#45;&gt;sourcefile~baseserver.f90</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M674.97,-157.76C660.65,-160.58 645.66,-166.05 635,-176.41 592.93,-217.3 638.7,-260.22 599,-303.41 595.21,-307.53 590.7,-311 585.83,-313.93"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="584.02,-310.92 576.74,-318.62 587.23,-317.14 584.02,-310.92"/>
+</g>
+<!-- sourcefile~mpiserver.f90&#45;&gt;sourcefile~serverthread.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge36" class="edge">
+<title>sourcefile~mpiserver.f90&#45;&gt;sourcefile~serverthread.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M674.62,-160.39C661.07,-163.46 646.64,-168.41 635,-176.41 612.13,-192.12 621.16,-210.72 599,-227.41 573.06,-246.94 562.42,-249.64 530,-251.41"/>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M528,-251.41C495.58,-253.18 484.66,-247.31 459,-227.41 419.91,-197.09 392.31,-144.58 379.01,-115.1"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="382.12,-113.47 374.91,-105.71 375.7,-116.27 382.12,-113.47"/>
+</g>
+<!-- sourcefile~openmpserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node14" class="node">
+<title>sourcefile~openmpserver.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node14"><a xlink:href="../sourcefile/openmpserver.f90.html" xlink:title="OpenMPServer.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="775,-125.41 663,-125.41 663,-101.41 775,-101.41 775,-125.41"/>
+<text text-anchor="middle" x="719" y="-111.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">OpenMPServer.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~openmpserver.f90&#45;&gt;sourcefile~abstractserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~openmpserver.f90&#45;&gt;sourcefile~abstractserver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M528,-213.41C496.02,-219.03 488.49,-223.82 459,-237.41 417.39,-256.58 410.38,-311.05 370,-289.41"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M368,-289.41C295.36,-250.48 249.56,-157.2 231.85,-114.9"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="235.05,-113.49 228.04,-105.54 228.56,-116.12 235.05,-113.49"/>
+</g>
+<!-- sourcefile~openmpserver.f90&#45;&gt;sourcefile~baseserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge24" class="edge">
+<title>sourcefile~openmpserver.f90&#45;&gt;sourcefile~baseserver.f90</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M662.93,-118.28C652.51,-121.52 642.53,-126.59 635,-134.41 581.74,-189.73 649.07,-245.18 599,-303.41 595.3,-307.72 590.8,-311.31 585.91,-314.31"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="583.98,-311.37 576.74,-319.1 587.22,-317.57 583.98,-311.37"/>
+</g>
+<!-- sourcefile~openmpserver.f90&#45;&gt;sourcefile~serverthread.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge40" class="edge">
+<title>sourcefile~openmpserver.f90&#45;&gt;sourcefile~serverthread.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M662.58,-121C652.77,-124.07 643.11,-128.38 635,-134.41 610.04,-152.96 623.77,-175.6 599,-194.41 573.67,-213.65 561.33,-207.9 530,-213.41"/>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M528,-213.41C462.95,-224.84 406.7,-151.82 382.57,-114.45"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="385.42,-112.4 377.14,-105.79 379.49,-116.12 385.42,-112.4"/>
+</g>
+<!-- sourcefile~pfio.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node15" class="node">
+<title>sourcefile~pfio.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node15"><a xlink:href="../sourcefile/pfio.f90.html" xlink:title="pFIO.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="940,-291.41 882,-291.41 882,-267.41 940,-267.41 940,-291.41"/>
+<text text-anchor="middle" x="911" y="-277.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pFIO.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~pfio.f90&#45;&gt;sourcefile~abstractserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~pfio.f90&#45;&gt;sourcefile~abstractserver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M908.39,-267.14C902.55,-228.03 878.67,-105.65 803,-50.41 704.2,21.72 651.45,-0.82 530,-15.41"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M528,-15.41C433.15,-24.28 403.23,-3.49 315,-39.41 296.23,-47.05 296.28,-56.82 279,-67.41 273.52,-70.76 267.54,-73.98 261.6,-76.94"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="259.88,-73.89 252.37,-81.36 262.9,-80.2 259.88,-73.89"/>
+</g>
+<!-- sourcefile~pfio.f90&#45;&gt;sourcefile~baseserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge25" class="edge">
+<title>sourcefile~pfio.f90&#45;&gt;sourcefile~baseserver.f90</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M881.64,-279.34C831.49,-279.67 724.02,-282.39 635,-298.41 614.54,-302.09 592.41,-308.28 573.76,-314.17"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="572.51,-310.89 564.07,-317.3 574.66,-317.55 572.51,-310.89"/>
+</g>
+<!-- sourcefile~pfio.f90&#45;&gt;sourcefile~multicommserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge28" class="edge">
+<title>sourcefile~pfio.f90&#45;&gt;sourcefile~multicommserver.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M901.67,-291.81C881.19,-321.98 828.22,-398.01 803,-415.41 797.32,-419.33 791.03,-422.67 784.51,-425.53"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="782.86,-422.42 774.87,-429.37 785.45,-428.92 782.86,-422.42"/>
+</g>
+<!-- sourcefile~pfio.f90&#45;&gt;sourcefile~multigroupserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge30" class="edge">
+<title>sourcefile~pfio.f90&#45;&gt;sourcefile~multigroupserver.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M900.19,-291.63C885.65,-310.12 858.05,-346.61 839,-380.41 819.46,-415.08 833.38,-436.69 803,-462.41 799.68,-465.22 796.04,-467.66 792.19,-469.78"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="790.43,-466.74 782.88,-474.17 793.42,-473.07 790.43,-466.74"/>
+</g>
+<!-- sourcefile~pfio.f90&#45;&gt;sourcefile~multilayerserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge32" class="edge">
+<title>sourcefile~pfio.f90&#45;&gt;sourcefile~multilayerserver.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M906.66,-267.11C896.87,-233.5 864.96,-139.46 803,-92.41 799.13,-89.47 794.9,-86.94 790.47,-84.77"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="791.68,-81.48 781.11,-80.77 788.93,-87.92 791.68,-81.48"/>
+</g>
+<!-- sourcefile~pfio.f90&#45;&gt;sourcefile~serverthread.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge41" class="edge">
+<title>sourcefile~pfio.f90&#45;&gt;sourcefile~serverthread.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M528,-15.41C476.3,-21.62 469.71,-44.38 423,-67.41 416.76,-70.48 410.11,-73.75 403.69,-76.9"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="401.99,-73.84 394.55,-81.39 405.07,-80.13 401.99,-73.84"/>
+</g>
+<!-- sourcefile~pfioservergridcomp.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node16" class="node">
+<title>sourcefile~pfioservergridcomp.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node16"><a xlink:href="../sourcefile/pfioservergridcomp.f90.html" xlink:title="PfioServerGridComp.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="983,-413.41 839,-413.41 839,-389.41 983,-389.41 983,-413.41"/>
+<text text-anchor="middle" x="911" y="-399.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">PfioServerGridComp.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~pfioservergridcomp.f90&#45;&gt;sourcefile~baseserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge26" class="edge">
+<title>sourcefile~pfioservergridcomp.f90&#45;&gt;sourcefile~baseserver.f90</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M838.69,-409.23C802.64,-411.22 758.49,-410.65 720,-401.41"/>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M718,-401.41C681.2,-392.57 669.33,-398.33 635,-382.41 616.86,-373.99 616.53,-365.03 599,-355.41 592.14,-351.64 584.61,-348.19 577.14,-345.12"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="578.33,-341.83 567.74,-341.43 575.78,-348.34 578.33,-341.83"/>
+</g>
+<!-- sourcefile~pfioservergridcomp.f90&#45;&gt;sourcefile~multigroupserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge31" class="edge">
+<title>sourcefile~pfioservergridcomp.f90&#45;&gt;sourcefile~multigroupserver.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M857,-413.51C850.7,-415.97 844.54,-418.91 839,-422.41 818.77,-435.17 823.48,-450.05 803,-462.41 799.59,-464.47 795.98,-466.32 792.26,-468"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="790.78,-464.82 782.81,-471.8 793.39,-471.32 790.78,-464.82"/>
+</g>
+<!-- sourcefile~serverthreadvector.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node17" class="node">
+<title>sourcefile~serverthreadvector.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node17"><a xlink:href="../sourcefile/serverthreadvector.f90.html" xlink:title="ServerThreadVector.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="599,-185.41 459,-185.41 459,-161.41 599,-161.41 599,-185.41"/>
+<text text-anchor="middle" x="529" y="-171.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ServerThreadVector.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~serverthreadvector.f90&#45;&gt;sourcefile~serverthread.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge42" class="edge">
+<title>sourcefile~serverthreadvector.f90&#45;&gt;sourcefile~serverthread.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M492.01,-161.28C481.22,-157.26 469.48,-152.5 459,-147.41 437.13,-136.77 413.67,-122.4 396.32,-111.15"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="398.13,-108.16 387.85,-105.6 394.29,-114.01 398.13,-108.16"/>
+</g>
+<!-- sourcefile~stringservermap.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_node18" class="node">
+<title>sourcefile~stringservermap.f90</title>
+<g id="a_sourcefile~~shmemreference.f90~~AfferentGraph_node18"><a xlink:href="../sourcefile/stringservermap.f90.html" xlink:title="StringServerMap.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="781,-331.41 657,-331.41 657,-307.41 781,-307.41 781,-331.41"/>
+<text text-anchor="middle" x="719" y="-317.01" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StringServerMap.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~stringservermap.f90&#45;&gt;sourcefile~baseserver.f90 -->
+<g id="sourcefile~~shmemreference.f90~~AfferentGraph_edge27" class="edge">
+<title>sourcefile~stringservermap.f90&#45;&gt;sourcefile~baseserver.f90</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M656.96,-322.65C634.47,-323.85 609.1,-325.2 586.98,-326.38"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="586.54,-322.9 576.74,-326.92 586.91,-329.89 586.54,-322.9"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefileshmemreferencef90AfferentGraph = svgPanZoom('#sourcefileshmemreferencef90AfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#AfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="AfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+<br>
+      <section>
+        <h2><span class="anchor" id="src"></span>Source Code</h2>
+        <div class="hl codehilite"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="cp">#include &quot;MAPL_ErrLog.h&quot;</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a><span class="cp">#include &quot;unused_dummy.H&quot;</span>
+<a id="ln-3" name="ln-3" href="#ln-3"></a>
+<a id="ln-4" name="ln-4" href="#ln-4"></a><span class="k">module </span><span class="n">pFIO_ShmemReferenceMod</span>
+<a id="ln-5" name="ln-5" href="#ln-5"></a><span class="w">   </span><span class="k">use</span><span class="p">,</span><span class="w"> </span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iso_fortran_env</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">INT64</span>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_ErrorHandling_mod</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="w">   </span><span class="k">use </span><span class="n">pFIO_UtilitiesMod</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a><span class="w">   </span><span class="k">use </span><span class="n">pFIO_AbstractDataReferenceMod</span>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_ErrorHandling_mod</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="w">   </span><span class="k">use </span><span class="n">mpi</span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="w">   </span><span class="k">implicit none</span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a>
+<a id="ln-14" name="ln-14" href="#ln-14"></a><span class="k">   private</span>
+<a id="ln-15" name="ln-15" href="#ln-15"></a>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="k">   public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ShmemReference</span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a>
+<a id="ln-18" name="ln-18" href="#ln-18"></a><span class="w">   </span><span class="k">type</span><span class="p">,</span><span class="k">extends</span><span class="p">(</span><span class="n">AbstractDataReference</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ShmemReference</span>
+<a id="ln-19" name="ln-19" href="#ln-19"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">win</span><span class="w">         </span><span class="c">! used for shared memory</span>
+<a id="ln-20" name="ln-20" href="#ln-20"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">InNode_Comm</span><span class="w"> </span><span class="c">!</span>
+<a id="ln-21" name="ln-21" href="#ln-21"></a><span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">INT64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">msize_word</span>
+<a id="ln-22" name="ln-22" href="#ln-22"></a><span class="w">      </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">shmem_allocated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<a id="ln-23" name="ln-23" href="#ln-23"></a><span class="w">   </span><span class="k">contains</span>
+<a id="ln-24" name="ln-24" href="#ln-24"></a><span class="k">      procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_length</span>
+<a id="ln-25" name="ln-25" href="#ln-25"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">serialize</span>
+<a id="ln-26" name="ln-26" href="#ln-26"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">deserialize</span>
+<a id="ln-27" name="ln-27" href="#ln-27"></a><span class="w">      </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="k">allocate</span>
+<a id="ln-28" name="ln-28" href="#ln-28"></a><span class="k">      procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="k">deallocate</span>
+<a id="ln-29" name="ln-29" href="#ln-29"></a><span class="k">      procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fence</span>
+<a id="ln-30" name="ln-30" href="#ln-30"></a><span class="w">   </span><span class="k">end type </span><span class="n">ShmemReference</span>
+<a id="ln-31" name="ln-31" href="#ln-31"></a>
+<a id="ln-32" name="ln-32" href="#ln-32"></a><span class="w">   </span><span class="k">interface </span><span class="n">ShmemReference</span>
+<a id="ln-33" name="ln-33" href="#ln-33"></a><span class="w">      </span><span class="k">module procedure </span><span class="n">new_ShmemReference</span>
+<a id="ln-34" name="ln-34" href="#ln-34"></a><span class="w">   </span><span class="k">end interface </span><span class="n">ShmemReference</span>
+<a id="ln-35" name="ln-35" href="#ln-35"></a>
+<a id="ln-36" name="ln-36" href="#ln-36"></a><span class="k">contains</span>
+<a id="ln-37" name="ln-37" href="#ln-37"></a>
+<a id="ln-38" name="ln-38" href="#ln-38"></a><span class="k">   function </span><span class="n">new_ShmemReference</span><span class="p">(</span><span class="n">type_kind</span><span class="p">,</span><span class="n">msize_word</span><span class="p">,</span><span class="n">InNode_Comm</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+<a id="ln-39" name="ln-39" href="#ln-39"></a><span class="w">      </span><span class="k">type</span><span class="w"> </span><span class="p">(</span><span class="n">ShmemReference</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">reference</span>
+<a id="ln-40" name="ln-40" href="#ln-40"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">type_kind</span>
+<a id="ln-41" name="ln-41" href="#ln-41"></a><span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">INT64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">msize_word</span>
+<a id="ln-42" name="ln-42" href="#ln-42"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">InNode_Comm</span>
+<a id="ln-43" name="ln-43" href="#ln-43"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-44" name="ln-44" href="#ln-44"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-45" name="ln-45" href="#ln-45"></a>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="w">      </span><span class="n">reference</span><span class="p">%</span><span class="n">msize_word</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">msize_word</span>
+<a id="ln-47" name="ln-47" href="#ln-47"></a><span class="w">      </span><span class="n">reference</span><span class="p">%</span><span class="n">type_kind</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">type_kind</span>
+<a id="ln-48" name="ln-48" href="#ln-48"></a><span class="w">      </span><span class="k">call </span><span class="n">Mpi_comm_dup</span><span class="p">(</span><span class="n">InNode_Comm</span><span class="p">,</span><span class="n">reference</span><span class="p">%</span><span class="n">InNode_Comm</span><span class="p">,</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-49" name="ln-49" href="#ln-49"></a><span class="w">      </span><span class="err">_</span><span class="n">VERIFY</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-50" name="ln-50" href="#ln-50"></a>
+<a id="ln-51" name="ln-51" href="#ln-51"></a><span class="w">      </span><span class="k">call </span><span class="n">reference</span><span class="p">%</span><span class="k">allocate</span><span class="p">(</span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-52" name="ln-52" href="#ln-52"></a><span class="w">      </span><span class="err">_</span><span class="n">VERIFY</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-53" name="ln-53" href="#ln-53"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-54" name="ln-54" href="#ln-54"></a><span class="w">   </span><span class="k">end function </span><span class="n">new_ShmemReference</span>
+<a id="ln-55" name="ln-55" href="#ln-55"></a>
+<a id="ln-56" name="ln-56" href="#ln-56"></a><span class="w">   </span><span class="kt">integer </span><span class="k">function </span><span class="n">get_length</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+<a id="ln-57" name="ln-57" href="#ln-57"></a><span class="w">      </span><span class="k">class</span><span class="w"> </span><span class="p">(</span><span class="n">ShmemReference</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-58" name="ln-58" href="#ln-58"></a><span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">INT64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">long_dummy</span>
+<a id="ln-59" name="ln-59" href="#ln-59"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">size_msize</span>
+<a id="ln-60" name="ln-60" href="#ln-60"></a>
+<a id="ln-61" name="ln-61" href="#ln-61"></a><span class="w">      </span><span class="n">size_msize</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="nb">transfer</span><span class="p">(</span><span class="n">long_dummy</span><span class="p">,[</span><span class="mi">1</span><span class="p">]))</span>
+<a id="ln-62" name="ln-62" href="#ln-62"></a><span class="w">      </span><span class="n">length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">get_length_base</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">size_msize</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-63" name="ln-63" href="#ln-63"></a><span class="w">                    </span><span class="mi">3</span><span class="w"> </span><span class="c">! win + InNode_comm + Shmem_alloacted</span>
+<a id="ln-64" name="ln-64" href="#ln-64"></a>
+<a id="ln-65" name="ln-65" href="#ln-65"></a><span class="w">   </span><span class="k">end function </span><span class="n">get_length</span>
+<a id="ln-66" name="ln-66" href="#ln-66"></a>
+<a id="ln-67" name="ln-67" href="#ln-67"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">serialize</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">      </span><span class="k">class</span><span class="w"> </span><span class="p">(</span><span class="n">ShmemReference</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-69" name="ln-69" href="#ln-69"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">buffer</span><span class="p">(:)</span>
+<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-71" name="ln-71" href="#ln-71"></a>
+<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">tmp_buff</span><span class="p">(:)</span>
+<a id="ln-73" name="ln-73" href="#ln-73"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-74" name="ln-74" href="#ln-74"></a>
+<a id="ln-75" name="ln-75" href="#ln-75"></a><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">buffer</span><span class="p">))</span><span class="w"> </span><span class="k">deallocate</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+<a id="ln-76" name="ln-76" href="#ln-76"></a><span class="w">      </span><span class="k">allocate</span><span class="p">(</span><span class="n">buffer</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">get_length</span><span class="p">()))</span>
+<a id="ln-77" name="ln-77" href="#ln-77"></a>
+<a id="ln-78" name="ln-78" href="#ln-78"></a><span class="w">      </span><span class="k">call </span><span class="n">this</span><span class="p">%</span><span class="n">serialize_base</span><span class="p">(</span><span class="n">tmp_buff</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-79" name="ln-79" href="#ln-79"></a><span class="w">      </span><span class="err">_</span><span class="n">VERIFY</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-80" name="ln-80" href="#ln-80"></a><span class="w">      </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">get_length_base</span><span class="p">()</span>
+<a id="ln-81" name="ln-81" href="#ln-81"></a><span class="w">      </span><span class="n">buffer</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">)</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">tmp_buff</span><span class="p">(:)</span>
+<a id="ln-82" name="ln-82" href="#ln-82"></a><span class="w">      </span><span class="n">buffer</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">win</span>
+<a id="ln-83" name="ln-83" href="#ln-83"></a><span class="w">      </span><span class="n">buffer</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">InNode_Comm</span>
+<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">      </span><span class="n">buffer</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">:</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">serialize_intrinsic</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">shmem_allocated</span><span class="p">)</span>
+<a id="ln-85" name="ln-85" href="#ln-85"></a><span class="w">      </span><span class="n">buffer</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">4</span><span class="p">:)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">transfer</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">msize_word</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<a id="ln-86" name="ln-86" href="#ln-86"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-87" name="ln-87" href="#ln-87"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">serialize</span>
+<a id="ln-88" name="ln-88" href="#ln-88"></a>
+<a id="ln-89" name="ln-89" href="#ln-89"></a><span class="w">   </span><span class="k">subroutine </span><span class="n">deserialize</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-90" name="ln-90" href="#ln-90"></a><span class="w">      </span><span class="k">class</span><span class="w"> </span><span class="p">(</span><span class="n">ShmemReference</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-91" name="ln-91" href="#ln-91"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">buffer</span><span class="p">(:)</span>
+<a id="ln-92" name="ln-92" href="#ln-92"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-93" name="ln-93" href="#ln-93"></a><span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">INT64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">long_dummy</span>
+<a id="ln-94" name="ln-94" href="#ln-94"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">size_msize</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">n1</span><span class="p">,</span><span class="w"> </span><span class="n">status</span>
+<a id="ln-95" name="ln-95" href="#ln-95"></a>
+<a id="ln-96" name="ln-96" href="#ln-96"></a><span class="w">      </span><span class="n">size_msize</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="nb">transfer</span><span class="p">(</span><span class="n">long_dummy</span><span class="p">,[</span><span class="mi">1</span><span class="p">]))</span>
+<a id="ln-97" name="ln-97" href="#ln-97"></a><span class="w">      </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+<a id="ln-98" name="ln-98" href="#ln-98"></a><span class="w">      </span><span class="n">n1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">size_msize</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-99" name="ln-99" href="#ln-99"></a><span class="w">      </span><span class="n">this</span><span class="p">%</span><span class="n">msize_word</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nb">transfer</span><span class="p">(</span><span class="n">buffer</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">msize_word</span><span class="p">)</span>
+<a id="ln-100" name="ln-100" href="#ln-100"></a><span class="w">      </span><span class="k">call  </span><span class="n">deserialize_intrinsic</span><span class="p">(</span><span class="n">buffer</span><span class="p">(</span><span class="n">n1</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">n1</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">shmem_allocated</span><span class="p">)</span>
+<a id="ln-101" name="ln-101" href="#ln-101"></a><span class="w">      </span><span class="k">call  </span><span class="n">deserialize_intrinsic</span><span class="p">(</span><span class="n">buffer</span><span class="p">(</span><span class="n">n1</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span><span class="n">n1</span><span class="o">-</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">InNode_Comm</span><span class="p">)</span>
+<a id="ln-102" name="ln-102" href="#ln-102"></a><span class="w">      </span><span class="k">call  </span><span class="n">deserialize_intrinsic</span><span class="p">(</span><span class="n">buffer</span><span class="p">(</span><span class="n">n1</span><span class="o">-</span><span class="mi">3</span><span class="p">:</span><span class="n">n1</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">win</span><span class="p">)</span>
+<a id="ln-103" name="ln-103" href="#ln-103"></a><span class="w">      </span><span class="k">call  </span><span class="n">this</span><span class="p">%</span><span class="n">deserialize_base</span><span class="p">(</span><span class="n">buffer</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">n1</span><span class="o">-</span><span class="mi">4</span><span class="p">),</span><span class="w"> </span><span class="n">rc</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-104" name="ln-104" href="#ln-104"></a><span class="w">      </span><span class="err">_</span><span class="n">VERIFY</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+<a id="ln-105" name="ln-105" href="#ln-105"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-106" name="ln-106" href="#ln-106"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">deserialize</span>
+<a id="ln-107" name="ln-107" href="#ln-107"></a>
+<a id="ln-108" name="ln-108" href="#ln-108"></a><span class="w">   </span><span class="k">subroutine allocate</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-109" name="ln-109" href="#ln-109"></a><span class="w">      </span><span class="k">class</span><span class="w"> </span><span class="p">(</span><span class="n">ShmemReference</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-110" name="ln-110" href="#ln-110"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-111" name="ln-111" href="#ln-111"></a>
+<a id="ln-112" name="ln-112" href="#ln-112"></a><span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">MPI_ADDRESS_KIND</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">windowsize</span>
+<a id="ln-113" name="ln-113" href="#ln-113"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">disp_unit</span><span class="p">,</span><span class="n">ierr</span><span class="p">,</span><span class="w"> </span><span class="n">InNode_Rank</span>
+<a id="ln-114" name="ln-114" href="#ln-114"></a><span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">MPI_ADDRESS_KIND</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n_bytes</span>
+<a id="ln-115" name="ln-115" href="#ln-115"></a><span class="cp">#if !defined (SUPPORT_FOR_MPI_ALLOC_MEM_CPTR)</span>
+<a id="ln-116" name="ln-116" href="#ln-116"></a><span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">MPI_ADDRESS_KIND</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">baseaddr</span>
+<a id="ln-117" name="ln-117" href="#ln-117"></a><span class="cp">#endif</span>
+<a id="ln-118" name="ln-118" href="#ln-118"></a>
+<a id="ln-119" name="ln-119" href="#ln-119"></a><span class="w">      </span><span class="n">n_bytes</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">this</span><span class="p">%</span><span class="n">msize_word</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4_MPI_ADDRESS_KIND</span>
+<a id="ln-120" name="ln-120" href="#ln-120"></a>
+<a id="ln-121" name="ln-121" href="#ln-121"></a><span class="w">      </span><span class="k">call </span><span class="n">MPI_Comm_rank</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">InNode_Comm</span><span class="p">,</span><span class="n">InNode_Rank</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-122" name="ln-122" href="#ln-122"></a><span class="w">      </span><span class="err">_</span><span class="n">VERIFY</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-123" name="ln-123" href="#ln-123"></a>
+<a id="ln-124" name="ln-124" href="#ln-124"></a><span class="w">      </span><span class="n">disp_unit</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-125" name="ln-125" href="#ln-125"></a><span class="w">      </span><span class="n">windowsize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0_MPI_ADDRESS_KIND</span>
+<a id="ln-126" name="ln-126" href="#ln-126"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">InNode_Rank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">windowsize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n_bytes</span>
+<a id="ln-127" name="ln-127" href="#ln-127"></a>
+<a id="ln-128" name="ln-128" href="#ln-128"></a><span class="cp">#if defined(SUPPORT_FOR_MPI_ALLOC_MEM_CPTR)</span>
+<a id="ln-129" name="ln-129" href="#ln-129"></a><span class="w">      </span><span class="k">call </span><span class="n">MPI_Win_allocate_shared</span><span class="p">(</span><span class="n">windowsize</span><span class="p">,</span><span class="w"> </span><span class="n">disp_unit</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_INFO_NULL</span><span class="p">,</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">InNode_Comm</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-130" name="ln-130" href="#ln-130"></a><span class="w">               </span><span class="n">this</span><span class="p">%</span><span class="n">base_address</span><span class="p">,</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-131" name="ln-131" href="#ln-131"></a><span class="w">      </span><span class="err">_</span><span class="n">VERIFY</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-132" name="ln-132" href="#ln-132"></a><span class="cp">#else</span>
+<a id="ln-133" name="ln-133" href="#ln-133"></a><span class="w">      </span><span class="k">call </span><span class="n">MPI_Win_allocate_shared</span><span class="p">(</span><span class="n">windowsize</span><span class="p">,</span><span class="w"> </span><span class="n">disp_unit</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_INFO_NULL</span><span class="p">,</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">InNode_Comm</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-134" name="ln-134" href="#ln-134"></a><span class="w">               </span><span class="n">baseaddr</span><span class="p">,</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-135" name="ln-135" href="#ln-135"></a><span class="w">      </span><span class="err">_</span><span class="n">VERIFY</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-136" name="ln-136" href="#ln-136"></a><span class="w">      </span><span class="n">this</span><span class="p">%</span><span class="n">base_address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">transfer</span><span class="p">(</span><span class="n">baseaddr</span><span class="p">,</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">base_address</span><span class="p">)</span>
+<a id="ln-137" name="ln-137" href="#ln-137"></a><span class="cp">#endif</span>
+<a id="ln-138" name="ln-138" href="#ln-138"></a>
+<a id="ln-139" name="ln-139" href="#ln-139"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">InNode_Rank</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">  </span><span class="k">then</span>
+<a id="ln-140" name="ln-140" href="#ln-140"></a><span class="cp">#if defined(SUPPORT_FOR_MPI_ALLOC_MEM_CPTR)</span>
+<a id="ln-141" name="ln-141" href="#ln-141"></a><span class="w">          </span><span class="k">call </span><span class="n">MPI_Win_shared_query</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">windowsize</span><span class="p">,</span><span class="w"> </span><span class="n">disp_unit</span><span class="p">,</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">base_address</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-142" name="ln-142" href="#ln-142"></a><span class="w">          </span><span class="err">_</span><span class="n">VERIFY</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-143" name="ln-143" href="#ln-143"></a><span class="cp">#else</span>
+<a id="ln-144" name="ln-144" href="#ln-144"></a><span class="w">          </span><span class="k">call </span><span class="n">MPI_Win_shared_query</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">windowsize</span><span class="p">,</span><span class="w"> </span><span class="n">disp_unit</span><span class="p">,</span><span class="w"> </span><span class="n">baseaddr</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-145" name="ln-145" href="#ln-145"></a><span class="w">          </span><span class="n">this</span><span class="p">%</span><span class="n">base_address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">transfer</span><span class="p">(</span><span class="n">baseaddr</span><span class="p">,</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">base_address</span><span class="p">)</span>
+<a id="ln-146" name="ln-146" href="#ln-146"></a><span class="w">          </span><span class="err">_</span><span class="n">VERIFY</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-147" name="ln-147" href="#ln-147"></a><span class="cp">#endif</span>
+<a id="ln-148" name="ln-148" href="#ln-148"></a><span class="w">      </span><span class="k">endif</span>
+<a id="ln-149" name="ln-149" href="#ln-149"></a>
+<a id="ln-150" name="ln-150" href="#ln-150"></a><span class="k">      </span><span class="n">this</span><span class="p">%</span><span class="n">shmem_allocated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<a id="ln-151" name="ln-151" href="#ln-151"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-152" name="ln-152" href="#ln-152"></a><span class="w">   </span><span class="k">end subroutine allocate</span>
+<a id="ln-153" name="ln-153" href="#ln-153"></a>
+<a id="ln-154" name="ln-154" href="#ln-154"></a><span class="k">   subroutine deallocate</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-155" name="ln-155" href="#ln-155"></a><span class="w">      </span><span class="k">class</span><span class="w"> </span><span class="p">(</span><span class="n">ShmemReference</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-156" name="ln-156" href="#ln-156"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-157" name="ln-157" href="#ln-157"></a><span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ierr</span>
+<a id="ln-158" name="ln-158" href="#ln-158"></a>
+<a id="ln-159" name="ln-159" href="#ln-159"></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">shmem_allocated</span><span class="p">)</span><span class="w">  </span><span class="k">then</span>
+<a id="ln-160" name="ln-160" href="#ln-160"></a><span class="k">         </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-161" name="ln-161" href="#ln-161"></a><span class="w">      </span><span class="k">endif</span>
+<a id="ln-162" name="ln-162" href="#ln-162"></a>
+<a id="ln-163" name="ln-163" href="#ln-163"></a><span class="k">      call </span><span class="n">MPI_Win_fence</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-164" name="ln-164" href="#ln-164"></a><span class="w">      </span><span class="err">_</span><span class="n">VERIFY</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-165" name="ln-165" href="#ln-165"></a><span class="w">      </span><span class="k">call </span><span class="n">MPI_Win_free</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">win</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-166" name="ln-166" href="#ln-166"></a><span class="w">      </span><span class="err">_</span><span class="n">VERIFY</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-167" name="ln-167" href="#ln-167"></a><span class="w">      </span><span class="k">call </span><span class="n">MPI_Comm_free</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">InNode_Comm</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-168" name="ln-168" href="#ln-168"></a><span class="w">      </span><span class="err">_</span><span class="n">VERIFY</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-169" name="ln-169" href="#ln-169"></a><span class="w">      </span><span class="n">this</span><span class="p">%</span><span class="n">shmem_allocated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<a id="ln-170" name="ln-170" href="#ln-170"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-171" name="ln-171" href="#ln-171"></a><span class="w">   </span><span class="k">end subroutine deallocate</span>
+<a id="ln-172" name="ln-172" href="#ln-172"></a>
+<a id="ln-173" name="ln-173" href="#ln-173"></a><span class="k">   subroutine </span><span class="n">fence</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<a id="ln-174" name="ln-174" href="#ln-174"></a><span class="w">     </span><span class="k">class</span><span class="p">(</span><span class="n">ShmemReference</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-175" name="ln-175" href="#ln-175"></a><span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+<a id="ln-176" name="ln-176" href="#ln-176"></a><span class="w">     </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ierr</span>
+<a id="ln-177" name="ln-177" href="#ln-177"></a>
+<a id="ln-178" name="ln-178" href="#ln-178"></a><span class="w">     </span><span class="k">if</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">shmem_allocated</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-179" name="ln-179" href="#ln-179"></a><span class="k">        </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-180" name="ln-180" href="#ln-180"></a><span class="w">     </span><span class="k">endif</span>
+<a id="ln-181" name="ln-181" href="#ln-181"></a><span class="k">     call </span><span class="n">Mpi_Win_fence</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-182" name="ln-182" href="#ln-182"></a><span class="w">      </span><span class="err">_</span><span class="n">VERIFY</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-183" name="ln-183" href="#ln-183"></a><span class="w">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<a id="ln-184" name="ln-184" href="#ln-184"></a><span class="w">   </span><span class="k">end subroutine </span><span class="n">fence</span>
+<a id="ln-185" name="ln-185" href="#ln-185"></a>
+<a id="ln-186" name="ln-186" href="#ln-186"></a><span class="k">end module </span><span class="n">pFIO_ShmemReferenceMod</span>
+<a id="ln-187" name="ln-187" href="#ln-187"></a>
+<a id="ln-188" name="ln-188" href="#ln-188"></a><span class="k">module </span><span class="n">pFIO_IntegerShmemReferenceMapMod</span>
+<a id="ln-189" name="ln-189" href="#ln-189"></a><span class="w">   </span><span class="k">use </span><span class="n">pFIO_ShmemReferenceMod</span>
+<a id="ln-190" name="ln-190" href="#ln-190"></a>
+<a id="ln-191" name="ln-191" href="#ln-191"></a><span class="cp">#include &quot;types/key_integer.inc&quot;</span>
+<a id="ln-192" name="ln-192" href="#ln-192"></a><span class="cp">#define _value type(ShmemReference)</span>
+<a id="ln-193" name="ln-193" href="#ln-193"></a>
+<a id="ln-194" name="ln-194" href="#ln-194"></a><span class="cp">#define _map IntegerShmemReferenceMap</span>
+<a id="ln-195" name="ln-195" href="#ln-195"></a><span class="cp">#define _iterator IntegerShmemReferenceMapIterator</span>
+<a id="ln-196" name="ln-196" href="#ln-196"></a><span class="cp">#define _alt</span>
+<a id="ln-197" name="ln-197" href="#ln-197"></a><span class="cp">#include &quot;templates/map.inc&quot;</span>
+<a id="ln-198" name="ln-198" href="#ln-198"></a>
+<a id="ln-199" name="ln-199" href="#ln-199"></a><span class="k">end module </span><span class="n">pFIO_IntegerShmemReferenceMapMod</span>
+</pre></div>
+
+      </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              MAPL
+ was developed by The MAPL Developers<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-07-24T12:54:20.457142+0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
