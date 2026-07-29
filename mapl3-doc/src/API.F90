@@ -1,35 +1,27 @@
-! Export umbrella for the MAPL infrastructure/vertical/vertical_grid layer.
-! Public API exposed to external consumers.
-module mapl_vertical_grid_api
+! Export umbrella for the MAPL.field library.
 
-   use mapl_VerticalGrid_mod, only: mapl_VerticalGrid => VerticalGrid
-   use mapl_VerticalGrid_mod, only: MAPL_VERTICAL_GRID_NOT_FOUND => VERTICAL_GRID_NOT_FOUND
-   use mapl_VerticalGridSpec_mod, only: mapl_VerticalGridSpec => VerticalGridSpec
-   use mapl_VerticalGridFactory_mod, only: mapl_VerticalGridFactory => VerticalGridFactory
-   use mapl_BasicVerticalGrid_mod, only: mapl_BasicVerticalGrid => BasicVerticalGrid
-   use mapl_BasicVerticalGrid_mod, only: mapl_BasicVerticalGridSpec => BasicVerticalGridSpec
-   use mapl_BasicVerticalGrid_mod, only: mapl_BasicVerticalGridFactory => BasicVerticalGridFactory
-   use mapl_VerticalGridManager_mod, only: mapl_VerticalGridManager => VerticalGridManager
-   use mapl_VerticalGridManager_mod, only: mapl_get_vertical_grid_manager => get_vertical_grid_manager
+module mapl_field_api
+
+   use mapl_FieldCreate_mod, only: MAPL_FieldCreate => FieldCreate
+   use mapl_FieldCreate_mod, only: MAPL_FieldEmptyComplete => FieldEmptyComplete
+   use mapl_FieldCreate_mod, only: MAPL_FieldsAreAliased => FieldsAreAliased
+   use mapl_FieldGet_mod, only: MAPL_FieldGet => FieldGet
+   use mapl_FieldSet_mod, only: MAPL_FieldSet => FieldSet
+   use mapl_FieldFill_mod, only: MAPL_FieldFill => FieldFill
+   use mapl_RestartModes_mod, only: MAPL_RESTART_REQUIRED => RESTART_REQUIRED
+   use mapl_RestartModes_mod, only: MAPL_RESTART_SKIP => RESTART_SKIP
 
    implicit none
    private
 
-   ! Abstract base types
-   public :: mapl_VerticalGrid
-   public :: mapl_VerticalGridSpec
-   public :: mapl_VerticalGridFactory
+   public :: MAPL_FieldCreate
+   public :: MAPL_FieldEmptyComplete
+   public :: MAPL_FieldsAreAliased
+   public :: MAPL_FieldGet
+   public :: MAPL_FieldSet
+   public :: MAPL_FieldFill
+   public :: MAPL_RESTART_REQUIRED
+   public :: MAPL_RESTART_SKIP
 
-   ! Concrete basic implementation
-   public :: mapl_BasicVerticalGrid
-   public :: mapl_BasicVerticalGridSpec
-   public :: mapl_BasicVerticalGridFactory
+end module mapl_field_api
 
-   ! Manager
-   public :: mapl_VerticalGridManager
-   public :: mapl_get_vertical_grid_manager
-
-   ! Parameters
-   public :: MAPL_VERTICAL_GRID_NOT_FOUND
-
-end module mapl_vertical_grid_api
