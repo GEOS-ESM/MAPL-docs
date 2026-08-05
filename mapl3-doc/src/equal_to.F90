@@ -1,24 +1,24 @@
 #include "MAPL.h"
 
-submodule (mapl_EASEGeomSpec_mod) equal_to_smod
-   use mapl_GeomSpec_mod
-   use mapl_EASEDecomposition_mod
-   implicit none (type, external)
+submodule (mapl_CoordinateAxis_mod) equal_to_smod
+   use mapl_ErrorHandling_mod
+   use gftl2_StringVector
+   implicit none(type,external)
 
 contains
+   
+   elemental logical module function equal_to(a, b)
+      type(CoordinateAxis), intent(in) :: a, b
 
-   pure logical module function equal_to(a, b)
-      class(EASEGeomSpec), intent(in) :: a
-      class(GeomSpec),     intent(in) :: b
+      ! Do the fast checks first
+      equal_to = size(a%centers) == size(b%centers)
+      if (.not. equal_to) return
+      equal_to = size(a%corners) == size(b%corners)
+      if (.not. equal_to) return
 
-      select type (b)
-      type is (EASEGeomSpec)
-         equal_to = (a%grid_name == b%grid_name) .and. &
-                    (a%decomposition == b%decomposition)
-      class default
-         equal_to = .false.
-      end select
-
+      equal_to = all(a%centers == b%centers)
+      if (.not. equal_to) return
+      equal_to = all(a%corners == b%corners)
    end function equal_to
 
 end submodule equal_to_smod
