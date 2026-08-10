@@ -1,29 +1,33 @@
 #include "MAPL.h"
 
-submodule (mapl_LatAxis_mod) supports_metadata_smod
-   use mapl_Range_mod
-!   use hconfig3g
-   use esmf
+submodule (mapl_XYGeomSpec_mod) supports_metadata_smod
    use mapl_ErrorHandling_mod
-   implicit none (type, external)
-
-   integer, parameter :: R8 = ESMF_KIND_R8
+   use pfio, only: FileMetadata, Attribute
+   implicit none
 
 contains
 
-   logical module function supports_metadata(file_metadata, rc) result(supports)
+   ! A file metadata object represents an XY grid if it has a
+   ! 'grid_type' global attribute equal to 'XY' (set by the MAPL2
+   ! XYGridFactory via append_metadata).
+   logical module function supports_metadata_(this, file_metadata, rc) result(supports)
+      class(XYGeomSpec), intent(in) :: this
       type(FileMetadata), intent(in) :: file_metadata
       integer, optional, intent(out) :: rc
 
       integer :: status
-      character(:), allocatable :: dim_name
+      character(len=:), allocatable :: grid_type
+      type(Attribute), pointer :: attr
 
-      supports = .true.
-      dim_name = get_dim_name(file_metadata, units='degrees_north', _RC)
+      supports = file_metadata%has_attribute('grid_type')
+      _RETURN_UNLESS(supports)
 
-      supports = (dim_name /= '')
+      attr => file_metadata%get_attribute('grid_type', _RC)
+      grid_type = attr%get_string(_RC)
+      supports = (grid_type == 'XY')
+
       _RETURN(_SUCCESS)
-   end function supports_metadata
+      _UNUSED_DUMMY(this)
+   end function supports_metadata_
 
 end submodule supports_metadata_smod
-
