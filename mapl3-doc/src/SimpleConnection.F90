@@ -1,0 +1,227 @@
+#include "MAPL.h"
+
+module mapl_SimpleConnection_mod
+
+   use mapl_StateItemSpec_mod
+   use mapl_Connection_mod
+   use mapl_ConnectionPt_mod
+   use mapl_StateRegistry_mod
+   use mapl_VirtualConnectionPt_mod
+   use mapl_VirtualConnectionPtVector_mod
+   use mapl_ActualConnectionPt_mod
+   use mapl_ActualPtVec_Map_mod
+   use mapl_GriddedComponentDriver_mod
+   use mapl_StateItemSpec_mod
+   use mapl_StateItemSpecVector_mod
+   use mapl_StateItemSpecPtrVector_mod
+   use mapl_MultiState_mod
+   use mapl_KeywordEnforcer_mod
+   use mapl_ErrorHandling_mod
+   use gFTL2_StringVector, only: StringVector
+   use esmf
+
+   implicit none(type,external)
+   private
+
+   public :: SimpleConnection
+
+   type, extends(Connection) :: SimpleConnection
+      private
+      type(ConnectionPt) :: source
+      type(ConnectionPt) :: destination
+      logical :: consumed
+   contains
+      procedure :: get_source
+      procedure :: get_destination
+      procedure :: activate
+      procedure :: connect
+      procedure :: connect_sibling
+   end type SimpleConnection
+
+   interface SimpleConnection
+      module procedure :: new_SimpleConnection
+   end interface SimpleConnection
+
+contains
+
+   function new_SimpleConnection(source, destination) result(this)
+      type(SimpleConnection) :: this
+      type(ConnectionPt), intent(in) :: source
+      type(ConnectionPt), intent(in) :: destination
+
+      this%source = source
+      this%destination = destination
+      this%consumed = .false.
+
+   end function new_SimpleConnection
+
+   function get_source(this) result(source)
+      type(ConnectionPt) :: source
+      class(SimpleConnection), intent(in) :: this
+      source = this%source
+   end function get_source
+
+   function get_destination(this) result(destination)
+      type(ConnectionPt) :: destination
+      class(SimpleConnection), intent(in) :: this
+      destination = this%destination
+   end function get_destination
+
+   recursive subroutine activate(this, registry, rc)
+      class(SimpleConnection), target, intent(in) :: this
+      type(StateRegistry), target, intent(inout) :: registry
+      integer, optional, intent(out) :: rc
+
+      type(StateRegistry), pointer :: src_registry, dst_registry
+      type(ConnectionPt) :: src_pt, dst_pt
+      type(StateItemSpecPtr), target, allocatable :: src_extensions(:), dst_extensions(:)
+      type(StateItemSpec), pointer :: src_extension, dst_extension
+      type(StateItemSpec), pointer :: spec
+      character(:), allocatable :: error_message
+      integer :: i
+      integer :: status
+
+      src_pt = this%get_source()
+      dst_pt = this%get_destination()
+
+      dst_registry => registry%get_subregistry(dst_pt)
+      src_registry => registry%get_subregistry(src_pt)
+
+      _ASSERT(associated(src_registry), 'Unknown source registry')
+      _ASSERT(associated(dst_registry), 'Unknown destination registry')
+
+      error_message = "Unknown destination v_pt '" // dst_pt%v_pt%get_full_name() // &
+           "' for component '" // dst_pt%component_name // "'"
+      _ASSERT(dst_registry%has_virtual_pt(dst_pt%v_pt), error_message)
+      dst_extensions = dst_registry%get_specs(dst_pt%v_pt, _RC)
+      error_message = "Unknown source v_pt '" // src_pt%v_pt%get_full_name() // &
+           "' for component '" // src_pt%component_name // "'"
+      _ASSERT(src_registry%has_virtual_pt(src_pt%v_pt), error_message)
+      src_extensions = src_registry%get_specs(src_pt%v_pt, _RC)
+
+      do i = 1, size(dst_extensions)
+         dst_extension => dst_extensions(i)%ptr
+         spec => dst_extension
+!#         _ASSERT(.not. spec%is_active(), 'Imports can only be activated by one connection.')
+         call spec%activate(_RC)
+      end do
+
+      do i = 1, size(src_extensions)
+         src_extension => src_extensions(i)%ptr
+         spec => src_extension
+         call spec%activate(_RC)
+         call activate_dependencies(src_extension, src_registry, _RC)
+      end do
+
+      _RETURN(_SUCCESS)
+   end subroutine activate
+
+
+   recursive subroutine connect(this, registry, rc)
+      class(SimpleConnection), target, intent(inout) :: this
+      type(StateRegistry), target, intent(inout) :: registry
+      integer, optional, intent(out) :: rc
+
+      type(StateRegistry), pointer :: src_registry, dst_registry
+      type(ConnectionPt) :: src_pt, dst_pt
+      logical :: is_deferred
+      integer :: status
+
+      _RETURN_IF(this%consumed)
+
+      src_pt = this%get_source()
+      src_registry => registry%get_subregistry(src_pt)
+
+      is_deferred = src_registry%item_is_deferred(src_pt%v_pt, _RC)
+      _RETURN_IF(is_deferred)
+
+      dst_pt = this%get_destination()
+      dst_registry => registry%get_subregistry(dst_pt)
+
+      _ASSERT(associated(src_registry), 'Unknown source registry')
+      _ASSERT(associated(dst_registry), 'Unknown destination registry')
+
+      call this%connect_sibling(dst_registry, src_registry, _RC)
+
+      this%consumed = .true.
+
+      _RETURN(_SUCCESS)
+   end subroutine connect
+
+
+   recursive subroutine connect_sibling(this, dst_registry, src_registry, unusable, rc)
+      class(SimpleConnection), target, intent(in) :: this
+      type(StateRegistry), target, intent(inout) :: dst_registry
+      type(StateRegistry), target, intent(inout) :: src_registry
+      class(KeywordEnforcer), optional, intent(in) :: unusable
+      integer, optional, intent(out) :: rc
+
+      type(StateItemSpecPtr), target, allocatable :: dst_extensions(:)
+      type(StateItemSpec), pointer :: dst_extension
+      type(StateItemSpec), pointer :: dst_spec
+      integer :: i
+      integer :: status
+      type(ConnectionPt) :: src_pt, dst_pt
+      type(StateItemSpec), pointer :: new_extension
+      type(StateItemSpec), pointer :: new_spec
+      type(ActualConnectionPt) :: effective_pt
+
+      src_pt = this%get_source()
+
+      dst_pt = this%get_destination()
+      dst_extensions = dst_registry%get_specs(dst_pt%v_pt, _RC)
+
+      ! Very useful for debugging:
+!#      _HERE, 'src component: ', src_pt%component_name, ' :: ', src_pt%v_pt
+!#      _HERE, 'dst component: ', dst_pt%component_name, ' :: ', dst_pt%v_pt
+      do i = 1, size(dst_extensions)
+
+         dst_extension => dst_extensions(i)%ptr
+         dst_spec => dst_extension
+
+         new_extension => src_registry%extend(src_pt%v_pt, dst_spec, _RC)
+         ! In the case of wildcard specs, we need to pass an actual_pt to
+         ! the dst_spec to support multiple matches.  A bit of a kludge.
+         effective_pt = ActualConnectionPt(VirtualConnectionPt(ESMF_STATEINTENT_IMPORT, &
+              src_pt%v_pt%get_comp_name()//'/'//src_pt%v_pt%get_esmf_name()))
+         new_spec => new_extension
+
+         call dst_spec%connect(new_spec, effective_pt, _RC)
+         if (new_extension%has_producer()) then
+            call dst_extension%set_producer(new_extension%get_producer(), _RC)
+         end if
+      end do
+
+      _RETURN(_SUCCESS)
+      _UNUSED_DUMMY(unusable)
+   end subroutine connect_sibling
+
+   ! This activates _within_ the user gridcomp.   Some exports may require
+   ! other exports to be computed even when no external connection is made to those
+   ! exports.
+   subroutine activate_dependencies(extension, registry, rc)
+      type(StateItemSpec), target, intent(in) :: extension
+      type(StateRegistry), target, intent(in) :: registry
+      integer, optional, intent(out) :: rc
+
+      integer :: status
+      integer :: i
+      type(VirtualConnectionPtVector) :: dependencies
+      class(StateItemSpec), pointer :: dep_extension
+      type(StateItemSpec), pointer :: spec
+      type(StateItemSpec), pointer :: dep_spec
+
+      spec => extension
+      dependencies = spec%get_dependencies()
+      do i = 1, dependencies%size()
+         associate (v_pt => dependencies%of(i))
+           dep_extension => registry%get_primary_spec(v_pt, _RC)
+         end associate
+         dep_spec => dep_extension
+         call dep_spec%activate(_RC)
+      end do
+
+      _RETURN(_SUCCESS)
+   end subroutine activate_dependencies
+
+end module mapl_SimpleConnection_mod
