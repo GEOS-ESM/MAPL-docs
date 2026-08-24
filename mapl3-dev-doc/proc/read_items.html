@@ -148,6 +148,12 @@
   
   
   
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/read_items.html#src">read_items</a>
+      </div>
+    </div>
 
 
   </div>
@@ -176,7 +182,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-this~2054"></span>
+              <span class="anchor" id="variable-this~1260"></span>
               class(<a href='../type/extdatareader.html'>ExtDataReader</a>),
             </td>
 <td>intent(inout)</td>
@@ -191,7 +197,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-lgr~12"></span>
+              <span class="anchor" id="variable-lgr~6"></span>
               class(<a href='../type/logger.html'>Logger</a>),
             </td>
 <td></td>
@@ -206,7 +212,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-rc~869"></span>
+              <span class="anchor" id="variable-rc~602"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -611,18 +617,18 @@ large graphs.</div>
 <polygon fill="none" stroke="black" points="251,-24 90,-24 90,0 251,0 251,-24"/>
 <text text-anchor="middle" x="170.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">ExtDataReader%read_items</text>
 </g>
-<!-- proc~run~4 -->
+<!-- proc~run~20 -->
 <g id="proc~~read_items~~CalledByGraph_node2" class="node">
-<title>proc~run~4</title>
-<g id="a_proc~~read_items~~CalledByGraph_node2"><a xlink:href="../proc/run~4.html" xlink:title="run">
+<title>proc~run~20</title>
+<g id="a_proc~~read_items~~CalledByGraph_node2"><a xlink:href="../proc/run~20.html" xlink:title="run">
 <polygon fill="#d9534f" stroke="#d9534f" points="54,-24 0,-24 0,0 54,0 54,-24"/>
 <text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">run</text>
 </a>
 </g>
 </g>
-<!-- proc~run~4&#45;&gt;proc~read_items -->
+<!-- proc~run~20&#45;&gt;proc~read_items -->
 <g id="proc~~read_items~~CalledByGraph_edge1" class="edge">
-<title>proc~run~4&#45;&gt;proc~read_items</title>
+<title>proc~run~20&#45;&gt;proc~read_items</title>
 <path fill="none" stroke="#ff0000" d="M54.28,-12C61.85,-12 70.57,-12 79.74,-12"/>
 <polygon fill="#ff0000" stroke="#ff0000" points="79.85,-15.5 89.85,-12 79.85,-8.5 79.85,-15.5"/>
 </g>
@@ -721,6 +727,76 @@ large graphs.</div>
 
 
     
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="w">   </span><span class="k">subroutine </span><span class="n">read_items</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">lgr</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ExtDataReader</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">logger</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">lgr</span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+
+<span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="n">ESMF_MAXSTR</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">field_name</span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">client_id</span><span class="p">,</span><span class="w"> </span><span class="n">time_index</span>
+<span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">alias</span><span class="p">,</span><span class="w"> </span><span class="n">filename</span>
+<span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">pfio_typekind</span><span class="p">,</span><span class="w"> </span><span class="n">num_fields</span><span class="p">,</span><span class="w"> </span><span class="n">request_id</span>
+<span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">ClientThread</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i_client</span>
+<span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Field</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">field_list</span><span class="p">(:)</span>
+<span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_Grid</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">grid</span>
+<span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ESMF_TypeKind_Flag</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">esmf_typekind</span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">element_count</span><span class="p">(:),</span><span class="w"> </span><span class="n">new_element_count</span><span class="p">(:)</span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">local_start</span><span class="p">(:),</span><span class="w"> </span><span class="n">global_start</span><span class="p">(:),</span><span class="w"> </span><span class="n">global_count</span><span class="p">(:)</span>
+<span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">mapl_pFIOServerBounds</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">server_bounds</span>
+<span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="kt">c_ptr</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">address</span>
+<span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">mapl_ArrayReference</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ref</span>
+
+<span class="w">      </span><span class="k">call </span><span class="n">ESMF_FieldBundleGet</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">accumulated_fields</span><span class="p">,</span><span class="w"> </span><span class="n">fieldCount</span><span class="o">=</span><span class="n">num_fields</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">num_fields</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">         </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<span class="w">      </span><span class="k">end if</span>
+
+<span class="k">      </span><span class="n">i_client</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">mapl_get_client</span><span class="p">(</span><span class="n">MAPL_DEFAULT_INPUT_SERVER</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+
+<span class="w">      </span><span class="k">call </span><span class="n">MAPL_FieldBundleGet</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">accumulated_fields</span><span class="p">,</span><span class="w"> </span><span class="n">fieldList</span><span class="o">=</span><span class="n">field_list</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">field_list</span><span class="p">)</span>
+<span class="w">         </span><span class="k">call </span><span class="n">ESMF_FieldGet</span><span class="p">(</span><span class="n">field_list</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="n">field_name</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<span class="w">         </span><span class="n">alias</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">alias_map</span><span class="p">%</span><span class="n">at</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">field_name</span><span class="p">))</span>
+<span class="w">         </span><span class="n">filename</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">filename_map</span><span class="p">%</span><span class="n">at</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">field_name</span><span class="p">))</span>
+<span class="w">         </span><span class="n">client_id</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">client_id_map</span><span class="p">%</span><span class="n">at</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">field_name</span><span class="p">))</span>
+<span class="w">         </span><span class="n">time_index</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">time_index_map</span><span class="p">%</span><span class="n">at</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">field_name</span><span class="p">))</span>
+<span class="w">         </span><span class="k">call </span><span class="n">ESMF_FieldGet</span><span class="p">(</span><span class="n">field_list</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">grid</span><span class="o">=</span><span class="n">grid</span><span class="p">,</span><span class="w"> </span><span class="n">typekind</span><span class="o">=</span><span class="n">esmf_typekind</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<span class="w">         </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MAPL_FieldGetLocalElementCount</span><span class="p">(</span><span class="n">field_list</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+
+
+<span class="w">         </span><span class="n">server_bounds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapl_pFIOServerBounds</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="w"> </span><span class="n">element_count</span><span class="p">,</span><span class="w"> </span><span class="n">MAPL_PFIO_BOUNDS_READ</span><span class="p">,</span><span class="w"> </span><span class="n">time_index</span><span class="o">=</span><span class="n">time_index</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+
+
+<span class="w">         </span><span class="n">global_start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">server_bounds</span><span class="p">%</span><span class="n">get_global_start</span><span class="p">()</span>
+<span class="w">         </span><span class="n">global_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">server_bounds</span><span class="p">%</span><span class="n">get_global_count</span><span class="p">()</span>
+<span class="w">         </span><span class="n">local_start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">server_bounds</span><span class="p">%</span><span class="n">get_local_start</span><span class="p">()</span>
+<span class="w">         </span><span class="k">call </span><span class="n">MAPL_FieldGetCptr</span><span class="p">(</span><span class="n">field_list</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+
+<span class="w">         </span><span class="n">pfio_typekind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapl_esmf_to_pfio_type</span><span class="p">(</span><span class="n">esmf_typekind</span><span class="p">,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<span class="w">         </span><span class="n">new_element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">server_bounds</span><span class="p">%</span><span class="n">get_file_shape</span><span class="p">()</span>
+<span class="w">         </span><span class="n">ref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapl_ArrayReference</span><span class="p">(</span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="n">pfio_typekind</span><span class="p">,</span><span class="w"> </span><span class="n">new_element_count</span><span class="p">)</span>
+<span class="w">           </span><span class="n">request_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i_client</span><span class="p">%</span><span class="n">collective_prefetch_data</span><span class="p">(</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">               </span><span class="n">client_id</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">               </span><span class="n">filename</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">               </span><span class="n">alias</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">               </span><span class="n">ref</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">               </span><span class="n">start</span><span class="o">=</span><span class="n">local_start</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">               </span><span class="n">global_start</span><span class="o">=</span><span class="n">global_start</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">               </span><span class="n">global_count</span><span class="o">=</span><span class="n">global_count</span><span class="p">)</span>
+<span class="w">         </span><span class="k">deallocate</span><span class="p">(</span><span class="n">global_start</span><span class="p">,</span><span class="w"> </span><span class="n">global_count</span><span class="p">,</span><span class="w"> </span><span class="n">local_start</span><span class="p">,</span><span class="w"> </span><span class="n">element_count</span><span class="p">,</span><span class="w"> </span><span class="n">new_element_count</span><span class="p">)</span>
+<span class="w">         </span><span class="k">call </span><span class="n">lgr</span><span class="p">%</span><span class="n">info</span><span class="p">(</span><span class="s1">'reading %a from file %a at time index %i0.5'</span><span class="p">,</span><span class="w"> </span><span class="n">alias</span><span class="p">,</span><span class="w"> </span><span class="n">filename</span><span class="p">,</span><span class="w"> </span><span class="n">time_index</span><span class="p">)</span>
+<span class="w">      </span><span class="k">enddo</span>
+<span class="k">      call </span><span class="n">i_client</span><span class="p">%</span><span class="n">done_collective_prefetch</span><span class="p">()</span>
+<span class="w">      </span><span class="k">call </span><span class="n">i_client</span><span class="p">%</span><span class="n">wait_all</span><span class="p">()</span>
+
+<span class="w">       </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<span class="w">    </span><span class="k">end subroutine </span><span class="n">read_items</span>
+</pre></div>
+
+    </section>
+    <br>
     
     </div>
   </div>
@@ -740,7 +816,7 @@ large graphs.</div>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-08-24T15:43:24.210260+0000             </p>
+ on 2026-08-24T17:15:41.405462+0000             </p>
           </div>
         </div>
         <br>
