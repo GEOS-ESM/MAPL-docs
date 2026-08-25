@@ -1,5 +1,7 @@
-module mapl_PythonBridge_api
+module mapl_superstructure_api
 
-   use mapl_PythonBridge_mod
+   use mapl_generic_api
+   use mapl_state_api
+   use mapl_component_api
 
-end module mapl_PythonBridge_api
+end module mapl_superstructure_api
