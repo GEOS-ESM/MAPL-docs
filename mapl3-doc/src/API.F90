@@ -1,34 +1,37 @@
-module mapl_geomio_api
+! Export umbrella for the MAPL.field_bundle library.
+module mapl_field_bundle_api
 
-   use mapl_CompressionSettings_mod, only: mapl_CompressionSettings => CompressionSettings
-   use mapl_SharedIO_mod, only: mapl_bundle_to_metadata => bundle_to_metadata
-   use mapl_SharedIO_mod, only: mapl_esmf_to_pfio_type => esmf_to_pfio_type
-   use mapl_GeomPFIO_mod, only: mapl_GeomPFIO => GeomPFIO
-   use mapl_GeomCategorizer_mod, only: mapl_make_geom_pfio => make_geom_pfio
-   use mapl_pFIOServerBounds_mod, only: mapl_pFIOServerBounds => pFIOServerBounds
-   use mapl_pFIOServerBounds_mod, only: mapl_PFIO_BOUNDS_READ => PFIO_BOUNDS_READ
-   use mapl_DataCollection_mod, only: mapl_DataCollection => DataCollection
-   use mapl_DataCollectionManager_mod, only: MAPL_AddDataCollection => AddDataCollection
-   use mapl_DataCollectionManager_mod, only: mapl_DataCollections => DataCollections
+   use ESMF, only: MAPL_FieldBundleAdd => ESMF_FieldBundleAdd
+   use mapl_FieldBundleCopy_mod, only: MAPL_FieldBundleCopy => FieldBundleCopy
+   use mapl_FieldBundleCreate_mod, only: MAPL_FieldBundleCreate => FieldBundleCreate
+   use mapl_FieldBundleCreate_mod, only: MAPL_FieldBundlesAreAliased => FieldBundlesAreAliased
+   use mapl_FieldBundleDestroy_mod, only: MAPL_FieldBundleDestroy
+   use mapl_FieldBundleGet_mod, only: MAPL_FieldBundleGet => FieldBundleGet
+   use mapl_FieldBundleGetByIndex_mod, only: MAPL_FieldBundleGetByIndex => FieldBundleGetByIndex
+   use mapl_FieldBundleGetPointer_mod, only: MAPL_FieldBundleGetPointer => FieldBundleGetPointerToData
+   use mapl_FieldBundleInfo_mod, only: MAPL_FieldBundleInfoGetInternal => FieldBundleInfoGetInternal
+   use mapl_FieldBundleInfo_mod, only: MAPL_FieldBundleInfoSetInternal => FieldBundleInfoSetInternal
+   use mapl_FieldBundleMatch_mod, only: MAPL_FieldBundleSameData => FieldBundleSameData
+   use mapl_FieldBundleSet_mod, only: MAPL_FieldBundleSet => FieldBundleSet
+   use mapl_FieldBundleFilter_mod, only: MAPL_FieldBundleFilter => FieldBundleFilter
+   use mapl_FieldBundleApplyUserRoutine_mod, only: MAPL_FieldBundleApplyUserRoutine => FieldBundleApplyUserRoutine
 
-   use mapl_FieldBundleWrite_mod, only: mapl_FieldBundleWriter => FieldBundleWriter
-   use mapl_FieldBundleRead_mod, only: mapl_read_bundle => read_bundle
    implicit none
    private
 
+   public :: MAPL_FieldBundleAdd
+   public :: MAPL_FieldBundleCopy
+   public :: MAPL_FieldBundleCreate
+   public :: MAPL_FieldBundleDestroy
+   public :: MAPL_FieldBundleGet
+   public :: MAPL_FieldBundleGetByIndex
+   public :: MAPL_FieldBundleGetPointer
+   public :: MAPL_FieldBundleInfoGetInternal
+   public :: MAPL_FieldBundleInfoSetInternal
+   public :: MAPL_FieldBundleSameData
+   public :: MAPL_FieldBundlesAreAliased
+   public :: MAPL_FieldBundleSet
+   public :: MAPL_FieldBundleFilter
+   public :: MAPL_FieldBundleApplyUserRoutine
 
-   public :: mapl_CompressionSettings
-   public :: mapl_GeomPFIO
-   public :: mapl_pFIOServerBounds
-   public :: MAPL_PFIO_BOUNDS_READ
-   public :: mapl_DataCollection
-   public :: mapl_DataCollections
-   public :: mapl_AddDataCollection
-   public :: mapl_FieldBundleWriter
-
-   public :: mapl_make_geom_pfio
-   public :: mapl_bundle_to_metadata
-   public :: mapl_esmf_to_pfio_type
-   public :: mapl_read_bundle
-   
-end module mapl_geomio_api
+end module mapl_field_bundle_api
