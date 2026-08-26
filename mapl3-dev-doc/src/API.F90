@@ -1,124 +1,93 @@
-! Export umbrella for the MAPL superstructure/generic layer.
-! Public API exposed to external consumers.
-module mapl_generic_api
+! Public Export umbrella for the MAPL.mp_utils layer.
+! Re-exports only the symbols that are part of MAPL's public API
+! (i.e., entities carrying the MAPL_ prefix).
+! This is what mapl/MAPL.F90 imports from.
+module mapl_mp_utils_api
+   use mapl_ArrayReductions_mod, only: MAPL_AreaMean => AreaMean
+   use mapl_ArrayReductions_mod, only: MAPL_MaxMin => MaxMin
+   ! Import all PackedTime functions (both prefixed and unprefixed)
+   use mapl_PackedTime_mod,      only: MAPL_PackedDateCreate => PackedDateCreate, &
+                                       MAPL_PackedTimeCreate => PackedTimeCreate, &
+                                       MAPL_PackedDateTimeCreate => PackedDateTimeCreate, &
+                                       MAPL_ESMFTimeFromPacked => ESMFTimeFromPacked, &
+                                       MAPL_UnpackDate => UnpackDate, &
+                                       MAPL_UnpackTime => UnpackTime, &
+                                       MAPL_UnpackDateTime => UnpackDateTime
 
-   use mapl_UserSetServices_mod, only: UserSetServices, ProcSetServices, DsoSetServices
+   use mapl_StringTemplate_mod,  only: mapl_StrTemplate => StrTemplate
+   use mapl_StringTemplate_mod,  only: mapl_fill_grads_template => fill_grads_template
+   use mapl_StringTemplate_mod,  only: mapl_fill_grads_template_esmf => fill_grads_template_esmf
 
-   use mapl_OpenMP_Support_mod, only: mapl_find_bounds => find_bounds
-   use mapl_OpenMP_Support_mod, only: mapl_get_num_threads => get_num_threads
-   use mapl_OpenMP_Support_mod, only: mapl_get_current_thread => get_current_thread
-
-   use mapl_Generic_mod, &
-       mapl_GridCompAddVarSpec => GridCompAddVarSpec, &
-       mapl_GridCompAddSpec => GridCompAddSpec, &
-       mapl_GridCompAdvertiseVariable => GridCompAdvertiseVariable, &
-       mapl_GridCompGet => GridCompGet, &
-       mapl_GridCompSet => GridCompSet, &
-       mapl_GridCompSetCheckpointControls => GridCompSetCheckpointControls, &
-       mapl_GridCompSetEntryPoint => GridCompSetEntryPoint, &
-       mapl_GridCompAddChild => GridCompAddChild, &
-       mapl_GridCompGetChildName => GridCompGetChildName, &
-       mapl_GridCompRunChild => GridCompRunChild, &
-       mapl_GridCompRunChildren => GridCompRunChildren, &
-       mapl_GridCompGetInternalState => GridCompGetInternalState, &
-       mapl_GridCompSetGeometry => GridCompSetGeometry, &
-       mapl_GridcompGetResource => GridCompGetResource, &
-       mapl_ClockGet => ClockGet, &
-       mapl_GridCompSetGeom => GridCompSetGeom, &
-       mapl_GridCompSetVerticalGrid => GridCompSetVerticalGrid, &
-       mapl_GridCompAddConnection => GridCompAddConnection, &
-       mapl_GridCompAddConnectivity => GridCompAddConnectivity, &
-       mapl_GridCompReexport => GridCompReexport, &
-       mapl_GridCompConnectAll => GridCompConnectAll, &
-       mapl_GridCompTimerStart => GridCompTimerStart, &
-       mapl_GridCompTimerStop => GridCompTimerStop, &
-       mapl_GridCompGetCheckpointDir => GridCompGetCheckpointDir, &
-       mapl_GridCompSetCheckpointControls => GridCompSetCheckpointControls, &
-   !    mapl_STATEITEM_STATE => STATEITEM_STATE, &
-   !    mapl_STATEITEM_FIELDBUNDLE => STATEITEM_FIELDBUNDLE, &
-   !    mapl_STATEITEM_SERVICE => STATEITEM_SERVICE, &
-   !    mapl_STATEITEM_VECTOR => STATEITEM_VECTOR, &
-       MAPL_GridCompGetOuterMeta => GridCompGetOuterMeta, &
-       MAPL_GridCompGetRegistry => GridCompGetRegistry, &
-       MAPL_GridCompIsGeneric => GridCompIsGeneric, &
-       MAPL_GridCompIsUser => GridCompIsUser
-
-   use mapl_GenericGridComp_mod,  &
-       mapl_GridCompCreate => GridCompCreate, &
-       mapl_GenericSetServices => GenericSetServices
-
-    use mapl_VariableSpec_mod
-    use mapl_ComponentSpec_mod
-    use mapl_CheckpointControls_mod, only: mapl_CheckpointControls => CheckpointControls
-    use mapl_ChildSpec_mod
-    use mapl_RestartHandler_mod, only: mapl_RestartHandler => RestartHandler
-
+   use mapl_Shmem_mod, only: MAPL_GetNodeInfo => GetNodeInfo
+   use mapl_Shmem_mod, only: MAPL_CoresPerNodeGet => CoresPerNodeGet
+   use mapl_Shmem_mod, only: MAPL_InitializeShmem => InitializeShmem
+   use mapl_Shmem_mod, only: MAPL_FinalizeShmem => FinalizeShmem
+   use mapl_Shmem_mod, only: MAPL_AllocNodeArray => AllocNodeArray
+   use mapl_Shmem_mod, only: MAPL_DeAllocNodeArray => DeAllocNodeArray
+   use mapl_Shmem_mod, only: MAPL_ShmemAmOnFirstNode => ShmemAmOnFirstNode
+   use mapl_Shmem_mod, only: MAPL_SyncSharedMemory => SyncSharedMemory
+   use mapl_Shmem_mod, only: MAPL_BroadcastToNodes => BroadcastToNodes
+   use mapl_Shmem_mod, only: MAPL_AllocateShared => AllocateShared
+   use mapl_Shmem_mod, only: mapl_GetSharedMemory => GetSharedMemory
+   use mapl_Shmem_mod, only: mapl_ReleaseSharedMemory => ReleaseSharedMemory
+   use mapl_Shmem_mod, only: MAPL_GetNewRank => GetNewRank
+   use mapl_Shmem_mod, only: MAPL_NodeComm
+   use mapl_Shmem_mod, only: MAPL_NodeRootsComm
+   use mapl_Shmem_mod, only: MAPL_MyNodeNum
+   use mapl_Shmem_mod, only: MAPL_AmNodeRoot
+   use mapl_Shmem_mod, only: MAPL_ShmInitialized
+   use mapl_LoadBalance_mod, only: MAPL_BalanceWork => BalanceWork, &
+                                   MAPL_BalanceCreate => BalanceCreate, &
+                                   MAPL_BalanceDestroy => BalanceDestroy, &
+                                   MAPL_BalanceGet => BalanceGet
    implicit none
    private
 
-   ! These should be available to users
-   public :: mapl_GridCompAddVarSpec
-   public :: mapl_GridCompAddSpec
-   public :: mapl_GridCompAdvertiseVariable
+   ! Statistics
+   public :: MAPL_MaxMin
+   public :: MAPL_AreaMean
 
-   public :: mapl_GridCompGet
-   public :: mapl_GridCompGetRegistry
-   public :: mapl_GridCompSet
-   public :: mapl_GridCompSetCheckpointControls
-   public :: mapl_GridCompSetEntryPoint
+   ! Time packing
+   public :: MAPL_UnpackTime
+   public :: MAPL_UnpackDate
+   public :: MAPL_UnpackDateTime
 
-   public :: MAPL_GridCompIsGeneric
-   public :: MAPL_GridCompIsUser
-   public :: MAPL_GridCompGetOuterMeta
+   ! PackedTime functions with MAPL_ prefix
+   public :: MAPL_PackedDateCreate
+   public :: MAPL_PackedTimeCreate
+   public :: MAPL_PackedDateTimeCreate
+   public :: MAPL_ESMFTimeFromPacked
 
-   public :: mapl_GridCompAddChild
-   public :: mapl_GridCompGetChildName
-   public :: mapl_GridCompRunChild
-   public :: mapl_GridCompRunChildren
+   public :: mapl_StrTemplate
 
-   public :: mapl_GridCompGetInternalState
+   public :: mapl_fill_grads_template
+   public :: mapl_fill_grads_template_esmf
+   
+   public :: MAPL_GetNodeInfo
+   public :: MAPL_CoresPerNodeGet
+   public :: MAPL_InitializeShmem
+   public :: MAPL_FinalizeShmem
+   
+   public :: MAPL_AllocNodeArray
+   public :: MAPL_DeAllocNodeArray
+   public :: MAPL_ShmemAmOnFirstNode
+   public :: MAPL_SyncSharedMemory
+   public :: MAPL_BroadcastToNodes
+   
+   public :: MAPL_AllocateShared
+   public :: MAPL_GetSharedMemory
+   public :: MAPL_ReleaseSharedMemory
 
-   public :: mapl_GridCompSetGeometry
+   public :: MAPL_GetNewRank
+   public :: MAPL_NodeComm
+   public :: MAPL_NodeRootsComm
+   public :: MAPL_MyNodeNum
+   public :: MAPL_AmNodeRoot
+   public :: MAPL_ShmInitialized
 
-   public :: mapl_GridcompGetResource
+   public :: MAPL_BalanceWork
+   public :: MAPL_BalanceCreate
+   public :: MAPL_BalanceDestroy
+   public :: MAPL_BalanceGet
 
-   public :: mapl_ClockGet
-
-   ! Accessors
-!!$   public :: mapl_GetOrbit
-!!$   public :: mapl_GetCoordinates
-!!$   public :: mapl_GetLayout
-
-   public :: mapl_GridCompSetGeom
-   public :: mapl_GridCompSetVerticalGrid
-
-   ! Connections
-   public :: mapl_GridCompAddConnection
-   public :: mapl_GridCompAddConnectivity  ! Legacy name - temporary backward compatibility
-   public :: mapl_GridCompReexport
-   public :: mapl_GridCompConnectAll
-
-   ! Timers
-   public :: mapl_GridCompTimerStart
-   public :: mapl_GridCompTimerStop
-
-   ! Checkpoint directory
-   public :: mapl_GridCompGetCheckpointDir
-
-   ! Spec types
-   public :: mapl_STATEITEM_STATE, mapl_STATEITEM_FIELDBUNDLE
-   public :: mapl_STATEITEM_SERVICE, mapl_STATEITEM_VECTOR
-
-   public :: mapl_find_bounds
-   public :: mapl_get_num_threads
-   public :: mapl_get_current_thread
-
-   public :: mapl_GridCompCreate
-   public :: mapl_GenericSetServices
-   public :: UserSetServices
-   public :: ProcSetServices
-   public :: DsoSetServices
-
-   public :: mapl_CheckpointControls
-   public :: mapl_RestartHandler
-end module mapl_generic_api
+end module mapl_mp_utils_api
