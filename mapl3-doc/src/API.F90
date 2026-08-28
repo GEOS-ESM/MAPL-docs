@@ -1,198 +1,202 @@
-! Export umbrella for the MAPL infrastructure/esmf layer.
-! Public API of esmf/ leaf modules exposed to external consumers.
-module mapl_esmf_api
+! Public Export umbrella for the MAPL.enums layer.
+! All enum entities carry the MAPL_ prefix.
+! This is what mapl/MAPL.F90 imports from.
+module mapl_enums_api
+   ! ConservationType
+   use mapl_ConservationType_mod, only: MAPL_CONSERVE_NONE     => CONSERVE_NONE
+   use mapl_ConservationType_mod, only: MAPL_CONSERVE_MASS     => CONSERVE_MASS
+   use mapl_ConservationType_mod, only: MAPL_CONSERVE_ENERGY   => CONSERVE_ENERGY
+   use mapl_ConservationType_mod, only: MAPL_CONSERVE_MOMENTUM => CONSERVE_MOMENTUM
+   use mapl_ConservationType_mod, only: MAPL_ConservationType   => ConservationType
 
-   ! Alarm
-   use mapl_SimpleAlarm_mod, only: MAPL_SimpleAlarm => SimpleAlarm
+   ! NormalizationType
+   use mapl_NormalizationType_mod, only: MAPL_NORMALIZE_NONE => NORMALIZE_NONE
+   use mapl_NormalizationType_mod, only: MAPL_NORMALIZE_DELP => NORMALIZE_DELP
+   use mapl_NormalizationType_mod, only: MAPL_NORMALIZE_DZ   => NORMALIZE_DZ
+   use mapl_NormalizationType_mod, only: MAPL_NormalizationType => NormalizationType
+   use mapl_NormalizationType_mod, only: operator(==), operator(/=)
 
-   ! Core ESMF utilities
-   use mapl_ESMF_Time_Utilities_mod, only: MAPL_SubTimeInDateTime => sub_time_in_datetime
+   ! QuantityType
+   use mapl_QuantityType_mod, only: MAPL_QuantityType            => QuantityType
+   use mapl_QuantityType_mod, only: MAPL_MixingRatioBasis        => MixingRatioBasis
+   use mapl_QuantityType_mod, only: MAPL_QUANTITY_UNKNOWN        => QUANTITY_UNKNOWN
+   use mapl_QuantityType_mod, only: MAPL_QUANTITY_MIXING_RATIO   => QUANTITY_MIXING_RATIO
+   use mapl_QuantityType_mod, only: MAPL_QUANTITY_CONCENTRATION  => QUANTITY_CONCENTRATION
+   use mapl_QuantityType_mod, only: MAPL_QUANTITY_TEMPERATURE    => QUANTITY_TEMPERATURE
+   use mapl_QuantityType_mod, only: MAPL_QUANTITY_PRESSURE       => QUANTITY_PRESSURE
+   use mapl_QuantityType_mod, only: MAPL_QUANTITY_EXTENSIVE      => QUANTITY_EXTENSIVE
+   use mapl_QuantityType_mod, only: MAPL_BASIS_NONE              => BASIS_NONE
+   use mapl_QuantityType_mod, only: MAPL_BASIS_WET_MASS          => BASIS_WET_MASS
+   use mapl_QuantityType_mod, only: MAPL_BASIS_DRY_MASS          => BASIS_DRY_MASS
+   use mapl_QuantityType_mod, only: MAPL_BASIS_VOLUME            => BASIS_VOLUME
+   use mapl_QuantityType_mod, only: operator(==), operator(/=)
 
-   ! Comms
-   use mapl_comms_mod, only: MAPL_ROOT => ROOT_PROCESS_ID
-   use mapl_comms_mod, only: MAPL_Barrier => barrier
-   use mapl_comms_mod, only: MAPL_Am_I_Root => am_i_root
-   use mapl_comms_mod, only: MAPL_Am_I_Rank => am_i_rank
-   use mapl_comms_mod, only: MAPL_NPES => num_pes
-   use mapl_comms_mod, only: MAPL_CommsSend => comms_send, MAPL_CommsRecv => comms_recv
-   use mapl_comms_mod, only: MAPL_CommsSendRecv => comms_sendrecv
-   use mapl_comms_mod, only: MAPL_CommsGatherV => comms_gatherv
-   use mapl_comms_mod, only: MAPL_CommsScatterV => comms_scatterv
-   use mapl_comms_mod, only: MAPL_CommsAllGather => comms_allgather
-   use mapl_comms_mod, only: MAPL_CommsAllGatherV => comms_allgatherv
-   use mapl_comms_mod, only: MAPL_ArrayGather => array_gather
-   use mapl_comms_mod, only: MAPL_ArrayScatter => array_scatter
-   use mapl_comms_mod, only: MAPL_CommsAllReduceMin => comms_allreduce_min
-   use mapl_comms_mod, only: MAPL_CommsAllReduceMax => comms_allreduce_max
-   use mapl_comms_mod, only: MAPL_CommsAllReduceSum => comms_allreduce_sum
+   ! VectorBasisKind
+   use mapl_VectorBasisKind_mod, only: MAPL_VECTOR_BASIS_KIND_INVALID => VECTOR_BASIS_KIND_INVALID
+   use mapl_VectorBasisKind_mod, only: MAPL_VECTOR_BASIS_KIND_GRID    => VECTOR_BASIS_KIND_GRID
+   use mapl_VectorBasisKind_mod, only: MAPL_VECTOR_BASIS_KIND_NS      => VECTOR_BASIS_KIND_NS
+   use mapl_VectorBasisKind_mod, only: MAPL_VectorBasisKind            => VectorBasisKind
+   use mapl_VectorBasisKind_mod, only: operator(==), operator(/=)
 
-   ! ShmemComms
-   use mapl_ShmemComms_mod, only: MAPL_RoundRobinPEList => RoundRobinPEList
-   use mapl_ShmemComms_mod, only: MAPL_BcastShared => BcastShared
-   use mapl_ShmemComms_mod, only: MAPL_CommsBcast => CommsBcast
-   use mapl_ShmemComms_mod, only: MAPL_CommRequest => CommRequest
-   use mapl_ShmemComms_mod, only: MAPL_CreateRequest => CreateRequest
-   use mapl_ShmemComms_mod, only: MAPL_ArrayIGather => ArrayIGather
-   use mapl_ShmemComms_mod, only: MAPL_ArrayIScatter => ArrayIScatter
-   use mapl_ShmemComms_mod, only: MAPL_CollectiveWait => CollectiveWait
+   ! ValidationMode
+   use mapl_ValidationMode_mod, only: MAPL_VALIDATION_MODE_PERMISSIVE => VALIDATION_MODE_PERMISSIVE
+   use mapl_ValidationMode_mod, only: MAPL_VALIDATION_MODE_STRICT     => VALIDATION_MODE_STRICT
+   use mapl_ValidationMode_mod, only: MAPL_ValidationMode              => ValidationMode
 
-   ! HConfig
-   use mapl_hconfig_get_mod, only: MAPL_HConfigGet => HConfigGet
-   use mapl_ESMF_HConfigUtilities_mod, only: MAPL_HConfigMatch => HConfigMatch
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsItemType => HConfigAsItemType
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsStateIntent => HConfigAsStateIntent
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsTime => HConfigAsTime
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsTimeInterval => HConfigAsTimeInterval
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsTimeRange => HConfigAsTimeRange
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsStringVector => HConfigAsStringVector
+   ! VerificationStatus
+   use mapl_VerificationStatus_mod, only: MAPL_VERIFICATION_STATUS_UNVERIFIED   => VERIFICATION_STATUS_UNVERIFIED
+   use mapl_VerificationStatus_mod, only: MAPL_VERIFICATION_STATUS_VERIFIED     => VERIFICATION_STATUS_VERIFIED
+   use mapl_VerificationStatus_mod, only: MAPL_VERIFICATION_STATUS_CF_COMPLIANT => VERIFICATION_STATUS_CF_COMPLIANT
+   use mapl_VerificationStatus_mod, only: MAPL_VerificationStatus                => VerificationStatus
 
-   ! Info / metadata utilities
-   ! NOTE: MAPL_Info* from mapl_InfoUtilities_mod are widely used across the
-   ! MAPL codebase, so we are not removing the prefixes there
-   use mapl_InfoUtilities_mod, only: MAPL_InfoSet, MAPL_InfoGet
-   use mapl_InfoUtilities_mod, only: MAPL_InfoCreateFromShared
-   use mapl_InfoUtilities_mod, only: MAPL_InfoSetShared, MAPL_InfoGetShared
-   use mapl_InfoUtilities_mod, only: MAPL_InfoSetPrivate, MAPL_InfoGetPrivate
-   use mapl_InfoUtilities_mod, only: MAPL_InfoSetNamespace
+   ! GenericPhases
+   use mapl_GenericPhases_mod, only: MAPL_GENERIC_INIT_PHASE_SEQUENCE  => GENERIC_INIT_PHASE_SEQUENCE
+   use mapl_GenericPhases_mod, only: MAPL_GENERIC_INIT_SET_CLOCK       => GENERIC_INIT_SET_CLOCK
+   use mapl_GenericPhases_mod, only: MAPL_GENERIC_INIT_GEOM_A          => GENERIC_INIT_GEOM_A
+   use mapl_GenericPhases_mod, only: MAPL_GENERIC_INIT_GEOM_B          => GENERIC_INIT_GEOM_B
+   use mapl_GenericPhases_mod, only: MAPL_GENERIC_INIT_ADVERTISE       => GENERIC_INIT_ADVERTISE
+   use mapl_GenericPhases_mod, only: MAPL_GENERIC_INIT_MODIFY_ADVERTISED => GENERIC_INIT_MODIFY_ADVERTISED
+   use mapl_GenericPhases_mod, only: MAPL_GENERIC_INIT_REALIZE         => GENERIC_INIT_REALIZE
+   use mapl_GenericPhases_mod, only: MAPL_GENERIC_INIT_READ_RESTART    => GENERIC_INIT_READ_RESTART
+   use mapl_GenericPhases_mod, only: MAPL_GENERIC_INIT_USER            => GENERIC_INIT_USER
+   use mapl_GenericPhases_mod, only: MAPL_GENERIC_RUN_OFFSET           => GENERIC_RUN_OFFSET
+   use mapl_GenericPhases_mod, only: MAPL_GENERIC_RUN_CLOCK_ADVANCE    => GENERIC_RUN_CLOCK_ADVANCE
+   use mapl_GenericPhases_mod, only: MAPL_GENERIC_RUN_USER             => GENERIC_RUN_USER
+   use mapl_GenericPhases_mod, only: MAPL_GENERIC_FINALIZE_USER        => GENERIC_FINALIZE_USER
 
-   ! Ungridded dimensions
-   use mapl_UngriddedDim_mod, only: mapl_UngriddedDim => UngriddedDim
-   use mapl_UngriddedDim_mod, only: mapl_make_UngriddedDim => make_UngriddedDim
-   use mapl_UngriddedDims_mod, only: mapl_UngriddedDims => UngriddedDims
+   ! CouplerPhases
+   use mapl_CouplerPhases_mod, only: MAPL_GENERIC_COUPLER_INITIALIZE    => GENERIC_COUPLER_INITIALIZE
+   use mapl_CouplerPhases_mod, only: MAPL_GENERIC_COUPLER_UPDATE        => GENERIC_COUPLER_UPDATE
+   use mapl_CouplerPhases_mod, only: MAPL_GENERIC_COUPLER_INVALIDATE    => GENERIC_COUPLER_INVALIDATE
+   use mapl_CouplerPhases_mod, only: MAPL_GENERIC_COUPLER_CLOCK_ADVANCE => GENERIC_COUPLER_CLOCK_ADVANCE
 
-   ! Bounds / grid utilities
-   use mapl_LU_Bound_mod
-   use mapl_HorizontalDimsSpec_mod
-   use mapl_DistGridGet_mod
+   ! StateItemAllocation
+   use mapl_StateItemAllocation_mod, only: MAPL_StateItemAllocation              => StateItemAllocation
+   use mapl_StateItemAllocation_mod, only: MAPL_STATEITEM_ALLOCATION_INVALID   => STATEITEM_ALLOCATION_INVALID
+   use mapl_StateItemAllocation_mod, only: MAPL_STATEITEM_ALLOCATION_CREATED   => STATEITEM_ALLOCATION_CREATED
+   use mapl_StateItemAllocation_mod, only: MAPL_STATEITEM_ALLOCATION_INACTIVE  => STATEITEM_ALLOCATION_INACTIVE
+   use mapl_StateItemAllocation_mod, only: MAPL_STATEITEM_ALLOCATION_ACTIVE    => STATEITEM_ALLOCATION_ACTIVE
+   use mapl_StateItemAllocation_mod, only: MAPL_STATEITEM_ALLOCATION_CONNECTED => STATEITEM_ALLOCATION_CONNECTED
+   use mapl_StateItemAllocation_mod, only: MAPL_STATEITEM_ALLOCATION_ALLOCATED => STATEITEM_ALLOCATION_ALLOCATED
+   use mapl_StateItemAllocation_mod, only: operator(==), operator(/=), operator(<), operator(>=)
 
-   ! Field utilities
-   use mapl_FieldPointerUtilities_mod, only: MAPL_FieldGetCPtr => FieldGetCPtr
-   use mapl_FieldPointerUtilities_mod, only: MAPL_FieldCopy => FieldCopy
-   use mapl_FieldPointerUtilities_mod, only: MAPL_AssignFptr => assign_fptr
-   use mapl_FieldPointerUtilities_mod, only: MAPL_FieldGetLocalElementCount => FieldGetLocalElementCount
-   use mapl_FieldPointerUtilities_mod, only: MAPL_FieldClone => FieldClone
+   ! FieldBundleType_Flag
+   use mapl_FieldBundleType_Flag_mod, only: MAPL_FieldBundleType_Flag               => FieldBundleType_Flag
+   use mapl_FieldBundleType_Flag_mod, only: MAPL_FIELDBUNDLETYPE_BASIC              => FIELDBUNDLETYPE_BASIC
+   use mapl_FieldBundleType_Flag_mod, only: MAPL_FIELDBUNDLETYPE_VECTOR             => FIELDBUNDLETYPE_VECTOR
+   use mapl_FieldBundleType_Flag_mod, only: MAPL_FIELDBUNDLETYPE_BRACKET            => FIELDBUNDLETYPE_BRACKET
+   use mapl_FieldBundleType_Flag_mod, only: MAPL_FIELDBUNDLETYPE_VECTORBRACKET      => FIELDBUNDLETYPE_VECTORBRACKET
+   use mapl_FieldBundleType_Flag_mod, only: MAPL_FIELDBUNDLETYPE_SERVICE            => FIELDBUNDLETYPE_SERVICE
+   use mapl_FieldBundleType_Flag_mod, only: MAPL_FIELDBUNDLETYPE_SERVICE_AGGREGATE  => FIELDBUNDLETYPE_SERVICE_AGGREGATE
+   use mapl_FieldBundleType_Flag_mod, only: MAPL_FIELDBUNDLETYPE_SERVICE_SEPARATE   => FIELDBUNDLETYPE_SERVICE_SEPARATE
+   use mapl_FieldBundleType_Flag_mod, only: MAPL_FIELDBUNDLETYPE_INVALID            => FIELDBUNDLETYPE_INVALID
+   use mapl_FieldBundleType_Flag_mod, only: operator(==), operator(/=)
 
+   ! Vertical enums
+   ! VerticalStaggerLoc
+   ! TODO: pchakrab - remove aliases once GEOS is updated to use the prefixed enums
+   use mapl_VerticalStaggerLoc_mod, only: MAPL_VerticalStaggerLoc       => VerticalStaggerLoc
+   use mapl_VerticalStaggerLoc_mod, only: MAPL_VERTICAL_STAGGER_NONE    => VERTICAL_STAGGER_NONE
+   use mapl_VerticalStaggerLoc_mod, only: MAPL_VERTICAL_STAGGER_EDGE    => VERTICAL_STAGGER_EDGE
+   use mapl_VerticalStaggerLoc_mod, only: MAPL_VERTICAL_STAGGER_CENTER  => VERTICAL_STAGGER_CENTER
+   use mapl_VerticalStaggerLoc_mod, only: MAPL_VERTICAL_STAGGER_MIRROR  => VERTICAL_STAGGER_MIRROR
+   use mapl_VerticalStaggerLoc_mod, only: MAPL_VERTICAL_STAGGER_INVALID => VERTICAL_STAGGER_INVALID
 
-   ! HConfig
-   use mapl_HConfigAs_mod, only: &
-        mapl_HConfigAsItemType => HConfigAsItemType, &
-        mapl_HConfigAsStateIntent => HConfigAsStateIntent, &
-        mapl_HConfigAsTime => HConfigAsTime, &
-        mapl_HConfigAsTimeInterval => HConfigAsTimeInterval, &
-        mapl_HConfigAsTimeRange => HConfigAsTimeRange, &
-        mapl_HConfigAsStringVector => HConfigAsStringVector
-   use mapl_HConfigAs_mod
-   use mapl_HConfigUtilities_mod
-   use mapl_get_hconfig_mod
-   use mapl_hconfig_get_mod
-   use mapl_hconfig_params_mod
-   use mapl_generalized_equality_mod
+   ! VerticalAlignment
+   use mapl_VerticalAlignment_mod, only: MAPL_VerticalAlignment => VerticalAlignment
+   use mapl_VerticalAlignment_mod, only: MAPL_VALIGN_WITH_GRID => VALIGN_WITH_GRID
+   use mapl_VerticalAlignment_mod, only: MAPL_VALIGN_UP => VALIGN_UP
+   use mapl_VerticalAlignment_mod, only: MAPL_VALIGN_DOWN => VALIGN_DOWN
+   use mapl_VerticalAlignment_mod, only: MAPL_VALIGN_INVALID => VALIGN_INVALID
 
-
-   ! State item
-   use mapl_StateItem_mod
-
-   ! State item constants
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_UNKNOWN
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_FIELD, MAPL_STATEITEM_FIELDBUNDLE, MAPL_STATEITEM_STATE
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_SERVICE
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_SERVICE_PROVIDER, MAPL_STATEITEM_SERVICE_SUBSCRIBER
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_WILDCARD, MAPL_STATEITEM_BRACKET
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_VECTOR, MAPL_STATEITEM_VECTORBRACKET
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_EXPRESSION
-
-   ! Type kinds
-   use mapl_typekind_mod, only: MAPL_TYPEKIND_MIRROR
-
-   implicit none
+   use mapl_QuantityTypeMetadata_mod, mapl_QuantityTypeMetadata => QuantityTypeMetadata, &
+        mapl_MakeQuantityTypeMetadata => make_QuantityTypeMetadata
+   use mapl_NormalizationMetadata_mod, mapl_NormalizationMetadata => NormalizationMetadata, &
+        mapl_MakeNormalizationMetadata => make_NormalizationMetadata
+   use mapl_ConservationMetadata_mod, mapl_ConservationMetadata => ConservationMetadata, &
+        mapl_MakeConservationMetadata => make_ConservationMetadata
+   implicit none(type, external)
    private
 
-   ! Alarm
-   public :: MAPL_SimpleAlarm
+   ! CouplerPhases
+   public :: MAPL_GENERIC_COUPLER_INITIALIZE, MAPL_GENERIC_COUPLER_UPDATE
+   public :: MAPL_GENERIC_COUPLER_INVALIDATE, MAPL_GENERIC_COUPLER_CLOCK_ADVANCE
 
-   ! Core ESMF utilities
-   public :: MAPL_SubTimeInDateTime
+   ! GenericPhases
+   public :: MAPL_GENERIC_INIT_PHASE_SEQUENCE
+   public :: MAPL_GENERIC_INIT_SET_CLOCK
+   public :: MAPL_GENERIC_INIT_GEOM_A
+   public :: MAPL_GENERIC_INIT_GEOM_B
+   public :: MAPL_GENERIC_INIT_ADVERTISE
+   public :: MAPL_GENERIC_INIT_MODIFY_ADVERTISED
+   public :: MAPL_GENERIC_INIT_REALIZE
+   public :: MAPL_GENERIC_INIT_READ_RESTART
+   public :: MAPL_GENERIC_INIT_USER
 
-   ! Comms
-   public :: MAPL_ROOT
-   public :: MAPL_NPES
-   public :: MAPL_Barrier
-   public :: MAPL_Am_I_Root
-   public :: MAPL_Am_I_Rank
-   public :: MAPL_CommsSend
-   public :: MAPL_CommsRecv
-   public :: MAPL_CommsSendRecv
-   public :: MAPL_CommsGatherV
-   public :: MAPL_CommsScatterV
-   public :: MAPL_CommsAllGather
-   public :: MAPL_CommsAllGatherV
-   public :: MAPL_ArrayGather
-   public :: MAPL_ArrayScatter
-   public :: MAPL_CommsAllReduceMin
-   public :: MAPL_CommsAllReduceMax
-   public :: MAPL_CommsAllReduceSum
+   ! Run phases
+   public :: MAPL_GENERIC_RUN_OFFSET
+   public :: MAPL_GENERIC_RUN_CLOCK_ADVANCE
+   public :: MAPL_GENERIC_RUN_USER
 
-   ! ShmemComms
-   public :: MAPL_RoundRobinPEList
-   public :: MAPL_BcastShared
-   public :: MAPL_CommsBcast
-   public :: MAPL_CommRequest
-   public :: MAPL_CreateRequest
-   public :: MAPL_CollectiveWait
-   public :: MAPL_ArrayIGather
-   public :: MAPL_ArrayIScatter
+   ! Finalize phases
+   public :: MAPL_GENERIC_FINALIZE_USER
 
-   ! User comp internal state
+   ! StateItemAllocation
+   public :: MAPL_StateItemAllocation
+   public :: MAPL_STATEITEM_ALLOCATION_INVALID, MAPL_STATEITEM_ALLOCATION_CREATED
+   public :: MAPL_STATEITEM_ALLOCATION_INACTIVE, MAPL_STATEITEM_ALLOCATION_ACTIVE
+   public :: MAPL_STATEITEM_ALLOCATION_CONNECTED, MAPL_STATEITEM_ALLOCATION_ALLOCATED
+   public :: operator(==), operator(/=), operator(<), operator(>=)
 
-   ! HConfig
-   public :: MAPL_HConfigMatch
-   public :: MAPL_HConfigGet
-   public :: mapl_HConfigAsItemType
-   public :: mapl_HConfigAsStateIntent
-   public :: mapl_HConfigAsTime
-   public :: mapl_HConfigAsTimeInterval
-   public :: mapl_HConfigAsTimeRange
-   public :: mapl_HConfigAsStringVector
+   ! FieldBundleType_Flag
+   public :: MAPL_FieldBundleType_Flag
+   public :: MAPL_FIELDBUNDLETYPE_BASIC, MAPL_FIELDBUNDLETYPE_VECTOR
+   public :: MAPL_FIELDBUNDLETYPE_BRACKET, MAPL_FIELDBUNDLETYPE_VECTORBRACKET
+   public :: MAPL_FIELDBUNDLETYPE_SERVICE, MAPL_FIELDBUNDLETYPE_SERVICE_AGGREGATE
+   public :: MAPL_FIELDBUNDLETYPE_SERVICE_SEPARATE, MAPL_FIELDBUNDLETYPE_INVALID
 
-   ! Info / metadata utilities
-   public :: MAPL_InfoSet
-   public :: MAPL_InfoGet
-   public :: MAPL_InfoCreateFromShared
-   public :: MAPL_InfoSetShared
-   public :: MAPL_InfoGetShared
-   public :: MAPL_InfoSetPrivate
-   public :: MAPL_InfoGetPrivate
-   public :: MAPL_InfoSetNamespace
+   ! VectorBasisKind
+   public :: MAPL_VectorBasisKind
+   public :: MAPL_VECTOR_BASIS_KIND_INVALID, MAPL_VECTOR_BASIS_KIND_GRID
+   public :: MAPL_VECTOR_BASIS_KIND_NS
 
+   ! Vertical stagger locations
+   ! TODO: pchakrab - remove aliases once GEOS is updated to use the prefixed enums
+   public :: MAPL_VerticalStaggerLoc
+   public :: MAPL_VERTICAL_STAGGER_NONE
+   public :: MAPL_VERTICAL_STAGGER_EDGE
+   public :: MAPL_VERTICAL_STAGGER_CENTER
+   public :: MAPL_VERTICAL_STAGGER_MIRROR
+   public :: MAPL_VERTICAL_STAGGER_INVALID
 
-   ! Field utilities
-   public :: MAPL_FieldGetCPtr
-   public :: MAPL_FieldCopy
-   public :: MAPL_AssignFptr
-   public :: MAPL_FieldGetLocalElementCount
-   public :: MAPL_FieldClone
+   ! Vertical alignment
+   public :: MAPL_VerticalAlignment
+   public :: MAPL_VALIGN_WITH_GRID
+   public :: MAPL_VALIGN_UP
+   public :: MAPL_VALIGN_DOWN
+   public :: MAPL_VALIGN_INVALID
 
-   ! State item constants
-   public :: mapl_UngriddedDim
-   public :: mapl_make_UngriddedDim
-   public :: mapl_UngriddedDims
+   ! ConservationType
+   public :: MAPL_ConservationType
+   public :: MAPL_CONSERVE_NONE, MAPL_CONSERVE_MASS
+   public :: MAPL_CONSERVE_ENERGY, MAPL_CONSERVE_MOMENTUM
 
-   ! State item constants
+   ! NormalizationType
+   public :: MAPL_NormalizationType
+   public :: MAPL_NORMALIZE_NONE, MAPL_NORMALIZE_DELP, MAPL_NORMALIZE_DZ
 
-   ! TYPEKIND
-   public :: MAPL_TYPEKIND_MIRROR
+   ! QuantityType
+   public :: MAPL_QuantityType, MAPL_MixingRatioBasis
+   public :: MAPL_QUANTITY_UNKNOWN, MAPL_QUANTITY_MIXING_RATIO
+   public :: MAPL_QUANTITY_CONCENTRATION, MAPL_QUANTITY_TEMPERATURE
+   public :: MAPL_QUANTITY_PRESSURE, MAPL_QUANTITY_EXTENSIVE
+   public :: MAPL_BASIS_NONE, MAPL_BASIS_WET_MASS, MAPL_BASIS_DRY_MASS, MAPL_BASIS_VOLUME
 
-   public :: MAPL_STATEITEM_UNKNOWN
-   public :: MAPL_STATEITEM_FIELD
-   public :: MAPL_STATEITEM_FIELDBUNDLE
-   public :: MAPL_STATEITEM_STATE
-   public :: MAPL_STATEITEM_SERVICE
-   public :: MAPL_STATEITEM_SERVICE_PROVIDER
-   public :: MAPL_STATEITEM_SERVICE_SUBSCRIBER
-   public :: MAPL_STATEITEM_WILDCARD
-   public :: MAPL_STATEITEM_BRACKET
-   public :: MAPL_STATEITEM_VECTOR
-   public :: MAPL_STATEITEM_VECTORBRACKET
-   public :: MAPL_STATEITEM_EXPRESSION
+   public :: mapl_QuantityTypeMetadata
+   public :: mapl_MakeQuantityTypeMetadata
 
-end module mapl_esmf_api
+   public :: mapl_NormalizationMetadata
+   public :: mapl_MakeNormalizationMetadata
+   public :: mapl_ConservationMetadata
+   public :: mapl_MakeConservationMetadata
+end module mapl_enums_api
