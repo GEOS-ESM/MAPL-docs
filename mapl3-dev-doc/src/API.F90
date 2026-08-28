@@ -1,35 +1,30 @@
-! Export umbrella for the MAPL infrastructure/vertical/vertical_grid layer.
-! Public API exposed to external consumers.
-module mapl_vertical_grid_api
+! Export umbrella for the MAPL.state library.
+module mapl_state_api
 
-   use mapl_VerticalGrid_mod, only: mapl_VerticalGrid => VerticalGrid
-   use mapl_VerticalGrid_mod, only: MAPL_VERTICAL_GRID_NOT_FOUND => VERTICAL_GRID_NOT_FOUND
-   use mapl_VerticalGridSpec_mod, only: mapl_VerticalGridSpec => VerticalGridSpec
-   use mapl_VerticalGridFactory_mod, only: mapl_VerticalGridFactory => VerticalGridFactory
-   use mapl_BasicVerticalGrid_mod, only: mapl_BasicVerticalGrid => BasicVerticalGrid
-   use mapl_BasicVerticalGrid_mod, only: mapl_BasicVerticalGridSpec => BasicVerticalGridSpec
-   use mapl_BasicVerticalGrid_mod, only: mapl_BasicVerticalGridFactory => BasicVerticalGridFactory
-   use mapl_VerticalGridManager_mod, only: mapl_VerticalGridManager => VerticalGridManager
-   use mapl_VerticalGridManager_mod, only: mapl_get_vertical_grid_manager => get_vertical_grid_manager
+   use mapl_StateArithmeticParser_mod, only: MAPL_ParserVariablesInExpression => parser_variables_in_expression
+   use mapl_StateArithmeticParser_mod, only: mapl_StateEval => StateEval
+   use mapl_StateAddMethod_mod, only: mapl_StateAddMethod => StateAddMethod
+   use mapl_StateDestroy_mod, only: MAPL_StateDestroy => StateDestroy
+   use mapl_StateGet_mod, only: MAPL_StateGet => StateGet
+   use mapl_StateSet_mod, only: MAPL_StateSet => StateSet
+   use mapl_StateGetGeom_mod, only: MAPL_StateGetGeom => StateGetGeom
+   use mapl_StateGetPointer_mod, only: MAPL_StateGetPointer => StateGetPointer
+   use mapl_StateMask_mod, only: MAPL_StateMask => StateMask
+   use mapl_StateMerge_mod, only: MAPL_StateMerge => StateMerge
+   
 
    implicit none
    private
 
-   ! Abstract base types
-   public :: mapl_VerticalGrid
-   public :: mapl_VerticalGridSpec
-   public :: mapl_VerticalGridFactory
+   public :: MAPL_ParserVariablesInExpression
+   public :: mapl_StateAddMethod
+   public :: MAPL_StateDestroy
+   public :: MAPL_StateGet
+   public :: MAPL_StateSet
+   public :: MAPL_StateGetGeom
+   public :: MAPL_StateGetPointer
+   public :: mapl_StateEval
 
-   ! Concrete basic implementation
-   public :: mapl_BasicVerticalGrid
-   public :: mapl_BasicVerticalGridSpec
-   public :: mapl_BasicVerticalGridFactory
-
-   ! Manager
-   public :: mapl_VerticalGridManager
-   public :: mapl_get_vertical_grid_manager
-
-   ! Parameters
-   public :: MAPL_VERTICAL_GRID_NOT_FOUND
-
-end module mapl_vertical_grid_api
+   public :: MAPL_StateMask
+   public :: MAPL_StateMerge
+end module mapl_state_api
