@@ -1,93 +1,36 @@
-! Public Export umbrella for the MAPL.mp_utils layer.
-! Re-exports only the symbols that are part of MAPL's public API
-! (i.e., entities carrying the MAPL_ prefix).
-! This is what mapl/MAPL.F90 imports from.
-module mapl_mp_utils_api
-   use mapl_ArrayReductions_mod, only: MAPL_AreaMean => AreaMean
-   use mapl_ArrayReductions_mod, only: MAPL_MaxMin => MaxMin
-   ! Import all PackedTime functions (both prefixed and unprefixed)
-   use mapl_PackedTime_mod,      only: MAPL_PackedDateCreate => PackedDateCreate, &
-                                       MAPL_PackedTimeCreate => PackedTimeCreate, &
-                                       MAPL_PackedDateTimeCreate => PackedDateTimeCreate, &
-                                       MAPL_ESMFTimeFromPacked => ESMFTimeFromPacked, &
-                                       MAPL_UnpackDate => UnpackDate, &
-                                       MAPL_UnpackTime => UnpackTime, &
-                                       MAPL_UnpackDateTime => UnpackDateTime
+module mapl_pfio_api
+  use pfio, only: mapl_FileMetadata => FileMetadata
+  use pfio, only: mapl_Variable => Variable
+  use pfio, only: mapl_StringVariableMap => StringVariableMap
+  use pfio, only: mapl_StringVariableMapIterator => StringVariableMapIterator
+  use pfio, only: mapl_NetCDF4_FileFormatter => NetCDF4_FileFormatter
+  use pfio, only: mapl_ArrayReference => ArrayReference
+  use mapl_DefaultServerNames_mod, only: MAPL_DEFAULT_INPUT_SERVER, MAPL_DEFAULT_OUTPUT_SERVER
+  use pfio, only: operator(==), operator(/=)
 
-   use mapl_StringTemplate_mod,  only: mapl_StrTemplate => StrTemplate
-   use mapl_StringTemplate_mod,  only: mapl_fill_grads_template => fill_grads_template
-   use mapl_StringTemplate_mod,  only: mapl_fill_grads_template_esmf => fill_grads_template_esmf
+  use pfio, only: mapl_get_client => get_client
+  use pfio, only: mapl_add_client => add_client
+  use pfio, only: ClientThread
+  use pfio, only: mapl_pfio_read => pfio_read
+  use pfio, only: mapl_string_in_stringvector => string_in_stringvector
 
-   use mapl_Shmem_mod, only: MAPL_GetNodeInfo => GetNodeInfo
-   use mapl_Shmem_mod, only: MAPL_CoresPerNodeGet => CoresPerNodeGet
-   use mapl_Shmem_mod, only: MAPL_InitializeShmem => InitializeShmem
-   use mapl_Shmem_mod, only: MAPL_FinalizeShmem => FinalizeShmem
-   use mapl_Shmem_mod, only: MAPL_AllocNodeArray => AllocNodeArray
-   use mapl_Shmem_mod, only: MAPL_DeAllocNodeArray => DeAllocNodeArray
-   use mapl_Shmem_mod, only: MAPL_ShmemAmOnFirstNode => ShmemAmOnFirstNode
-   use mapl_Shmem_mod, only: MAPL_SyncSharedMemory => SyncSharedMemory
-   use mapl_Shmem_mod, only: MAPL_BroadcastToNodes => BroadcastToNodes
-   use mapl_Shmem_mod, only: MAPL_AllocateShared => AllocateShared
-   use mapl_Shmem_mod, only: mapl_GetSharedMemory => GetSharedMemory
-   use mapl_Shmem_mod, only: mapl_ReleaseSharedMemory => ReleaseSharedMemory
-   use mapl_Shmem_mod, only: MAPL_GetNewRank => GetNewRank
-   use mapl_Shmem_mod, only: MAPL_NodeComm
-   use mapl_Shmem_mod, only: MAPL_NodeRootsComm
-   use mapl_Shmem_mod, only: MAPL_MyNodeNum
-   use mapl_Shmem_mod, only: MAPL_AmNodeRoot
-   use mapl_Shmem_mod, only: MAPL_ShmInitialized
-   use mapl_LoadBalance_mod, only: MAPL_BalanceWork => BalanceWork, &
-                                   MAPL_BalanceCreate => BalanceCreate, &
-                                   MAPL_BalanceDestroy => BalanceDestroy, &
-                                   MAPL_BalanceGet => BalanceGet
-   implicit none
-   private
+  implicit none
+  private
 
-   ! Statistics
-   public :: MAPL_MaxMin
-   public :: MAPL_AreaMean
+  public :: mapl_FileMetadata
+  public :: MAPL_Variable
+  public :: mapl_StringVariableMap
+  public :: mapl_StringVariableMapIterator
+  public :: mapl_NetCDF4_FileFormatter
+  public :: MAPL_DEFAULT_INPUT_SERVER
+  public :: MAPL_DEFAULT_OUTPUT_SERVER
 
-   ! Time packing
-   public :: MAPL_UnpackTime
-   public :: MAPL_UnpackDate
-   public :: MAPL_UnpackDateTime
+  public :: mapl_get_client
+  public :: ClientThread
+  public :: mapl_pfio_read
+  public :: mapl_ArrayReference
+  public :: mapl_string_in_stringvector
 
-   ! PackedTime functions with MAPL_ prefix
-   public :: MAPL_PackedDateCreate
-   public :: MAPL_PackedTimeCreate
-   public :: MAPL_PackedDateTimeCreate
-   public :: MAPL_ESMFTimeFromPacked
+  public :: operator(==), operator(/=)
 
-   public :: mapl_StrTemplate
-
-   public :: mapl_fill_grads_template
-   public :: mapl_fill_grads_template_esmf
-   
-   public :: MAPL_GetNodeInfo
-   public :: MAPL_CoresPerNodeGet
-   public :: MAPL_InitializeShmem
-   public :: MAPL_FinalizeShmem
-   
-   public :: MAPL_AllocNodeArray
-   public :: MAPL_DeAllocNodeArray
-   public :: MAPL_ShmemAmOnFirstNode
-   public :: MAPL_SyncSharedMemory
-   public :: MAPL_BroadcastToNodes
-   
-   public :: MAPL_AllocateShared
-   public :: MAPL_GetSharedMemory
-   public :: MAPL_ReleaseSharedMemory
-
-   public :: MAPL_GetNewRank
-   public :: MAPL_NodeComm
-   public :: MAPL_NodeRootsComm
-   public :: MAPL_MyNodeNum
-   public :: MAPL_AmNodeRoot
-   public :: MAPL_ShmInitialized
-
-   public :: MAPL_BalanceWork
-   public :: MAPL_BalanceCreate
-   public :: MAPL_BalanceDestroy
-   public :: MAPL_BalanceGet
-
-end module mapl_mp_utils_api
+end module mapl_pfio_api
