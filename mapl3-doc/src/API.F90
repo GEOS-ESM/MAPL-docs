@@ -1,93 +1,72 @@
-! Public Export umbrella for the MAPL.mp_utils layer.
-! Re-exports only the symbols that are part of MAPL's public API
-! (i.e., entities carrying the MAPL_ prefix).
-! This is what mapl/MAPL.F90 imports from.
-module mapl_mp_utils_api
-   use mapl_ArrayReductions_mod, only: MAPL_AreaMean => AreaMean
-   use mapl_ArrayReductions_mod, only: MAPL_MaxMin => MaxMin
-   ! Import all PackedTime functions (both prefixed and unprefixed)
-   use mapl_PackedTime_mod,      only: MAPL_PackedDateCreate => PackedDateCreate, &
-                                       MAPL_PackedTimeCreate => PackedTimeCreate, &
-                                       MAPL_PackedDateTimeCreate => PackedDateTimeCreate, &
-                                       MAPL_ESMFTimeFromPacked => ESMFTimeFromPacked, &
-                                       MAPL_UnpackDate => UnpackDate, &
-                                       MAPL_UnpackTime => UnpackTime, &
-                                       MAPL_UnpackDateTime => UnpackDateTime
+module mapl_base_api
+   use mapl_FileMetadataUtils_mod
+   use mapl_FileMetadataUtilsVector_mod
+   ! StringTemplate is in mp_utils/ - should be exported from mapl_mp_utils_export
+   use mapl_MemUtils_mod, only: mapl_MemUtilsInit => MemUtilsInit
+   use mapl_MemUtils_mod, only: mapl_MemUtilsDisable => MemUtilsDisable
+   use mapl_MemUtils_mod, only: mapl_MemUtilsWrite => MemUtilsWrite
+   use mapl_MemUtils_mod, only: mapl_MemUtilsIsDisabled => MemUtilsIsDisabled
+   use mapl_MemUtils_mod, only: mapl_MemUtilsFree => MemUtilsFree
+   use mapl_MemUtils_mod, only: mapl_MemCommited => MemCommited
+   use mapl_MemUtils_mod, only: mapl_MemUsed => MemUsed
+   use mapl_MemUtils_mod, only: mapl_MemReport => MemReport
+   use mapl_MemUtils_mod, only: mapl_MemUtilsModeNode => MemUtilsModeNode
+   use mapl_MemUtils_mod, only: mapl_MemUtilsModeFull => MemUtilsModeFull
+   use mapl_MemUtils_mod, only: mapl_MemUtilsModeBase => MemUtilsModeBase
+   use mapl_Sun_mod, only: MAPL_SunOrbitCreate, MAPL_SunOrbitCreateFromConfig, &
+         MAPL_SunOrbitCreated, MAPL_SunOrbitDestroy, MAPL_SunOrbitQuery, &
+         MAPL_SunGetInsolation, MAPL_SunGetSolarConstant, &
+          MAPL_SunGetDaylightDuration, MAPL_SunGetDaylightDurationMax, &
+          MAPL_SunGetLocalSolarHourAngle, MAPL_SunOrbit
+   use mapl_FileIO_mod, only: WRITE_PARALLEL
+   use mapl_SimpleBundleMod_impl_mod, only: mapl_SimpleBundleCreate => SimpleBundleCreate
+   use mapl_SimpleBundleMod_impl_mod, only: mapl_SimpleBundlePrint => SimpleBundlePrint
+   use mapl_SimpleBundleMod_impl_mod, only: mapl_SimpleBundleGetIndex => SimpleBundleGetIndex
+   use mapl_SimpleBundleMod_impl_mod, only: mapl_SimpleBundleDestroy => SimpleBundleDestroy
+   use mapl_SimpleBundleMod_impl_mod, only:  mapl_SimpleBundle => SimpleBundle
 
-   use mapl_StringTemplate_mod,  only: mapl_StrTemplate => StrTemplate
-   use mapl_StringTemplate_mod,  only: mapl_fill_grads_template => fill_grads_template
-   use mapl_StringTemplate_mod,  only: mapl_fill_grads_template_esmf => fill_grads_template_esmf
+   use mapl_FileIOShared_mod, only: ArrDescr, ArrDescrInit, ArrDescrSet
+   use mapl_FileIOShared_mod, only: mapl_TileMaskGet => TileMaskGet
+   use mapl_NCIO_mod, only: mapl_VarRead => VarRead
+   use mapl_NCIO_mod, only: mapl_VarWrite => VarWrite
+   use mapl_NCIO_mod, only: mapl_NCIOGetFileType => NCIOGetFileType
+   use mapl_NCIO_mod, only: mapl_IOGetNonDimVars => IOGetNonDimVars
+   use mapl_NCIO_mod, only: mapl_IOCountNonDimVars => IOCountNonDimVars 
+   use mapl_NCIO_mod, only: mapl_IOChangeRes => IOChangeRes
+   use mapl_NCIO_mod, only: mapl_IOCountLevels => IOCountLevels
+   use mapl_locstreammod, only: mapl_LocStreamCreate => LocStreamCreate
+   use mapl_locstreammod, only: mapl_LocStreamAdjustNsubtiles => LocStreamAdjustNsubtiles
+   use mapl_locstreammod, only: mapl_LocStreamTransform => LocStreamTransform
+   use mapl_locstreammod, only: mapl_LocStreamIsAssociated => LocStreamIsAssociated
+   use mapl_locstreammod, only: mapl_LocStreamXformIsAssociated => LocStreamXformIsAssociated
+   use mapl_locstreammod, only: mapl_LocStreamGet => LocStreamGet
+   use mapl_locstreammod, only: mapl_LocStreamCreateXform => LocStreamCreateXform
+   use mapl_locstreammod, only: mapl_LocStreamFracArea => LocStreamFracArea
+   use mapl_locstreammod, only: mapl_GridCoordAdjust => GridCoordAdjust
+   use mapl_locstreammod, only: mapl_LocStreamTileWeight => LocStreamTileWeight
 
-   use mapl_Shmem_mod, only: MAPL_GetNodeInfo => GetNodeInfo
-   use mapl_Shmem_mod, only: MAPL_CoresPerNodeGet => CoresPerNodeGet
-   use mapl_Shmem_mod, only: MAPL_InitializeShmem => InitializeShmem
-   use mapl_Shmem_mod, only: MAPL_FinalizeShmem => FinalizeShmem
-   use mapl_Shmem_mod, only: MAPL_AllocNodeArray => AllocNodeArray
-   use mapl_Shmem_mod, only: MAPL_DeAllocNodeArray => DeAllocNodeArray
-   use mapl_Shmem_mod, only: MAPL_ShmemAmOnFirstNode => ShmemAmOnFirstNode
-   use mapl_Shmem_mod, only: MAPL_SyncSharedMemory => SyncSharedMemory
-   use mapl_Shmem_mod, only: MAPL_BroadcastToNodes => BroadcastToNodes
-   use mapl_Shmem_mod, only: MAPL_AllocateShared => AllocateShared
-   use mapl_Shmem_mod, only: mapl_GetSharedMemory => GetSharedMemory
-   use mapl_Shmem_mod, only: mapl_ReleaseSharedMemory => ReleaseSharedMemory
-   use mapl_Shmem_mod, only: MAPL_GetNewRank => GetNewRank
-   use mapl_Shmem_mod, only: MAPL_NodeComm
-   use mapl_Shmem_mod, only: MAPL_NodeRootsComm
-   use mapl_Shmem_mod, only: MAPL_MyNodeNum
-   use mapl_Shmem_mod, only: MAPL_AmNodeRoot
-   use mapl_Shmem_mod, only: MAPL_ShmInitialized
-   use mapl_LoadBalance_mod, only: MAPL_BalanceWork => BalanceWork, &
-                                   MAPL_BalanceCreate => BalanceCreate, &
-                                   MAPL_BalanceDestroy => BalanceDestroy, &
-                                   MAPL_BalanceGet => BalanceGet
-   implicit none
+
+
+   implicit none(type,external)
    private
 
-   ! Statistics
-   public :: MAPL_MaxMin
-   public :: MAPL_AreaMean
+   ! StrTemplate moved to mapl_mp_utils_export
+   public :: mapl_MemUtilsInit, mapl_MemUtilsDisable
+   public :: mapl_MemUtilsWrite, mapl_MemUtilsIsDisabled, mapl_MemUtilsFree
+   public :: mapl_MemCommited, mapl_MemUsed, mapl_MemReport
+   public :: mapl_SunOrbitCreate, mapl_SunOrbitCreateFromConfig
+   public :: mapl_SunOrbitCreated, mapl_SunOrbitDestroy, mapl_SunOrbitQuery
+   public :: mapl_SunGetInsolation, mapl_SunGetSolarConstant
+   public :: mapl_SunGetDaylightDuration, mapl_SunGetDaylightDurationMax
+   public :: mapl_SunGetLocalSolarHourAngle, mapl_SunOrbit
+   public :: WRITE_PARALLEL
+   public :: mapl_SimpleBundleCreate, mapl_SimpleBundlePrint
+   public :: mapl_SimpleBundleGetIndex, mapl_SimpleBundleDestroy, mapl_SimpleBundle
+   public :: ArrDescr, ArrDescrInit, ArrDescrSet
+   public :: mapl_VarRead, mapl_VarWrite, mapl_NCIOGetFileType
+   public :: mapl_IOGetNonDimVars, mapl_IOCountNonDimVars
+   public :: mapl_IOChangeRes, mapl_IOCountLevels
 
-   ! Time packing
-   public :: MAPL_UnpackTime
-   public :: MAPL_UnpackDate
-   public :: MAPL_UnpackDateTime
+   public :: FileMetaDataUtils
 
-   ! PackedTime functions with MAPL_ prefix
-   public :: MAPL_PackedDateCreate
-   public :: MAPL_PackedTimeCreate
-   public :: MAPL_PackedDateTimeCreate
-   public :: MAPL_ESMFTimeFromPacked
-
-   public :: mapl_StrTemplate
-
-   public :: mapl_fill_grads_template
-   public :: mapl_fill_grads_template_esmf
-   
-   public :: MAPL_GetNodeInfo
-   public :: MAPL_CoresPerNodeGet
-   public :: MAPL_InitializeShmem
-   public :: MAPL_FinalizeShmem
-   
-   public :: MAPL_AllocNodeArray
-   public :: MAPL_DeAllocNodeArray
-   public :: MAPL_ShmemAmOnFirstNode
-   public :: MAPL_SyncSharedMemory
-   public :: MAPL_BroadcastToNodes
-   
-   public :: MAPL_AllocateShared
-   public :: MAPL_GetSharedMemory
-   public :: MAPL_ReleaseSharedMemory
-
-   public :: MAPL_GetNewRank
-   public :: MAPL_NodeComm
-   public :: MAPL_NodeRootsComm
-   public :: MAPL_MyNodeNum
-   public :: MAPL_AmNodeRoot
-   public :: MAPL_ShmInitialized
-
-   public :: MAPL_BalanceWork
-   public :: MAPL_BalanceCreate
-   public :: MAPL_BalanceDestroy
-   public :: MAPL_BalanceGet
-
-end module mapl_mp_utils_api
+end module mapl_base_api
