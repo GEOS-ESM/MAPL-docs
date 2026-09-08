@@ -1,8 +1,9 @@
 #include "MAPL.h"
 
-module mapl_Cap_mod
+module mapl_CapDriver_mod
 
    use MAPL
+   use mapl_HConfigUtilities_mod, only: merge_hconfig
    use pflogger
    use esmf
 
@@ -45,86 +46,72 @@ module mapl_Cap_mod
 contains
 
    ! Create the cap GridComp and clock. Collective: all PETs must call.
-   ! Reads is_model_pet and hconfig from the MAPL singleton.
-   subroutine mapl_cap_create(driver, unusable, rc)
+   ! Reads is_model_pet from the MAPL singleton.
+   ! config (the app.config-derived hconfig, as returned by MAPL_Initialize's
+   ! app_config argument) is reused as cap_driver_hconfig instead of
+   ! re-parsing cap_driver.yaml from disk. cap_driver.yaml's
+   ! cap_gridcomp_config key names the cap_gridcomp.yaml file.
+   subroutine mapl_cap_create(driver, unusable, config, rc)
       type(MAPL_GriddedComponentDriver), intent(out) :: driver
       class(mapl_KeywordEnforcer), optional, intent(in) :: unusable
+      type(ESMF_HConfig), intent(in) :: config
       integer, optional, intent(out) :: rc
 
       integer :: status
       logical :: is_model_pet
-      type(ESMF_HConfig) :: hconfig, cap_hconfig
+      type(ESMF_HConfig) :: cap_driver_hconfig, cap_gridcomp_hconfig
+      character(:), allocatable :: gridcomp_config_file
       type(CapOptions) :: options
       type(esmf_Clock) :: clock
 
-      call MAPL_Get(is_model_pet=is_model_pet, hconfig=hconfig, _RC)
-      cap_hconfig = ESMF_HConfigCreateAt(hconfig, keystring='cap', _RC)
-      options = make_cap_options(cap_hconfig, is_model_pet, _RC)
-      clock = make_clock(cap_hconfig, options%lgr, _RC)
-      driver = make_driver(clock, cap_hconfig, options, _RC)
+      call MAPL_Get(is_model_pet=is_model_pet, _RC)
+      cap_driver_hconfig = config
+      gridcomp_config_file = esmf_HConfigAsString(cap_driver_hconfig, keystring='cap_gridcomp_config', _RC)
+      cap_gridcomp_hconfig = esmf_HConfigCreate(filename=gridcomp_config_file, _RC)
+      ! Propagate driver-level keys (e.g. checkpointing) that descendant
+      ! components rely on inheriting (via the same merge_hconfig mechanism
+      ! used for child components) down through the cap gridcomp's own config.
+      cap_gridcomp_hconfig = merge_hconfig(cap_driver_hconfig, cap_gridcomp_hconfig, _RC)
+      options = make_cap_options(cap_driver_hconfig, is_model_pet, _RC)
+      clock = make_clock(cap_driver_hconfig, options%lgr, _RC)
+      driver = make_driver(clock, cap_gridcomp_hconfig, options, _RC)
 
       _RETURN(_SUCCESS)
       _UNUSED_DUMMY(unusable)
    end subroutine mapl_cap_create
 
    ! Run the cap lifecycle on model PETs; server PETs return immediately.
-   subroutine mapl_cap_run(driver, unusable, rc)
+   ! config (the app.config-derived hconfig, as returned by MAPL_Initialize's
+   ! app_config argument) is reused as cap_driver_hconfig instead of
+   ! re-parsing cap_driver.yaml from disk.
+   subroutine mapl_cap_run(driver, unusable, config, rc)
       type(MAPL_GriddedComponentDriver), intent(inout) :: driver
       class(mapl_KeywordEnforcer), optional, intent(in) :: unusable
+      type(ESMF_HConfig), intent(in) :: config
       integer, optional, intent(out) :: rc
 
       integer :: status
       logical :: is_model_pet
-      type(ESMF_HConfig) :: hconfig, cap_hconfig
+      type(ESMF_HConfig) :: cap_driver_hconfig
       type(CapOptions) :: options
       type(esmf_Clock) :: clock
 
-      call MAPL_Get(is_model_pet=is_model_pet, hconfig=hconfig, _RC)
+      call MAPL_Get(is_model_pet=is_model_pet, _RC)
       _RETURN_UNLESS(is_model_pet)
 
-      cap_hconfig = ESMF_HConfigCreateAt(hconfig, keystring='cap', _RC)
-      options = make_cap_options(cap_hconfig, is_model_pet, _RC)
+      cap_driver_hconfig = config
+      options = make_cap_options(cap_driver_hconfig, is_model_pet, _RC)
 
       call MAPL_DriverInitializePhases(driver, phases=MAPL_GENERIC_INIT_PHASE_SEQUENCE, _RC)
-      call integrate(driver, cap_hconfig, options%checkpointing, options%lgr, _RC)
+      call integrate(driver, cap_driver_hconfig, options%checkpointing, options%lgr, _RC)
       call driver%finalize(_RC)
 
       clock = driver%get_clock()
-      call update_restart(cap_hconfig, clock, _RC)
-      call ESMF_HConfigDestroy(cap_hconfig, _RC)
+      call update_restart(cap_driver_hconfig, clock, _RC)
 
       _RETURN(_SUCCESS)
       _UNUSED_DUMMY(unusable)
    end subroutine mapl_cap_run
-
-   subroutine mapl_run_driver(hconfig, is_model_pet, unusable, servers, rc)
-      type(esmf_HConfig), intent(inout) :: hconfig
-      logical, intent(in) :: is_model_pet
-      class(mapl_KeywordEnforcer), optional, intent(in) :: unusable
-      type(esmf_GridComp), optional, intent(in) :: servers(:)
-      integer, optional, intent(out) :: rc
-
-      type(MAPL_GriddedComponentDriver) :: driver
-      type(esmf_Clock) :: clock
-      type(CapOptions) :: options
-      integer :: status
-
-      options = make_cap_options(hconfig, is_model_pet, _RC)
-      clock = make_clock(hconfig, options%lgr, _RC)
-      driver = make_driver(clock, hconfig, options, _RC)
-
-      _RETURN_UNLESS(is_model_pet)
-
-      ! TODO `initialize_phases` should be a MAPL procedure (name)
-      call MAPL_DriverInitializePhases(driver, phases=MAPL_GENERIC_INIT_PHASE_SEQUENCE, _RC)
-      call integrate(driver, hconfig, options%checkpointing, options%lgr, _RC)
-      call driver%finalize(_RC)
-      call update_restart(hconfig, clock, _RC)
-
-      _RETURN(_SUCCESS)
-      _UNUSED_DUMMY(unusable)
-      _UNUSED_DUMMY(servers)
-   end subroutine mapl_run_driver
 
    subroutine integrate(driver, hconfig, checkpointing, lgr, rc)
       type(MAPL_GriddedComponentDriver), intent(inout) :: driver
@@ -314,8 +301,13 @@ contains
       integer, optional, intent(out) :: rc
 
       integer :: status
+      logical :: has_name
 
-      options%name = esmf_HConfigAsString(hconfig, keystring='name', _RC)
+      options%name = 'CAP'
+      has_name = esmf_HConfigIsDefined(hconfig, keystring='name', _RC)
+      if (has_name) then
+         options%name = esmf_HConfigAsString(hconfig, keystring='name', _RC)
+      end if
       options%is_model_pet = is_model_pet
       options%lgr => logging%get_logger(options%name, _RC)
 
@@ -705,4 +697,4 @@ contains
 
    end subroutine update_restart
 
-end module mapl_Cap_mod
+end module mapl_CapDriver_mod
