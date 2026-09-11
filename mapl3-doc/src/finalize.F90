@@ -1,145 +1,33 @@
 #include "MAPL.h"
 
-submodule (mapl_OuterMetaComponent_mod) finalize_smod
-
-   use mapl_GriddedComponentDriverMap_mod
-   use mapl_enums_api, only: MAPL_GENERIC_FINALIZE_USER
+submodule(mapl_GriddedComponentDriver_mod) finalize_smod
    use mapl_ErrorHandling_mod
-   use mapl_Profiler_mod, only: ProfileReporter
-   use mapl_Profiler_mod, only: MultiColumn, NameColumn, FormattedTextColumn, PercentageColumn
-   use mapl_Profiler_mod, only: InclusiveColumn, ExclusiveColumn, SeparatorColumn, NumCyclesColumn
-   use pflogger, only: logger_t => logger, logging
-   use gFTL2_StringVector
-
    implicit none(type,external)
 
 contains
 
-   module recursive subroutine finalize(this, importState, exportState, clock, unusable, rc)
-      class(OuterMetaComponent), intent(inout) :: this
-      type(ESMF_State) :: importState
-      type(ESMF_State) :: exportState
-      type(ESMF_Clock) :: clock
-      ! optional arguments
+   module recursive subroutine finalize(this, unusable, phase_idx, rc)
+      class(GriddedComponentDriver), target, intent(inout) :: this
       class(KE), optional, intent(in) :: unusable
+      integer, optional, intent(in) :: phase_idx
       integer, optional, intent(out) :: rc
 
-      character(*), parameter :: PHASE_NAME = 'GENERIC::FINALIZE_USER'
-      integer :: status
-  
-      call recurse_finalize_(this, phase_idx=MAPL_GENERIC_FINALIZE_USER, _RC)
+      integer :: status, user_status
 
-      ! Finalize profiler
-      call this%profiler%stop(_RC)
-      call report_generic_profile(this, _RC)
+      associate ( &
+           importState => this%states%importState, &
+           exportState => this%states%exportState)
 
-      ! User gridcomp may not have any given phase; not an error condition if not found
-      ! run_custom handles phase lookup internally
-      call this%run_custom(ESMF_METHOD_FINALIZE, PHASE_NAME, _RC)
+        call ESMF_GridCompFinalize(this%gridcomp, &
+             importState=importState, exportState=exportState, clock=this%clock, &
+             phase=phase_idx, _USERRC)
 
-      ! TODO - release resources
-
-      _RETURN(ESMF_SUCCESS)
-      _UNUSED_DUMMY(importState)
-      _UNUSED_DUMMY(exportState)
-      _UNUSED_DUMMY(clock)
-      _UNUSED_DUMMY(unusable)
-   end subroutine finalize
-
-   recursive subroutine recurse_finalize_(this, phase_idx, rc)
-      class(OuterMetaComponent), target, intent(inout) :: this
-      integer :: phase_idx
-      integer, optional, intent(out) :: rc
-
-      integer :: status
-      type(GriddedComponentDriverMapIterator) :: iter
-      type(GriddedComponentDriver), pointer :: child
-
-      associate(e => this%children%ftn_end())
-        iter = this%children%ftn_begin()
-        do while (iter /= e)
-           call iter%next()
-           child => iter%second()
-           call child%finalize(phase_idx=phase_idx, _RC)
-        end do
       end associate
 
+      call ESMF_GridCompDestroy(this%gridcomp, _RC)
+
       _RETURN(_SUCCESS)
-   end subroutine recurse_finalize_
-
-   subroutine report_generic_profile(this, rc)
-      class(OuterMetaComponent), target, intent(inout) :: this
-      integer, optional, intent(out) :: rc
-
-      type(StringVector) :: report
-      type(ProfileReporter) :: reporter
-      type(MultiColumn) :: min_multi, mean_multi, max_multi, pe_multi, n_cyc_multi
-      type(ESMF_VM) :: vm
-      character(1) :: empty(0)
-      class(logger_t), pointer :: logger
-      character(:), allocatable :: component_name
-      integer :: status, localPet
-      type(StringVectorIterator) :: iter
-
-      ! Use a child logger for profiling output to allow independent formatting control
-      component_name = this%user_gc_driver%get_name()
-      logger => logging%get_logger(component_name // '.profile')
-
-      ! Generate stats _across_ processes covered by this timer
-      ! Requires consistent call trees for now.
-      call this%profiler%reduce()
-
-      ! Only root process needs to generate and output the report
-      call ESMF_VmGetCurrent(vm, _RC)
-      call ESMF_VmGet(vm, localPet=localPet, _RC)
-      if (localPet == 0) then
-         reporter = ProfileReporter(empty)
-      call reporter%add_column(NameColumn(25, separator=" "))
-
-         min_multi = MultiColumn(['Min'], separator='=')
-         call min_multi%add_column(FormattedTextColumn('   %  ','(f6.2)', 6, PercentageColumn(ExclusiveColumn('MIN')), separator='-'))
-         call min_multi%add_column(FormattedTextColumn('inclusive', '(f10.2)', 10, InclusiveColumn('MIN'), separator='-'))
-         call min_multi%add_column(FormattedTextColumn('exclusive', '(f10.2)',10, ExclusiveColumn('MIN'), separator='-'))
-
-         mean_multi = MultiColumn(['Mean'], separator='=')
-         call mean_multi%add_column(FormattedTextColumn('   %  ','(f6.2)', 6, PercentageColumn(ExclusiveColumn('MEAN')), separator='-'))
-         call mean_multi%add_column(FormattedTextColumn('inclusive', '(f10.2)', 10, InclusiveColumn('MEAN'), separator='-'))
-         call mean_multi%add_column(FormattedTextColumn('exclusive', '(f10.2)', 10, ExclusiveColumn('MEAN'), separator='-'))
-
-         max_multi = MultiColumn(['Max'], separator='=')
-         call max_multi%add_column(FormattedTextColumn('   %  ','(f6.2)', 6, PercentageColumn(ExclusiveColumn('MAX')), separator='-'))
-         call max_multi%add_column(FormattedTextColumn('inclusive', '(f10.2)', 10, InclusiveColumn('MAX'), separator='-'))
-         call max_multi%add_column(FormattedTextColumn('exclusive', '(f10.2)', 10, ExclusiveColumn('MAX'), separator='-'))
-
-         pe_multi = MultiColumn(['PE'], separator='=')
-         call pe_multi%add_column(FormattedTextColumn('max','(1x,i5.5)', 6, ExclusiveColumn('MAX_PE'), separator='-'))
-         call pe_multi%add_column(FormattedTextColumn('min','(1x,i5.5)', 6, ExclusiveColumn('MIN_PE'),separator='-'))
-
-         n_cyc_multi = MultiColumn(['# cycles'], separator='=')
-         call n_cyc_multi%add_column(FormattedTextColumn('', '(i8.0)', 8, NumCyclesColumn(),separator=' '))
-
-         call reporter%add_column(SeparatorColumn('|'))
-         call reporter%add_column(min_multi)
-         call reporter%add_column(SeparatorColumn('|'))
-         call reporter%add_column(mean_multi)
-         call reporter%add_column(SeparatorColumn('|'))
-         call reporter%add_column(max_multi)
-         call reporter%add_column(SeparatorColumn('|'))
-         call reporter%add_column(pe_multi)
-         call reporter%add_column(SeparatorColumn('|'))
-         call reporter%add_column(n_cyc_multi)
-
-         report = reporter%generate_report(this%profiler)
-         call logger%info('')
-         call logger%info('Times for component <%a~>', this%user_gc_driver%get_name())
-         iter = report%begin()
-         do while (iter /= report%end())
-            call logger%info('%a', iter%of())
-            call iter%next()
-         end do
-         call logger%info('')
-      end if
-      _RETURN(ESMF_SUCCESS)
-   end subroutine report_generic_profile
+      _UNUSED_DUMMY(unusable)
+   end subroutine finalize
 
 end submodule finalize_smod
