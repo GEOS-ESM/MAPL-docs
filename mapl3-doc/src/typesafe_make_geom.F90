@@ -1,18 +1,16 @@
 #include "MAPL.h"
 
-submodule (mapl_EASEGeomFactory_mod) typesafe_make_geom_smod
-   use mapl_GeomSpec_mod
-   use mapl_EASEGeomSpec_mod
+submodule (mapl_XYGeomFactory_mod) typesafe_make_geom_smod
    use mapl_ErrorHandling_mod
+   use mapl_InternalConstants_mod
    use esmf
-
-   implicit none (type, external)
+   implicit none
 
 contains
 
    module function typesafe_make_geom(spec, rc) result(geom)
       type(ESMF_Geom) :: geom
-      type(EASEGeomSpec), intent(in) :: spec
+      type(XYGeomSpec), intent(in) :: spec
       integer, optional, intent(out) :: rc
 
       integer :: status
@@ -20,8 +18,17 @@ contains
       character(:), allocatable :: name
 
       if (spec%has_name()) name = spec%get_name()
-      grid = create_basic_grid(spec, name=name, _RC)
-      call fill_coordinates(spec, grid, _RC)
+      grid = create_basic_grid(spec, _RC)
+
+      select case (spec%get_coord_mode())
+      case (XY_COORD_ABI)
+         call fill_coordinates_abi(spec, grid, _RC)
+      case default
+         call fill_coordinates(spec, grid, _RC)
+      end select
+
+      call add_mask(spec, grid, _RC)
+
       geom = ESMF_GeomCreate(grid=grid, _RC)
 
       _RETURN(_SUCCESS)
