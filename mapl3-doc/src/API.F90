@@ -1,71 +1,41 @@
-! Export umbrella for the MAPL infrastructure/geom layer.
-! Public API exposed to external consumers.
-module mapl_geom_api
+! Export umbrella for the MAPL.field_bundle library.
+module mapl_field_bundle_api
 
-   use mapl_GeomId_mod, only: mapl_GeomId => GeomId
-   use mapl_GeomId_mod, only: mapl_GeomIdManager => GeomIdManager
-   use mapl_GeomId_mod, only: mapl_get_geom_id_manager => get_geom_id_manager
-   use mapl_GeomId_mod, only: mapl_new_GeomId => GeomId
-   use mapl_MaplGeom_mod, only: mapl_MaplGeom => MaplGeom
-   use mapl_GeomSpec_mod, only: mapl_GeomSpec => GeomSpec
-   use mapl_GeomManager_mod, only: mapl_GeomManager => GeomManager
-   use mapl_GeomManager_mod, only: mapl_get_geom_manager => get_geom_manager
-   use mapl_GeomManager_mod, only: mapl_get_mapl_geom => get_mapl_geom
-   use mapl_GeomUtilities_mod, only: mapl_SameGeom => SameGeom, mapl_GeomGetId => GeomGetId
-   use mapl_GeomAccessors_mod, only: mapl_GeomGet => GeomGet
-   use mapl_GeomAccessors_mod, only: mapl_GeomGetHorzIJIndex => GeomGetHorzIJIndex
-   use mapl_GeomAccessors_mod, only: mapl_GridGetHorzIJIndex => GridGetHorzIJIndex
-   use mapl_GridAccessors_mod, only: mapl_GridGet => GridGet
-   use mapl_GridAccessors_mod, only: mapl_GridGetCoordinates => GridGetCoordinates
-   use mapl_GridAccessors_mod, only: mapl_GridHasDE => grid_has_DE
-   use mapl_GridGetGlobal_mod, only: mapl_GridGetGlobalCellCountPerDim => GridGetGlobalCellCountPerDim
-   use mapl_GridComms_mod, only: MAPL_CollectiveGather3D => mapl_CollectiveGather3D
-   use mapl_GridComms_mod, only: MAPL_CollectiveScatter3D => mapl_CollectiveScatter3D
-   use mapl_Subgrid_mod, only: mapl_Interval => Interval
-   use mapl_Subgrid_mod, only: mapl_make_subgrids => make_subgrids
-   use mapl_Subgrid_mod, only: mapl_find_bounds => find_bounds
-   use mapl_CubedSphereGeomSpec_mod, only: mapl_CubedSphereGeomSpec => CubedSphereGeomSpec
-   use mapl_CubedSphereGeomSpec_mod, only: mapl_make_CubedSphereGeomSpec => make_CubedSphereGeomSpec
-   use mapl_CubedSphereDecomposition_mod, only: mapl_CubedSphereDecomposition => CubedSphereDecomposition
-   use mapl_CubedSphereDecomposition_mod, only: mapl_make_CubedSphereDecomposition => make_CubedSphereDecomposition
+   use ESMF, only: MAPL_FieldBundleAdd => ESMF_FieldBundleAdd
+   use mapl_FieldBundleClone_mod, only: MAPL_FieldBundleClone => FieldBundleClone
+   use mapl_FieldBundleCopy_mod, only: MAPL_FieldBundleCopy => FieldBundleCopy
+   use mapl_FieldBundleCreate_mod, only: MAPL_FieldBundleCreate => FieldBundleCreate
+   use mapl_FieldBundleCreate_mod, only: MAPL_FieldBundlesAreAliased => FieldBundlesAreAliased
+   use mapl_FieldBundleDestroy_mod, only: MAPL_FieldBundleDestroy
+   use mapl_FieldBundleGet_mod, only: MAPL_FieldBundleGet => FieldBundleGet
+   use mapl_FieldBundleGetByIndex_mod, only: MAPL_FieldBundleGetByIndex => FieldBundleGetByIndex
+   use mapl_FieldBundleGetPointer_mod, only: MAPL_FieldBundleGetPointer => FieldBundleGetPointerToData
+   use mapl_FieldBundleInfo_mod, only: MAPL_FieldBundleInfoGetInternal => FieldBundleInfoGetInternal
+   use mapl_FieldBundleInfo_mod, only: MAPL_FieldBundleInfoSetInternal => FieldBundleInfoSetInternal
+   use mapl_FieldBundleMatch_mod, only: MAPL_FieldBundleSameData => FieldBundleSameData
+   use mapl_FieldBundleSet_mod, only: MAPL_FieldBundleSet => FieldBundleSet
+   use mapl_FieldBundleFilter_mod, only: MAPL_FieldBundleFilter => FieldBundleFilter
+   use mapl_FieldBundleApplyUserRoutine_mod, only: MAPL_FieldBundleApplyUserRoutine => FieldBundleApplyUserRoutine
+   use mapl_FieldBundleGetGeom_mod, only: MAPL_FieldBundleGetGeom => FieldBundleGetGeom
 
    implicit none
    private
 
-   ! Geom types and manager
-   public :: mapl_GeomId
-   public :: mapl_GeomIdManager
-   public :: mapl_get_geom_id_manager
-   public :: mapl_new_GeomId
-   public :: mapl_MaplGeom
-   public :: mapl_GeomSpec
-   public :: mapl_GeomManager
-   public :: mapl_get_geom_manager
-   public :: mapl_get_mapl_geom
+   public :: MAPL_FieldBundleAdd
+   public :: MAPL_FieldBundleClone
+   public :: MAPL_FieldBundleCopy
+   public :: MAPL_FieldBundleCreate
+   public :: MAPL_FieldBundleDestroy
+   public :: MAPL_FieldBundleGet
+   public :: MAPL_FieldBundleGetByIndex
+   public :: MAPL_FieldBundleGetPointer
+   public :: MAPL_FieldBundleInfoGetInternal
+   public :: MAPL_FieldBundleInfoSetInternal
+   public :: MAPL_FieldBundleSameData
+   public :: MAPL_FieldBundlesAreAliased
+   public :: MAPL_FieldBundleSet
+   public :: MAPL_FieldBundleFilter
+   public :: MAPL_FieldBundleApplyUserRoutine
+   public :: MAPL_FieldBundleGetGeom
 
-   ! Geom utilities
-   public :: mapl_SameGeom
-   public :: mapl_GeomGetId
-   public :: mapl_GeomGet
-   public :: mapl_GeomGetHorzIJIndex
-   public :: mapl_GridGetHorzIJIndex
-   public :: mapl_GridGet
-   public :: mapl_GridGetCoordinates
-   public :: mapl_GridHasDE
-   public :: mapl_GridGetGlobalCellCountPerDim
-
-   ! Collective comms
-   public :: MAPL_CollectiveGather3D
-   public :: MAPL_CollectiveScatter3D
-
-   ! Subgrid
-   public :: mapl_Interval
-   public :: mapl_make_subgrids
-
-   ! CubedSphere geom specs
-   public :: mapl_CubedSphereGeomSpec
-   public :: mapl_make_CubedSphereGeomSpec
-   public :: mapl_CubedSphereDecomposition
-   public :: mapl_make_CubedSphereDecomposition
-
-end module mapl_geom_api
+end module mapl_field_bundle_api
