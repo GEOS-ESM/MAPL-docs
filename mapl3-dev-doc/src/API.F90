@@ -1,72 +1,71 @@
-module mapl_base_api
-   use mapl_FileMetadataUtils_mod
-   use mapl_FileMetadataUtilsVector_mod
-   ! StringTemplate is in mp_utils/ - should be exported from mapl_mp_utils_export
-   use mapl_MemUtils_mod, only: mapl_MemUtilsInit => MemUtilsInit
-   use mapl_MemUtils_mod, only: mapl_MemUtilsDisable => MemUtilsDisable
-   use mapl_MemUtils_mod, only: mapl_MemUtilsWrite => MemUtilsWrite
-   use mapl_MemUtils_mod, only: mapl_MemUtilsIsDisabled => MemUtilsIsDisabled
-   use mapl_MemUtils_mod, only: mapl_MemUtilsFree => MemUtilsFree
-   use mapl_MemUtils_mod, only: mapl_MemCommited => MemCommited
-   use mapl_MemUtils_mod, only: mapl_MemUsed => MemUsed
-   use mapl_MemUtils_mod, only: mapl_MemReport => MemReport
-   use mapl_MemUtils_mod, only: mapl_MemUtilsModeNode => MemUtilsModeNode
-   use mapl_MemUtils_mod, only: mapl_MemUtilsModeFull => MemUtilsModeFull
-   use mapl_MemUtils_mod, only: mapl_MemUtilsModeBase => MemUtilsModeBase
-   use mapl_Sun_mod, only: MAPL_SunOrbitCreate, MAPL_SunOrbitCreateFromConfig, &
-         MAPL_SunOrbitCreated, MAPL_SunOrbitDestroy, MAPL_SunOrbitQuery, &
-         MAPL_SunGetInsolation, MAPL_SunGetSolarConstant, &
-          MAPL_SunGetDaylightDuration, MAPL_SunGetDaylightDurationMax, &
-          MAPL_SunGetLocalSolarHourAngle, MAPL_SunOrbit
-   use mapl_FileIO_mod, only: WRITE_PARALLEL
-   use mapl_SimpleBundleMod_impl_mod, only: mapl_SimpleBundleCreate => SimpleBundleCreate
-   use mapl_SimpleBundleMod_impl_mod, only: mapl_SimpleBundlePrint => SimpleBundlePrint
-   use mapl_SimpleBundleMod_impl_mod, only: mapl_SimpleBundleGetIndex => SimpleBundleGetIndex
-   use mapl_SimpleBundleMod_impl_mod, only: mapl_SimpleBundleDestroy => SimpleBundleDestroy
-   use mapl_SimpleBundleMod_impl_mod, only:  mapl_SimpleBundle => SimpleBundle
+! Export umbrella for the MAPL infrastructure/geom layer.
+! Public API exposed to external consumers.
+module mapl_geom_api
 
-   use mapl_FileIOShared_mod, only: ArrDescr, ArrDescrInit, ArrDescrSet
-   use mapl_FileIOShared_mod, only: mapl_TileMaskGet => TileMaskGet
-   use mapl_NCIO_mod, only: mapl_VarRead => VarRead
-   use mapl_NCIO_mod, only: mapl_VarWrite => VarWrite
-   use mapl_NCIO_mod, only: mapl_NCIOGetFileType => NCIOGetFileType
-   use mapl_NCIO_mod, only: mapl_IOGetNonDimVars => IOGetNonDimVars
-   use mapl_NCIO_mod, only: mapl_IOCountNonDimVars => IOCountNonDimVars 
-   use mapl_NCIO_mod, only: mapl_IOChangeRes => IOChangeRes
-   use mapl_NCIO_mod, only: mapl_IOCountLevels => IOCountLevels
-   use mapl_locstreammod, only: mapl_LocStreamCreate => LocStreamCreate
-   use mapl_locstreammod, only: mapl_LocStreamAdjustNsubtiles => LocStreamAdjustNsubtiles
-   use mapl_locstreammod, only: mapl_LocStreamTransform => LocStreamTransform
-   use mapl_locstreammod, only: mapl_LocStreamIsAssociated => LocStreamIsAssociated
-   use mapl_locstreammod, only: mapl_LocStreamXformIsAssociated => LocStreamXformIsAssociated
-   use mapl_locstreammod, only: mapl_LocStreamGet => LocStreamGet
-   use mapl_locstreammod, only: mapl_LocStreamCreateXform => LocStreamCreateXform
-   use mapl_locstreammod, only: mapl_LocStreamFracArea => LocStreamFracArea
-   use mapl_locstreammod, only: mapl_GridCoordAdjust => GridCoordAdjust
-   use mapl_locstreammod, only: mapl_LocStreamTileWeight => LocStreamTileWeight
+   use mapl_GeomId_mod, only: mapl_GeomId => GeomId
+   use mapl_GeomId_mod, only: mapl_GeomIdManager => GeomIdManager
+   use mapl_GeomId_mod, only: mapl_get_geom_id_manager => get_geom_id_manager
+   use mapl_GeomId_mod, only: mapl_new_GeomId => GeomId
+   use mapl_MaplGeom_mod, only: mapl_MaplGeom => MaplGeom
+   use mapl_GeomSpec_mod, only: mapl_GeomSpec => GeomSpec
+   use mapl_GeomManager_mod, only: mapl_GeomManager => GeomManager
+   use mapl_GeomManager_mod, only: mapl_get_geom_manager => get_geom_manager
+   use mapl_GeomManager_mod, only: mapl_get_mapl_geom => get_mapl_geom
+   use mapl_GeomUtilities_mod, only: mapl_SameGeom => SameGeom, mapl_GeomGetId => GeomGetId
+   use mapl_GeomAccessors_mod, only: mapl_GeomGet => GeomGet
+   use mapl_GeomAccessors_mod, only: mapl_GeomGetHorzIJIndex => GeomGetHorzIJIndex
+   use mapl_GeomAccessors_mod, only: mapl_GridGetHorzIJIndex => GridGetHorzIJIndex
+   use mapl_GridAccessors_mod, only: mapl_GridGet => GridGet
+   use mapl_GridAccessors_mod, only: mapl_GridGetCoordinates => GridGetCoordinates
+   use mapl_GridAccessors_mod, only: mapl_GridHasDE => grid_has_DE
+   use mapl_GridGetGlobal_mod, only: mapl_GridGetGlobalCellCountPerDim => GridGetGlobalCellCountPerDim
+   use mapl_GridComms_mod, only: MAPL_CollectiveGather3D => mapl_CollectiveGather3D
+   use mapl_GridComms_mod, only: MAPL_CollectiveScatter3D => mapl_CollectiveScatter3D
+   use mapl_Subgrid_mod, only: mapl_Interval => Interval
+   use mapl_Subgrid_mod, only: mapl_make_subgrids => make_subgrids
+   use mapl_Subgrid_mod, only: mapl_find_bounds => find_bounds
+   use mapl_CubedSphereGeomSpec_mod, only: mapl_CubedSphereGeomSpec => CubedSphereGeomSpec
+   use mapl_CubedSphereGeomSpec_mod, only: mapl_make_CubedSphereGeomSpec => make_CubedSphereGeomSpec
+   use mapl_CubedSphereDecomposition_mod, only: mapl_CubedSphereDecomposition => CubedSphereDecomposition
+   use mapl_CubedSphereDecomposition_mod, only: mapl_make_CubedSphereDecomposition => make_CubedSphereDecomposition
 
-
-
-   implicit none(type,external)
+   implicit none
    private
 
-   ! StrTemplate moved to mapl_mp_utils_export
-   public :: mapl_MemUtilsInit, mapl_MemUtilsDisable
-   public :: mapl_MemUtilsWrite, mapl_MemUtilsIsDisabled, mapl_MemUtilsFree
-   public :: mapl_MemCommited, mapl_MemUsed, mapl_MemReport
-   public :: mapl_SunOrbitCreate, mapl_SunOrbitCreateFromConfig
-   public :: mapl_SunOrbitCreated, mapl_SunOrbitDestroy, mapl_SunOrbitQuery
-   public :: mapl_SunGetInsolation, mapl_SunGetSolarConstant
-   public :: mapl_SunGetDaylightDuration, mapl_SunGetDaylightDurationMax
-   public :: mapl_SunGetLocalSolarHourAngle, mapl_SunOrbit
-   public :: WRITE_PARALLEL
-   public :: mapl_SimpleBundleCreate, mapl_SimpleBundlePrint
-   public :: mapl_SimpleBundleGetIndex, mapl_SimpleBundleDestroy, mapl_SimpleBundle
-   public :: ArrDescr, ArrDescrInit, ArrDescrSet
-   public :: mapl_VarRead, mapl_VarWrite, mapl_NCIOGetFileType
-   public :: mapl_IOGetNonDimVars, mapl_IOCountNonDimVars
-   public :: mapl_IOChangeRes, mapl_IOCountLevels
+   ! Geom types and manager
+   public :: mapl_GeomId
+   public :: mapl_GeomIdManager
+   public :: mapl_get_geom_id_manager
+   public :: mapl_new_GeomId
+   public :: mapl_MaplGeom
+   public :: mapl_GeomSpec
+   public :: mapl_GeomManager
+   public :: mapl_get_geom_manager
+   public :: mapl_get_mapl_geom
 
-   public :: FileMetaDataUtils
+   ! Geom utilities
+   public :: mapl_SameGeom
+   public :: mapl_GeomGetId
+   public :: mapl_GeomGet
+   public :: mapl_GeomGetHorzIJIndex
+   public :: mapl_GridGetHorzIJIndex
+   public :: mapl_GridGet
+   public :: mapl_GridGetCoordinates
+   public :: mapl_GridHasDE
+   public :: mapl_GridGetGlobalCellCountPerDim
 
-end module mapl_base_api
+   ! Collective comms
+   public :: MAPL_CollectiveGather3D
+   public :: MAPL_CollectiveScatter3D
+
+   ! Subgrid
+   public :: mapl_Interval
+   public :: mapl_make_subgrids
+
+   ! CubedSphere geom specs
+   public :: mapl_CubedSphereGeomSpec
+   public :: mapl_make_CubedSphereGeomSpec
+   public :: mapl_CubedSphereDecomposition
+   public :: mapl_make_CubedSphereDecomposition
+
+end module mapl_geom_api
