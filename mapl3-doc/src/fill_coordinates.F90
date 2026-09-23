@@ -1,81 +1,110 @@
 #include "MAPL.h"
-
-submodule (mapl_EASEGeomFactory_mod) fill_coordinates_smod
+submodule (mapl_LatLonGeomFactory_mod) fill_coordinates_smod
    use mapl_GeomSpec_mod
-   use mapl_EASEGeomSpec_mod
-   use mapl_EASECoords_mod
+   use mapl_LonAxis_mod
+   use mapl_LatAxis_mod
+   use mapl_LatLonDecomposition_mod
+   use mapl_LatLonGeomSpec_mod
+   use mapl_MinMax_mod
    use mapl_ErrorHandling_mod
-   use mapl_KeywordEnforcer_mod, only: KE => KeywordEnforcer
+   use MAPL_Constants
+   use pFIO
+   use gFTL2_StringVector
    use esmf
-   use, intrinsic :: iso_fortran_env, only: REAL64
+   use mapl_KeywordEnforcer_mod, only: KE => KeywordEnforcer
    implicit none (type, external)
+
 
 contains
 
-   ! Fill center and corner coordinate arrays into the ESMF_Grid.
-   ! EASE grids store 2D coordinates (coordDep1/2 = [1,2]), so both
-   ! lon and lat arrays are 2D even though they vary only along one axis.
    module subroutine fill_coordinates(spec, grid, unusable, rc)
       use mapl_KeywordEnforcer_mod
-      type(EASEGeomSpec), intent(in) :: spec
+      type(LatLonGeomSpec), intent(in) :: spec
       type(ESMF_Grid), intent(inout) :: grid
       class(KE), optional, intent(in) :: unusable
       integer, optional, intent(out) :: rc
 
-      integer :: status, i, j
-      integer :: lbound_cen(2), ubound_cen(2)
-      integer :: lbound_cor(2), ubound_cor(2)
-      integer :: i1, in, j1, jn
-      integer :: ic1, icn, jc1, jcn
+      integer :: status
       real(kind=ESMF_KIND_R8), pointer :: centers(:,:)
       real(kind=ESMF_KIND_R8), pointer :: corners(:,:)
-      real(kind=REAL64), allocatable :: lon_cen(:), lon_cor(:)
-      real(kind=REAL64), allocatable :: lat_cen(:), lat_cor(:)
+      integer :: i, j
+      type(LonAxis) :: lon_axis
+      type(LatAxis) :: lat_axis
+      type(LonAxis) :: local_lon_axis
+      type(LatAxis) :: local_lat_axis
+      type(LatLonDecomposition) :: decomp
+      integer :: nx, ny, ix, iy
 
-      call compute_lons(spec, centers=lon_cen, corners=lon_cor, _RC)
-      call compute_lats(spec, centers=lat_cen, corners=lat_cor, _RC)
+      lon_axis = spec%get_lon_axis()
+      lat_axis = spec%get_lat_axis()
+      decomp = spec%get_decomposition()
 
-      ! Query local DE bounds
-      call ESMF_GridGet(grid, localDE=0, staggerloc=ESMF_STAGGERLOC_CENTER, &
-           & exclusiveLBound=lbound_cen, exclusiveUBound=ubound_cen, _RC)
-      call ESMF_GridGet(grid, localDE=0, staggerloc=ESMF_STAGGERLOC_CORNER, &
-           & exclusiveLBound=lbound_cor, exclusiveUBound=ubound_cor, _RC)
-
-      i1  = lbound_cen(1); in  = ubound_cen(1)
-      j1  = lbound_cen(2); jn  = ubound_cen(2)
-      ic1 = lbound_cor(1); icn = ubound_cor(1)
-      jc1 = lbound_cor(2); jcn = ubound_cor(2)
-
-      ! Fill longitude centers
+      nx = size(decomp%get_lon_distribution())
+      ny = size(decomp%get_lat_distribution())
+      call get_ranks(nx, ny, ix, iy, _RC)
+ 
+     ! First we handle longitudes:
       call ESMF_GridGetCoord(grid, coordDim=1, localDE=0, &
-           & staggerloc=ESMF_STAGGERLOC_CENTER, farrayPtr=centers, _RC)
-      do j = 1, size(centers, 2)
-         centers(:, j) = lon_cen(i1:in)
-      end do
-
-      ! Fill longitude corners
+           staggerloc=ESMF_STAGGERLOC_CENTER, &
+           farrayPtr=centers, _RC)
       call ESMF_GridGetCoord(grid, coordDim=1, localDE=0, &
-           & staggerloc=ESMF_STAGGERLOC_CORNER, farrayPtr=corners, _RC)
-      do j = 1, size(corners, 2)
-         corners(:, j) = lon_cor(ic1:icn)
+           staggerloc=ESMF_STAGGERLOC_CORNER, &
+           farrayPtr=corners, _RC)
+
+      lon_axis = spec%get_lon_axis()
+      local_lon_axis = decomp%get_lon_subset(lon_axis, rank=ix)
+      do j = 1, size(centers,2)
+         centers(:,j) = local_lon_axis%get_centers()
+      end do
+      do j = 1, size(corners,2)
+         corners(:,j) = local_lon_axis%get_corners()
+      end do
+      centers = centers * MAPL_DEGREES_TO_RADIANS_R8
+      corners = corners * MAPL_DEGREES_TO_RADIANS_R8
+
+
+      ! Now latitudes
+      call ESMF_GridGetCoord(grid, coordDim=2, localDE=0, &
+           staggerloc=ESMF_STAGGERLOC_CENTER, &
+           farrayPtr=centers, _RC)
+      call ESMF_GridGetCoord(grid, coordDim=2, localDE=0, &
+           staggerloc=ESMF_STAGGERLOC_CORNER, &
+           farrayPtr=corners, _RC)
+
+      local_lat_axis = decomp%get_lat_subset(lat_axis, rank=iy)
+      do i = 1, size(centers,1)
+         centers(i,:) = local_lat_axis%get_centers()
+      end do
+      do i = 1, size(corners,1)
+         corners(i,:) = local_lat_axis%get_corners()
       end do
 
-      ! Fill latitude centers
-      call ESMF_GridGetCoord(grid, coordDim=2, localDE=0, &
-           & staggerloc=ESMF_STAGGERLOC_CENTER, farrayPtr=centers, _RC)
-      do i = 1, size(centers, 1)
-         centers(i, :) = lat_cen(j1:jn)
-      end do
-
-      ! Fill latitude corners
-      call ESMF_GridGetCoord(grid, coordDim=2, localDE=0, &
-           & staggerloc=ESMF_STAGGERLOC_CORNER, farrayPtr=corners, _RC)
-      do i = 1, size(corners, 1)
-         corners(i, :) = lat_cor(jc1:jcn)
-      end do
+      centers = centers * MAPL_DEGREES_TO_RADIANS_R8
+      corners = corners * MAPL_DEGREES_TO_RADIANS_R8
 
       _RETURN(_SUCCESS)
       _UNUSED_DUMMY(unusable)
+      
+      CONTAINS
+
+      subroutine get_ranks(nx, ny, ix, iy, rc)
+      integer, intent(in) :: nx, ny
+      integer, intent(out) :: ix, iy
+      integer, optional, intent(out) :: rc
+
+      integer :: status
+      integer :: petCount, localPet
+      type(ESMF_VM) :: vm
+
+      call ESMF_VMGetCurrent(vm, _RC)
+      call ESMF_VMGet(vm, petCount=petCount, localPet=localPet, _RC)
+
+      ix = mod(localPet, nx)
+      iy = localPet / nx
+
+      _RETURN(_SUCCESS)
+      end subroutine get_ranks
+
    end subroutine fill_coordinates
 
 end submodule fill_coordinates_smod
