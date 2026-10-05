@@ -1,200 +1,63 @@
-! Export umbrella for the MAPL infrastructure/esmf layer.
-! Public API of esmf/ leaf modules exposed to external consumers.
-module mapl_esmf_api
+! Export umbrella for the MAPL infrastructure/regridder_mgr layer.
+! Public API exposed to external consumers.
+module mapl_regridder_mgr_api
 
-   ! Alarm
-   use mapl_SimpleAlarm_mod, only: MAPL_SimpleAlarm => SimpleAlarm
+   use mapl_Regridder_mod, only: mapl_Regridder => Regridder
+   use mapl_RegridderManager_mod, only: mapl_RegridderManager => RegridderManager
+   use mapl_RegridderManager_mod, only: mapl_regridder_manager => regridder_manager
+   use mapl_RegridderManager_mod, only: mapl_get_regridder_manager => get_regridder_manager
+   use mapl_RegridderSpec_mod, only: mapl_RegridderSpec => RegridderSpec
+   use mapl_RegridderMethods_mod, only: &
+        MAPL_REGRID_HINT_LOCAL => REGRID_HINT_LOCAL, &
+        MAPL_REGRID_HINT_FILE_WEIGHTS => REGRID_HINT_FILE_WEIGHTS, &
+        MAPL_REGRID_HINT_COMPUTE_TRANSPOSE => REGRID_HINT_COMPUTE_TRANSPOSE, &
+        MAPL_REGRID_METHOD_BILINEAR => REGRID_METHOD_BILINEAR, &
+        MAPL_REGRID_METHOD_BILINEAR_MONOTONIC => REGRID_METHOD_BILINEAR_MONOTONIC, &
+        MAPL_REGRID_METHOD_BILINEAR_ROTATE => REGRID_METHOD_BILINEAR_ROTATE, &
+        MAPL_REGRID_METHOD_CONSERVE => REGRID_METHOD_CONSERVE, &
+        MAPL_REGRID_METHOD_CONSERVE_MONOTONIC => REGRID_METHOD_CONSERVE_MONOTONIC, &
+        MAPL_REGRID_METHOD_VOTE => REGRID_METHOD_VOTE, &
+        MAPL_REGRID_METHOD_FRACTION => REGRID_METHOD_FRACTION, &
+        MAPL_REGRID_METHOD_CONSERVE_2ND => REGRID_METHOD_CONSERVE_2ND, &
+        MAPL_REGRID_METHOD_PATCH => REGRID_METHOD_PATCH, &
+        MAPL_REGRID_METHOD_NEAREST_STOD => REGRID_METHOD_NEAREST_STOD, &
+        MAPL_REGRID_METHOD_CONSERVE_HFLUX => REGRID_METHOD_CONSERVE_HFLUX, &
+        MAPL_UNSPECIFIED_REGRID_METHOD => UNSPECIFIED_REGRID_METHOD, &
+        mapl_regrid_method_string_to_int => regrid_method_string_to_int, &
+        mapl_regrid_method_int_to_string => regrid_method_int_to_string, &
+        mapl_generate_esmf_regrid_param => generate_esmf_regrid_param
 
-   ! Core ESMF utilities
-   use mapl_ESMF_Time_Utilities_mod, only: MAPL_SubTimeInDateTime => sub_time_in_datetime
-
-   ! Comms
-   use mapl_comms_mod, only: MAPL_ROOT => ROOT_PROCESS_ID
-   use mapl_comms_mod, only: MAPL_Barrier => barrier
-   use mapl_comms_mod, only: MAPL_Am_I_Root => am_i_root
-   use mapl_comms_mod, only: MAPL_Am_I_Rank => am_i_rank
-   use mapl_comms_mod, only: MAPL_NPES => num_pes
-   use mapl_comms_mod, only: MAPL_CommsSend => comms_send, MAPL_CommsRecv => comms_recv
-   use mapl_comms_mod, only: MAPL_CommsSendRecv => comms_sendrecv
-   use mapl_comms_mod, only: MAPL_CommsGatherV => comms_gatherv
-   use mapl_comms_mod, only: MAPL_CommsScatterV => comms_scatterv
-   use mapl_comms_mod, only: MAPL_CommsAllGather => comms_allgather
-   use mapl_comms_mod, only: MAPL_CommsAllGatherV => comms_allgatherv
-   use mapl_comms_mod, only: MAPL_ArrayGather => array_gather
-   use mapl_comms_mod, only: MAPL_ArrayScatter => array_scatter
-   use mapl_comms_mod, only: MAPL_CommsAllReduceMin => comms_allreduce_min
-   use mapl_comms_mod, only: MAPL_CommsAllReduceMax => comms_allreduce_max
-   use mapl_comms_mod, only: MAPL_CommsAllReduceSum => comms_allreduce_sum
-
-   ! ShmemComms
-   use mapl_ShmemComms_mod, only: MAPL_RoundRobinPEList => RoundRobinPEList
-   use mapl_ShmemComms_mod, only: MAPL_BcastShared => BcastShared
-   use mapl_ShmemComms_mod, only: MAPL_CommsBcast => CommsBcast
-   use mapl_ShmemComms_mod, only: MAPL_CommRequest => CommRequest
-   use mapl_ShmemComms_mod, only: MAPL_CreateRequest => CreateRequest
-   use mapl_ShmemComms_mod, only: MAPL_ArrayIGather => ArrayIGather
-   use mapl_ShmemComms_mod, only: MAPL_ArrayIScatter => ArrayIScatter
-   use mapl_ShmemComms_mod, only: MAPL_CollectiveWait => CollectiveWait
-
-   ! HConfig
-   use mapl_hconfig_get_mod, only: MAPL_HConfigGet => HConfigGet
-   use mapl_ESMF_HConfigUtilities_mod, only: MAPL_HConfigMatch => HConfigMatch
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsItemType => HConfigAsItemType
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsStateIntent => HConfigAsStateIntent
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsTime => HConfigAsTime
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsTimeInterval => HConfigAsTimeInterval
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsTimeRange => HConfigAsTimeRange
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsStringVector => HConfigAsStringVector
-
-   ! Info / metadata utilities
-   ! NOTE: MAPL_Info* from mapl_InfoUtilities_mod are widely used across the
-   ! MAPL codebase, so we are not removing the prefixes there
-   use mapl_InfoUtilities_mod, only: MAPL_InfoSet, MAPL_InfoGet
-   use mapl_InfoUtilities_mod, only: MAPL_InfoCreateFromShared
-   use mapl_InfoUtilities_mod, only: MAPL_InfoSetShared, MAPL_InfoGetShared
-   use mapl_InfoUtilities_mod, only: MAPL_InfoSetPrivate, MAPL_InfoGetPrivate
-   use mapl_InfoUtilities_mod, only: MAPL_InfoSetNamespace
-
-   ! Ungridded dimensions
-   use mapl_UngriddedDim_mod, only: mapl_UngriddedDim => UngriddedDim
-   use mapl_UngriddedDim_mod, only: mapl_make_UngriddedDim => make_UngriddedDim
-   use mapl_UngriddedDims_mod, only: mapl_UngriddedDims => UngriddedDims
-
-   ! Bounds / grid utilities
-   use mapl_LU_Bound_mod
-   use mapl_HorizontalDimsSpec_mod
-   use mapl_DistGridGet_mod
-
-   ! Field utilities
-   use mapl_FieldPointerUtilities_mod, only: MAPL_FieldGetCPtr => FieldGetCPtr
-   use mapl_FieldPointerUtilities_mod, only: MAPL_FieldCopy => FieldCopy
-   use mapl_FieldPointerUtilities_mod, only: MAPL_AssignFptr => assign_fptr
-   use mapl_FieldPointerUtilities_mod, only: MAPL_FieldGetLocalElementCount => FieldGetLocalElementCount
-   use mapl_FieldPointerUtilities_mod, only: MAPL_FieldClone => FieldClone
-   use mapl_FieldPointerUtilities_mod, only: MAPL_FieldHasDE => field_has_de
-
-
-   ! HConfig
-   use mapl_HConfigAs_mod, only: &
-        mapl_HConfigAsItemType => HConfigAsItemType, &
-        mapl_HConfigAsStateIntent => HConfigAsStateIntent, &
-        mapl_HConfigAsTime => HConfigAsTime, &
-        mapl_HConfigAsTimeInterval => HConfigAsTimeInterval, &
-        mapl_HConfigAsTimeRange => HConfigAsTimeRange, &
-        mapl_HConfigAsStringVector => HConfigAsStringVector
-   use mapl_HConfigAs_mod
-   use mapl_HConfigUtilities_mod
-   use mapl_get_hconfig_mod
-   use mapl_hconfig_get_mod
-   use mapl_hconfig_params_mod
-   use mapl_generalized_equality_mod
-
-
-   ! State item
-   use mapl_StateItem_mod
-
-   ! State item constants
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_UNKNOWN
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_FIELD, MAPL_STATEITEM_FIELDBUNDLE, MAPL_STATEITEM_STATE
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_SERVICE
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_SERVICE_PROVIDER, MAPL_STATEITEM_SERVICE_SUBSCRIBER
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_WILDCARD, MAPL_STATEITEM_BRACKET
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_VECTOR, MAPL_STATEITEM_VECTORBRACKET
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_EXPRESSION
-
-   ! Type kinds
-   use mapl_typekind_mod, only: MAPL_TYPEKIND_MIRROR
-
+   use mapl_EsmfRegridder_mod, only: mapl_EsmfRegridderParam => EsmfRegridderParam
    implicit none
    private
 
-   ! Alarm
-   public :: MAPL_SimpleAlarm
+   ! Regridder types
+   public :: mapl_Regridder
+   public :: mapl_RegridderManager
+   public :: mapl_regridder_manager
+   public :: mapl_get_regridder_manager
+   public :: mapl_RegridderSpec
+   public :: mapl_esmfRegridderParam
 
-   ! Core ESMF utilities
-   public :: MAPL_SubTimeInDateTime
-
-   ! Comms
-   public :: MAPL_ROOT
-   public :: MAPL_NPES
-   public :: MAPL_Barrier
-   public :: MAPL_Am_I_Root
-   public :: MAPL_Am_I_Rank
-   public :: MAPL_CommsSend
-   public :: MAPL_CommsRecv
-   public :: MAPL_CommsSendRecv
-   public :: MAPL_CommsGatherV
-   public :: MAPL_CommsScatterV
-   public :: MAPL_CommsAllGather
-   public :: MAPL_CommsAllGatherV
-   public :: MAPL_ArrayGather
-   public :: MAPL_ArrayScatter
-   public :: MAPL_CommsAllReduceMin
-   public :: MAPL_CommsAllReduceMax
-   public :: MAPL_CommsAllReduceSum
-
-   ! ShmemComms
-   public :: MAPL_RoundRobinPEList
-   public :: MAPL_BcastShared
-   public :: MAPL_CommsBcast
-   public :: MAPL_CommRequest
-   public :: MAPL_CreateRequest
-   public :: MAPL_CollectiveWait
-   public :: MAPL_ArrayIGather
-   public :: MAPL_ArrayIScatter
-
-   ! User comp internal state
-
-   ! HConfig
-   public :: MAPL_HConfigMatch
-   public :: MAPL_HConfigGet
-   public :: mapl_HConfigAsItemType
-   public :: mapl_HConfigAsStateIntent
-   public :: mapl_HConfigAsTime
-   public :: mapl_HConfigAsTimeInterval
-   public :: mapl_HConfigAsTimeRange
-   public :: mapl_HConfigAsStringVector
-
-   ! Info / metadata utilities
-   public :: MAPL_InfoSet
-   public :: MAPL_InfoGet
-   public :: MAPL_InfoCreateFromShared
-   public :: MAPL_InfoSetShared
-   public :: MAPL_InfoGetShared
-   public :: MAPL_InfoSetPrivate
-   public :: MAPL_InfoGetPrivate
-   public :: MAPL_InfoSetNamespace
+   ! Regrid methods and hints
+   public :: MAPL_REGRID_HINT_LOCAL
+   public :: MAPL_REGRID_HINT_FILE_WEIGHTS
+   public :: MAPL_REGRID_HINT_COMPUTE_TRANSPOSE
+   public :: MAPL_REGRID_METHOD_BILINEAR
+   public :: MAPL_REGRID_METHOD_BILINEAR_MONOTONIC
+   public :: MAPL_REGRID_METHOD_BILINEAR_ROTATE
+   public :: MAPL_REGRID_METHOD_CONSERVE
+   public :: MAPL_REGRID_METHOD_CONSERVE_MONOTONIC
+   public :: MAPL_REGRID_METHOD_VOTE
+   public :: MAPL_REGRID_METHOD_FRACTION
+   public :: MAPL_REGRID_METHOD_CONSERVE_2ND
+   public :: MAPL_REGRID_METHOD_PATCH
+   public :: MAPL_REGRID_METHOD_NEAREST_STOD
+   public :: MAPL_REGRID_METHOD_CONSERVE_HFLUX
+   public :: MAPL_UNSPECIFIED_REGRID_METHOD
+   public :: mapl_regrid_method_string_to_int
+   public :: mapl_regrid_method_int_to_string
+   public :: mapl_generate_esmf_regrid_param
 
 
-   ! Field utilities
-   public :: MAPL_FieldGetCPtr
-   public :: MAPL_FieldCopy
-   public :: MAPL_AssignFptr
-   public :: MAPL_FieldGetLocalElementCount
-   public :: MAPL_FieldClone
-   public :: MAPL_FieldHasDE
-
-   ! State item constants
-   public :: mapl_UngriddedDim
-   public :: mapl_make_UngriddedDim
-   public :: mapl_UngriddedDims
-
-   ! State item constants
-
-   ! TYPEKIND
-   public :: MAPL_TYPEKIND_MIRROR
-
-   public :: MAPL_STATEITEM_UNKNOWN
-   public :: MAPL_STATEITEM_FIELD
-   public :: MAPL_STATEITEM_FIELDBUNDLE
-   public :: MAPL_STATEITEM_STATE
-   public :: MAPL_STATEITEM_SERVICE
-   public :: MAPL_STATEITEM_SERVICE_PROVIDER
-   public :: MAPL_STATEITEM_SERVICE_SUBSCRIBER
-   public :: MAPL_STATEITEM_WILDCARD
-   public :: MAPL_STATEITEM_BRACKET
-   public :: MAPL_STATEITEM_VECTOR
-   public :: MAPL_STATEITEM_VECTORBRACKET
-   public :: MAPL_STATEITEM_EXPRESSION
-
-end module mapl_esmf_api
+end module mapl_regridder_mgr_api
