@@ -1,41 +1,36 @@
-! Export umbrella for the MAPL.field_bundle library.
-module mapl_field_bundle_api
+module mapl_pfio_api
+  use pfio, only: mapl_FileMetadata => FileMetadata
+  use pfio, only: mapl_Variable => Variable
+  use pfio, only: mapl_StringVariableMap => StringVariableMap
+  use pfio, only: mapl_StringVariableMapIterator => StringVariableMapIterator
+  use pfio, only: mapl_NetCDF4_FileFormatter => NetCDF4_FileFormatter
+  use pfio, only: mapl_ArrayReference => ArrayReference
+  use mapl_DefaultServerNames_mod, only: MAPL_DEFAULT_INPUT_SERVER, MAPL_DEFAULT_OUTPUT_SERVER
+  use pfio, only: operator(==), operator(/=)
 
-   use ESMF, only: MAPL_FieldBundleAdd => ESMF_FieldBundleAdd
-   use mapl_FieldBundleClone_mod, only: MAPL_FieldBundleClone => FieldBundleClone
-   use mapl_FieldBundleCopy_mod, only: MAPL_FieldBundleCopy => FieldBundleCopy
-   use mapl_FieldBundleCreate_mod, only: MAPL_FieldBundleCreate => FieldBundleCreate
-   use mapl_FieldBundleCreate_mod, only: MAPL_FieldBundlesAreAliased => FieldBundlesAreAliased
-   use mapl_FieldBundleDestroy_mod, only: MAPL_FieldBundleDestroy
-   use mapl_FieldBundleGet_mod, only: MAPL_FieldBundleGet => FieldBundleGet
-   use mapl_FieldBundleGetByIndex_mod, only: MAPL_FieldBundleGetByIndex => FieldBundleGetByIndex
-   use mapl_FieldBundleGetPointer_mod, only: MAPL_FieldBundleGetPointer => FieldBundleGetPointerToData
-   use mapl_FieldBundleInfo_mod, only: MAPL_FieldBundleInfoGetInternal => FieldBundleInfoGetInternal
-   use mapl_FieldBundleInfo_mod, only: MAPL_FieldBundleInfoSetInternal => FieldBundleInfoSetInternal
-   use mapl_FieldBundleMatch_mod, only: MAPL_FieldBundleSameData => FieldBundleSameData
-   use mapl_FieldBundleSet_mod, only: MAPL_FieldBundleSet => FieldBundleSet
-   use mapl_FieldBundleFilter_mod, only: MAPL_FieldBundleFilter => FieldBundleFilter
-   use mapl_FieldBundleApplyUserRoutine_mod, only: MAPL_FieldBundleApplyUserRoutine => FieldBundleApplyUserRoutine
-   use mapl_FieldBundleGetGeom_mod, only: MAPL_FieldBundleGetGeom => FieldBundleGetGeom
+  use pfio, only: mapl_get_client => get_client
+  use pfio, only: mapl_add_client => add_client
+  use pfio, only: ClientThread
+  use pfio, only: mapl_pfio_read => pfio_read
+  use pfio, only: mapl_string_in_stringvector => string_in_stringvector
 
-   implicit none
-   private
+  implicit none
+  private
 
-   public :: MAPL_FieldBundleAdd
-   public :: MAPL_FieldBundleClone
-   public :: MAPL_FieldBundleCopy
-   public :: MAPL_FieldBundleCreate
-   public :: MAPL_FieldBundleDestroy
-   public :: MAPL_FieldBundleGet
-   public :: MAPL_FieldBundleGetByIndex
-   public :: MAPL_FieldBundleGetPointer
-   public :: MAPL_FieldBundleInfoGetInternal
-   public :: MAPL_FieldBundleInfoSetInternal
-   public :: MAPL_FieldBundleSameData
-   public :: MAPL_FieldBundlesAreAliased
-   public :: MAPL_FieldBundleSet
-   public :: MAPL_FieldBundleFilter
-   public :: MAPL_FieldBundleApplyUserRoutine
-   public :: MAPL_FieldBundleGetGeom
+  public :: mapl_FileMetadata
+  public :: MAPL_Variable
+  public :: mapl_StringVariableMap
+  public :: mapl_StringVariableMapIterator
+  public :: mapl_NetCDF4_FileFormatter
+  public :: MAPL_DEFAULT_INPUT_SERVER
+  public :: MAPL_DEFAULT_OUTPUT_SERVER
 
-end module mapl_field_bundle_api
+  public :: mapl_get_client
+  public :: ClientThread
+  public :: mapl_pfio_read
+  public :: mapl_ArrayReference
+  public :: mapl_string_in_stringvector
+
+  public :: operator(==), operator(/=)
+
+end module mapl_pfio_api
