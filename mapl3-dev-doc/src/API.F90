@@ -1,34 +1,33 @@
-module mapl_geomio_api
+! Export umbrella for the MAPL.field library.
 
-   use mapl_CompressionSettings_mod, only: mapl_CompressionSettings => CompressionSettings
-   use mapl_SharedIO_mod, only: mapl_bundle_to_metadata => bundle_to_metadata
-   use mapl_SharedIO_mod, only: mapl_esmf_to_pfio_type => esmf_to_pfio_type
-   use mapl_GeomPFIO_mod, only: mapl_GeomPFIO => GeomPFIO
-   use mapl_GeomCategorizer_mod, only: mapl_make_geom_pfio => make_geom_pfio
-   use mapl_pFIOServerBounds_mod, only: mapl_pFIOServerBounds => pFIOServerBounds
-   use mapl_pFIOServerBounds_mod, only: mapl_PFIO_BOUNDS_READ => PFIO_BOUNDS_READ
-   use mapl_DataCollection_mod, only: mapl_DataCollection => DataCollection
-   use mapl_DataCollectionManager_mod, only: MAPL_AddDataCollection => AddDataCollection
-   use mapl_DataCollectionManager_mod, only: mapl_DataCollections => DataCollections
+module mapl_field_api
 
-   use mapl_FieldBundleWrite_mod, only: mapl_FieldBundleWriter => FieldBundleWriter
-   use mapl_FieldBundleRead_mod, only: mapl_read_bundle => read_bundle
+   use mapl_FieldCreate_mod, only: MAPL_FieldCreate => FieldCreate
+   use mapl_FieldCreate_mod, only: MAPL_FieldEmptyComplete => FieldEmptyComplete
+   use mapl_FieldCreate_mod, only: MAPL_FieldsAreAliased => FieldsAreAliased
+   use mapl_FieldGet_mod, only: MAPL_FieldGet => FieldGet
+   use mapl_FieldSet_mod, only: MAPL_FieldSet => FieldSet
+   use mapl_FieldNamedAlias_mod, only: MAPL_NamedAlias
+   use mapl_FieldFill_mod, only: MAPL_FieldFill => FieldFill
+   use mapl_FieldApplyUserRoutine_mod, only: MAPL_FieldApplyUserRoutine => FieldApplyUserRoutine
+   use mapl_FieldApplyUserRoutine_mod, only: MAPL_I_FieldSliceRoutine => I_FieldSliceRoutine
+   use mapl_RestartModes_mod, only: MAPL_RESTART_REQUIRED => RESTART_REQUIRED
+   use mapl_RestartModes_mod, only: MAPL_RESTART_SKIP => RESTART_SKIP
+
    implicit none
    private
 
+   public :: MAPL_FieldCreate
+   public :: MAPL_FieldEmptyComplete
+   public :: MAPL_FieldsAreAliased
+   public :: MAPL_FieldGet
+   public :: MAPL_FieldSet
+   public :: MAPL_NamedAlias
+   public :: MAPL_FieldFill
+   public :: MAPL_FieldApplyUserRoutine
+   public :: MAPL_I_FieldSliceRoutine
+   public :: MAPL_RESTART_REQUIRED
+   public :: MAPL_RESTART_SKIP
 
-   public :: mapl_CompressionSettings
-   public :: mapl_GeomPFIO
-   public :: mapl_pFIOServerBounds
-   public :: MAPL_PFIO_BOUNDS_READ
-   public :: mapl_DataCollection
-   public :: mapl_DataCollections
-   public :: mapl_AddDataCollection
-   public :: mapl_FieldBundleWriter
+end module mapl_field_api
 
-   public :: mapl_make_geom_pfio
-   public :: mapl_bundle_to_metadata
-   public :: mapl_esmf_to_pfio_type
-   public :: mapl_read_bundle
-   
-end module mapl_geomio_api
