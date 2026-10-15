@@ -1,200 +1,124 @@
-! Export umbrella for the MAPL infrastructure/esmf layer.
-! Public API of esmf/ leaf modules exposed to external consumers.
-module mapl_esmf_api
+! Export umbrella for the MAPL utils layer.
+! Defines the public API of utils/ for external consumers.
+! Directly imports from leaf modules and re-exports only the intended public symbols.
+module mapl_utils_api
 
-   ! Alarm
-   use mapl_SimpleAlarm_mod, only: MAPL_SimpleAlarm => SimpleAlarm
+   ! Error handling
+   use mapl_ErrorHandling_mod
 
-   ! Core ESMF utilities
-   use mapl_ESMF_Time_Utilities_mod, only: MAPL_SubTimeInDateTime => sub_time_in_datetime
+   ! Keyword enforcer (abstract sentinel type)
+   use mapl_KeywordEnforcer_mod, only: mapl_KeywordEnforcer => KeywordEnforcer
 
-   ! Comms
-   use mapl_comms_mod, only: MAPL_ROOT => ROOT_PROCESS_ID
-   use mapl_comms_mod, only: MAPL_Barrier => barrier
-   use mapl_comms_mod, only: MAPL_Am_I_Root => am_i_root
-   use mapl_comms_mod, only: MAPL_Am_I_Rank => am_i_rank
-   use mapl_comms_mod, only: MAPL_NPES => num_pes
-   use mapl_comms_mod, only: MAPL_CommsSend => comms_send, MAPL_CommsRecv => comms_recv
-   use mapl_comms_mod, only: MAPL_CommsSendRecv => comms_sendrecv
-   use mapl_comms_mod, only: MAPL_CommsGatherV => comms_gatherv
-   use mapl_comms_mod, only: MAPL_CommsScatterV => comms_scatterv
-   use mapl_comms_mod, only: MAPL_CommsAllGather => comms_allgather
-   use mapl_comms_mod, only: MAPL_CommsAllGatherV => comms_allgatherv
-   use mapl_comms_mod, only: MAPL_ArrayGather => array_gather
-   use mapl_comms_mod, only: MAPL_ArrayScatter => array_scatter
-   use mapl_comms_mod, only: MAPL_CommsAllReduceMin => comms_allreduce_min
-   use mapl_comms_mod, only: MAPL_CommsAllReduceMax => comms_allreduce_max
-   use mapl_comms_mod, only: MAPL_CommsAllReduceSum => comms_allreduce_sum
+   ! OS / filesystem
+   use mapl_os_mod, only: &
+      & mapl_GetCurrentWorkingDirectory => GetCurrentWorkingDirectory, &
+      & mapl_ChangeDirectory => ChangeDirectory, &
+      & mapl_MakeDirectory => MakeDirectory, &
+      & mapl_DirectoryExists => DirectoryExists, &
+      & mapl_RemoveDirectory => RemoveDirectory, &
+      & mapl_RemoveFile => RemoveFile, &
+      & mapl_PushDirectory => PushDirectory, &
+      & mapl_PopDirectory => PopDirectory, &
+      & mapl_ClearDirectoryStack => ClearDirectoryStack, &
+      & mapl_PathJoin => PathJoin, &
+      & mapl_MakeSymbolicLink => MakeSymbolicLink
+   use mapl_DirPath_mod
+   use mapl_FileSystemUtilities_mod
+   use mapl_DSO_Utilities_mod
 
-   ! ShmemComms
-   use mapl_ShmemComms_mod, only: MAPL_RoundRobinPEList => RoundRobinPEList
-   use mapl_ShmemComms_mod, only: MAPL_BcastShared => BcastShared
-   use mapl_ShmemComms_mod, only: MAPL_CommsBcast => CommsBcast
-   use mapl_ShmemComms_mod, only: MAPL_CommRequest => CommRequest
-   use mapl_ShmemComms_mod, only: MAPL_CreateRequest => CreateRequest
-   use mapl_ShmemComms_mod, only: MAPL_ArrayIGather => ArrayIGather
-   use mapl_ShmemComms_mod, only: MAPL_ArrayIScatter => ArrayIScatter
-   use mapl_ShmemComms_mod, only: MAPL_CollectiveWait => CollectiveWait
+   ! Numeric utilities
+   use mapl_Hash_mod
+   use mapl_MinMax_mod
+   use mapl_Range_mod
+   use mapl_Sort_mod
+   use mapl_Interp_mod
 
-   ! HConfig
-   use mapl_hconfig_get_mod, only: MAPL_HConfigGet => HConfigGet
-   use mapl_ESMF_HConfigUtilities_mod, only: MAPL_HConfigMatch => HConfigMatch
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsItemType => HConfigAsItemType
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsStateIntent => HConfigAsStateIntent
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsTime => HConfigAsTime
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsTimeInterval => HConfigAsTimeInterval
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsTimeRange => HConfigAsTimeRange
-   use mapl_HConfigAs_mod, only: mapl_HConfigAsStringVector => HConfigAsStringVector
+   ! Time utilities
+   use mapl_TimeUtilities_mod, only: mapl_PackDate => PackDate
+   use mapl_TimeUtilities_mod, only: mapl_PackDateTime => PackDateTime
+   use mapl_TimeUtilities_mod, only: mapl_UnpackDate => UnpackDate
 
-   ! Info / metadata utilities
-   ! NOTE: MAPL_Info* from mapl_InfoUtilities_mod are widely used across the
-   ! MAPL codebase, so we are not removing the prefixes there
-   use mapl_InfoUtilities_mod, only: MAPL_InfoSet, MAPL_InfoGet
-   use mapl_InfoUtilities_mod, only: MAPL_InfoCreateFromShared
-   use mapl_InfoUtilities_mod, only: MAPL_InfoSetShared, MAPL_InfoGetShared
-   use mapl_InfoUtilities_mod, only: MAPL_InfoSetPrivate, MAPL_InfoGetPrivate
-   use mapl_InfoUtilities_mod, only: MAPL_InfoSetNamespace
+   ! Use only the intended public API from ISO8601 to avoid conflicts
+   ! with is_valid_date/is_valid_time already exported by mapl_TimeUtils_mod
+   use mapl_ISO8601_DateTime_mod, only: mapl_convert_ISO8601_to_integer_time => convert_ISO8601_to_integer_time
+   use mapl_ISO8601_DateTime_mod, only: mapl_convert_ISO8601_to_integer_date => convert_ISO8601_to_integer_date
+   use mapl_ISO8601_DateTime_mod, only: mapl_ISO8601Date => ISO8601Date
+   use mapl_ISO8601_DateTime_mod, only: mapl_ISO8601Time => ISO8601Time
+   use mapl_ISO8601_DateTime_mod, only: mapl_ISO8601DateTime => ISO8601DateTime
+   use mapl_ISO8601_DateTime_mod, only: mapl_ISO8601Duration => ISO8601Duration
+   use mapl_ISO8601_DateTime_mod, only: mapl_ISO8601Interval => ISO8601Interval
+   use mapl_DateTime_Parsing_mod
+   use mapl_Sleep_mod
+   use mapl_CF_Time_mod
 
-   ! Ungridded dimensions
-   use mapl_UngriddedDim_mod, only: mapl_UngriddedDim => UngriddedDim
-   use mapl_UngriddedDim_mod, only: mapl_make_UngriddedDim => make_UngriddedDim
-   use mapl_UngriddedDims_mod, only: mapl_UngriddedDims => UngriddedDims
+   ! Keys for ESMF_Info objects used in MAPL. See module for keys.
+   use mapl_esmf_info_keys_mod
 
-   ! Bounds / grid utilities
-   use mapl_LU_Bound_mod
-   use mapl_HorizontalDimsSpec_mod
-   use mapl_DistGridGet_mod
+   ! Validation
+   use mapl_Validation_mod
 
-   ! Field utilities
-   use mapl_FieldPointerUtilities_mod, only: MAPL_FieldGetCPtr => FieldGetCPtr
-   use mapl_FieldPointerUtilities_mod, only: MAPL_FieldCopy => FieldCopy
-   use mapl_FieldPointerUtilities_mod, only: MAPL_AssignFptr => assign_fptr
-   use mapl_FieldPointerUtilities_mod, only: MAPL_FieldGetLocalElementCount => FieldGetLocalElementCount
-   use mapl_FieldPointerUtilities_mod, only: MAPL_FieldClone => FieldClone
-   use mapl_FieldPointerUtilities_mod, only: MAPL_FieldHasDE => field_has_de
-
-
-   ! HConfig
-   use mapl_HConfigAs_mod, only: &
-        mapl_HConfigAsItemType => HConfigAsItemType, &
-        mapl_HConfigAsStateIntent => HConfigAsStateIntent, &
-        mapl_HConfigAsTime => HConfigAsTime, &
-        mapl_HConfigAsTimeInterval => HConfigAsTimeInterval, &
-        mapl_HConfigAsTimeRange => HConfigAsTimeRange, &
-        mapl_HConfigAsStringVector => HConfigAsStringVector
-   use mapl_HConfigAs_mod
-   use mapl_HConfigUtilities_mod
-   use mapl_get_hconfig_mod
-   use mapl_hconfig_get_mod
-   use mapl_hconfig_params_mod
-   use mapl_generalized_equality_mod
-
-
-   ! State item
-   use mapl_StateItem_mod
-
-   ! State item constants
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_UNKNOWN
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_FIELD, MAPL_STATEITEM_FIELDBUNDLE, MAPL_STATEITEM_STATE
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_SERVICE
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_SERVICE_PROVIDER, MAPL_STATEITEM_SERVICE_SUBSCRIBER
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_WILDCARD, MAPL_STATEITEM_BRACKET
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_VECTOR, MAPL_STATEITEM_VECTORBRACKET
-   use mapl_StateItem_mod, only: MAPL_STATEITEM_EXPRESSION
-
-   ! Type kinds
-   use mapl_typekind_mod, only: MAPL_TYPEKIND_MIRROR
+   ! Memory info
+   use mapl_MemInfo_mod, only: mapl_MemInfo => MemInfo
+   use mapl_MemInfo_mod, only: mapl_MemInfoWrite => MemInfoWrite
+   use mapl_TimeUtilities_mod
 
    implicit none
    private
 
-   ! Alarm
-   public :: MAPL_SimpleAlarm
+   ! Error handling
+   public :: MAPL_Assert
+   public :: MAPL_Verify
+   public :: MAPL_Return
+   public :: MAPL_Deprecated
+   public :: MAPL_SetFailOnDeprecated
+   public :: MAPL_abort
+   public :: MAPL_set_abort_handler
+   public :: MAPL_SUCCESS
+   public :: MAPL_UNKNOWN_ERROR
+   public :: MAPL_NO_SUCH_PROPERTY
+   public :: MAPL_NO_SUCH_VARIABLE
+   public :: MAPL_TYPE_MISMATCH
+   public :: MAPL_UNSUPPORTED_TYPE
+   public :: MAPL_VALUE_NOT_SUPPORTED
+   public :: MAPL_NO_DEFAULT_VALUE
+   public :: MAPL_DUPLICATE_KEY
+   public :: MAPL_STRING_TOO_SHORT
 
-   ! Core ESMF utilities
-   public :: MAPL_SubTimeInDateTime
+   ! Keyword enforcer
+   public :: mapl_KeywordEnforcer
 
-   ! Comms
-   public :: MAPL_ROOT
-   public :: MAPL_NPES
-   public :: MAPL_Barrier
-   public :: MAPL_Am_I_Root
-   public :: MAPL_Am_I_Rank
-   public :: MAPL_CommsSend
-   public :: MAPL_CommsRecv
-   public :: MAPL_CommsSendRecv
-   public :: MAPL_CommsGatherV
-   public :: MAPL_CommsScatterV
-   public :: MAPL_CommsAllGather
-   public :: MAPL_CommsAllGatherV
-   public :: MAPL_ArrayGather
-   public :: MAPL_ArrayScatter
-   public :: MAPL_CommsAllReduceMin
-   public :: MAPL_CommsAllReduceMax
-   public :: MAPL_CommsAllReduceSum
+   ! OS / filesystem
+   public :: mapl_GetCurrentWorkingDirectory
+   public :: mapl_ChangeDirectory
+   public :: mapl_MakeDirectory
+   public :: mapl_DirectoryExists
+   public :: mapl_RemoveDirectory
+   public :: mapl_RemoveFile
+   public :: mapl_PushDirectory
+   public :: mapl_PopDirectory
+   public :: mapl_ClearDirectoryStack
+   public :: mapl_PathJoin
+   public :: mapl_MakeSymbolicLink
+   public :: get_file_extension
+   public :: get_file_basename
 
-   ! ShmemComms
-   public :: MAPL_RoundRobinPEList
-   public :: MAPL_BcastShared
-   public :: MAPL_CommsBcast
-   public :: MAPL_CommRequest
-   public :: MAPL_CreateRequest
-   public :: MAPL_CollectiveWait
-   public :: MAPL_ArrayIGather
-   public :: MAPL_ArrayIScatter
+   ! Memory info
+   public :: mapl_MemInfo
+   public :: mapl_MemInfoWrite
 
-   ! User comp internal state
+   ! Time utilities
+   public :: mapl_PackDate
+   public :: mapl_PackDateTime
+   public :: mapl_UnpackDate
 
-   ! HConfig
-   public :: MAPL_HConfigMatch
-   public :: MAPL_HConfigGet
-   public :: mapl_HConfigAsItemType
-   public :: mapl_HConfigAsStateIntent
-   public :: mapl_HConfigAsTime
-   public :: mapl_HConfigAsTimeInterval
-   public :: mapl_HConfigAsTimeRange
-   public :: mapl_HConfigAsStringVector
+   ! ISO8601 date/time conversion
+   public :: mapl_convert_ISO8601_to_integer_time
+   public :: mapl_convert_ISO8601_to_integer_date
+   ! ISO8601 date/time data types
+   public :: mapl_ISO8601Date
+   public :: mapl_ISO8601Time
+   public :: mapl_ISO8601DateTime
+   public :: mapl_ISO8601Duration
+   public :: mapl_ISO8601Interval
 
-   ! Info / metadata utilities
-   public :: MAPL_InfoSet
-   public :: MAPL_InfoGet
-   public :: MAPL_InfoCreateFromShared
-   public :: MAPL_InfoSetShared
-   public :: MAPL_InfoGetShared
-   public :: MAPL_InfoSetPrivate
-   public :: MAPL_InfoGetPrivate
-   public :: MAPL_InfoSetNamespace
-
-
-   ! Field utilities
-   public :: MAPL_FieldGetCPtr
-   public :: MAPL_FieldCopy
-   public :: MAPL_AssignFptr
-   public :: MAPL_FieldGetLocalElementCount
-   public :: MAPL_FieldClone
-   public :: MAPL_FieldHasDE
-
-   ! State item constants
-   public :: mapl_UngriddedDim
-   public :: mapl_make_UngriddedDim
-   public :: mapl_UngriddedDims
-
-   ! State item constants
-
-   ! TYPEKIND
-   public :: MAPL_TYPEKIND_MIRROR
-
-   public :: MAPL_STATEITEM_UNKNOWN
-   public :: MAPL_STATEITEM_FIELD
-   public :: MAPL_STATEITEM_FIELDBUNDLE
-   public :: MAPL_STATEITEM_STATE
-   public :: MAPL_STATEITEM_SERVICE
-   public :: MAPL_STATEITEM_SERVICE_PROVIDER
-   public :: MAPL_STATEITEM_SERVICE_SUBSCRIBER
-   public :: MAPL_STATEITEM_WILDCARD
-   public :: MAPL_STATEITEM_BRACKET
-   public :: MAPL_STATEITEM_VECTOR
-   public :: MAPL_STATEITEM_VECTORBRACKET
-   public :: MAPL_STATEITEM_EXPRESSION
-
-end module mapl_esmf_api
+end module mapl_utils_api
