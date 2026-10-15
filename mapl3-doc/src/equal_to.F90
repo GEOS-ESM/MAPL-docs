@@ -1,26 +1,24 @@
-#include "MAPL_ErrLog.h"
+#include "MAPL.h"
 
-submodule (mapl_LocStreamDecomposition_mod) equal_to_smod
+submodule (mapl_EASEGeomSpec_mod) equal_to_smod
+   use mapl_GeomSpec_mod
+   use mapl_EASEDecomposition_mod
    implicit none (type, external)
 
 contains
 
-   module procedure equal_to
-      
-      ! Both must have allocated distributions
-      if (.not. allocated(decomp1%point_distribution)) then
-         equal_to = .not. allocated(decomp2%point_distribution)
-         return
-      end if
+   pure logical module function equal_to(a, b)
+      class(EASEGeomSpec), intent(in) :: a
+      class(GeomSpec),     intent(in) :: b
 
-      if (.not. allocated(decomp2%point_distribution)) then
+      select type (b)
+      type is (EASEGeomSpec)
+         equal_to = (a%grid_name == b%grid_name) .and. &
+                    (a%decomposition == b%decomposition)
+      class default
          equal_to = .false.
-         return
-      end if
+      end select
 
-      ! Check if distributions are the same
-      equal_to = all(decomp1%point_distribution == decomp2%point_distribution)
-
-   end procedure equal_to
+   end function equal_to
 
 end submodule equal_to_smod
