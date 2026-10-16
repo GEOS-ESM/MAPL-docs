@@ -1,25 +1,18 @@
 #include "MAPL.h"
-submodule (mapl_LatLonGeomFactory_mod) typesafe_make_geom_smod
-   use mapl_GeomSpec_mod
-   use mapl_LonAxis_mod
-   use mapl_LatAxis_mod
-   use mapl_LatLonDecomposition_mod
-   use mapl_LatLonGeomSpec_mod
-   use mapl_MinMax_mod
-   use mapl_ErrorHandling_mod
-   use MAPL_Constants
-   use pFIO
-   use gFTL2_StringVector
-   use esmf
-   use mapl_KeywordEnforcer_mod, only: KE => KeywordEnforcer
-   implicit none (type, external)
 
+submodule (mapl_EASEGeomFactory_mod) typesafe_make_geom_smod
+   use mapl_GeomSpec_mod
+   use mapl_EASEGeomSpec_mod
+   use mapl_ErrorHandling_mod
+   use esmf
+
+   implicit none (type, external)
 
 contains
 
    module function typesafe_make_geom(spec, rc) result(geom)
       type(ESMF_Geom) :: geom
-      class(LatLonGeomSpec), intent(in) :: spec
+      type(EASEGeomSpec), intent(in) :: spec
       integer, optional, intent(out) :: rc
 
       integer :: status

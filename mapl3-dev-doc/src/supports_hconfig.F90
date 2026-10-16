@@ -1,36 +1,31 @@
 #include "MAPL.h"
 
-submodule (mapl_LatAxis_mod) supports_hconfig_smod
-   use mapl_Range_mod
-!   use hconfig3g
-   use esmf
+submodule (mapl_XYGeomSpec_mod) supports_hconfig_smod
    use mapl_ErrorHandling_mod
-   implicit none (type, external)
-
-   integer, parameter :: R8 = ESMF_KIND_R8
+   use esmf
+   implicit none
 
 contains
 
-   logical module function supports_hconfig(hconfig, rc) result(supports)
+   ! An hconfig block is an XY grid if it has:
+   !   class: xy
+   !   grid_file_name: <path>
+   logical module function supports_hconfig_(this, hconfig, rc) result(supports)
+      class(XYGeomSpec), intent(in) :: this
       type(ESMF_HConfig), intent(in) :: hconfig
       integer, optional, intent(out) :: rc
 
       integer :: status
-      logical :: has_jm_world
-      logical :: has_lat_range
-      logical :: has_pole
-      supports = .true.
+      character(len=:), allocatable :: geom_class
 
-      has_jm_world = ESMF_HConfigIsDefined(hconfig, keystring='jm_world', _RC)
-      _RETURN_UNLESS(has_jm_world)
+      supports = ESMF_HConfigIsDefined(hconfig, keystring='class', _RC)
+      _RETURN_UNLESS(supports)
 
-      has_lat_range = ESMF_HConfigIsDefined(hconfig, keystring='lat_range', _RC)
-      has_pole = ESMF_HConfigIsDefined(hconfig, keystring='pole', _RC)
-      _RETURN_UNLESS(has_lat_range .neqv. has_pole)
-      supports = .true.
+      geom_class = ESMF_HConfigAsString(hconfig, keyString='class', _RC)
+      supports = (geom_class == 'xy')
 
       _RETURN(_SUCCESS)
-   end function supports_hconfig
+      _UNUSED_DUMMY(this)
+   end function supports_hconfig_
 
 end submodule supports_hconfig_smod
-
