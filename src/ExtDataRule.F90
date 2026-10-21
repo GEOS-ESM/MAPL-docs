@@ -6,7 +6,6 @@ module MAPL_ExtDataRule
    use MAPL_TimeStringConversion
    use MAPL_ExtDataTimeSample
    use MAPL_ExtDataTimeSampleMap
-   use MAPL_ExtDataConstants
    implicit none
    private
 
@@ -85,7 +84,7 @@ contains
             rule%sample_key=ESMF_HConfigAsString(config1,_RC)
          end if
       else
-         rule%sample_key = sample_not_provided
+         rule%sample_key = ""
       end if
 
       if (allocated(rule%linear_trans)) deallocate(rule%linear_trans)
