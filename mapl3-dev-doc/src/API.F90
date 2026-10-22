@@ -1,34 +1,35 @@
-module mapl_geomio_api
+! Export umbrella for the MAPL infrastructure/vertical/vertical_grid layer.
+! Public API exposed to external consumers.
+module mapl_vertical_grid_api
 
-   use mapl_CompressionSettings_mod, only: mapl_CompressionSettings => CompressionSettings
-   use mapl_SharedIO_mod, only: mapl_bundle_to_metadata => bundle_to_metadata
-   use mapl_SharedIO_mod, only: mapl_esmf_to_pfio_type => esmf_to_pfio_type
-   use mapl_GeomPFIO_mod, only: mapl_GeomPFIO => GeomPFIO
-   use mapl_GeomCategorizer_mod, only: mapl_make_geom_pfio => make_geom_pfio
-   use mapl_pFIOServerBounds_mod, only: mapl_pFIOServerBounds => pFIOServerBounds
-   use mapl_pFIOServerBounds_mod, only: mapl_PFIO_BOUNDS_READ => PFIO_BOUNDS_READ
-   use mapl_DataCollection_mod, only: mapl_DataCollection => DataCollection
-   use mapl_DataCollectionManager_mod, only: MAPL_AddDataCollection => AddDataCollection
-   use mapl_DataCollectionManager_mod, only: mapl_DataCollections => DataCollections
+   use mapl_VerticalGrid_mod, only: mapl_VerticalGrid => VerticalGrid
+   use mapl_VerticalGrid_mod, only: MAPL_VERTICAL_GRID_NOT_FOUND => VERTICAL_GRID_NOT_FOUND
+   use mapl_VerticalGridSpec_mod, only: mapl_VerticalGridSpec => VerticalGridSpec
+   use mapl_VerticalGridFactory_mod, only: mapl_VerticalGridFactory => VerticalGridFactory
+   use mapl_BasicVerticalGrid_mod, only: mapl_BasicVerticalGrid => BasicVerticalGrid
+   use mapl_BasicVerticalGrid_mod, only: mapl_BasicVerticalGridSpec => BasicVerticalGridSpec
+   use mapl_BasicVerticalGrid_mod, only: mapl_BasicVerticalGridFactory => BasicVerticalGridFactory
+   use mapl_VerticalGridManager_mod, only: mapl_VerticalGridManager => VerticalGridManager
+   use mapl_VerticalGridManager_mod, only: mapl_get_vertical_grid_manager => get_vertical_grid_manager
 
-   use mapl_FieldBundleWrite_mod, only: mapl_FieldBundleWriter => FieldBundleWriter
-   use mapl_FieldBundleRead_mod, only: mapl_read_bundle => read_bundle
    implicit none
    private
 
+   ! Abstract base types
+   public :: mapl_VerticalGrid
+   public :: mapl_VerticalGridSpec
+   public :: mapl_VerticalGridFactory
 
-   public :: mapl_CompressionSettings
-   public :: mapl_GeomPFIO
-   public :: mapl_pFIOServerBounds
-   public :: MAPL_PFIO_BOUNDS_READ
-   public :: mapl_DataCollection
-   public :: mapl_DataCollections
-   public :: mapl_AddDataCollection
-   public :: mapl_FieldBundleWriter
+   ! Concrete basic implementation
+   public :: mapl_BasicVerticalGrid
+   public :: mapl_BasicVerticalGridSpec
+   public :: mapl_BasicVerticalGridFactory
 
-   public :: mapl_make_geom_pfio
-   public :: mapl_bundle_to_metadata
-   public :: mapl_esmf_to_pfio_type
-   public :: mapl_read_bundle
-   
-end module mapl_geomio_api
+   ! Manager
+   public :: mapl_VerticalGridManager
+   public :: mapl_get_vertical_grid_manager
+
+   ! Parameters
+   public :: MAPL_VERTICAL_GRID_NOT_FOUND
+
+end module mapl_vertical_grid_api
