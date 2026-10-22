@@ -1,52 +1,27 @@
 #include "MAPL.h"
 
-submodule (mapl_LatLonGeomSpec_mod) supports_metadata_smod
-
-   use mapl_CoordinateAxis_mod
-   use mapl_GeomSpec_mod
-   use pfio
+submodule (mapl_LonAxis_mod) supports_metadata_smod
+   use mapl_Range_mod
    use mapl_ErrorHandling_mod
    use esmf
-
    implicit none (type, external)
+   integer, parameter :: R8 = ESMF_KIND_R8
 
 contains
 
-   logical module function supports_metadata_(this, file_metadata, rc) result(supports)
-      class(LatLonGeomSpec), intent(in) :: this
+   logical module function supports_metadata(file_metadata, rc) result(supports)
       type(FileMetadata), intent(in) :: file_metadata
       integer, optional, intent(out) :: rc
 
       integer :: status
-      type(LonAxis) :: lon_axis
-      type(LatAxis) :: lat_axis
-      character(:), allocatable :: lon_dim, lat_dim
+      character(:), allocatable :: dim_name
 
-      supports = .false.
+      supports = .true.
+      dim_name = get_dim_name(file_metadata, units='degrees_east', _RC)
 
-      ! Require that both longitude and latitude axes are
-      ! supported in the usual way.
-
-      supports = lon_axis%supports(file_metadata, _RC)
-      _RETURN_UNLESS(supports)
-
-      supports = lat_axis%supports(file_metadata, _RC)
-      _RETURN_UNLESS(supports)
-
-      ! Distinguish regular LatLon grids from LocStreams. For
-      ! LatLon we expect distinct latitude and longitude
-      ! dimensions (e.g. lat x lon), whereas LocStreams share a
-      ! single dimension for both coordinates. If both
-      ! coordinates share the same dimension, consider this not
-      ! a LatLon grid so that LocStream factories can claim it.
-
-      lon_dim = get_dim_name(file_metadata, units='degrees_east', _RC)
-      lat_dim = get_dim_name(file_metadata, units='degrees_north', _RC)
-
-      supports = (lon_dim /= '' .and. lat_dim /= '' .and. lon_dim /= lat_dim)
-
+      supports = (dim_name /= '')
       _RETURN(_SUCCESS)
-      _UNUSED_DUMMY(this)
-   end function supports_metadata_
+   end function supports_metadata
 
 end submodule supports_metadata_smod
+
