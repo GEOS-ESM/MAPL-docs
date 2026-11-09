@@ -1,28 +1,40 @@
 #include "MAPL.h"
 
-submodule (mapl_XYGeomSpec_mod) supports_hconfig_smod
+submodule (mapl_LatLonGeomSpec_mod) supports_hconfig_smod
+
+   use mapl_CoordinateAxis_mod
+   use mapl_GeomSpec_mod
+   use pfio
    use mapl_ErrorHandling_mod
    use esmf
-   implicit none
+
+   implicit none (type, external)
 
 contains
 
-   ! An hconfig block is an XY grid if it has:
-   !   class: xy
-   !   grid_file_name: <path>
    logical module function supports_hconfig_(this, hconfig, rc) result(supports)
-      class(XYGeomSpec), intent(in) :: this
+      class(LatLonGeomSpec), intent(in) :: this
       type(ESMF_HConfig), intent(in) :: hconfig
       integer, optional, intent(out) :: rc
 
       integer :: status
-      character(len=:), allocatable :: geom_class
+      type(LonAxis) :: lon_axis
+      type(LatAxis) :: lat_axis
+      character(:), allocatable :: geom_class
 
+      ! Mandatory entry: "class: latlon"
       supports = ESMF_HConfigIsDefined(hconfig, keystring='class', _RC)
       _RETURN_UNLESS(supports)
 
       geom_class = ESMF_HConfigAsString(hconfig, keyString='class', _RC)
-      supports = (geom_class == 'xy')
+      supports = (geom_class == 'latlon')
+      _RETURN_UNLESS(supports)
+
+      supports = lon_axis%supports(hconfig, _RC)
+      _RETURN_UNLESS(supports)
+
+      supports = lat_axis%supports(hconfig, _RC)
+      _RETURN_UNLESS(supports)
 
       _RETURN(_SUCCESS)
       _UNUSED_DUMMY(this)
