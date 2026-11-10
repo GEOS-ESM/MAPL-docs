@@ -1,19 +1,18 @@
 #include "MAPL.h"
 
-submodule (mapl_EASEGeomFactory_mod) make_file_metadata_smod
-   use mapl_GeomSpec_mod
-   use mapl_EASEGeomSpec_mod
+submodule (mapl_XYGeomFactory_mod) make_file_metadata_smod
    use mapl_ErrorHandling_mod
-   use pfio
    use mapl_KeywordEnforcer_mod, only: KE => KeywordEnforcer
-   implicit none (type, external)
+   use pfio
+   use esmf
+   implicit none
 
 contains
 
    module function make_file_metadata(this, geom_spec, unusable, chunksizes, rc) result(file_metadata)
       use mapl_KeywordEnforcer_mod
       type(FileMetadata) :: file_metadata
-      class(EASEGeomFactory), intent(in) :: this
+      class(XYGeomFactory), intent(in) :: this
       class(GeomSpec), intent(in) :: geom_spec
       class(KE), optional, intent(in) :: unusable
       integer, optional, intent(in) :: chunksizes(:)
@@ -24,10 +23,10 @@ contains
       file_metadata = FileMetadata()
 
       select type (geom_spec)
-      type is (EASEGeomSpec)
+      type is (XYGeomSpec)
          file_metadata = typesafe_make_file_metadata(geom_spec, chunksizes=chunksizes, _RC)
       class default
-         _FAIL('make_file_metadata: geom_spec is not of dynamic type EASEGeomSpec')
+         _FAIL('geom_spec is not of dynamic type XYGeomSpec.')
       end select
 
       _RETURN(_SUCCESS)
