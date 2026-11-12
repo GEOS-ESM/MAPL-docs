@@ -1,0 +1,976 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="MAPL is a foundation layer of the GEOS architecture, whose original purpose is to supplement the Earth System Modeling Framework (ESMF)">
+    <meta name="author" content="The MAPL Developers" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>HierarchyResources.F90 &ndash; MAPL</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">MAPL </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>HierarchyResources.F90
+      <small>Source File</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.0% of total for source files.">11 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/HierarchyResources.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+            <li class="breadcrumb-item active" aria-current="page">HierarchyResources.F90</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#mods-0"
+         aria-expanded="false" aria-controls="mods-0">
+         <h4 class="card-header bg-primary text-white">Modules</h4>
+      </a>
+      <div id="mods-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/mapl_hierarchyresources_mod.html">mapl_HierarchyResources_mod</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/hierarchyresources.f90.html#src">HierarchyResources.F90</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">This file depends on</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (0)
+ -->
+<!-- Title: sourcefile~~hierarchyresources.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilehierarchyresourcesf90EfferentGraph" width="641pt" height="201pt"
+ viewBox="0.00 0.00 641.00 201.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph" class="graph" transform="scale(0.514182 0.514182) rotate(0) translate(4 386.44)">
+<title>sourcefile~~hierarchyresources.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-386.44 1242.64,-386.44 1242.64,4 -4,4"/>
+<!-- sourcefile~hierarchyresources.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~hierarchyresources.f90</title>
+<polygon fill="none" stroke="black" points="1238.64,-216.6 1098.87,-216.6 1098.87,-192.33 1238.64,-192.33 1238.64,-216.6"/>
+<text xml:space="preserve" text-anchor="middle" x="1168.76" y="-200.86" font-family="Helvetica,sans-Serif" font-size="10.50">HierarchyResources.F90</text>
+</g>
+<!-- sourcefile~hierarchygraph.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~hierarchygraph.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~EfferentGraph_node2"><a xlink:href="../sourcefile/hierarchygraph.f90.html" xlink:title="HierarchyGraph.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1062.87,-216.6 944.1,-216.6 944.1,-192.33 1062.87,-192.33 1062.87,-216.6"/>
+<text xml:space="preserve" text-anchor="middle" x="1003.49" y="-200.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">HierarchyGraph.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~hierarchyresources.f90&#45;&gt;sourcefile~hierarchygraph.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~hierarchyresources.f90&#45;&gt;sourcefile~hierarchygraph.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1098.51,-204.46C1090.63,-204.46 1082.59,-204.46 1074.69,-204.46"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1074.78,-200.96 1064.78,-204.46 1074.78,-207.96 1074.78,-200.96"/>
+</g>
+<!-- sourcefile~dependencynetwork.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~dependencynetwork.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~EfferentGraph_node3"><a xlink:href="../sourcefile/dependencynetwork.f90.html" xlink:title="DependencyNetwork.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="644.96,-235.6 499.94,-235.6 499.94,-211.33 644.96,-211.33 644.96,-235.6"/>
+<text xml:space="preserve" text-anchor="middle" x="572.45" y="-219.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">DependencyNetwork.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~dependencynetwork.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~dependencynetwork.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M972.46,-217C933.31,-232.44 862.32,-257.38 798.72,-263.46"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M796.72,-263.46C735.1,-269.36 664.98,-252.93 620.02,-239.38"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="621.19,-236.08 610.6,-236.46 619.12,-242.76 621.19,-236.08"/>
+</g>
+<!-- sourcefile~dependencynetworkid.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~dependencynetworkid.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~EfferentGraph_node4"><a xlink:href="../sourcefile/dependencynetworkid.f90.html" xlink:title="DependencyNetworkId.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="262.29,-138.6 107.52,-138.6 107.52,-114.33 262.29,-114.33 262.29,-138.6"/>
+<text xml:space="preserve" text-anchor="middle" x="184.91" y="-122.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">DependencyNetworkId.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~dependencynetworkid.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~dependencynetworkid.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M953.28,-191.93C938.82,-188.68 922.9,-185.52 908.1,-183.46 760.54,-163 722.27,-171.06 573.45,-164.46"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M571.45,-164.46C449.77,-157.58 419.48,-153.33 298.29,-140.46 290.36,-139.62 282.12,-138.7 273.87,-137.73"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="274.49,-134.28 264.14,-136.58 273.66,-141.23 274.49,-134.28"/>
+</g>
+<!-- sourcefile~dependencynetworkidnetworkmap.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~dependencynetworkidnetworkmap.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~EfferentGraph_node5"><a xlink:href="../sourcefile/dependencynetworkidnetworkmap.f90.html" xlink:title="DependencyNetworkIdNetworkMap.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="908.1,-216.6 687.33,-216.6 687.33,-192.33 908.1,-192.33 908.1,-216.6"/>
+<text xml:space="preserve" text-anchor="middle" x="797.72" y="-200.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">DependencyNetworkIdNetworkMap.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~dependencynetworkidnetworkmap.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~dependencynetworkidnetworkmap.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M943.82,-204.46C936.14,-204.46 928.06,-204.46 919.8,-204.46"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="919.97,-200.96 909.97,-204.46 919.97,-207.96 919.97,-200.96"/>
+</g>
+<!-- sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_node6" class="node">
+<title>sourcefile~errorhandling.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~EfferentGraph_node6"><a xlink:href="../sourcefile/errorhandling.f90.html" xlink:title="ErrorHandling.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="432.06,-334.6 323.79,-334.6 323.79,-310.33 432.06,-310.33 432.06,-334.6"/>
+<text xml:space="preserve" text-anchor="middle" x="377.93" y="-318.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ErrorHandling.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M796.72,-263.46C697.93,-272.91 668.34,-234.44 573.45,-263.46"/>
+</g>
+<!-- sourcefile~graphnode.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_node7" class="node">
+<title>sourcefile~graphnode.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~EfferentGraph_node7"><a xlink:href="../sourcefile/graphnode.f90.html" xlink:title="GraphNode.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="619.83,-374.6 525.06,-374.6 525.06,-350.33 619.83,-350.33 619.83,-374.6"/>
+<text xml:space="preserve" text-anchor="middle" x="572.45" y="-358.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GraphNode.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~graphnode.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~graphnode.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M998.35,-216.95C988.2,-245.36 959.11,-314.56 908.1,-343.46 821.77,-392.38 701.98,-384.56 631.6,-373.89"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="632.24,-370.45 621.81,-372.33 631.14,-377.36 632.24,-370.45"/>
+</g>
+<!-- sourcefile~nodeid.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_node8" class="node">
+<title>sourcefile~nodeid.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~EfferentGraph_node8"><a xlink:href="../sourcefile/nodeid.f90.html" xlink:title="NodeId.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="71.52,-234.6 0,-234.6 0,-210.33 71.52,-210.33 71.52,-234.6"/>
+<text xml:space="preserve" text-anchor="middle" x="35.76" y="-218.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">NodeId.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~nodeid.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~nodeid.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M994.2,-191.85C979.46,-170.42 946.61,-126.97 908.1,-103.46 776.12,-22.92 727.93,-2.12 573.45,-8.46"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M571.45,-8.46C450.12,-0.5 415.04,10.47 298.29,-23.46 243.3,-39.45 238.1,-62.91 185.91,-86.46"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M183.91,-86.46C151.95,-100.7 135.68,-84.7 107.52,-105.46 75.23,-129.27 54.74,-172.63 44.54,-199.36"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="41.31,-197.99 41.19,-208.59 47.89,-200.37 41.31,-197.99"/>
+</g>
+<!-- sourcefile~nodeidgraphnodemap.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_node9" class="node">
+<title>sourcefile~nodeidgraphnodemap.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~EfferentGraph_node9"><a xlink:href="../sourcefile/nodeidgraphnodemap.f90.html" xlink:title="NodeIdGraphNodeMap.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="875.1,-334.6 720.33,-334.6 720.33,-310.33 875.1,-310.33 875.1,-334.6"/>
+<text xml:space="preserve" text-anchor="middle" x="797.72" y="-318.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">NodeIdGraphNodeMap.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~nodeidgraphnodemap.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~nodeidgraphnodemap.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M988.94,-216.85C971.32,-232.49 939.12,-259.52 908.1,-277.46 888.9,-288.57 866.43,-298.31 846.87,-305.87"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="845.88,-302.5 837.76,-309.3 848.35,-309.05 845.88,-302.5"/>
+</g>
+<!-- sourcefile~portbindingtable.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_node10" class="node">
+<title>sourcefile~portbindingtable.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~EfferentGraph_node10"><a xlink:href="../sourcefile/portbindingtable.f90.html" xlink:title="PortBindingTable.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="859.35,-136.6 736.08,-136.6 736.08,-112.33 859.35,-112.33 859.35,-136.6"/>
+<text xml:space="preserve" text-anchor="middle" x="797.72" y="-120.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">PortBindingTable.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~portbindingtable.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~portbindingtable.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M984.12,-191.83C965.66,-179.66 936.01,-161.5 908.1,-150.46 896.31,-145.8 883.45,-141.83 870.84,-138.5"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="871.87,-135.15 861.32,-136.11 870.16,-141.94 871.87,-135.15"/>
+</g>
+<!-- sourcefile~stateitemmembermap.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_node11" class="node">
+<title>sourcefile~stateitemmembermap.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~EfferentGraph_node11"><a xlink:href="../sourcefile/stateitemmembermap.f90.html" xlink:title="StateItemMemberMap.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="454.19,-56.6 301.67,-56.6 301.67,-32.33 454.19,-32.33 454.19,-56.6"/>
+<text xml:space="preserve" text-anchor="middle" x="377.93" y="-40.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StateItemMemberMap.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~stateitemmembermap.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge10" class="edge">
+<title>sourcefile~hierarchygraph.f90&#45;&gt;sourcefile~stateitemmembermap.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M571.45,-8.46C525.53,-10.35 474.43,-20.28 436.42,-29.23"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="435.94,-25.75 427.04,-31.49 437.58,-32.55 435.94,-25.75"/>
+</g>
+<!-- sourcefile~dependencynetwork.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge11" class="edge">
+<title>sourcefile~dependencynetwork.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M519.49,-235.98C510.38,-239.49 501.34,-243.92 493.56,-249.46 472.14,-264.75 479,-281.21 457.56,-296.46 452.85,-299.82 447.67,-302.76 442.3,-305.33"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="440.99,-302.09 433.19,-309.25 443.76,-308.52 440.99,-302.09"/>
+</g>
+<!-- sourcefile~dependencynetwork.f90&#45;&gt;sourcefile~nodeid.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge12" class="edge">
+<title>sourcefile~dependencynetwork.f90&#45;&gt;sourcefile~nodeid.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M499.74,-216.57C422.36,-209.84 295.49,-200.82 185.9,-202.46"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M183.91,-202.46C149.88,-202.72 111.83,-208.03 82.95,-213.11"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="82.66,-209.6 73.45,-214.84 83.91,-216.49 82.66,-209.6"/>
+</g>
+<!-- sourcefile~nodeid_nodeidset_map.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_node13" class="node">
+<title>sourcefile~nodeid_nodeidset_map.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~EfferentGraph_node13"><a xlink:href="../sourcefile/nodeid_nodeidset_map.f90.html" xlink:title="NodeId_NodeIdSet_Map.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="457.56,-254.6 298.29,-254.6 298.29,-230.33 457.56,-230.33 457.56,-254.6"/>
+<text xml:space="preserve" text-anchor="middle" x="377.93" y="-238.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">NodeId_NodeIdSet_Map.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~dependencynetwork.f90&#45;&gt;sourcefile~nodeid_nodeidset_map.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge13" class="edge">
+<title>sourcefile~dependencynetwork.f90&#45;&gt;sourcefile~nodeid_nodeidset_map.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M499.48,-230.57C489.63,-231.54 479.41,-232.55 469.28,-233.55"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="469.02,-230.06 459.41,-234.52 469.7,-237.02 469.02,-230.06"/>
+</g>
+<!-- sourcefile~nodeidset.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_node14" class="node">
+<title>sourcefile~nodeidset.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~EfferentGraph_node14"><a xlink:href="../sourcefile/nodeidset.f90.html" xlink:title="NodeIdSet.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="229.29,-254.6 140.52,-254.6 140.52,-230.33 229.29,-230.33 229.29,-254.6"/>
+<text xml:space="preserve" text-anchor="middle" x="184.91" y="-238.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">NodeIdSet.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~dependencynetwork.f90&#45;&gt;sourcefile~nodeidset.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge14" class="edge">
+<title>sourcefile~dependencynetwork.f90&#45;&gt;sourcefile~nodeidset.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M532.49,-236.05C520.01,-240.2 506.16,-244.91 493.56,-249.46 477.41,-255.29 474.43,-260.3 457.56,-263.46 383.34,-277.39 296.04,-265.78 240.84,-255.07"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="241.55,-251.64 231.05,-253.1 240.17,-258.5 241.55,-251.64"/>
+</g>
+<!-- sourcefile~dependencynetworkidnetworkmap.f90&#45;&gt;sourcefile~dependencynetwork.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge15" class="edge">
+<title>sourcefile~dependencynetworkidnetworkmap.f90&#45;&gt;sourcefile~dependencynetwork.f90</title>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M687.04,-213.8C676.71,-214.68 666.35,-215.56 656.32,-216.41"/>
+<polygon fill="#aaff00" stroke="#aaff00" points="656.34,-212.9 646.67,-217.23 656.93,-219.87 656.34,-212.9"/>
+</g>
+<!-- sourcefile~dependencynetworkidnetworkmap.f90&#45;&gt;sourcefile~dependencynetworkid.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge16" class="edge">
+<title>sourcefile~dependencynetworkidnetworkmap.f90&#45;&gt;sourcefile~dependencynetworkid.f90</title>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M747.92,-191.86C702.96,-181.17 634.23,-167.16 573.45,-164.46"/>
+</g>
+<!-- sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_node12" class="node">
+<title>sourcefile~mapl_throw.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~EfferentGraph_node12"><a xlink:href="../sourcefile/mapl_throw.f90.html" xlink:title="MAPL_Throw.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="234.54,-334.6 135.27,-334.6 135.27,-310.33 234.54,-310.33 234.54,-334.6"/>
+<text xml:space="preserve" text-anchor="middle" x="184.91" y="-318.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Throw.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge17" class="edge">
+<title>sourcefile~errorhandling.f90&#45;&gt;sourcefile~mapl_throw.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M323.46,-322.46C299.45,-322.46 271.01,-322.46 246.24,-322.46"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="246.29,-318.96 236.29,-322.46 246.29,-325.96 246.29,-318.96"/>
+</g>
+<!-- sourcefile~graphnode.f90&#45;&gt;sourcefile~nodeid.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge18" class="edge">
+<title>sourcefile~graphnode.f90&#45;&gt;sourcefile~nodeid.f90</title>
+<path fill="none" stroke="#00ffa9" stroke-dasharray="5,2" d="M524.73,-361.13C485.72,-360.33 428.66,-359.91 378.93,-362.46"/>
+</g>
+<!-- sourcefile~nodeidgraphnodemap.f90&#45;&gt;sourcefile~graphnode.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge19" class="edge">
+<title>sourcefile~nodeidgraphnodemap.f90&#45;&gt;sourcefile~graphnode.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M726.38,-335.07C695.8,-340.54 660.4,-346.88 631.37,-352.09"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="630.89,-348.62 621.66,-353.83 632.12,-355.51 630.89,-348.62"/>
+</g>
+<!-- sourcefile~nodeidgraphnodemap.f90&#45;&gt;sourcefile~nodeid.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge20" class="edge">
+<title>sourcefile~nodeidgraphnodemap.f90&#45;&gt;sourcefile~nodeid.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M719.86,-324.76C658.44,-327.21 570.24,-332.07 493.56,-341.46 442.15,-347.76 430.65,-359.81 378.93,-362.46"/>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M376.93,-362.46C256.97,-366.72 209.47,-406.82 107.52,-343.46 71.89,-321.32 52.16,-274.14 43.07,-245.68"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="46.46,-244.78 40.25,-236.2 39.75,-246.78 46.46,-244.78"/>
+</g>
+<!-- sourcefile~portbindingtable.f90&#45;&gt;sourcefile~dependencynetworkid.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge21" class="edge">
+<title>sourcefile~portbindingtable.f90&#45;&gt;sourcefile~dependencynetworkid.f90</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M376.93,-126.46C343.3,-124.73 306.3,-124.37 273.89,-124.57"/>
+<polygon fill="#aa00ff" stroke="#aa00ff" points="274.12,-121.06 264.15,-124.65 274.17,-128.06 274.12,-121.06"/>
+</g>
+<!-- sourcefile~portbindingtable.f90&#45;&gt;sourcefile~errorhandling.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge22" class="edge">
+<title>sourcefile~portbindingtable.f90&#45;&gt;sourcefile~errorhandling.f90</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M762.85,-137.03C739.55,-146.95 709.02,-162.59 687.33,-183.46 664.65,-205.29 676.61,-225.7 651.33,-244.46 622.72,-265.7 607.52,-253.04 573.45,-263.46"/>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M571.45,-263.46C523.83,-278.03 469.6,-294.65 430.86,-306.53"/>
+<polygon fill="#aa00ff" stroke="#aa00ff" points="429.84,-303.18 421.3,-309.46 431.89,-309.88 429.84,-303.18"/>
+</g>
+<!-- sourcefile~portbindingtable.f90&#45;&gt;sourcefile~nodeid.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge23" class="edge">
+<title>sourcefile~portbindingtable.f90&#45;&gt;sourcefile~nodeid.f90</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M571.45,-126.46C485.97,-122.46 464.38,-130.88 378.93,-126.46"/>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M376.93,-126.46C366.1,-125.9 195.79,-82 185.91,-86.46"/>
+</g>
+<!-- sourcefile~portbindingtable.f90&#45;&gt;sourcefile~stateitemmembermap.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge26" class="edge">
+<title>sourcefile~portbindingtable.f90&#45;&gt;sourcefile~stateitemmembermap.f90</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M772.53,-111.93C744.28,-97.95 695.74,-75.92 651.33,-65.46 590.34,-51.1 519.75,-45.97 465.72,-44.37"/>
+<polygon fill="#aa00ff" stroke="#aa00ff" points="466.05,-40.88 455.96,-44.12 465.87,-47.87 466.05,-40.88"/>
+</g>
+<!-- sourcefile~portbindingkey.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_node15" class="node">
+<title>sourcefile~portbindingkey.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~EfferentGraph_node15"><a xlink:href="../sourcefile/portbindingkey.f90.html" xlink:title="PortBindingKey.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="434.31,-98.6 321.54,-98.6 321.54,-74.33 434.31,-74.33 434.31,-98.6"/>
+<text xml:space="preserve" text-anchor="middle" x="377.93" y="-82.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">PortBindingKey.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~portbindingtable.f90&#45;&gt;sourcefile~portbindingkey.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge24" class="edge">
+<title>sourcefile~portbindingtable.f90&#45;&gt;sourcefile~portbindingkey.f90</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M736.03,-126.83C691.11,-128.14 628.43,-129.04 573.45,-126.46"/>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M571.45,-126.46C523.34,-124.21 469.79,-112.29 431.4,-102.05"/>
+<polygon fill="#aa00ff" stroke="#aa00ff" points="432.53,-98.73 421.96,-99.47 430.68,-105.48 432.53,-98.73"/>
+</g>
+<!-- sourcefile~portbindingkeyportmap.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_node16" class="node">
+<title>sourcefile~portbindingkeyportmap.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~EfferentGraph_node16"><a xlink:href="../sourcefile/portbindingkeyportmap.f90.html" xlink:title="PortBindingKeyPortMap.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="651.33,-98.6 493.56,-98.6 493.56,-74.33 651.33,-74.33 651.33,-98.6"/>
+<text xml:space="preserve" text-anchor="middle" x="572.45" y="-82.86" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">PortBindingKeyPortMap.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~portbindingtable.f90&#45;&gt;sourcefile~portbindingkeyportmap.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge25" class="edge">
+<title>sourcefile~portbindingtable.f90&#45;&gt;sourcefile~portbindingkeyportmap.f90</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M735.71,-114.08C711.97,-110.04 684.37,-105.34 658.73,-100.98"/>
+<polygon fill="#aa00ff" stroke="#aa00ff" points="659.44,-97.55 648.99,-99.32 658.26,-104.45 659.44,-97.55"/>
+</g>
+<!-- sourcefile~stateitemmembermap.f90&#45;&gt;sourcefile~nodeid.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge27" class="edge">
+<title>sourcefile~stateitemmembermap.f90&#45;&gt;sourcefile~nodeid.f90</title>
+<path fill="none" stroke="#ff00aa" stroke-dasharray="5,2" d="M301.62,-53.63C265.5,-59.86 222.27,-70.06 185.91,-86.46"/>
+</g>
+<!-- sourcefile~nodeid_nodeidset_map.f90&#45;&gt;sourcefile~nodeid.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge28" class="edge">
+<title>sourcefile~nodeid_nodeidset_map.f90&#45;&gt;sourcefile~nodeid.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M340.77,-229.91C302.7,-217.88 240.79,-201.64 185.91,-202.46"/>
+</g>
+<!-- sourcefile~nodeid_nodeidset_map.f90&#45;&gt;sourcefile~nodeidset.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge29" class="edge">
+<title>sourcefile~nodeid_nodeidset_map.f90&#45;&gt;sourcefile~nodeidset.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M297.85,-242.46C278.74,-242.46 258.72,-242.46 240.98,-242.46"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="241.2,-238.96 231.2,-242.46 241.2,-245.96 241.2,-238.96"/>
+</g>
+<!-- sourcefile~nodeidset.f90&#45;&gt;sourcefile~nodeid.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge30" class="edge">
+<title>sourcefile~nodeidset.f90&#45;&gt;sourcefile~nodeid.f90</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M140.16,-236.52C122.14,-234.07 101.25,-231.23 82.99,-228.75"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="83.59,-225.3 73.21,-227.42 82.65,-232.23 83.59,-225.3"/>
+</g>
+<!-- sourcefile~portbindingkey.f90&#45;&gt;sourcefile~dependencynetworkid.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge31" class="edge">
+<title>sourcefile~portbindingkey.f90&#45;&gt;sourcefile~dependencynetworkid.f90</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M321.16,-98.14C301.18,-102.32 278.39,-107.1 257.27,-111.52"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="256.63,-108.08 247.56,-113.55 258.06,-114.93 256.63,-108.08"/>
+</g>
+<!-- sourcefile~portbindingkey.f90&#45;&gt;sourcefile~nodeid.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge32" class="edge">
+<title>sourcefile~portbindingkey.f90&#45;&gt;sourcefile~nodeid.f90</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M321.3,-74.76C281.77,-69.17 228.38,-67.3 185.91,-86.46"/>
+</g>
+<!-- sourcefile~portbindingkeyportmap.f90&#45;&gt;sourcefile~stateitemmembermap.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge34" class="edge">
+<title>sourcefile~portbindingkeyportmap.f90&#45;&gt;sourcefile~stateitemmembermap.f90</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M513.68,-73.86C492.93,-69.34 469.33,-64.19 447.73,-59.47"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="448.64,-56.09 438.13,-57.38 447.15,-62.93 448.64,-56.09"/>
+</g>
+<!-- sourcefile~portbindingkeyportmap.f90&#45;&gt;sourcefile~portbindingkey.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~EfferentGraph_edge33" class="edge">
+<title>sourcefile~portbindingkeyportmap.f90&#45;&gt;sourcefile~portbindingkey.f90</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M493.14,-86.46C477.54,-86.46 461.3,-86.46 446.11,-86.46"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="446.25,-82.96 436.25,-86.46 446.25,-89.96 446.25,-82.96"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefilehierarchyresourcesf90EfferentGraph = svgPanZoom('#sourcefilehierarchyresourcesf90EfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#EfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="EfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="200pt" height="32pt"
+ viewBox="0.00 0.00 200.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28.27)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 195.52,-28.27 195.52,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="69.27,-24.27 0,-24.27 0,0 69.27,0 69.27,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="34.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="191.52,-24.27 87.75,-24.27 87.75,0 191.52,0 191.52,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="139.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Files dependent on this one</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (0)
+ -->
+<!-- Title: sourcefile~~hierarchyresources.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilehierarchyresourcesf90AfferentGraph" width="641pt" height="255pt"
+ viewBox="0.00 0.00 641.00 255.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph" class="graph" transform="scale(0.622723 0.622723) rotate(0) translate(4 406.27)">
+<title>sourcefile~~hierarchyresources.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-406.27 1025.35,-406.27 1025.35,4 -4,4"/>
+<!-- sourcefile~hierarchyresources.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~hierarchyresources.f90</title>
+<polygon fill="none" stroke="black" points="139.77,-214.27 0,-214.27 0,-190 139.77,-190 139.77,-214.27"/>
+<text xml:space="preserve" text-anchor="middle" x="69.89" y="-198.53" font-family="Helvetica,sans-Serif" font-size="10.50">HierarchyResources.F90</text>
+</g>
+<!-- sourcefile~add_child_by_spec.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~add_child_by_spec.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~AfferentGraph_node2"><a xlink:href="../sourcefile/add_child_by_spec.f90.html" xlink:title="add_child_by_spec.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="731.58,-255.27 598.56,-255.27 598.56,-231 731.58,-231 731.58,-255.27"/>
+<text xml:space="preserve" text-anchor="middle" x="665.07" y="-239.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">add_child_by_spec.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~add_child_by_spec.f90&#45;&gt;sourcefile~hierarchyresources.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~add_child_by_spec.f90&#45;&gt;sourcefile~hierarchyresources.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M598.17,-241.25C568.2,-240.87 532.31,-241.1 500.05,-243.13"/>
+</g>
+<!-- sourcefile~hierarchyregistry.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~hierarchyregistry.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~AfferentGraph_node5"><a xlink:href="../sourcefile/hierarchyregistry.f90.html" xlink:title="HierarchyRegistry.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="562.56,-214.27 435.54,-214.27 435.54,-190 562.56,-190 562.56,-214.27"/>
+<text xml:space="preserve" text-anchor="middle" x="499.05" y="-198.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">HierarchyRegistry.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~add_child_by_spec.f90&#45;&gt;sourcefile~hierarchyregistry.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~add_child_by_spec.f90&#45;&gt;sourcefile~hierarchyregistry.f90</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M613.97,-230.61C597.43,-226.48 578.84,-221.83 561.55,-217.51"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="562.43,-214.12 551.88,-215.09 560.73,-220.91 562.43,-214.12"/>
+</g>
+<!-- sourcefile~componentgraph.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~componentgraph.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~AfferentGraph_node3"><a xlink:href="../sourcefile/componentgraph.f90.html" xlink:title="ComponentGraph.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="729.71,-213.27 600.44,-213.27 600.44,-189 729.71,-189 729.71,-213.27"/>
+<text xml:space="preserve" text-anchor="middle" x="665.07" y="-197.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ComponentGraph.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~componentgraph.f90&#45;&gt;sourcefile~hierarchyresources.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~componentgraph.f90&#45;&gt;sourcefile~hierarchyresources.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M622.45,-213.69C582.09,-225.52 523.59,-241.65 500.05,-243.13"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M498.05,-243.13C405.17,-248.99 381.63,-247.29 288.66,-243.13"/>
+</g>
+<!-- sourcefile~componentgraph.f90&#45;&gt;sourcefile~hierarchyregistry.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~componentgraph.f90&#45;&gt;sourcefile~hierarchyregistry.f90</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M600.19,-201.52C591.68,-201.58 582.9,-201.63 574.24,-201.68"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="574.44,-198.18 564.46,-201.74 574.49,-205.18 574.44,-198.18"/>
+</g>
+<!-- sourcefile~hierarchyidhierarchyresourcesmap.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~hierarchyidhierarchyresourcesmap.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~AfferentGraph_node4"><a xlink:href="../sourcefile/hierarchyidhierarchyresourcesmap.f90.html" xlink:title="HierarchyIdHierarchyResourcesMap.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="399.54,-214.27 175.77,-214.27 175.77,-190 399.54,-190 399.54,-214.27"/>
+<text xml:space="preserve" text-anchor="middle" x="287.66" y="-198.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">HierarchyIdHierarchyResourcesMap.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~hierarchyidhierarchyresourcesmap.f90&#45;&gt;sourcefile~hierarchyresources.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~hierarchyidhierarchyresourcesmap.f90&#45;&gt;sourcefile~hierarchyresources.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M175.29,-202.13C167.26,-202.13 159.26,-202.13 151.46,-202.13"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="151.71,-198.64 141.71,-202.14 151.71,-205.64 151.71,-198.64"/>
+</g>
+<!-- sourcefile~hierarchyregistry.f90&#45;&gt;sourcefile~hierarchyresources.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~hierarchyregistry.f90&#45;&gt;sourcefile~hierarchyresources.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M461.76,-214.68C420.31,-227.72 350.27,-245.89 288.66,-243.13"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M286.66,-243.13C231.93,-240.69 170.68,-228.07 127.45,-217.48"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="128.34,-214.09 117.78,-215.06 126.64,-220.88 128.34,-214.09"/>
+</g>
+<!-- sourcefile~hierarchyregistry.f90&#45;&gt;sourcefile~hierarchyidhierarchyresourcesmap.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~hierarchyregistry.f90&#45;&gt;sourcefile~hierarchyidhierarchyresourcesmap.f90</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M435.22,-202.13C427.52,-202.13 419.46,-202.13 411.24,-202.13"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="411.48,-198.64 401.48,-202.14 411.48,-205.64 411.48,-198.64"/>
+</g>
+<!-- sourcefile~init_meta.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~init_meta.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~AfferentGraph_node6"><a xlink:href="../sourcefile/init_meta.f90.html" xlink:title="init_meta.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="706.83,-171.27 623.31,-171.27 623.31,-147 706.83,-147 706.83,-171.27"/>
+<text xml:space="preserve" text-anchor="middle" x="665.07" y="-155.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">init_meta.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~init_meta.f90&#45;&gt;sourcefile~hierarchyresources.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~init_meta.f90&#45;&gt;sourcefile~hierarchyresources.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M623.06,-158.88C538.89,-158.81 340.66,-161.03 175.77,-181.13 163.08,-182.68 149.63,-184.92 136.75,-187.35"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="136.23,-183.89 127.09,-189.25 137.58,-190.76 136.23,-183.89"/>
+</g>
+<!-- sourcefile~init_meta.f90&#45;&gt;sourcefile~hierarchyregistry.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~init_meta.f90&#45;&gt;sourcefile~hierarchyregistry.f90</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M623.1,-169.87C603.71,-174.96 580.19,-181.12 558.93,-186.7"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="558.31,-183.24 549.52,-189.17 560.08,-190.02 558.31,-183.24"/>
+</g>
+<!-- sourcefile~componentgraph_demanddrivenupdate.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~componentgraph_demanddrivenupdate.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~AfferentGraph_node7"><a xlink:href="../sourcefile/componentgraph_demanddrivenupdate.f90.html" xlink:title="ComponentGraph_DemandDrivenUpdate.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1021.35,-402.27 767.58,-402.27 767.58,-378 1021.35,-378 1021.35,-402.27"/>
+<text xml:space="preserve" text-anchor="middle" x="894.47" y="-386.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ComponentGraph_DemandDrivenUpdate.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~componentgraph_demanddrivenupdate.f90&#45;&gt;sourcefile~componentgraph.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~componentgraph_demanddrivenupdate.f90&#45;&gt;sourcefile~componentgraph.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M778.61,-377.54C774.69,-375.09 770.99,-372.3 767.58,-369.13 718.27,-323.39 777.45,-271.33 731.58,-222.13 731.1,-221.62 730.6,-221.11 730.09,-220.62"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="732.23,-217.85 722.15,-214.58 727.99,-223.42 732.23,-217.85"/>
+</g>
+<!-- sourcefile~compositestatematerialization.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~compositestatematerialization.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~AfferentGraph_node8"><a xlink:href="../sourcefile/compositestatematerialization.f90.html" xlink:title="CompositeStateMaterialization.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="993.23,-360.27 795.71,-360.27 795.71,-336 993.23,-336 993.23,-360.27"/>
+<text xml:space="preserve" text-anchor="middle" x="894.47" y="-344.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">CompositeStateMaterialization.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~compositestatematerialization.f90&#45;&gt;sourcefile~componentgraph.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~compositestatematerialization.f90&#45;&gt;sourcefile~componentgraph.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M795.27,-342.69C785.19,-339.05 775.69,-334.01 767.58,-327.13 729.94,-295.24 766.81,-256.67 731.58,-222.13 730.83,-221.4 730.06,-220.7 729.27,-220.02"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="731.46,-217.28 721.24,-214.48 727.48,-223.04 731.46,-217.28"/>
+</g>
+<!-- sourcefile~extensionmaterialization.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~extensionmaterialization.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~AfferentGraph_node9"><a xlink:href="../sourcefile/extensionmaterialization.f90.html" xlink:title="ExtensionMaterialization.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="976.73,-318.27 812.21,-318.27 812.21,-294 976.73,-294 976.73,-318.27"/>
+<text xml:space="preserve" text-anchor="middle" x="894.47" y="-302.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ExtensionMaterialization.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extensionmaterialization.f90&#45;&gt;sourcefile~componentgraph.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~extensionmaterialization.f90&#45;&gt;sourcefile~componentgraph.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M811.81,-303.25C796.14,-299.83 780.58,-294.19 767.58,-285.13 741.12,-266.7 756.64,-242.44 731.58,-222.13 730.3,-221.1 728.98,-220.12 727.61,-219.18"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="729.76,-216.39 719.35,-214.44 726.28,-222.45 729.76,-216.39"/>
+</g>
+<!-- sourcefile~extensionresolution.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~extensionresolution.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~AfferentGraph_node10"><a xlink:href="../sourcefile/extensionresolution.f90.html" xlink:title="ExtensionResolution.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="965.1,-276.27 823.83,-276.27 823.83,-252 965.1,-252 965.1,-276.27"/>
+<text xml:space="preserve" text-anchor="middle" x="894.47" y="-260.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ExtensionResolution.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~extensionresolution.f90&#45;&gt;sourcefile~componentgraph.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~extensionresolution.f90&#45;&gt;sourcefile~componentgraph.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M823.38,-257.05C804.89,-253.95 785.19,-249.5 767.58,-243.13 750.16,-236.84 748.5,-229.67 731.58,-222.13 728.04,-220.56 724.34,-219.04 720.58,-217.6"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="721.93,-214.36 711.33,-214.24 719.54,-220.94 721.93,-214.36"/>
+</g>
+<!-- sourcefile~graph_diagnostic.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~graph_diagnostic.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~AfferentGraph_node11"><a xlink:href="../sourcefile/graph_diagnostic.f90.html" xlink:title="graph_diagnostic.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="957.23,-234.27 831.71,-234.27 831.71,-210 957.23,-210 957.23,-234.27"/>
+<text xml:space="preserve" text-anchor="middle" x="894.47" y="-218.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">graph_diagnostic.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~graph_diagnostic.f90&#45;&gt;sourcefile~componentgraph.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~graph_diagnostic.f90&#45;&gt;sourcefile~componentgraph.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M831.33,-216.4C803.58,-213.83 770.64,-210.79 741.5,-208.1"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="741.9,-204.62 731.62,-207.19 741.25,-211.59 741.9,-204.62"/>
+</g>
+<!-- sourcefile~graphbuilder.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~graphbuilder.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~AfferentGraph_node12"><a xlink:href="../sourcefile/graphbuilder.f90.html" xlink:title="GraphBuilder.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="946.35,-192.27 842.58,-192.27 842.58,-168 946.35,-168 946.35,-192.27"/>
+<text xml:space="preserve" text-anchor="middle" x="894.47" y="-176.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GraphBuilder.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~graphbuilder.f90&#45;&gt;sourcefile~componentgraph.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~graphbuilder.f90&#45;&gt;sourcefile~componentgraph.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M842.15,-184.87C812.26,-187.63 774.03,-191.16 740.84,-194.23"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="740.94,-190.71 731.3,-195.11 741.58,-197.68 740.94,-190.71"/>
+</g>
+<!-- sourcefile~graphexport.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~graphexport.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~AfferentGraph_node13"><a xlink:href="../sourcefile/graphexport.f90.html" xlink:title="GraphExport.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="945.23,-150.27 843.71,-150.27 843.71,-126 945.23,-126 945.23,-150.27"/>
+<text xml:space="preserve" text-anchor="middle" x="894.47" y="-134.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GraphExport.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~graphexport.f90&#45;&gt;sourcefile~componentgraph.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~graphexport.f90&#45;&gt;sourcefile~componentgraph.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M843.39,-142.27C819.87,-145.27 791.75,-150.4 767.58,-159.13 750.16,-165.43 748.5,-172.6 731.58,-180.13 728.04,-181.71 724.34,-183.23 720.58,-184.67"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="719.54,-181.33 711.33,-188.03 721.93,-187.91 719.54,-181.33"/>
+</g>
+<!-- sourcefile~methodinvocation.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_node14" class="node">
+<title>sourcefile~methodinvocation.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~AfferentGraph_node14"><a xlink:href="../sourcefile/methodinvocation.f90.html" xlink:title="MethodInvocation.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="959.1,-108.27 829.83,-108.27 829.83,-84 959.1,-84 959.1,-108.27"/>
+<text xml:space="preserve" text-anchor="middle" x="894.47" y="-92.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MethodInvocation.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~methodinvocation.f90&#45;&gt;sourcefile~componentgraph.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~methodinvocation.f90&#45;&gt;sourcefile~componentgraph.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M829.48,-96.03C808.25,-98.68 785.49,-104.66 767.58,-117.13 741.12,-135.57 756.64,-159.83 731.58,-180.13 730.3,-181.17 728.98,-182.15 727.61,-183.09"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="726.28,-179.82 719.35,-187.83 729.76,-185.88 726.28,-179.82"/>
+</g>
+<!-- sourcefile~outermetacomponent.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_node15" class="node">
+<title>sourcefile~outermetacomponent.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~AfferentGraph_node15"><a xlink:href="../sourcefile/outermetacomponent.f90.html" xlink:title="OuterMetaComponent.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="970.73,-66.27 818.21,-66.27 818.21,-42 970.73,-42 970.73,-66.27"/>
+<text xml:space="preserve" text-anchor="middle" x="894.47" y="-50.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">OuterMetaComponent.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~outermetacomponent.f90&#45;&gt;sourcefile~componentgraph.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~outermetacomponent.f90&#45;&gt;sourcefile~componentgraph.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M817.92,-53.66C799.78,-56.86 781.61,-63.25 767.58,-75.13 729.94,-107.03 766.81,-145.6 731.58,-180.13 730.83,-180.87 730.06,-181.57 729.27,-182.25"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="727.48,-179.23 721.24,-187.79 731.46,-184.99 727.48,-179.23"/>
+</g>
+<!-- sourcefile~setsharedcharacteristic.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_node16" class="node">
+<title>sourcefile~setsharedcharacteristic.f90</title>
+<g id="a_sourcefile~~hierarchyresources.f90~~AfferentGraph_node16"><a xlink:href="../sourcefile/setsharedcharacteristic.f90.html" xlink:title="SetSharedCharacteristic.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="975.98,-24.27 812.96,-24.27 812.96,0 975.98,0 975.98,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="894.47" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SetSharedCharacteristic.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~setsharedcharacteristic.f90&#45;&gt;sourcefile~componentgraph.f90 -->
+<g id="sourcefile~~hierarchyresources.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~setsharedcharacteristic.f90&#45;&gt;sourcefile~componentgraph.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M812.59,-11.69C796.03,-15.18 779.92,-21.68 767.58,-33.13 718.27,-78.88 777.45,-130.94 731.58,-180.13 731.1,-180.65 730.6,-181.16 730.09,-181.65"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="727.99,-178.85 722.15,-187.69 732.23,-184.42 727.99,-178.85"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefilehierarchyresourcesf90AfferentGraph = svgPanZoom('#sourcefilehierarchyresourcesf90AfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#AfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="AfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="200pt" height="32pt"
+ viewBox="0.00 0.00 200.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28.27)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 195.52,-28.27 195.52,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="69.27,-24.27 0,-24.27 0,0 69.27,0 69.27,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="34.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="191.52,-24.27 87.75,-24.27 87.75,0 191.52,0 191.52,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="139.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+<br>
+      <section>
+        <h2><span class="anchor" id="src"></span>Source Code</h2>
+        <div class="hl codehilite"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="cp">#include "MAPL.h"</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a>
+<a id="ln-3" name="ln-3" href="#ln-3"></a><span class="c">!------------------------------------------------------------------------------</span>
+<a id="ln-4" name="ln-4" href="#ln-4"></a><span class="c">! HierarchyResources: container of hierarchy-wide shared resources, held one</span>
+<a id="ln-5" name="ln-5" href="#ln-5"></a><span class="c">! per hierarchy in the private HierarchyId-keyed registry</span>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="c">! (mapl_HierarchyRegistry_mod). Holds one HierarchyGraph and one</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="c">! component_names set, and is shaped so future hierarchy-wide resources (e.g.</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a><span class="c">! a geometry registry) can be added without another threading mechanism.</span>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="c">!------------------------------------------------------------------------------</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="k">module </span><span class="n">mapl_HierarchyResources_mod</span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a><span class="w">   </span><span class="k">use </span><span class="n">mapl_HierarchyGraph_mod</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">HierarchyGraph</span>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="w">   </span><span class="k">use </span><span class="n">gFTL2_StringSet</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">StringSet</span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a><span class="w">   </span><span class="k">implicit none</span><span class="p">(</span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">external</span><span class="p">)</span>
+<a id="ln-14" name="ln-14" href="#ln-14"></a><span class="w">   </span><span class="k">private</span>
+<a id="ln-15" name="ln-15" href="#ln-15"></a>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="k">   public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">HierarchyResources</span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a>
+<a id="ln-18" name="ln-18" href="#ln-18"></a><span class="w">   </span><span class="k">type</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">HierarchyResources</span>
+<a id="ln-19" name="ln-19" href="#ln-19"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">HierarchyGraph</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">graph</span>
+<a id="ln-20" name="ln-20" href="#ln-20"></a><span class="w">      </span><span class="c">! Every component name added anywhere in this hierarchy, consulted and</span>
+<a id="ln-21" name="ln-21" href="#ln-21"></a><span class="w">      </span><span class="c">! inserted into at child-add time so a name collision anywhere in the</span>
+<a id="ln-22" name="ln-22" href="#ln-22"></a><span class="w">      </span><span class="c">! hierarchy, not only among a new child's siblings, is caught.</span>
+<a id="ln-23" name="ln-23" href="#ln-23"></a><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">StringSet</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">component_names</span>
+<a id="ln-24" name="ln-24" href="#ln-24"></a><span class="w">   </span><span class="k">end type </span><span class="n">HierarchyResources</span>
+<a id="ln-25" name="ln-25" href="#ln-25"></a>
+<a id="ln-26" name="ln-26" href="#ln-26"></a><span class="k">end module </span><span class="n">mapl_HierarchyResources_mod</span>
+</pre></div>
+
+      </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              MAPL
+ was developed by The MAPL Developers<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-11-12T20:01:17.285795+0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
