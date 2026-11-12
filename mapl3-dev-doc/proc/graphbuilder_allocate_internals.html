@@ -1,0 +1,959 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="MAPL is a foundation layer of the GEOS architecture, whose original purpose is to supplement the Earth System Modeling Framework (ESMF)">
+    <meta name="author" content="The MAPL Developers" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>graphbuilder_allocate_internals &ndash; MAPL</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">MAPL </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>graphbuilder_allocate_internals
+      <small>Module Subroutine</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.0% of total for procedures.">30 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/GraphBuilder_StatePopulation_smod.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/graphbuilder_statepopulation_smod.f90.html'>GraphBuilder_StatePopulation_smod.F90</a></li>
+                <li class="breadcrumb-item"><a href='../module/graphbuilder_statepopulation_smod.html'>GraphBuilder_StatePopulation_smod</a></li>
+            <li class="breadcrumb-item active" aria-current="page">graphbuilder_allocate_internals</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/graphbuilder_allocate_internals.html#src">graphbuilder_allocate_internals</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>module subroutine graphbuilder_allocate_internals(this, rc)  
+    <a href="../interface/graphbuilder_allocate_internals.html"><button type="button" class="btn btn-info depwarn">Interface &rarr;</button></a>
+</h2>
+    
+
+
+
+    <h3>Arguments</h3>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-this~9441"></span>
+              class(<a href='../type/outermetacomponent.html'>OuterMetaComponent</a>),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-rc~3256"></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>rc</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <br>
+    <div class="card">
+      <div class="card-header">
+  <h3 class="card-title">Calls</h3>
+      </div>
+      <div class="card-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (0)
+ -->
+<!-- Title: proc~~graphbuilder_allocate_internals~~CallsGraph Pages: 1 -->
+<svg id="procgraphbuilder_allocate_internalsCallsGraph" width="641pt" height="339pt"
+ viewBox="0.00 0.00 641.00 339.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph" class="graph" transform="scale(0.632568 0.632568) rotate(0) translate(4 532.27)">
+<title>proc~~graphbuilder_allocate_internals~~CallsGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-532.27 1009.33,-532.27 1009.33,4 -4,4"/>
+<!-- proc~graphbuilder_allocate_internals -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node1" class="node">
+<title>proc~graphbuilder_allocate_internals</title>
+<polygon fill="none" stroke="black" points="180.27,-292.27 0,-292.27 0,-268 180.27,-268 180.27,-292.27"/>
+<text xml:space="preserve" text-anchor="middle" x="90.13" y="-276.53" font-family="Helvetica,sans-Serif" font-size="10.50">graphbuilder_allocate_internals</text>
+</g>
+<!-- interface~get_component_graph -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node2" class="node">
+<title>interface~get_component_graph</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node2"><a xlink:href="../interface/get_component_graph.html" xlink:title="OuterMetaComponent%get_component_graph">
+<polygon fill="#a7506f" stroke="#a7506f" points="476.04,-527.27 216.27,-527.27 216.27,-503 476.04,-503 476.04,-527.27"/>
+<text xml:space="preserve" text-anchor="middle" x="346.15" y="-511.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">OuterMetaComponent%get_component_graph</text>
+</a>
+</g>
+</g>
+<!-- proc~graphbuilder_allocate_internals&#45;&gt;interface~get_component_graph -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge1" class="edge">
+<title>proc~graphbuilder_allocate_internals&#45;&gt;interface~get_component_graph</title>
+<path fill="none" stroke="#ff0000" d="M94.4,-292.53C104.91,-329.83 141.63,-441.59 216.27,-493.13 218.52,-494.69 220.84,-496.14 223.22,-497.5"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="221.46,-500.54 231.97,-501.92 224.62,-494.29 221.46,-500.54"/>
+</g>
+<!-- interface~get_component_spec -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node3" class="node">
+<title>interface~get_component_spec</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node3"><a xlink:href="../interface/get_component_spec.html" xlink:title="OuterMetaComponent%get_component_spec">
+<polygon fill="#a7506f" stroke="#a7506f" points="472.66,-484.27 219.64,-484.27 219.64,-460 472.66,-460 472.66,-484.27"/>
+<text xml:space="preserve" text-anchor="middle" x="346.15" y="-468.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">OuterMetaComponent%get_component_spec</text>
+</a>
+</g>
+</g>
+<!-- proc~graphbuilder_allocate_internals&#45;&gt;interface~get_component_spec -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge2" class="edge">
+<title>proc~graphbuilder_allocate_internals&#45;&gt;interface~get_component_spec</title>
+<path fill="none" stroke="#ff0000" d="M96.24,-292.52C110.14,-324.58 152.01,-410.5 216.27,-450.13 219.08,-451.87 221.98,-453.47 224.96,-454.96"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="223.42,-458.11 233.98,-458.97 226.26,-451.71 223.42,-458.11"/>
+</g>
+<!-- none~of~261 -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node4" class="node">
+<title>none~of~261</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node4"><a xlink:href="../type/variablespecvectoriterator.html#boundprocedure-of~261" xlink:title="VariableSpecVectorIterator%of">
+<polygon fill="#a7506f" stroke="#a7506f" points="433.66,-441.27 258.64,-441.27 258.64,-417 433.66,-417 433.66,-441.27"/>
+<text xml:space="preserve" text-anchor="middle" x="346.15" y="-425.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VariableSpecVectorIterator%of</text>
+</a>
+</g>
+</g>
+<!-- proc~graphbuilder_allocate_internals&#45;&gt;none~of~261 -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge3" class="edge">
+<title>proc~graphbuilder_allocate_internals&#45;&gt;none~of~261</title>
+<path fill="none" stroke="#ff0000" d="M99.48,-292.5C117.49,-318.13 162.74,-376.96 216.27,-405.13 225.94,-410.22 236.51,-414.25 247.31,-417.43"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="246.13,-420.74 256.7,-419.94 247.95,-413.97 246.13,-420.74"/>
+</g>
+<!-- proc~graph_get_resource_index -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node5" class="node">
+<title>proc~graph_get_resource_index</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node5"><a xlink:href="../proc/graph_get_resource_index.html" xlink:title="ComponentGraph%graph_get_resource_index">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="473.79,-396.27 218.52,-396.27 218.52,-372 473.79,-372 473.79,-396.27"/>
+<text xml:space="preserve" text-anchor="middle" x="346.15" y="-380.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ComponentGraph%graph_get_resource_index</text>
+</a>
+</g>
+</g>
+<!-- proc~graphbuilder_allocate_internals&#45;&gt;proc~graph_get_resource_index -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge4" class="edge">
+<title>proc~graphbuilder_allocate_internals&#45;&gt;proc~graph_get_resource_index</title>
+<path fill="none" stroke="#ff0000" d="M105.38,-292.59C127.48,-311.17 172.1,-345.82 216.27,-363.13 221.28,-365.1 226.48,-366.88 231.77,-368.5"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="230.73,-371.84 241.3,-371.17 232.62,-365.1 230.73,-371.84"/>
+</g>
+<!-- proc~graph_populates_user_states -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node6" class="node">
+<title>proc~graph_populates_user_states</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node6"><a xlink:href="../proc/graph_populates_user_states.html" xlink:title="graph_populates_user_states">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="429.16,-354.27 263.14,-354.27 263.14,-330 429.16,-330 429.16,-354.27"/>
+<text xml:space="preserve" text-anchor="middle" x="346.15" y="-338.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">graph_populates_user_states</text>
+</a>
+</g>
+</g>
+<!-- proc~graphbuilder_allocate_internals&#45;&gt;proc~graph_populates_user_states -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge5" class="edge">
+<title>proc~graphbuilder_allocate_internals&#45;&gt;proc~graph_populates_user_states</title>
+<path fill="none" stroke="#ff0000" d="M124.72,-292.71C149.68,-301.67 184.73,-313.45 216.27,-321.13 227.74,-323.93 239.87,-326.46 251.93,-328.71"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="251,-332.1 261.46,-330.43 252.24,-325.21 251,-332.1"/>
+</g>
+<!-- proc~item_key -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node7" class="node">
+<title>proc~item_key</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node7"><a xlink:href="../proc/item_key.html" xlink:title="item_key">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="375.91,-312.27 316.39,-312.27 316.39,-288 375.91,-288 375.91,-312.27"/>
+<text xml:space="preserve" text-anchor="middle" x="346.15" y="-296.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">item_key</text>
+</a>
+</g>
+</g>
+<!-- proc~graphbuilder_allocate_internals&#45;&gt;proc~item_key -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge6" class="edge">
+<title>proc~graphbuilder_allocate_internals&#45;&gt;proc~item_key</title>
+<path fill="none" stroke="#ff0000" d="M180.69,-287.19C223.11,-290.53 271.66,-294.35 304.95,-296.97"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="304.3,-300.43 314.54,-297.72 304.85,-293.45 304.3,-300.43"/>
+</g>
+<!-- proc~mapl_return -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node8" class="node">
+<title>proc~mapl_return</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node8"><a xlink:href="../proc/mapl_return.html" xlink:title="MAPL_Return">
+<polygon fill="#d9534f" stroke="#d9534f" points="715.18,-276.27 634.66,-276.27 634.66,-252 715.18,-252 715.18,-276.27"/>
+<text xml:space="preserve" text-anchor="middle" x="674.92" y="-260.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Return</text>
+</a>
+</g>
+</g>
+<!-- proc~graphbuilder_allocate_internals&#45;&gt;proc~mapl_return -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge7" class="edge">
+<title>proc~graphbuilder_allocate_internals&#45;&gt;proc~mapl_return</title>
+<path fill="none" stroke="#ff0000" d="M180.6,-277.68C304.32,-274.28 523.58,-268.26 622.72,-265.54"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="622.78,-269.04 632.68,-265.27 622.59,-262.04 622.78,-269.04"/>
+</g>
+<!-- proc~mapl_verify -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node9" class="node">
+<title>proc~mapl_verify</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node9"><a xlink:href="../proc/mapl_verify.html" xlink:title="MAPL_Verify">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="712.56,-234.27 637.29,-234.27 637.29,-210 712.56,-210 712.56,-234.27"/>
+<text xml:space="preserve" text-anchor="middle" x="674.92" y="-218.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_Verify</text>
+</a>
+</g>
+</g>
+<!-- proc~graphbuilder_allocate_internals&#45;&gt;proc~mapl_verify -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge8" class="edge">
+<title>proc~graphbuilder_allocate_internals&#45;&gt;proc~mapl_verify</title>
+<path fill="none" stroke="#ff0000" d="M180.66,-269.95C192.63,-268.64 204.75,-267.33 216.27,-266.13 365.3,-250.63 541.85,-234.21 625.43,-226.55"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="625.68,-230.04 635.32,-225.64 625.04,-223.07 625.68,-230.04"/>
+</g>
+<!-- proc~prepare_created_field -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node10" class="node">
+<title>proc~prepare_created_field</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node10"><a xlink:href="../proc/prepare_created_field.html" xlink:title="prepare_created_field">
+<polygon fill="#d9534f" stroke="#d9534f" points="409.66,-194.27 282.64,-194.27 282.64,-170 409.66,-170 409.66,-194.27"/>
+<text xml:space="preserve" text-anchor="middle" x="346.15" y="-178.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">prepare_created_field</text>
+</a>
+</g>
+</g>
+<!-- proc~graphbuilder_allocate_internals&#45;&gt;proc~prepare_created_field -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge9" class="edge">
+<title>proc~graphbuilder_allocate_internals&#45;&gt;proc~prepare_created_field</title>
+<path fill="none" stroke="#ff0000" d="M108.46,-267.72C131.82,-251.57 175.23,-223.61 216.27,-208.13 233.6,-201.6 252.9,-196.59 271.17,-192.81"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="271.77,-196.26 280.91,-190.89 270.42,-189.39 271.77,-196.26"/>
+</g>
+<!-- proc~vector_ftn_begin~20 -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node11" class="node">
+<title>proc~vector_ftn_begin~20</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node11"><a xlink:href="../proc/vector_ftn_begin~20.html" xlink:title="VariableSpecVector%vector_ftn_begin">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="452.79,-152.27 239.52,-152.27 239.52,-128 452.79,-128 452.79,-152.27"/>
+<text xml:space="preserve" text-anchor="middle" x="346.15" y="-136.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VariableSpecVector%vector_ftn_begin</text>
+</a>
+</g>
+</g>
+<!-- proc~graphbuilder_allocate_internals&#45;&gt;proc~vector_ftn_begin~20 -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge10" class="edge">
+<title>proc~graphbuilder_allocate_internals&#45;&gt;proc~vector_ftn_begin~20</title>
+<path fill="none" stroke="#ff0000" d="M100.15,-267.51C118.71,-242.57 163.91,-187.14 216.27,-161.13 220.21,-159.18 224.3,-157.4 228.48,-155.78"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="229.35,-159.18 237.63,-152.57 227.04,-152.57 229.35,-159.18"/>
+</g>
+<!-- proc~vector_ftn_end~20 -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node12" class="node">
+<title>proc~vector_ftn_end~20</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node12"><a xlink:href="../proc/vector_ftn_end~20.html" xlink:title="VariableSpecVector%vector_ftn_end">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="447.91,-110.27 244.39,-110.27 244.39,-86 447.91,-86 447.91,-110.27"/>
+<text xml:space="preserve" text-anchor="middle" x="346.15" y="-94.54" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VariableSpecVector%vector_ftn_end</text>
+</a>
+</g>
+</g>
+<!-- proc~graphbuilder_allocate_internals&#45;&gt;proc~vector_ftn_end~20 -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge11" class="edge">
+<title>proc~graphbuilder_allocate_internals&#45;&gt;proc~vector_ftn_end~20</title>
+<path fill="none" stroke="#ff0000" d="M96.63,-267.92C111.16,-237.14 153.87,-156.19 216.27,-119.14 221.63,-115.95 227.33,-113.21 233.23,-110.85"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="234.36,-114.17 242.6,-107.52 232.01,-107.57 234.36,-114.17"/>
+</g>
+<!-- proc~vector_iter_next~20 -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node13" class="node">
+<title>proc~vector_iter_next~20</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node13"><a xlink:href="../proc/vector_iter_next~20.html" xlink:title="VariableSpecVectorIterator%vector_iter_next">
+<polygon fill="#d9534f" stroke="#d9534f" points="470.79,-68.27 221.52,-68.27 221.52,-44 470.79,-44 470.79,-68.27"/>
+<text xml:space="preserve" text-anchor="middle" x="346.15" y="-52.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VariableSpecVectorIterator%vector_iter_next</text>
+</a>
+</g>
+</g>
+<!-- proc~graphbuilder_allocate_internals&#45;&gt;proc~vector_iter_next~20 -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge12" class="edge">
+<title>proc~graphbuilder_allocate_internals&#45;&gt;proc~vector_iter_next~20</title>
+<path fill="none" stroke="#ff0000" d="M94.81,-267.51C106.1,-231.12 144.02,-125.5 216.27,-77.14 217.92,-76.03 219.61,-74.97 221.33,-73.97"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="222.89,-77.1 230.19,-69.42 219.69,-70.88 222.89,-77.1"/>
+</g>
+<!-- proc~get_component_graph -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node19" class="node">
+<title>proc~get_component_graph</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node19"><a xlink:href="../proc/get_component_graph.html" xlink:title="get_component_graph">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="740.68,-528.27 609.16,-528.27 609.16,-504 740.68,-504 740.68,-528.27"/>
+<text xml:space="preserve" text-anchor="middle" x="674.92" y="-512.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_component_graph</text>
+</a>
+</g>
+</g>
+<!-- interface~get_component_graph&#45;&gt;proc~get_component_graph -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge13" class="edge">
+<title>interface~get_component_graph&#45;&gt;proc~get_component_graph</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M476.3,-515.53C517.35,-515.66 561.42,-515.79 597.5,-515.9"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="597.4,-519.4 607.41,-515.93 597.42,-512.4 597.4,-519.4"/>
+</g>
+<!-- proc~get_component_spec -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node20" class="node">
+<title>proc~get_component_spec</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node20"><a xlink:href="../proc/get_component_spec.html" xlink:title="get_component_spec">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="737.31,-486.27 612.54,-486.27 612.54,-462 737.31,-462 737.31,-486.27"/>
+<text xml:space="preserve" text-anchor="middle" x="674.92" y="-470.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_component_spec</text>
+</a>
+</g>
+</g>
+<!-- interface~get_component_spec&#45;&gt;proc~get_component_spec -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge14" class="edge">
+<title>interface~get_component_spec&#45;&gt;proc~get_component_spec</title>
+<path fill="none" stroke="#ff7f00" stroke-dasharray="5,2" d="M473.03,-472.91C516.37,-473.17 563.43,-473.46 601.1,-473.69"/>
+<polygon fill="#ff7f00" stroke="#ff7f00" points="600.94,-477.19 610.97,-473.75 600.99,-470.19 600.94,-477.19"/>
+</g>
+<!-- proc~vector_iter_of_offset_size_kind~20 -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node26" class="node">
+<title>proc~vector_iter_of_offset_size_kind~20</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node26"><a xlink:href="../proc/vector_iter_of_offset_size_kind~20.html" xlink:title="VariableSpecVectorIterator%vector_iter_of_offset_size_kind">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="837.81,-444.27 512.04,-444.27 512.04,-420 837.81,-420 837.81,-444.27"/>
+<text xml:space="preserve" text-anchor="middle" x="674.92" y="-428.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">VariableSpecVectorIterator%vector_iter_of_offset_size_kind</text>
+</a>
+</g>
+</g>
+<!-- none~of~261&#45;&gt;proc~vector_iter_of_offset_size_kind~20 -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge15" class="edge">
+<title>none~of~261&#45;&gt;proc~vector_iter_of_offset_size_kind~20</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M433.87,-429.93C454.5,-430.12 477.25,-430.33 500.27,-430.54"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="500.04,-434.04 510.07,-430.63 500.1,-427.04 500.04,-434.04"/>
+</g>
+<!-- none~at~332 -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node15" class="node">
+<title>none~at~332</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node15"><a xlink:href="../type/stateitemmembermap.html#boundprocedure-at~332" xlink:title="StateItemMemberMap%at">
+<polygon fill="#a7506f" stroke="#a7506f" points="750.06,-360.27 599.79,-360.27 599.79,-336 750.06,-336 750.06,-360.27"/>
+<text xml:space="preserve" text-anchor="middle" x="674.92" y="-344.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StateItemMemberMap%at</text>
+</a>
+</g>
+</g>
+<!-- proc~graph_get_resource_index&#45;&gt;none~at~332 -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge16" class="edge">
+<title>proc~graph_get_resource_index&#45;&gt;none~at~332</title>
+<path fill="none" stroke="#7fff00" d="M461.44,-371.54C503.15,-366.95 549.57,-361.84 588.35,-357.56"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="588.54,-361.06 598.1,-356.49 587.78,-354.1 588.54,-361.06"/>
+</g>
+<!-- proc~graph_is_finalized -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node23" class="node">
+<title>proc~graph_is_finalized</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node23"><a xlink:href="../proc/graph_is_finalized.html" xlink:title="ComponentGraph%graph_is_finalized">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="780.81,-402.27 569.04,-402.27 569.04,-378 780.81,-378 780.81,-402.27"/>
+<text xml:space="preserve" text-anchor="middle" x="674.92" y="-386.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ComponentGraph%graph_is_finalized</text>
+</a>
+</g>
+</g>
+<!-- proc~graph_get_resource_index&#45;&gt;proc~graph_is_finalized -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge17" class="edge">
+<title>proc~graph_get_resource_index&#45;&gt;proc~graph_is_finalized</title>
+<path fill="none" stroke="#7fff00" d="M473.96,-386.46C501.35,-386.97 530.19,-387.5 557.18,-387.99"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="557.04,-391.49 567.11,-388.17 557.17,-384.49 557.04,-391.49"/>
+</g>
+<!-- proc~graph_mode -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node24" class="node">
+<title>proc~graph_mode</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node24"><a xlink:href="../proc/graph_mode.html" xlink:title="graph_mode">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="714.43,-318.27 635.41,-318.27 635.41,-294 714.43,-294 714.43,-318.27"/>
+<text xml:space="preserve" text-anchor="middle" x="674.92" y="-302.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">graph_mode</text>
+</a>
+</g>
+</g>
+<!-- proc~graph_populates_user_states&#45;&gt;proc~graph_mode -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge18" class="edge">
+<title>proc~graph_populates_user_states&#45;&gt;proc~graph_mode</title>
+<path fill="none" stroke="#00ff00" d="M429.61,-333.05C490.78,-326.31 572.2,-317.34 623.85,-311.65"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="623.97,-315.16 633.53,-310.59 623.21,-308.2 623.97,-315.16"/>
+</g>
+<!-- proc~get_error_message -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node21" class="node">
+<title>proc~get_error_message</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node21"><a xlink:href="../proc/get_error_message.html" xlink:title="get_error_message">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="996.33,-276.27 882.81,-276.27 882.81,-252 996.33,-252 996.33,-276.27"/>
+<text xml:space="preserve" text-anchor="middle" x="939.57" y="-260.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_error_message</text>
+</a>
+</g>
+</g>
+<!-- proc~mapl_return&#45;&gt;proc~get_error_message -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge19" class="edge">
+<title>proc~mapl_return&#45;&gt;proc~get_error_message</title>
+<path fill="none" stroke="#00ffff" d="M715.53,-264.13C756.74,-264.13 822.03,-264.13 871.34,-264.13"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="871.04,-267.64 881.04,-264.14 871.04,-260.64 871.04,-267.64"/>
+</g>
+<!-- proc~mapl_throw_exception -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node25" class="node">
+<title>proc~mapl_throw_exception</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node25"><a xlink:href="../proc/mapl_throw_exception.html" xlink:title="MAPL_throw_exception">
+<polygon fill="#d9534f" stroke="#d9534f" points="1005.33,-234.27 873.81,-234.27 873.81,-210 1005.33,-210 1005.33,-234.27"/>
+<text xml:space="preserve" text-anchor="middle" x="939.57" y="-218.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">MAPL_throw_exception</text>
+</a>
+</g>
+</g>
+<!-- proc~mapl_return&#45;&gt;proc~mapl_throw_exception -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge20" class="edge">
+<title>proc~mapl_return&#45;&gt;proc~mapl_throw_exception</title>
+<path fill="none" stroke="#00ffff" d="M715.64,-259.84C748.48,-256.08 796.31,-250.14 837.81,-243.13 848.58,-241.32 859.95,-239.17 871.02,-236.95"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="871.38,-240.45 880.48,-235.03 869.98,-233.59 871.38,-240.45"/>
+</g>
+<!-- proc~mapl_verify&#45;&gt;proc~mapl_throw_exception -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge21" class="edge">
+<title>proc~mapl_verify&#45;&gt;proc~mapl_throw_exception</title>
+<path fill="none" stroke="#007fff" d="M713,-222.13C751.57,-222.13 813.06,-222.13 862.1,-222.13"/>
+<polygon fill="#007fff" stroke="#007fff" points="861.81,-225.64 871.81,-222.14 861.81,-218.64 861.81,-225.64"/>
+</g>
+<!-- proc~prepare_created_field&#45;&gt;proc~mapl_return -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge27" class="edge">
+<title>proc~prepare_created_field&#45;&gt;proc~mapl_return</title>
+<path fill="none" stroke="#0000ff" d="M375.14,-194.7C407.46,-208.69 462.55,-230.94 512.04,-243.13 548.56,-252.14 590.71,-257.45 622.85,-260.48"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="622.43,-263.95 632.7,-261.36 623.06,-256.98 622.43,-263.95"/>
+</g>
+<!-- proc~prepare_created_field&#45;&gt;proc~mapl_verify -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge28" class="edge">
+<title>proc~prepare_created_field&#45;&gt;proc~mapl_verify</title>
+<path fill="none" stroke="#0000ff" d="M410.16,-189.85C473.14,-197.56 568.62,-209.24 625.77,-216.24"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="625.16,-219.69 635.51,-217.43 626.01,-212.74 625.16,-219.69"/>
+</g>
+<!-- get_descriptor -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node14" class="node">
+<title>get_descriptor</title>
+<polygon fill="#777777" stroke="#777777" points="718.93,-24.27 630.91,-24.27 630.91,0 718.93,0 718.93,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="674.92" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_descriptor</text>
+</g>
+<!-- proc~prepare_created_field&#45;&gt;get_descriptor -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge22" class="edge">
+<title>proc~prepare_created_field&#45;&gt;get_descriptor</title>
+<path fill="none" stroke="#0000ff" d="M409.92,-185.42C433.18,-183.44 458.2,-177.07 476.04,-161.13 520.11,-121.77 467.33,-71.78 512.04,-33.13 541.03,-8.07 584.56,-3.63 619.18,-5.01"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="618.85,-8.5 629.03,-5.59 619.26,-1.51 618.85,-8.5"/>
+</g>
+<!-- proc~complete_created_field -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node16" class="node">
+<title>proc~complete_created_field</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node16"><a xlink:href="../proc/complete_created_field.html" xlink:title="complete_created_field">
+<polygon fill="#d9534f" stroke="#d9534f" points="742.93,-192.27 606.91,-192.27 606.91,-168 742.93,-168 742.93,-192.27"/>
+<text xml:space="preserve" text-anchor="middle" x="674.92" y="-176.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">complete_created_field</text>
+</a>
+</g>
+</g>
+<!-- proc~prepare_created_field&#45;&gt;proc~complete_created_field -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge23" class="edge">
+<title>proc~prepare_created_field&#45;&gt;proc~complete_created_field</title>
+<path fill="none" stroke="#0000ff" d="M410.16,-181.75C462.91,-181.43 538.44,-180.96 595.17,-180.62"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="595.12,-184.12 605.1,-180.56 595.08,-177.12 595.12,-184.12"/>
+</g>
+<!-- proc~describe_created_field -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node17" class="node">
+<title>proc~describe_created_field</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node17"><a xlink:href="../proc/describe_created_field.html" xlink:title="describe_created_field">
+<polygon fill="#d9534f" stroke="#d9534f" points="740.68,-150.27 609.16,-150.27 609.16,-126 740.68,-126 740.68,-150.27"/>
+<text xml:space="preserve" text-anchor="middle" x="674.92" y="-134.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">describe_created_field</text>
+</a>
+</g>
+</g>
+<!-- proc~prepare_created_field&#45;&gt;proc~describe_created_field -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge24" class="edge">
+<title>proc~prepare_created_field&#45;&gt;proc~describe_created_field</title>
+<path fill="none" stroke="#0000ff" d="M410.16,-173.2C440.89,-168.88 478.38,-163.67 512.04,-159.13 539.93,-155.38 570.55,-151.38 597.58,-147.89"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="597.95,-151.37 607.42,-146.62 597.05,-144.42 597.95,-151.37"/>
+</g>
+<!-- proc~descriptor_get_incomplete_kinds -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node18" class="node">
+<title>proc~descriptor_get_incomplete_kinds</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node18"><a xlink:href="../proc/descriptor_get_incomplete_kinds.html" xlink:title="StateItemDescriptor%descriptor_get_incomplete_kinds">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="826.56,-108.27 523.29,-108.27 523.29,-84 826.56,-84 826.56,-108.27"/>
+<text xml:space="preserve" text-anchor="middle" x="674.92" y="-92.54" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">StateItemDescriptor%descriptor_get_incomplete_kinds</text>
+</a>
+</g>
+</g>
+<!-- proc~prepare_created_field&#45;&gt;proc~descriptor_get_incomplete_kinds -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge25" class="edge">
+<title>proc~prepare_created_field&#45;&gt;proc~descriptor_get_incomplete_kinds</title>
+<path fill="none" stroke="#0000ff" d="M409.87,-180.95C431.96,-178.26 456.21,-172.58 476.04,-161.13 497.93,-148.51 489.95,-129.4 512.04,-117.14 514.59,-115.72 517.19,-114.39 519.84,-113.13"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="521.09,-116.4 528.9,-109.23 518.33,-109.97 521.09,-116.4"/>
+</g>
+<!-- proc~graph_get_node -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_node22" class="node">
+<title>proc~graph_get_node</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CallsGraph_node22"><a xlink:href="../proc/graph_get_node.html" xlink:title="ComponentGraph%graph_get_node">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="776.31,-66.27 573.54,-66.27 573.54,-42 776.31,-42 776.31,-66.27"/>
+<text xml:space="preserve" text-anchor="middle" x="674.92" y="-50.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ComponentGraph%graph_get_node</text>
+</a>
+</g>
+</g>
+<!-- proc~prepare_created_field&#45;&gt;proc~graph_get_node -->
+<g id="proc~~graphbuilder_allocate_internals~~CallsGraph_edge26" class="edge">
+<title>proc~prepare_created_field&#45;&gt;proc~graph_get_node</title>
+<path fill="none" stroke="#0000ff" d="M409.93,-184.16C432.79,-181.94 457.53,-175.74 476.04,-161.13 508.57,-135.47 479.1,-100.27 512.04,-75.14 526.59,-64.03 544.11,-57.19 562.17,-53.18"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="562.8,-56.62 571.97,-51.31 561.49,-49.74 562.8,-56.62"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var panprocgraphbuilder_allocate_internalsCallsGraph = svgPanZoom('#procgraphbuilder_allocate_internalsCallsGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CallsGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 28.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.873868 0.873868) rotate(0) translate(4 28.27)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 729.52,-28.27 729.52,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="69.27,-24.27 0,-24.27 0,0 69.27,0 69.27,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="34.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="143.89,-24.27 87.38,-24.27 87.38,0 143.89,0 143.89,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="115.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="221.39,-24.27 161.88,-24.27 161.88,0 221.39,0 221.39,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="191.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="368.27,-24.27 239,-24.27 239,0 368.27,0 368.27,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="303.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="529.39,-24.27 385.88,-24.27 385.88,0 529.39,0 529.39,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="457.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="603.89,-24.27 547.38,-24.27 547.38,0 603.89,0 603.89,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="575.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="725.52,-24.27 621.75,-24.27 621.75,0 725.52,0 725.52,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="673.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+  <h3 class="card-title">Called by</h3>
+      </div>
+      <div class="card-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (0)
+ -->
+<!-- Title: proc~~graphbuilder_allocate_internals~~CalledByGraph Pages: 1 -->
+<svg id="procgraphbuilder_allocate_internalsCalledByGraph" width="641pt" height="19pt"
+ viewBox="0.00 0.00 641.00 19.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~graphbuilder_allocate_internals~~CalledByGraph" class="graph" transform="scale(0.593738 0.593738) rotate(0) translate(4 28.27)">
+<title>proc~~graphbuilder_allocate_internals~~CalledByGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 1075.6,-28.27 1075.6,4 -4,4"/>
+<!-- proc~graphbuilder_allocate_internals -->
+<g id="proc~~graphbuilder_allocate_internals~~CalledByGraph_node1" class="node">
+<title>proc~graphbuilder_allocate_internals</title>
+<polygon fill="none" stroke="black" points="1071.6,-24.27 891.33,-24.27 891.33,0 1071.6,0 1071.6,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="981.46" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">graphbuilder_allocate_internals</text>
+</g>
+<!-- interface~graphbuilder_allocate_internals -->
+<g id="proc~~graphbuilder_allocate_internals~~CalledByGraph_node2" class="node">
+<title>interface~graphbuilder_allocate_internals</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CalledByGraph_node2"><a xlink:href="../interface/graphbuilder_allocate_internals.html" xlink:title="GraphBuilder%graphbuilder_allocate_internals">
+<polygon fill="#a7506f" stroke="#a7506f" points="855.33,-24.27 594.06,-24.27 594.06,0 855.33,0 855.33,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="724.69" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">GraphBuilder%graphbuilder_allocate_internals</text>
+</a>
+</g>
+</g>
+<!-- interface~graphbuilder_allocate_internals&#45;&gt;proc~graphbuilder_allocate_internals -->
+<g id="proc~~graphbuilder_allocate_internals~~CalledByGraph_edge1" class="edge">
+<title>interface~graphbuilder_allocate_internals&#45;&gt;proc~graphbuilder_allocate_internals</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M855.69,-12.13C863.69,-12.13 871.67,-12.13 879.51,-12.13"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="879.37,-15.64 889.37,-12.14 879.37,-8.64 879.37,-15.64"/>
+</g>
+<!-- proc~initialize_realize_accepted -->
+<g id="proc~~graphbuilder_allocate_internals~~CalledByGraph_node3" class="node">
+<title>proc~initialize_realize_accepted</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CalledByGraph_node3"><a xlink:href="../proc/initialize_realize_accepted.html" xlink:title="initialize_realize_accepted">
+<polygon fill="#d9534f" stroke="#d9534f" points="558.06,-24.27 407.04,-24.27 407.04,0 558.06,0 558.06,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="482.55" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">initialize_realize_accepted</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_realize_accepted&#45;&gt;interface~graphbuilder_allocate_internals -->
+<g id="proc~~graphbuilder_allocate_internals~~CalledByGraph_edge2" class="edge">
+<title>proc~initialize_realize_accepted&#45;&gt;interface~graphbuilder_allocate_internals</title>
+<path fill="none" stroke="#ff0000" d="M558.55,-12.13C566.22,-12.13 574.17,-12.13 582.26,-12.13"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="582.26,-15.64 592.26,-12.14 582.26,-8.64 582.26,-15.64"/>
+</g>
+<!-- interface~initialize_realize_accepted -->
+<g id="proc~~graphbuilder_allocate_internals~~CalledByGraph_node4" class="node">
+<title>interface~initialize_realize_accepted</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CalledByGraph_node4"><a xlink:href="../interface/initialize_realize_accepted.html" xlink:title="OuterMetaComponent%initialize_realize_accepted">
+<polygon fill="#a7506f" stroke="#a7506f" points="371.04,-24.27 91.77,-24.27 91.77,0 371.04,0 371.04,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="231.4" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">OuterMetaComponent%initialize_realize_accepted</text>
+</a>
+</g>
+</g>
+<!-- interface~initialize_realize_accepted&#45;&gt;proc~initialize_realize_accepted -->
+<g id="proc~~graphbuilder_allocate_internals~~CalledByGraph_edge3" class="edge">
+<title>interface~initialize_realize_accepted&#45;&gt;proc~initialize_realize_accepted</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M371.18,-12.13C379.37,-12.13 387.47,-12.13 395.34,-12.13"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="395.18,-15.64 405.18,-12.14 395.18,-8.64 395.18,-15.64"/>
+</g>
+<!-- proc~initialize~24 -->
+<g id="proc~~graphbuilder_allocate_internals~~CalledByGraph_node5" class="node">
+<title>proc~initialize~24</title>
+<g id="a_proc~~graphbuilder_allocate_internals~~CalledByGraph_node5"><a xlink:href="../proc/initialize~24.html" xlink:title="initialize">
+<polygon fill="#d9534f" stroke="#d9534f" points="55.77,-24.27 0,-24.27 0,0 55.77,0 55.77,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="27.88" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">initialize</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize~24&#45;&gt;interface~initialize_realize_accepted -->
+<g id="proc~~graphbuilder_allocate_internals~~CalledByGraph_edge4" class="edge">
+<title>proc~initialize~24&#45;&gt;interface~initialize_realize_accepted</title>
+<path fill="none" stroke="#ff0000" d="M56.06,-12.13C63.09,-12.13 71.16,-12.13 79.9,-12.13"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="79.79,-15.64 89.79,-12.14 79.79,-8.64 79.79,-15.64"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var panprocgraphbuilder_allocate_internalsCalledByGraph = svgPanZoom('#procgraphbuilder_allocate_internalsCalledByGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CalledByGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="CalledByGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 28.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.873868 0.873868) rotate(0) translate(4 28.27)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 729.52,-28.27 729.52,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="69.27,-24.27 0,-24.27 0,0 69.27,0 69.27,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="34.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="143.89,-24.27 87.38,-24.27 87.38,0 143.89,0 143.89,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="115.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="221.39,-24.27 161.88,-24.27 161.88,0 221.39,0 221.39,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="191.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="368.27,-24.27 239,-24.27 239,0 368.27,0 368.27,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="303.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="529.39,-24.27 385.88,-24.27 385.88,0 529.39,0 529.39,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="457.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="603.89,-24.27 547.38,-24.27 547.38,0 603.89,0 603.89,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="575.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="725.52,-24.27 621.75,-24.27 621.75,0 725.52,0 725.52,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="673.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+
+    
+    
+
+    
+    
+
+
+
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="w">   </span><span class="k">module subroutine </span><span class="n">graphbuilder_allocate_internals</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="p">)</span>
+<span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">OuterMetaComponent</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rc</span>
+
+<span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span>
+<span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ComponentSpec</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spec</span>
+<span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">ComponentGraph</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">graph</span>
+<span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">VariableSpecVectorIterator</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iter</span>
+<span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">VariableSpec</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">var_spec</span>
+<span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">NodeId</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">id_ptr</span>
+
+<span class="w">      </span><span class="err">_</span><span class="n">RETURN_UNLESS</span><span class="p">(</span><span class="n">graph_populates_user_states</span><span class="p">())</span>
+
+<span class="w">      </span><span class="n">graph</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">get_component_graph</span><span class="p">()</span>
+<span class="w">      </span><span class="n">spec</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">get_component_spec</span><span class="p">()</span>
+<span class="w">      </span><span class="k">associate</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">spec</span><span class="p">%</span><span class="n">var_specs</span><span class="p">%</span><span class="n">ftn_end</span><span class="p">())</span>
+<span class="w">         </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spec</span><span class="p">%</span><span class="n">var_specs</span><span class="p">%</span><span class="n">ftn_begin</span><span class="p">()</span>
+<span class="w">         </span><span class="k">do while</span><span class="w"> </span><span class="p">(</span><span class="n">iter</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
+<span class="w">            </span><span class="k">call </span><span class="n">iter</span><span class="p">%</span><span class="n">next</span><span class="p">()</span>
+<span class="w">            </span><span class="n">var_spec</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">iter</span><span class="p">%</span><span class="n">of</span><span class="p">()</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="p">(</span><span class="n">var_spec</span><span class="p">%</span><span class="n">state_intent</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                 </span><span class="n">ESMF_STATEINTENT_INTERNAL</span><span class="p">))</span><span class="w"> </span><span class="k">cycle</span>
+<span class="k">            </span><span class="n">id_ptr</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">graph</span><span class="p">%</span><span class="n">get_resource_index</span><span class="p">(</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                 </span><span class="n">item_key</span><span class="p">(</span><span class="n">var_spec</span><span class="p">%</span><span class="n">state_intent</span><span class="p">,</span><span class="w"> </span><span class="n">var_spec</span><span class="p">%</span><span class="n">short_name</span><span class="p">))</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="nb">associated</span><span class="p">(</span><span class="n">id_ptr</span><span class="p">))</span><span class="w"> </span><span class="k">cycle</span>
+<span class="k">            call </span><span class="n">prepare_created_field</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span><span class="w"> </span><span class="n">id_ptr</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="err">_</span><span class="n">RC</span><span class="p">)</span>
+<span class="w">         </span><span class="k">end do</span>
+<span class="k">      end associate</span>
+
+<span class="k">      </span><span class="err">_</span><span class="n">RETURN</span><span class="p">(</span><span class="err">_</span><span class="n">SUCCESS</span><span class="p">)</span>
+<span class="w">   </span><span class="k">end subroutine </span><span class="n">graphbuilder_allocate_internals</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              MAPL
+ was developed by The MAPL Developers<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-11-12T20:43:18.953170+0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
