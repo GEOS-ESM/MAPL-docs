@@ -1,33 +1,30 @@
-! Export umbrella for the MAPL.field library.
+! Export umbrella for the MAPL.state library.
+module mapl_state_api
 
-module mapl_field_api
-
-   use mapl_FieldCreate_mod, only: MAPL_FieldCreate => FieldCreate
-   use mapl_FieldCreate_mod, only: MAPL_FieldEmptyComplete => FieldEmptyComplete
-   use mapl_FieldCreate_mod, only: MAPL_FieldsAreAliased => FieldsAreAliased
-   use mapl_FieldGet_mod, only: MAPL_FieldGet => FieldGet
-   use mapl_FieldSet_mod, only: MAPL_FieldSet => FieldSet
-   use mapl_FieldNamedAlias_mod, only: MAPL_NamedAlias
-   use mapl_FieldFill_mod, only: MAPL_FieldFill => FieldFill
-   use mapl_FieldApplyUserRoutine_mod, only: MAPL_FieldApplyUserRoutine => FieldApplyUserRoutine
-   use mapl_FieldApplyUserRoutine_mod, only: MAPL_I_FieldSliceRoutine => I_FieldSliceRoutine
-   use mapl_RestartModes_mod, only: MAPL_RESTART_REQUIRED => RESTART_REQUIRED
-   use mapl_RestartModes_mod, only: MAPL_RESTART_SKIP => RESTART_SKIP
+   use mapl_StateArithmeticParser_mod, only: MAPL_ParserVariablesInExpression => parser_variables_in_expression
+   use mapl_StateArithmeticParser_mod, only: mapl_StateEval => StateEval
+   use mapl_StateAddMethod_mod, only: mapl_StateAddMethod => StateAddMethod
+   use mapl_StateDestroy_mod, only: MAPL_StateDestroy => StateDestroy
+   use mapl_StateGet_mod, only: MAPL_StateGet => StateGet
+   use mapl_StateSet_mod, only: MAPL_StateSet => StateSet
+   use mapl_StateGetGeom_mod, only: MAPL_StateGetGeom => StateGetGeom
+   use mapl_StateGetPointer_mod, only: MAPL_StateGetPointer => StateGetPointer
+   use mapl_StateMask_mod, only: MAPL_StateMask => StateMask
+   use mapl_StateMerge_mod, only: MAPL_StateMerge => StateMerge
+   
 
    implicit none
    private
 
-   public :: MAPL_FieldCreate
-   public :: MAPL_FieldEmptyComplete
-   public :: MAPL_FieldsAreAliased
-   public :: MAPL_FieldGet
-   public :: MAPL_FieldSet
-   public :: MAPL_NamedAlias
-   public :: MAPL_FieldFill
-   public :: MAPL_FieldApplyUserRoutine
-   public :: MAPL_I_FieldSliceRoutine
-   public :: MAPL_RESTART_REQUIRED
-   public :: MAPL_RESTART_SKIP
+   public :: MAPL_ParserVariablesInExpression
+   public :: mapl_StateAddMethod
+   public :: MAPL_StateDestroy
+   public :: MAPL_StateGet
+   public :: MAPL_StateSet
+   public :: MAPL_StateGetGeom
+   public :: MAPL_StateGetPointer
+   public :: mapl_StateEval
 
-end module mapl_field_api
-
+   public :: MAPL_StateMask
+   public :: MAPL_StateMerge
+end module mapl_state_api

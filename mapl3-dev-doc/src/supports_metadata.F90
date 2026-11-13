@@ -1,12 +1,10 @@
 #include "MAPL.h"
 
-submodule (mapl_LatAxis_mod) supports_metadata_smod
+submodule (mapl_LonAxis_mod) supports_metadata_smod
    use mapl_Range_mod
-!   use hconfig3g
-   use esmf
    use mapl_ErrorHandling_mod
+   use esmf
    implicit none (type, external)
-
    integer, parameter :: R8 = ESMF_KIND_R8
 
 contains
@@ -19,7 +17,7 @@ contains
       character(:), allocatable :: dim_name
 
       supports = .true.
-      dim_name = get_dim_name(file_metadata, units='degrees_north', _RC)
+      dim_name = get_dim_name(file_metadata, units='degrees_east', _RC)
 
       supports = (dim_name /= '')
       _RETURN(_SUCCESS)

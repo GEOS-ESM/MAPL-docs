@@ -1,14 +1,13 @@
 #include "MAPL.h"
 
-submodule (mapl_OuterMetaComponent_mod) get_name_smod
-   use mapl_ErrorHandling_mod
-   implicit none(type,external)
+submodule (mapl_GriddedComponentDriver_mod) get_name_smod
+   implicit none
 
 contains
 
    module function get_name(this, rc) result(name)
       character(:), allocatable :: name
-      class(OuterMetaComponent), intent(in) :: this
+      class(GriddedComponentDriver), intent(in) :: this
       integer, optional, intent(out) :: rc
 
       integer :: status
@@ -16,8 +15,8 @@ contains
 
       ! An allocatable result must be allocated on error paths too; the caller copies it.
       name = ''
-      call ESMF_GridCompGet(this%self_gridcomp, name=buffer, _RC)
-      name=trim(buffer)
+      call ESMF_GridCompGet(this%gridcomp, name=buffer, _RC)
+      name = trim(buffer)
 
       _RETURN(ESMF_SUCCESS)
    end function get_name
