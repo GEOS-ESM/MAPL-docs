@@ -1,28 +1,28 @@
 #include "MAPL.h"
 
-submodule (mapl_XYGeomSpec_mod) equal_to_smod
+submodule (mapl_LatLonDecomposition_mod) equal_to_smod
    use mapl_ErrorHandling_mod
-   implicit none
+   implicit none (type, external)
 
 contains
 
-   pure logical module function equal_to(a, b)
-      class(XYGeomSpec), intent(in) :: a
-      class(GeomSpec),   intent(in) :: b
+   elemental module function equal_to(decomp1, decomp2)
+      logical :: equal_to
+      type(LatLonDecomposition), intent(in) :: decomp1
+      type(LatLonDecomposition), intent(in) :: decomp2
 
-      select type (b)
-      type is (XYGeomSpec)
-         equal_to = (a%im_world    == b%im_world)    .and. &
-                    (a%jm_world    == b%jm_world)    .and. &
-                    (a%lm          == b%lm)          .and. &
-                    (a%n_peri_dim  == b%n_peri_dim)  .and. &
-                    (a%coord_mode  == b%coord_mode)  .and. &
-                    (a%thin_factor == b%thin_factor) .and. &
-                    (a%grid_file_name == b%grid_file_name)
-      class default
-         equal_to = .false.
-      end select
+      equal_to = size(decomp1%lon_distribution) == size(decomp2%lon_distribution)
+      if (.not. equal_to) return
+
+      equal_to = size(decomp1%lat_distribution) == size(decomp2%lat_distribution)
+      if (.not. equal_to) return
+
+      equal_to = all(decomp1%lon_distribution == decomp2%lon_distribution)
+      if (.not. equal_to) return
+
+      equal_to = all(decomp1%lat_distribution == decomp2%lat_distribution)
 
    end function equal_to
 
 end submodule equal_to_smod
+
