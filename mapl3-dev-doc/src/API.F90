@@ -1,71 +1,36 @@
-! Export umbrella for the MAPL infrastructure/geom layer.
-! Public API exposed to external consumers.
-module mapl_geom_api
+module mapl_geomio_api
 
-   use mapl_GeomId_mod, only: mapl_GeomId => GeomId
-   use mapl_GeomId_mod, only: mapl_GeomIdManager => GeomIdManager
-   use mapl_GeomId_mod, only: mapl_get_geom_id_manager => get_geom_id_manager
-   use mapl_GeomId_mod, only: mapl_new_GeomId => GeomId
-   use mapl_MaplGeom_mod, only: mapl_MaplGeom => MaplGeom
-   use mapl_GeomSpec_mod, only: mapl_GeomSpec => GeomSpec
-   use mapl_GeomManager_mod, only: mapl_GeomManager => GeomManager
-   use mapl_GeomManager_mod, only: mapl_get_geom_manager => get_geom_manager
-   use mapl_GeomManager_mod, only: mapl_get_mapl_geom => get_mapl_geom
-   use mapl_GeomUtilities_mod, only: mapl_SameGeom => SameGeom, mapl_GeomGetId => GeomGetId
-   use mapl_GeomAccessors_mod, only: mapl_GeomGet => GeomGet
-   use mapl_GeomAccessors_mod, only: mapl_GeomGetHorzIJIndex => GeomGetHorzIJIndex
-   use mapl_GeomAccessors_mod, only: mapl_GridGetHorzIJIndex => GridGetHorzIJIndex
-   use mapl_GridAccessors_mod, only: mapl_GridGet => GridGet
-   use mapl_GridAccessors_mod, only: mapl_GridGetCoordinates => GridGetCoordinates
-   use mapl_GridAccessors_mod, only: mapl_GridHasDE => grid_has_DE
-   use mapl_GridGetGlobal_mod, only: mapl_GridGetGlobalCellCountPerDim => GridGetGlobalCellCountPerDim
-   use mapl_GridComms_mod, only: MAPL_CollectiveGather3D => mapl_CollectiveGather3D
-   use mapl_GridComms_mod, only: MAPL_CollectiveScatter3D => mapl_CollectiveScatter3D
-   use mapl_Subgrid_mod, only: mapl_Interval => Interval
-   use mapl_Subgrid_mod, only: mapl_make_subgrids => make_subgrids
-   use mapl_Subgrid_mod, only: mapl_find_bounds => find_bounds
-   use mapl_CubedSphereGeomSpec_mod, only: mapl_CubedSphereGeomSpec => CubedSphereGeomSpec
-   use mapl_CubedSphereGeomSpec_mod, only: mapl_make_CubedSphereGeomSpec => make_CubedSphereGeomSpec
-   use mapl_CubedSphereDecomposition_mod, only: mapl_CubedSphereDecomposition => CubedSphereDecomposition
-   use mapl_CubedSphereDecomposition_mod, only: mapl_make_CubedSphereDecomposition => make_CubedSphereDecomposition
+   use mapl_CompressionSettings_mod, only: mapl_CompressionSettings => CompressionSettings
+   use mapl_SharedIO_mod, only: mapl_bundle_to_metadata => bundle_to_metadata
+   use mapl_SharedIO_mod, only: mapl_esmf_to_pfio_type => esmf_to_pfio_type
+   use mapl_SharedIO_mod, only: mapl_ungridded_dims_from_metadata => ungridded_dims_from_metadata
+   use mapl_GeomPFIO_mod, only: mapl_GeomPFIO => GeomPFIO
+   use mapl_GeomCategorizer_mod, only: mapl_make_geom_pfio => make_geom_pfio
+   use mapl_pFIOServerBounds_mod, only: mapl_pFIOServerBounds => pFIOServerBounds
+   use mapl_pFIOServerBounds_mod, only: mapl_PFIO_BOUNDS_READ => PFIO_BOUNDS_READ
+   use mapl_DataCollection_mod, only: mapl_DataCollection => DataCollection
+   use mapl_DataCollectionManager_mod, only: MAPL_AddDataCollection => AddDataCollection
+   use mapl_DataCollectionManager_mod, only: mapl_DataCollections => DataCollections
 
+   use mapl_FieldBundleWrite_mod, only: mapl_FieldBundleWriter => FieldBundleWriter
+   use mapl_FieldBundleRead_mod, only: mapl_read_bundle => read_bundle
    implicit none
    private
 
-   ! Geom types and manager
-   public :: mapl_GeomId
-   public :: mapl_GeomIdManager
-   public :: mapl_get_geom_id_manager
-   public :: mapl_new_GeomId
-   public :: mapl_MaplGeom
-   public :: mapl_GeomSpec
-   public :: mapl_GeomManager
-   public :: mapl_get_geom_manager
-   public :: mapl_get_mapl_geom
 
-   ! Geom utilities
-   public :: mapl_SameGeom
-   public :: mapl_GeomGetId
-   public :: mapl_GeomGet
-   public :: mapl_GeomGetHorzIJIndex
-   public :: mapl_GridGetHorzIJIndex
-   public :: mapl_GridGet
-   public :: mapl_GridGetCoordinates
-   public :: mapl_GridHasDE
-   public :: mapl_GridGetGlobalCellCountPerDim
+   public :: mapl_CompressionSettings
+   public :: mapl_GeomPFIO
+   public :: mapl_pFIOServerBounds
+   public :: MAPL_PFIO_BOUNDS_READ
+   public :: mapl_DataCollection
+   public :: mapl_DataCollections
+   public :: mapl_AddDataCollection
+   public :: mapl_FieldBundleWriter
 
-   ! Collective comms
-   public :: MAPL_CollectiveGather3D
-   public :: MAPL_CollectiveScatter3D
-
-   ! Subgrid
-   public :: mapl_Interval
-   public :: mapl_make_subgrids
-
-   ! CubedSphere geom specs
-   public :: mapl_CubedSphereGeomSpec
-   public :: mapl_make_CubedSphereGeomSpec
-   public :: mapl_CubedSphereDecomposition
-   public :: mapl_make_CubedSphereDecomposition
-
-end module mapl_geom_api
+   public :: mapl_make_geom_pfio
+   public :: mapl_bundle_to_metadata
+   public :: mapl_esmf_to_pfio_type
+   public :: mapl_ungridded_dims_from_metadata
+   public :: mapl_read_bundle
+   
+end module mapl_geomio_api
