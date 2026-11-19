@@ -1,26 +1,28 @@
-#include "MAPL_ErrLog.h"
+#include "MAPL.h"
 
-submodule (mapl_LocStreamDecomposition_mod) equal_to_smod
-   implicit none (type, external)
+submodule (mapl_XYGeomSpec_mod) equal_to_smod
+   use mapl_ErrorHandling_mod
+   implicit none
 
 contains
 
-   module procedure equal_to
-      
-      ! Both must have allocated distributions
-      if (.not. allocated(decomp1%point_distribution)) then
-         equal_to = .not. allocated(decomp2%point_distribution)
-         return
-      end if
+   pure logical module function equal_to(a, b)
+      class(XYGeomSpec), intent(in) :: a
+      class(GeomSpec),   intent(in) :: b
 
-      if (.not. allocated(decomp2%point_distribution)) then
+      select type (b)
+      type is (XYGeomSpec)
+         equal_to = (a%im_world    == b%im_world)    .and. &
+                    (a%jm_world    == b%jm_world)    .and. &
+                    (a%lm          == b%lm)          .and. &
+                    (a%n_peri_dim  == b%n_peri_dim)  .and. &
+                    (a%coord_mode  == b%coord_mode)  .and. &
+                    (a%thin_factor == b%thin_factor) .and. &
+                    (a%grid_file_name == b%grid_file_name)
+      class default
          equal_to = .false.
-         return
-      end if
+      end select
 
-      ! Check if distributions are the same
-      equal_to = all(decomp1%point_distribution == decomp2%point_distribution)
-
-   end procedure equal_to
+   end function equal_to
 
 end submodule equal_to_smod
