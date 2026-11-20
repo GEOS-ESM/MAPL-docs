@@ -1,51 +1,52 @@
 #include "MAPL.h"
-
-submodule (mapl_EASEGeomFactory_mod) typesafe_make_file_metadata_smod
+submodule (mapl_LatLonGeomFactory_mod) typesafe_make_file_metadata_smod
    use mapl_GeomSpec_mod
-   use mapl_EASEGeomSpec_mod
-   use mapl_EASECoords_mod
+   use mapl_LonAxis_mod
+   use mapl_LatAxis_mod
+   use mapl_LatLonDecomposition_mod
+   use mapl_LatLonGeomSpec_mod
+   use mapl_MinMax_mod
    use mapl_ErrorHandling_mod
-   use pfio
+   use MAPL_Constants
+   use pFIO
+   use gFTL2_StringVector
+   use esmf
    use mapl_KeywordEnforcer_mod, only: KE => KeywordEnforcer
-   use, intrinsic :: iso_fortran_env, only: REAL64
    implicit none (type, external)
+
 
 contains
 
    module function typesafe_make_file_metadata(geom_spec, unusable, chunksizes, rc) result(file_metadata)
       use mapl_KeywordEnforcer_mod
       type(FileMetadata) :: file_metadata
-      type(EASEGeomSpec), intent(in) :: geom_spec
+      type(LatLonGeomSpec), intent(in) :: geom_spec
       class(KE), optional, intent(in) :: unusable
       integer, optional, intent(in) :: chunksizes(:)
       integer, optional, intent(out) :: rc
 
-      integer :: status
-      integer :: im, jm
+      type(LonAxis) :: lon_axis
+      type(LatAxis) :: lat_axis
       type(Variable) :: v
-      real(kind=REAL64), allocatable :: lon_cen(:), lat_cen(:)
 
-      call compute_lons(geom_spec, centers=lon_cen, _RC)
-      call compute_lats(geom_spec, centers=lat_cen, _RC)
+      lon_axis = geom_spec%get_lon_axis()
+      lat_axis = geom_spec%get_lat_axis()
+      
+      call file_metadata%add_dimension('lon', lon_axis%get_extent())
+      call file_metadata%add_dimension('lat', lat_axis%get_extent())
 
-      im = geom_spec%get_im_world(_RC)
-      jm = geom_spec%get_jm_world(_RC)
-
-      call file_metadata%add_dimension('lon', im)
-      call file_metadata%add_dimension('lat', jm)
-
-      ! Longitude coordinate variable
+      ! Coordinate variables
       v = Variable(type=PFIO_REAL64, dimensions='lon', chunksizes=chunksizes)
       call v%add_attribute('long_name', 'longitude')
       call v%add_attribute('units', 'degrees_east')
-      call v%add_const_value(UnlimitedEntity(lon_cen))
+      call v%add_const_value(UnlimitedEntity(lon_axis%get_centers()))
+      
       call file_metadata%add_variable('lon', v)
 
-      ! Latitude coordinate variable
       v = Variable(type=PFIO_REAL64, dimensions='lat', chunksizes=chunksizes)
       call v%add_attribute('long_name', 'latitude')
       call v%add_attribute('units', 'degrees_north')
-      call v%add_const_value(UnlimitedEntity(lat_cen))
+      call v%add_const_value(UnlimitedEntity(lat_axis%get_centers()))
       call file_metadata%add_variable('lat', v)
 
       _RETURN(_SUCCESS)
