@@ -1,25 +1,27 @@
 #include "MAPL.h"
 
-submodule (mapl_XYGeomFactory_mod) make_geom_smod
+submodule (mapl_EASEGeomFactory_mod) make_geom_smod
+   use mapl_GeomSpec_mod
+   use mapl_EASEGeomSpec_mod
    use mapl_ErrorHandling_mod
    use esmf
-   implicit none
+   implicit none (type, external)
 
 contains
 
    module function make_geom(this, geom_spec, rc) result(geom)
       type(ESMF_Geom) :: geom
-      class(XYGeomFactory), intent(in) :: this
+      class(EASEGeomFactory), intent(in) :: this
       class(GeomSpec), intent(in) :: geom_spec
       integer, optional, intent(out) :: rc
 
       integer :: status
 
       select type (geom_spec)
-      type is (XYGeomSpec)
+      type is (EASEGeomSpec)
          geom = typesafe_make_geom(geom_spec, _RC)
       class default
-         _FAIL("geom_spec type not supported by XYGeomFactory")
+         _FAIL("make_geom: geom_spec is not of dynamic type EASEGeomSpec")
       end select
 
       _RETURN(_SUCCESS)
