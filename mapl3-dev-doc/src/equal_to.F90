@@ -1,24 +1,24 @@
 #include "MAPL.h"
 
-submodule (mapl_XYGeomSpec_mod) equal_to_smod
+submodule (mapl_LatLonGeomSpec_mod) equal_to_smod
+   use mapl_CoordinateAxis_mod
+   use mapl_GeomSpec_mod
+   use pfio
    use mapl_ErrorHandling_mod
-   implicit none
-
+   use esmf
+   implicit none (type, external)
+   
 contains
 
    pure logical module function equal_to(a, b)
-      class(XYGeomSpec), intent(in) :: a
-      class(GeomSpec),   intent(in) :: b
+      class(LatLonGeomSpec), intent(in) :: a
+      class(GeomSpec), intent(in) :: b
 
       select type (b)
-      type is (XYGeomSpec)
-         equal_to = (a%im_world    == b%im_world)    .and. &
-                    (a%jm_world    == b%jm_world)    .and. &
-                    (a%lm          == b%lm)          .and. &
-                    (a%n_peri_dim  == b%n_peri_dim)  .and. &
-                    (a%coord_mode  == b%coord_mode)  .and. &
-                    (a%thin_factor == b%thin_factor) .and. &
-                    (a%grid_file_name == b%grid_file_name)
+      type is (LatLonGeomSpec)
+         equal_to = (a%lon_axis == b%lon_axis) .and. (a%lat_axis == b%lat_axis)
+         if (.not. equal_to) return
+         equal_to = (a%decomposition == b%decomposition)
       class default
          equal_to = .false.
       end select
