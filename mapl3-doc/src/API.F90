@@ -1,13 +1,10 @@
-! Export umbrella for the MAPL.component library
-module mapl_component_api
+module mapl_infrastructure_api
+   use mapl_esmf_api
+   use mapl_field_api
+   use mapl_field_bundle_api
+   use mapl_geom_api
+   use mapl_vertical_grid_api
+   use mapl_regridder_mgr_api
+   use mapl_geomio_api
 
-   use mapl_ComponentDriver_mod, only: MAPL_DriverInitializePhases => DriverInitializePhases
-   use mapl_GriddedComponentDriver_mod, only: MAPL_GriddedComponentDriver => GriddedComponentDriver
-
-   implicit none
-   private
-
-   public :: MAPL_DriverInitializePhases
-   public :: MAPL_GriddedComponentDriver
-
-end module mapl_component_api
+end module mapl_infrastructure_api
